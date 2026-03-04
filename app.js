@@ -16,8 +16,8 @@
         const { useState, useEffect } = React;
 
         // PASTE YOUR DAEDELUS11 KEYS HERE
-        const supabaseUrl = https://mrhgitbdobfnelnulnbg.supabase.co; 
-        const supabaseKey = sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh; 
+        const supabaseUrl = 'https://mrhgitbdobfnelnulnbg.supabase.co'; 
+        const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh'; 
 
         const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -70,3 +70,4 @@
     </script>
 </body>
 </html>
+
