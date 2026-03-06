@@ -15,59 +15,64 @@
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // PASTE YOUR DAEDELUS11 KEYS HERE
-        const supabaseUrl = 'https://mrhgitbdobfnelnulnbg.supabase.co'; 
-        const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh'; 
-
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        // FIXED: Added quotes and renamed variable to avoid conflict with the library
+        const supabaseUrl = 'https://mrhgitbdobfnelnulnbg.supabase.co';
+        const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         function App() {
-            const [status, setStatus] = useState("Connecting...");
+            const [count, setCount] = useState(0);
+            const [loading, setLoading] = useState(true);
 
             useEffect(() => {
-                const init = async () => {
-                    const { data, error } = await supabase
+                const fetchCount = async () => {
+                    // FIXED: Using supabaseClient here
+                    const { data, error } = await supabaseClient
                         .from('medicine_supply')
                         .select('value')
                         .eq('label', 'cartridge_count')
                         .single();
                     
-                    if (data) {
-                        setStatus(data.value);
-                    } else {
-                        setStatus("Check DB");
-                    }
+                    if (data) setCount(data.value);
+                    setLoading(false);
                 };
-                init();
+                fetchCount();
 
-                const channel = supabase.channel('changes').on('postgres_changes', 
+                const channel = supabaseClient.channel('db-changes').on('postgres_changes', 
                     { event: 'UPDATE', schema: 'public', table: 'medicine_supply' },
-                    (payload) => { setStatus(payload.new.value); }
+                    (payload) => { setCount(payload.new.value); }
                 ).subscribe();
-                return () => supabase.removeChannel(channel);
+
+                return () => supabaseClient.removeChannel(channel);
             }, []);
 
             const updateCount = async (newVal) => {
-                setStatus(newVal);
-                await supabase.from('medicine_supply').update({ value: newVal }).eq('label', 'cartridge_count');
+                setCount(newVal);
+                // FIXED: Using supabaseClient here
+                await supabaseClient
+                    .from('medicine_supply')
+                    .update({ value: newVal })
+                    .eq('label', 'cartridge_count');
             };
+
+            if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
 
             return (
                 <div className="flex h-screen items-center justify-center p-6">
                     <div className="w-full max-w-sm bg-slate-800 p-10 rounded-3xl border border-slate-700 text-center shadow-2xl">
-                        <h1 className="text-xs uppercase tracking-widest mb-10 text-slate-500 font-bold">Cartridges</h1>
-                        <div className="text-8xl font-black mb-12 text-white tabular-nums">{status}</div>
+                        <h1 className="text-xs uppercase tracking-[0.2em] mb-10 text-slate-500 font-bold">Cartridges Remaining</h1>
+                        <div className="text-9xl font-black mb-12 text-white tabular-nums">{count}</div>
                         <div className="flex justify-between gap-6">
-                            <button onClick={() => updateCount(Number(status) - 1)} className="flex-1 py-6 rounded-2xl border-2 border-slate-600 text-4xl hover:bg-slate-700 active:scale-95 transition-all">–</button>
-                            <button onClick={() => updateCount(Number(status) + 1)} className="flex-1 py-6 rounded-2xl bg-blue-600 text-4xl font-bold hover:bg-blue-500 active:scale-95 transition-all shadow-lg">+</button>
+                            <button onClick={() => updateCount(count - 1)} className="flex-1 py-6 rounded-2xl border-2 border-slate-600 text-4xl hover:bg-slate-700 active:scale-95 transition-all">–</button>
+                            <button onClick={() => updateCount(count + 1)} className="flex-1 py-6 rounded-2xl bg-blue-600 text-4xl font-bold hover:bg-blue-500 active:scale-95 transition-all shadow-lg shadow-blue-900/40">+</button>
                         </div>
                     </div>
                 </div>
             );
         }
 
-        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
     </script>
 </body>
 </html>
-
