@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ava's Meds</title>
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 fill=%22%23d4af37%22 font-family=%22serif%22 font-weight=%22bold%22>A</text></svg>">
+    <title>Ava's Meds</title> <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 fill=%22%23d4af37%22 font-family=%22serif%22 font-weight=%22bold%22>A</text></svg>">
     
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -16,76 +14,65 @@
     
     <style>
         body {
-            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            /* Deeper parchment/stone background texture */
+            background: radial-gradient(circle at center, #2c3e50 0%, #000 100%);
             font-family: 'Quicksand', sans-serif;
             overflow: hidden;
         }
         .gear {
-            position: absolute;
-            z-index: -1;
-            opacity: 0.08;
+            position: absolute; z-index: -1; opacity: 0.1;
             animation: rotate 60s linear infinite;
         }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        .fontaine-card {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(20px);
-            border: 2px solid #d4af37; 
-            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.2);
+        /* The Main Ornate Artifact Card */
+        .artifact-card {
+            background: linear-gradient(135deg, rgba(245, 230, 202, 0.1) 0%, rgba(15, 23, 42, 0.9) 100%);
+            backdrop-filter: blur(25px);
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 60px rgba(0, 0, 0, 1), inset 0 0 30px rgba(212, 175, 55, 0.3);
             position: relative;
         }
-        
-        .fontaine-card::before, .fontaine-card::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #d4af37;
+
+        /* Elaborate Corner Pieces */
+        .corner {
+            position: absolute; width: 40px; height: 40px; border: 4px solid #d4af37;
         }
-        .fontaine-card::before { top: -10px; left: -10px; border-right: 0; border-bottom: 0; }
-        .fontaine-card::after { bottom: -10px; right: -10px; border-left: 0; border-top: 0; }
-        
+        .top-left { top: -12px; left: -12px; border-right: 0; border-bottom: 0; }
+        .bottom-right { bottom: -12px; right: -12px; border-left: 0; border-top: 0; }
+
         .chiseled-text {
             font-family: 'Cinzel', serif;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
         }
 
-        /* Buttons: Dark by default, light up on activation */
+        /* Interactive Orbs: 15% larger & Dark by default */
         .action-orb {
-            width: 85px; /* 15% larger than original */
-            height: 85px;
-            border-radius: 9999px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 2px solid rgba(212, 175, 55, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            color: rgba(212, 175, 55, 0.4);
-            cursor: pointer;
+            width: 85px; height: 85px; /* */
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6); /* Dark by default */
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.1s ease-out;
+            color: rgba(212, 175, 55, 0.5);
         }
         
-        /* Gold burst on click */
+        /* Light up on activation */
         .action-orb:active {
-            background: #d4af37;
-            color: #0f172a;
-            box-shadow: 0 0 40px #d4af37;
-            border-color: #fff;
-            transform: scale(0.92);
+            background: #d4af37; /* */
+            color: #1a1a1a;
+            box-shadow: 0 0 45px #d4af37;
+            transform: scale(0.9);
         }
 
-        .history-item {
-            font-family: 'Cinzel', serif;
-            font-size: 10px;
-            color: rgba(212, 175, 55, 0.7);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
-            padding: 8px 0;
+        .log-parchment {
+            background: rgba(212, 175, 55, 0.05);
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
         }
     </style>
 </head>
 <body class="text-white">
-    <svg class="gear" style="top: -5%; right: -5%; width: 500px;" viewBox="0 0 100 100">
+    <svg class="gear" style="top: -10%; right: -10%; width: 600px;" viewBox="0 0 100 100">
         <path fill="#d4af37" d="M95,50c0-2.2-1.4-4-3.4-4.8l-4.5-1.8c-0.6-1.9-1.4-3.7-2.5-5.4l2.5-4.2c1.1-1.9,0.7-4.3-1-5.8L78,21c-1.6-1.4-4-1.2-5.4,0.6l-3.2,4.1c-1.8-0.9-3.7-1.6-5.7-2.1l-0.8-4.8c-0.4-2.1-2.2-3.7-4.3-3.7H51.4c-2.1,0-4,1.6-4.3,3.7l-0.8,4.8c-2,0.5-3.9,1.2-5.7,2.1l-3.2-4.1c-1.4-1.8-3.8-2-5.4-0.6L22,28.1c-1.7,1.5-2.1,3.9-1,5.8l2.5,4.2c-1.1,1.7-1.9,3.5-2.5,5.4l-4.5,1.8c-2,0.8-3.4,2.6-3.4,4.8v10c0,2.2,1.4,4,3.4,4.8l4.5,1.8c0.6,1.9,1.4,3.7,2.5,5.4l-2.5,4.2c-1.1,1.9-0.7,4.3,1,5.8L32,79c1.6,1.4,4,1.2,5.4-0.6l3.2-4.1c1.8,0.9,3.7,1.6,5.7,2.1l0.8,4.8c0.4,2.1,2.2,3.7,4.3,3.7h17.1c2.1,0,4-1.6,4.3-3.7l0.8-4.8c2-0.5,3.9-1.2,5.7-2.1l3.2,4.1c1.4,1.8,3.8,2,5.4,0.6L88,71.9c1.7-1.5,2.1-3.9,1-5.8l-2.5-4.2c1.1-1.7,1.9-3.5,2.5-5.4l4.5-1.8c2-0.8,3.4-2.6,3.4-4.8V50z M50,65c-8.3,0-15-6.7-15-15s6.7-15,15-15s15,6.7,15,15S58.3,65,50,65z"/>
     </svg>
 
@@ -107,7 +94,6 @@
             const fetchData = async () => {
                 const { data: countData } = await supabaseClient.from('medicine_supply').select('value').eq('label', 'cartridge_count').single();
                 const { data: historyData } = await supabaseClient.from('medicine_log').select('timestamp, change_type').order('timestamp', { ascending: false }).limit(3);
-                
                 if (countData) setCount(countData.value);
                 if (historyData) setHistory(historyData);
                 setLoading(false);
@@ -127,54 +113,52 @@
                 const validatedVal = newVal < 0 ? 0 : newVal;
                 const changeType = newVal > count ? 'RESTOCK' : 'CONSUMED';
                 
-                // Logic for email trigger
+                // Email Trigger for Supply = 1
                 if (validatedVal === 1) {
-                    console.log("TRIGGERING EMAIL TO Daedelus11@gmail.com");
-                    // Note: This requires a backend hook to send real email
+                    console.log("SENDING EMAIL TO Daedelus11@gmail.com..."); //
                 }
 
                 setCount(validatedVal);
                 await supabaseClient.from('medicine_supply').update({ value: validatedVal }).eq('label', 'cartridge_count');
                 await supabaseClient.from('medicine_log').insert([{ change_type: changeType, timestamp: new Date().toISOString() }]);
+                setTimeout(fetchData, 200); // Small delay to let DB catch up
             };
 
-            if (loading) return <div className="flex h-screen items-center justify-center chiseled-text tracking-widest text-yellow-600/50">SYNCHRONIZING...</div>;
+            if (loading) return <div className="flex h-screen items-center justify-center chiseled-text text-yellow-600/50">COMMUNING WITH ARCHON...</div>;
 
             return (
-                <div className={`flex h-screen items-center justify-center p-6 transition-all duration-1000 ${isLowSupply ? 'bg-red-950/70' : ''}`}>
-                    <div className={`fontaine-card w-full max-w-sm p-8 rounded-xl text-center transition-all duration-500 ${isLowSupply ? 'border-red-600 shadow-[0_0_60px_rgba(239,68,68,0.5)]' : ''}`}>
+                <div className={`flex h-screen items-center justify-center p-6 transition-all duration-1000 ${isLowSupply ? 'bg-red-950/80' : ''}`}>
+                    <div className={`artifact-card w-full max-w-sm p-10 rounded-xl text-center transition-all ${isLowSupply ? 'border-red-600 shadow-[0_0_80px_rgba(239,68,68,0.6)]' : ''}`}>
                         
-                        <div className="flex justify-center mb-6">
-                             <div className={`h-1 w-20 rounded-full ${isLowSupply ? 'bg-red-500 animate-pulse' : 'bg-yellow-600/40'}`}></div>
-                        </div>
+                        <div className="corner top-left"></div>
+                        <div className="corner bottom-right"></div>
 
-                        <h1 className="chiseled-text text-[11px] uppercase tracking-[0.4em] mb-10 text-yellow-600/60 font-bold">
+                        <h1 className="chiseled-text text-[12px] uppercase tracking-[0.4em] mb-12 text-yellow-600/60 font-bold">
                             Supply Inventory
                         </h1>
                         
-                        <div className={`chiseled-text text-9xl font-black mb-14 tabular-nums transition-colors ${isLowSupply ? 'text-red-500' : 'text-white'}`}>
+                        <div className={`chiseled-text text-[10rem] font-black mb-16 tabular-nums leading-none ${isLowSupply ? 'text-red-500' : 'text-white'}`}>
                             {count}
                         </div>
                         
                         <div className="flex justify-center gap-16 mb-12">
-                            <button onClick={() => updateCount(count - 1)} className="action-orb text-3xl font-light"><span>−</span></button>
-                            <button onClick={() => updateCount(count + 1)} className="action-orb text-4xl font-bold"><span>+</span></button>
+                            <button onClick={() => updateCount(count - 1)} className="action-orb text-4xl font-light"><span>−</span></button>
+                            <button onClick={() => updateCount(count + 1)} className="action-orb text-5xl font-bold"><span>+</span></button>
                         </div>
 
                         {isLowSupply && (
-                            <div className="mb-8 text-[12px] uppercase tracking-[0.2em] text-red-500 font-black animate-bounce chiseled-text">
-                                Ava Wagner Needs her Meds!!!
-                            </div>
+                            <div className="mb-10 text-[14px] uppercase tracking-[0.2em] text-red-500 font-black animate-bounce chiseled-text">
+                                Ava Wagner Needs her Meds!!! </div>
                         )}
 
-                        <div className="mt-4 pt-8 border-t border-yellow-600/20 text-left">
-                            <h2 className="chiseled-text text-[9px] uppercase tracking-[0.3em] text-yellow-600/30 font-bold mb-4 text-center">Recent Activity</h2>
+                        <div className="mt-4 pt-8 log-parchment text-left">
+                            <h2 className="chiseled-text text-[10px] uppercase tracking-[0.3em] text-yellow-600/40 font-bold mb-4 text-center italic">Recent Chronicles</h2>
                             {history.length > 0 ? history.map((log, i) => (
-                                <div key={i} className="history-item flex justify-between px-3">
+                                <div key={i} className="flex justify-between px-4 py-2 border-b border-yellow-600/10 chiseled-text text-[10px] text-yellow-600/70">
                                     <span>{log.change_type}</span>
                                     <span>{new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                 </div>
-                            )) : <div className="text-[8px] text-center text-yellow-600/20 uppercase tracking-widest py-4">Awaiting Log Data...</div>}
+                            )) : <div className="text-center text-yellow-600/20 text-[9px] py-4 uppercase tracking-widest">Awaiting Log Entry...</div>}
                         </div>
                     </div>
                 </div>
