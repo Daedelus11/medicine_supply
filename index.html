@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ava's Meds</title> <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 fill=%22%23d4af37%22 font-family=%22serif%22 font-weight=%22bold%22>A</text></svg>">
+    <title>Ava's Meds</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 fill=%22%23d4af37%22 font-family=%22serif%22 font-weight=%22bold%22>A</text></svg>">
     
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -14,65 +15,61 @@
     
     <style>
         body {
-            /* Deeper parchment/stone background texture */
-            background: radial-gradient(circle at center, #2c3e50 0%, #000 100%);
+            background: radial-gradient(circle at center, #1a2a3a 0%, #050a0f 100%);
             font-family: 'Quicksand', sans-serif;
             overflow: hidden;
         }
-        .gear {
-            position: absolute; z-index: -1; opacity: 0.1;
-            animation: rotate 60s linear infinite;
-        }
+        .gear { position: absolute; z-index: -1; opacity: 0.12; animation: rotate 80s linear infinite; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* The Main Ornate Artifact Card */
+        /* The Main Artifact Container */
         .artifact-card {
-            background: linear-gradient(135deg, rgba(245, 230, 202, 0.1) 0%, rgba(15, 23, 42, 0.9) 100%);
-            backdrop-filter: blur(25px);
-            border: 2px solid #d4af37;
-            box-shadow: 0 0 60px rgba(0, 0, 0, 1), inset 0 0 30px rgba(212, 175, 55, 0.3);
+            background: linear-gradient(180deg, rgba(40, 55, 75, 0.9) 0%, rgba(15, 20, 30, 0.95) 100%);
+            backdrop-filter: blur(30px);
+            border: 2.5px solid #d4af37;
+            box-shadow: 0 0 80px rgba(0, 0, 0, 1), inset 0 0 40px rgba(212, 175, 55, 0.2);
             position: relative;
         }
 
-        /* Elaborate Corner Pieces */
-        .corner {
-            position: absolute; width: 40px; height: 40px; border: 4px solid #d4af37;
+        /* 5-Star Rarity Glow */
+        .rarity-bg {
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.3) 0%, transparent 70%);
         }
-        .top-left { top: -12px; left: -12px; border-right: 0; border-bottom: 0; }
-        .bottom-right { bottom: -12px; right: -12px; border-left: 0; border-top: 0; }
 
         .chiseled-text {
             font-family: 'Cinzel', serif;
-            text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
         }
 
-        /* Interactive Orbs: 15% larger & Dark by default */
+        /* Interactive Orbs */
         .action-orb {
-            width: 85px; height: 85px; /* */
+            width: 85px; height: 85px;
             border-radius: 50%;
-            background: rgba(0, 0, 0, 0.6); /* Dark by default */
-            border: 2px solid rgba(212, 175, 55, 0.4);
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(212, 175, 55, 0.3);
             display: flex; align-items: center; justify-content: center;
-            transition: all 0.1s ease-out;
+            transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             color: rgba(212, 175, 55, 0.5);
         }
         
         /* Light up on activation */
         .action-orb:active {
-            background: #d4af37; /* */
-            color: #1a1a1a;
-            box-shadow: 0 0 45px #d4af37;
+            background: #d4af37;
+            color: #0c1219;
+            box-shadow: 0 0 50px #d4af37, inset 0 0 10px white;
             transform: scale(0.9);
         }
 
-        .log-parchment {
-            background: rgba(212, 175, 55, 0.05);
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
+        /* Ornate Corners */
+        .fontaine-corner {
+            position: absolute; width: 45px; height: 45px; border: 4px solid #d4af37;
         }
+        .tc { top: -14px; left: -14px; border-right: 0; border-bottom: 0; }
+        .bc { bottom: -14px; right: -14px; border-left: 0; border-top: 0; }
     </style>
 </head>
 <body class="text-white">
-    <svg class="gear" style="top: -10%; right: -10%; width: 600px;" viewBox="0 0 100 100">
+    <svg class="gear" style="top: -15%; right: -15%; width: 700px;" viewBox="0 0 100 100">
         <path fill="#d4af37" d="M95,50c0-2.2-1.4-4-3.4-4.8l-4.5-1.8c-0.6-1.9-1.4-3.7-2.5-5.4l2.5-4.2c1.1-1.9,0.7-4.3-1-5.8L78,21c-1.6-1.4-4-1.2-5.4,0.6l-3.2,4.1c-1.8-0.9-3.7-1.6-5.7-2.1l-0.8-4.8c-0.4-2.1-2.2-3.7-4.3-3.7H51.4c-2.1,0-4,1.6-4.3,3.7l-0.8,4.8c-2,0.5-3.9,1.2-5.7,2.1l-3.2-4.1c-1.4-1.8-3.8-2-5.4-0.6L22,28.1c-1.7,1.5-2.1,3.9-1,5.8l2.5,4.2c-1.1,1.7-1.9,3.5-2.5,5.4l-4.5,1.8c-2,0.8-3.4,2.6-3.4,4.8v10c0,2.2,1.4,4,3.4,4.8l4.5,1.8c0.6,1.9,1.4,3.7,2.5,5.4l-2.5,4.2c-1.1,1.9-0.7,4.3,1,5.8L32,79c1.6,1.4,4,1.2,5.4-0.6l3.2-4.1c1.8,0.9,3.7,1.6,5.7,2.1l0.8,4.8c0.4,2.1,2.2,3.7,4.3,3.7h17.1c2.1,0,4-1.6,4.3-3.7l0.8-4.8c2-0.5,3.9-1.2,5.7-2.1l3.2,4.1c1.4,1.8,3.8,2,5.4,0.6L88,71.9c1.7-1.5,2.1-3.9,1-5.8l-2.5-4.2c1.1-1.7,1.9-3.5,2.5-5.4l4.5-1.8c2-0.8,3.4-2.6,3.4-4.8V50z M50,65c-8.3,0-15-6.7-15-15s6.7-15,15-15s15,6.7,15,15S58.3,65,50,65z"/>
     </svg>
 
@@ -84,6 +81,26 @@
         const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
+        // STYLIZED GENSHIN CARTRIDGE ICON
+        const CartridgeIcon = ({ color }) => (
+            <svg width="60" height="60" viewBox="0 0 100 100" className="drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]">
+                <defs>
+                    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#f3e5ab" />
+                        <stop offset="50%" stopColor="#d4af37" />
+                        <stop offset="100%" stopColor="#a67c00" />
+                    </linearGradient>
+                </defs>
+                {/* Reforged Base */}
+                <rect x="35" y="10" width="30" height="70" rx="15" fill="rgba(0,0,0,0.8)" stroke="url(#gold)" strokeWidth="3" />
+                {/* Hydro Core */}
+                <rect x="42" y="45" width="16" height="25" rx="4" fill={color} className="animate-pulse" />
+                {/* Gold Bands */}
+                <rect x="35" y="40" width="30" height="5" fill="url(#gold)" />
+                <rect x="35" y="75" width="30" height="8" fill="url(#gold)" />
+            </svg>
+        );
+
         function App() {
             const [count, setCount] = useState(0);
             const [history, setHistory] = useState([]);
@@ -92,52 +109,47 @@
             const isLowSupply = count <= 2;
 
             const fetchData = async () => {
-                const { data: countData } = await supabaseClient.from('medicine_supply').select('value').eq('label', 'cartridge_count').single();
-                const { data: historyData } = await supabaseClient.from('medicine_log').select('timestamp, change_type').order('timestamp', { ascending: false }).limit(3);
-                if (countData) setCount(countData.value);
-                if (historyData) setHistory(historyData);
+                const { data: c } = await supabaseClient.from('medicine_supply').select('value').eq('label', 'cartridge_count').single();
+                const { data: h } = await supabaseClient.from('medicine_log').select('timestamp, change_type').order('timestamp', { ascending: false }).limit(3);
+                if (c) setCount(c.value);
+                if (h) setHistory(h);
                 setLoading(false);
             };
 
             useEffect(() => {
                 fetchData();
-                const channel = supabaseClient.channel('db-changes').on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'medicine_supply' }, () => fetchData()
-                ).on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'medicine_log' }, () => fetchData()
-                ).subscribe();
+                const channel = supabaseClient.channel('realtime').on('postgres_changes', { event: '*', schema: 'public' }, () => fetchData()).subscribe();
                 return () => supabaseClient.removeChannel(channel);
             }, []);
 
             const updateCount = async (newVal) => {
-                const validatedVal = newVal < 0 ? 0 : newVal;
-                const changeType = newVal > count ? 'RESTOCK' : 'CONSUMED';
-                
-                // Email Trigger for Supply = 1
-                if (validatedVal === 1) {
-                    console.log("SENDING EMAIL TO Daedelus11@gmail.com..."); //
-                }
-
-                setCount(validatedVal);
-                await supabaseClient.from('medicine_supply').update({ value: validatedVal }).eq('label', 'cartridge_count');
-                await supabaseClient.from('medicine_log').insert([{ change_type: changeType, timestamp: new Date().toISOString() }]);
-                setTimeout(fetchData, 200); // Small delay to let DB catch up
+                const v = newVal < 0 ? 0 : newVal;
+                if (v === 1) console.log("MAIL ALERT: Daedelus11@gmail.com"); 
+                setCount(v);
+                await supabaseClient.from('medicine_supply').update({ value: v }).eq('label', 'cartridge_count');
+                await supabaseClient.from('medicine_log').insert([{ change_type: v > count ? 'RESTOCK' : 'CONSUMED', timestamp: new Date().toISOString() }]);
+                setTimeout(fetchData, 300);
             };
 
-            if (loading) return <div className="flex h-screen items-center justify-center chiseled-text text-yellow-600/50">COMMUNING WITH ARCHON...</div>;
+            if (loading) return <div className="flex h-screen items-center justify-center chiseled-text tracking-widest text-yellow-600/50">INVOKING DATA...</div>;
 
             return (
                 <div className={`flex h-screen items-center justify-center p-6 transition-all duration-1000 ${isLowSupply ? 'bg-red-950/80' : ''}`}>
-                    <div className={`artifact-card w-full max-w-sm p-10 rounded-xl text-center transition-all ${isLowSupply ? 'border-red-600 shadow-[0_0_80px_rgba(239,68,68,0.6)]' : ''}`}>
+                    <div className={`artifact-card w-full max-w-sm p-10 rounded-2xl text-center transition-all ${isLowSupply ? 'border-red-500 shadow-[0_0_100px_rgba(239,68,68,0.7)]' : ''}`}>
                         
-                        <div className="corner top-left"></div>
-                        <div className="corner bottom-right"></div>
+                        <div className="fontaine-corner tc"></div>
+                        <div className="fontaine-corner bc"></div>
 
-                        <h1 className="chiseled-text text-[12px] uppercase tracking-[0.4em] mb-12 text-yellow-600/60 font-bold">
-                            Supply Inventory
+                        {/* Inventory Stylization */}
+                        <div className="rarity-bg p-6 rounded-full inline-block mb-4">
+                            <CartridgeIcon color={isLowSupply ? "#ef4444" : "#60a5fa"} />
+                        </div>
+
+                        <h1 className="chiseled-text text-[13px] uppercase tracking-[0.4em] mb-12 text-yellow-600/60 font-bold">
+                            Legendary Supply
                         </h1>
                         
-                        <div className={`chiseled-text text-[10rem] font-black mb-16 tabular-nums leading-none ${isLowSupply ? 'text-red-500' : 'text-white'}`}>
+                        <div className={`chiseled-text text-[11rem] font-black mb-16 tabular-nums leading-none ${isLowSupply ? 'text-red-500 drop-shadow-[0_0_20px_#ef4444]' : 'text-white'}`}>
                             {count}
                         </div>
                         
@@ -147,16 +159,16 @@
                         </div>
 
                         {isLowSupply && (
-                            <div className="mb-10 text-[14px] uppercase tracking-[0.2em] text-red-500 font-black animate-bounce chiseled-text">
+                            <div className="mb-10 text-[15px] uppercase tracking-[0.2em] text-red-500 font-black animate-bounce chiseled-text">
                                 Ava Wagner Needs her Meds!!! </div>
                         )}
 
-                        <div className="mt-4 pt-8 log-parchment text-left">
-                            <h2 className="chiseled-text text-[10px] uppercase tracking-[0.3em] text-yellow-600/40 font-bold mb-4 text-center italic">Recent Chronicles</h2>
-                            {history.length > 0 ? history.map((log, i) => (
-                                <div key={i} className="flex justify-between px-4 py-2 border-b border-yellow-600/10 chiseled-text text-[10px] text-yellow-600/70">
-                                    <span>{log.change_type}</span>
-                                    <span>{new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                        <div className="mt-4 pt-8 border-t border-yellow-600/15 text-left bg-black/20 rounded-b-xl">
+                            <h2 className="chiseled-text text-[10px] uppercase tracking-[0.3em] text-yellow-600/30 font-bold mb-4 text-center italic">Chronicle of Uses</h2>
+                            {history.length > 0 ? history.map((l, i) => (
+                                <div key={i} className="flex justify-between px-6 py-2 border-b border-white/5 chiseled-text text-[10px] text-yellow-600/70">
+                                    <span>{l.change_type}</span>
+                                    <span>{new Date(l.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                                 </div>
                             )) : <div className="text-center text-yellow-600/20 text-[9px] py-4 uppercase tracking-widest">Awaiting Log Entry...</div>}
                         </div>
