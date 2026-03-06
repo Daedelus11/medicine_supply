@@ -33,21 +33,18 @@
             max-width: 400px;
         }
 
-        /* RESTORED CORNER DETAILS */
+        /* TWO CORNER LAYOUT */
         .corner { position: absolute; width: 35px; height: 35px; border: 4px solid #d4af37; z-index: 10; }
         .tc_l { top: -12px; left: -12px; border-right: 0; border-bottom: 0; }
-        .tc_r { top: -12px; right: -12px; border-left: 0; border-bottom: 0; }
-        .bc_l { bottom: -12px; left: -12px; border-right: 0; border-top: 0; }
         .bc_r { bottom: -12px; right: -12px; border-left: 0; border-top: 0; }
 
         .chiseled-text { font-family: 'Cinzel', serif; text-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
 
-        /* RE-IMPROVED BUTTONS */
         .action-orb {
             width: 82px; height: 82px;
             border-radius: 50%;
             background: linear-gradient(180deg, #5d432c 0%, #3e2d1d 100%); 
-            border: 4px solid #f3e5ab; /* Thicker & Brighter Outline */
+            border: 4px solid #f3e5ab; 
             display: flex; align-items: center; justify-content: center;
             transition: all 0.1s ease;
             color: #f3e5ab;
@@ -119,9 +116,9 @@
 
             return (
                 <div onClick={initAudio} className={`artifact-card p-6 md:p-8 rounded-2xl text-center transition-all flex flex-col justify-between ${isLowSupply ? 'border-red-500 shadow-[0_0_80px_rgba(239,68,68,0.6)]' : ''}`}>
-                    {/* RESTORED CORNERS */}
-                    <div className="corner tc_l"></div><div className="corner tc_r"></div>
-                    <div className="corner bc_l"></div><div className="corner bc_r"></div>
+                    {/* TWO CORNER LAYOUT */}
+                    <div className="corner tc_l"></div>
+                    <div className="corner bc_r"></div>
 
                     <div className="flex flex-col items-center">
                         <div className="rarity-slot flex items-center justify-center">
@@ -139,7 +136,6 @@
 
                     <h1 className="chiseled-text text-[9px] uppercase tracking-[0.3em] mt-3 text-yellow-600/50 font-bold">Legendary Supply</h1>
                     
-                    {/* 15% SMALLER NUMBER (15.3vh) */}
                     <div className={`chiseled-text text-[15.3vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500 drop-shadow-[0_0_20px_#ef4444]' : 'text-white'}`}>
                         {count}
                     </div>
@@ -149,8 +145,9 @@
                         <button onClick={() => updateCount(count + 1)} className="action-orb text-4xl font-bold"><span>+</span></button>
                     </div>
 
+                    {/* LOW SUPPLY ALERT: 15% LARGER */}
                     {isLowSupply && (
-                        <div className="mt-4 text-[12px] text-red-500 font-black animate-bounce chiseled-text">
+                        <div className="mt-4 text-[14px] text-red-500 font-black animate-bounce chiseled-text">
                             Ava Wagner Needs her Meds!!!
                         </div>
                     )}
