@@ -10,12 +10,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-slate-900 text-white font-sans">
+<body id="body-bg" class="bg-slate-900 text-white font-sans transition-colors duration-500">
     <div id="root"></div>
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // FIXED: Added quotes and renamed variable to avoid conflict with the library
         const supabaseUrl = 'https://mrhgitbdobfnelnulnbg.supabase.co';
         const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
@@ -24,10 +23,12 @@
             const [count, setCount] = useState(0);
             const [loading, setLoading] = useState(true);
 
+            // Logic to determine if supply is low
+            const isLowSupply = count <= 2;
+
             useEffect(() => {
                 const fetchCount = async () => {
-                    // FIXED: Using supabaseClient here
-                    const { data, error } = await supabaseClient
+                    const { data } = await supabaseClient
                         .from('medicine_supply')
                         .select('value')
                         .eq('label', 'cartridge_count')
@@ -47,24 +48,45 @@
             }, []);
 
             const updateCount = async (newVal) => {
-                setCount(newVal);
-                // FIXED: Using supabaseClient here
+                const validatedVal = newVal < 0 ? 0 : newVal; // Prevent negative counts
+                setCount(validatedVal);
                 await supabaseClient
                     .from('medicine_supply')
-                    .update({ value: newVal })
+                    .update({ value: validatedVal })
                     .eq('label', 'cartridge_count');
             };
 
             if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
 
             return (
-                <div className="flex h-screen items-center justify-center p-6">
-                    <div className="w-full max-w-sm bg-slate-800 p-10 rounded-3xl border border-slate-700 text-center shadow-2xl">
-                        <h1 className="text-xs uppercase tracking-[0.2em] mb-10 text-slate-500 font-bold">Cartridges Remaining</h1>
-                        <div className="text-9xl font-black mb-12 text-white tabular-nums">{count}</div>
+                <div className={`flex h-screen items-center justify-center p-6 transition-colors duration-500 ${isLowSupply ? 'bg-red-600' : 'bg-slate-900'}`}>
+                    <div className="w-full max-w-sm bg-white/10 backdrop-blur-md p-10 rounded-3xl border border-white/20 text-center shadow-2xl">
+                        
+                        {isLowSupply && (
+                            <div className="mb-4 py-1 px-3 bg-white text-red-600 text-[10px] font-black uppercase rounded-full inline-block animate-pulse">
+                                Low Supply Alert
+                            </div>
+                        )}
+
+                        <h1 className="text-xs uppercase tracking-[0.2em] mb-10 text-white/50 font-bold">
+                            Cartridges Remaining
+                        </h1>
+                        
+                        <div className="text-9xl font-black mb-12 text-white tabular-nums drop-shadow-md">
+                            {count}
+                        </div>
+                        
                         <div className="flex justify-between gap-6">
-                            <button onClick={() => updateCount(count - 1)} className="flex-1 py-6 rounded-2xl border-2 border-slate-600 text-4xl hover:bg-slate-700 active:scale-95 transition-all">–</button>
-                            <button onClick={() => updateCount(count + 1)} className="flex-1 py-6 rounded-2xl bg-blue-600 text-4xl font-bold hover:bg-blue-500 active:scale-95 transition-all shadow-lg shadow-blue-900/40">+</button>
+                            <button 
+                                onClick={() => updateCount(count - 1)} 
+                                className="flex-1 py-6 rounded-2xl border-2 border-white/30 text-4xl text-white hover:bg-white/10 active:scale-95 transition-all">
+                                –
+                            </button>
+                            <button 
+                                onClick={() => updateCount(count + 1)} 
+                                className="flex-1 py-6 rounded-2xl bg-white text-slate-900 text-4xl font-bold hover:bg-white/90 active:scale-95 transition-all shadow-lg">
+                                +
+                            </button>
                         </div>
                     </div>
                 </div>
