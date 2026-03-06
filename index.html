@@ -19,6 +19,9 @@
             font-family: 'Quicksand', sans-serif;
             overflow: hidden;
         }
+        .gear { position: absolute; z-index: -1; opacity: 0.1; animation: rotate 80s linear infinite; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
         .artifact-card {
             background: linear-gradient(180deg, rgba(40, 55, 75, 0.9) 0%, rgba(15, 20, 30, 0.95) 100%);
             backdrop-filter: blur(25px);
@@ -29,6 +32,14 @@
             width: 90vw;
             max-width: 400px;
         }
+
+        /* 1. RESTORED CORNER DETAILS */
+        .corner { position: absolute; width: 35px; height: 35px; border: 4px solid #d4af37; }
+        .tc_l { top: -12px; left: -12px; border-right: 0; border-bottom: 0; }
+        .tc_r { top: -12px; right: -12px; border-left: 0; border-bottom: 0; }
+        .bc_l { bottom: -12px; left: -12px; border-right: 0; border-top: 0; }
+        .bc_r { bottom: -12px; right: -12px; border-left: 0; border-top: 0; }
+
         .chiseled-text { font-family: 'Cinzel', serif; text-shadow: 0 0 15px rgba(255, 255, 255, 0.4); }
         
         .action-orb {
@@ -51,22 +62,33 @@
         const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // NEW "PLINK" SOUND: Sharper, shorter, and less intrusive
+        // 3. SOUND RESTORATION LOGIC
         const plinkUrl = 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3';
 
         function App() {
             const [count, setCount] = useState(0);
             const [history, setHistory] = useState([]);
             const [loading, setLoading] = useState(true);
-            const audioRef = useRef(new Audio(plinkUrl)); // Pre-load the plink
+            const [audioReady, setAudioReady] = useState(false);
+            const audioRef = useRef(new Audio(plinkUrl));
 
             const isLowSupply = count <= 2;
 
+            // Unlock Audio context on first click
+            const initAudio = () => {
+                if (!audioReady) {
+                    audioRef.current.play().then(() => {
+                        audioRef.current.pause();
+                        setAudioReady(true);
+                    });
+                }
+            };
+
             const playPlink = () => {
-                if (audioRef.current) {
-                    audioRef.current.currentTime = 0; // Reset to start
-                    audioRef.current.volume = 0.6; // Subtle volume
-                    audioRef.current.play().catch(e => console.log("Audio blocked", e));
+                if (audioRef.current && audioReady) {
+                    audioRef.current.currentTime = 0;
+                    audioRef.current.volume = 0.6;
+                    audioRef.current.play().catch(e => console.log("Audio play blocked", e));
                 }
             };
 
@@ -86,7 +108,7 @@
 
             const updateCount = async (newVal) => {
                 const v = newVal < 0 ? 0 : newVal;
-                playPlink(); // Play only on explicit user click
+                playPlink();
                 setCount(v);
                 await supabaseClient.from('medicine_supply').update({ value: v }).eq('label', 'cartridge_count');
                 await supabaseClient.from('medicine_log').insert([{ change_type: v > count ? 'RESTOCK' : 'CONSUMED', timestamp: new Date().toISOString() }]);
@@ -95,7 +117,11 @@
             if (loading) return <div className="chiseled-text tracking-widest text-yellow-600/50">SYNCHRONIZING...</div>;
 
             return (
-                <div className={`artifact-card p-6 md:p-8 rounded-2xl text-center transition-all flex flex-col justify-between ${isLowSupply ? 'border-red-500 shadow-[0_0_80px_rgba(239,68,68,0.6)]' : ''}`}>
+                <div onClick={initAudio} className={`artifact-card p-6 md:p-8 rounded-2xl text-center transition-all flex flex-col justify-between ${isLowSupply ? 'border-red-500 shadow-[0_0_80px_rgba(239,68,68,0.6)]' : ''}`}>
+                    {/* 1. RESTORED CORNER DETAILS */}
+                    <div className="corner tc_l"></div><div className="corner tc_r"></div>
+                    <div className="corner bc_l"></div><div className="corner bc_r"></div>
+
                     <div className="flex flex-col items-center">
                         <div className="rarity-slot flex items-center justify-center">
                             <svg width="45" height="45" viewBox="0 0 100 100">
@@ -107,7 +133,8 @@
 
                     <h1 className="chiseled-text text-[9px] uppercase tracking-[0.3em] mt-3 text-yellow-600/50 font-bold text-center">Supply Inventory</h1>
                     
-                    <div className={`chiseled-text text-[18vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500 drop-shadow-[0_0_20px_#ef4444]' : 'text-white'}`}>
+                    {/* 2. NUMBER SIZE 15% SMALLER (Changed from 18vh to 15.3vh) */}
+                    <div className={`chiseled-text text-[15.3vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500 drop-shadow-[0_0_20px_#ef4444]' : 'text-white'}`}>
                         {count}
                     </div>
                     
