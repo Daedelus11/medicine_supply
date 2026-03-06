@@ -59,7 +59,6 @@
             box-shadow: 0 8px 25px rgba(0,0,0,0.9);
         }
         
-        /* Bright flash on activation */
         .action-orb:active { 
             background: #f9f0d1; 
             color: #2b1d0e; 
@@ -90,7 +89,6 @@
         const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // SUBTLE PLINK SOUND
         const plinkUrl = 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3';
 
         function App() {
@@ -144,7 +142,7 @@
                 await supabaseClient.from('medicine_log').insert([{ change_type: v > count ? 'RESTOCK' : 'CONSUMED', timestamp: new Date().toISOString() }]);
             };
 
-            if (loading) return <div className="chiseled-text tracking-[0.5em] text-yellow-600/60 animate-pulse">COMMUNING...</div>;
+            if (loading) return <div className="chiseled-text tracking-[0.5em] text-yellow-600/60 animate-pulse flex items-center justify-center min-h-screen">COMMUNING...</div>;
 
             return (
                 <div onClick={initAudio} className={`artifact-card p-6 md:p-8 rounded-2xl text-center transition-all flex flex-col justify-between ${isLowSupply ? 'border-red-500 shadow-[0_0_80px_rgba(239,68,68,0.7)]' : ''}`}>
@@ -153,7 +151,8 @@
 
                     <div className="flex flex-col items-center">
                         <div className="rarity-slot flex items-center justify-center">
-                            <svg width="45" height="45" viewBox="0 0 100 100">
+                            {/* DYNAMIC SCALE FIX: Icon width/height increased by 25% (45 to 56) */}
+                            <svg width="56" height="56" viewBox="0 0 100 100">
                                 <path d="M40,15 L60,15 L60,75 L40,75 Z" fill="rgba(0,0,0,0.8)" stroke="#f3e5ab" strokeWidth="2" />
                                 <rect x="43" y="35" width="14" height="30" rx="2" fill={isLowSupply ? "#ef4444" : "#60a5fa"} className="animate-pulse" />
                                 <path d="M38,20 L62,20 L62,28 L38,28 Z" fill="#d4af37" />
@@ -165,7 +164,6 @@
                         </div>
                     </div>
 
-                    {/* LEGIBILITY UPGRADE: Bright gold & Bold */}
                     <div className="flex items-center justify-center gap-2 mt-4">
                         <svg width="12" height="12" viewBox="0 0 100 100" fill="#60a5fa">
                             <path d="M50 0C22.4 0 0 22.4 0 50s22.4 50 50 50 50-22.4 50-50S77.6 0 50 0zm0 90C27.9 90 10 72.1 10 50S27.9 10 50 10s40 17.9 40 40-17.9 40-40 40z"/>
@@ -175,7 +173,6 @@
                         </h1>
                     </div>
                     
-                    {/* 15% SMALLER NUMBER (13vh) */}
                     <div className={`chiseled-text text-[13vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500 drop-shadow-[0_0_20px_#ef4444]' : 'text-white'}`}>
                         {count}
                     </div>
@@ -185,7 +182,6 @@
                         <button onClick={() => updateCount(count + 1)} className="action-orb text-4xl font-bold"><span>+</span></button>
                     </div>
 
-                    {/* NOTIFICATION: 15% LARGER (18.5px) */}
                     {isLowSupply && (
                         <div className="mt-4 text-[18.5px] text-red-500 font-black animate-bounce chiseled-text drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
                             Ava Wagner Needs her Meds!!!
