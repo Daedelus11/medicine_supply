@@ -3,19 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supply Log</title>
+    <title>Supply Log: Fontaine Clockwork</title>
     <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+        }
+        
+        /* Rotating Gear Background */
+        .gear {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.05;
+            animation: rotate 60s linear infinite;
+        }
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .fontaine-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid #d4af37; 
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5), inset 0 0 15px rgba(212, 175, 55, 0.2);
+            position: relative;
+        }
+        
+        .fontaine-card::before, .fontaine-card::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 3px solid #d4af37;
+        }
+        .fontaine-card::before { top: -6px; left: -6px; border-right: 0; border-bottom: 0; }
+        .fontaine-card::after { bottom: -6px; right: -6px; border-left: 0; border-top: 0; }
+        
+        .counter-text {
+            font-family: 'Cinzel', serif;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
+        .hydro-glow { box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+        .pyro-glow { 
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.6); 
+            border-color: #ef4444 !important;
+        }
+    </style>
 </head>
-<body class="bg-slate-900 text-white font-sans transition-colors duration-500">
+<body class="text-white">
+    <svg class="gear" style="top: -10%; right: -10%; width: 500px;" viewBox="0 0 100 100">
+        <path fill="#d4af37" d="M95,50c0-2.2-1.4-4-3.4-4.8l-4.5-1.8c-0.6-1.9-1.4-3.7-2.5-5.4l2.5-4.2c1.1-1.9,0.7-4.3-1-5.8L78,21c-1.6-1.4-4-1.2-5.4,0.6l-3.2,4.1c-1.8-0.9-3.7-1.6-5.7-2.1l-0.8-4.8c-0.4-2.1-2.2-3.7-4.3-3.7H51.4c-2.1,0-4,1.6-4.3,3.7l-0.8,4.8c-2,0.5-3.9,1.2-5.7,2.1l-3.2-4.1c-1.4-1.8-3.8-2-5.4-0.6L22,28.1c-1.7,1.5-2.1,3.9-1,5.8l2.5,4.2c-1.1,1.7-1.9,3.5-2.5,5.4l-4.5,1.8c-2,0.8-3.4,2.6-3.4,4.8v10c0,2.2,1.4,4,3.4,4.8l4.5,1.8c0.6,1.9,1.4,3.7,2.5,5.4l-2.5,4.2c-1.1,1.9-0.7,4.3,1,5.8L32,79c1.6,1.4,4,1.2,5.4-0.6l3.2-4.1c1.8,0.9,3.7,1.6,5.7,2.1l0.8,4.8c0.4,2.1,2.2,3.7,4.3,3.7h17.1c2.1,0,4-1.6,4.3-3.7l0.8-4.8c2-0.5,3.9-1.2,5.7-2.1l3.2,4.1c1.4,1.8,3.8,2,5.4,0.6L88,71.9c1.7-1.5,2.1-3.9,1-5.8l-2.5-4.2c1.1-1.7,1.9-3.5,2.5-5.4l4.5-1.8c2-0.8,3.4-2.6,3.4-4.8V50z M50,65c-8.3,0-15-6.7-15-15s6.7-15,15-15s15,6.7,15,15S58.3,65,50,65z"/>
+    </svg>
+
     <div id="root"></div>
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // FIXED: Renamed to supabaseClient and added 'single quotes'
         const supabaseUrl = 'https://mrhgitbdobfnelnulnbg.supabase.co';
         const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
@@ -28,12 +79,7 @@
 
             useEffect(() => {
                 const fetchCount = async () => {
-                    const { data } = await supabaseClient
-                        .from('medicine_supply')
-                        .select('value')
-                        .eq('label', 'cartridge_count')
-                        .single();
-                    
+                    const { data } = await supabaseClient.from('medicine_supply').select('value').eq('label', 'cartridge_count').single();
                     if (data) setCount(data.value);
                     setLoading(false);
                 };
@@ -43,39 +89,53 @@
                     { event: 'UPDATE', schema: 'public', table: 'medicine_supply' },
                     (payload) => { setCount(payload.new.value); }
                 ).subscribe();
-
                 return () => supabaseClient.removeChannel(channel);
             }, []);
 
             const updateCount = async (newVal) => {
                 const validatedVal = newVal < 0 ? 0 : newVal;
                 setCount(validatedVal);
-                await supabaseClient
-                    .from('medicine_supply')
-                    .update({ value: validatedVal })
-                    .eq('label', 'cartridge_count');
+                await supabaseClient.from('medicine_supply').update({ value: validatedVal }).eq('label', 'cartridge_count');
             };
 
-            if (loading) return <div className="flex h-screen items-center justify-center">Loading...</div>;
+            if (loading) return <div className="flex h-screen items-center justify-center font-serif tracking-widest text-blue-200">LOADING DATA...</div>;
 
             return (
-                <div className={`flex h-screen items-center justify-center p-6 transition-colors duration-500 ${isLowSupply ? 'bg-red-600' : 'bg-slate-900'}`}>
-                    <div className="w-full max-w-sm bg-white/10 backdrop-blur-md p-10 rounded-3xl border border-white/20 text-center shadow-2xl">
-                        {isLowSupply && (
-                            <div className="mb-4 py-1 px-3 bg-white text-red-600 text-[10px] font-black uppercase rounded-full inline-block animate-pulse">
-                                Low Supply Alert
-                            </div>
-                        )}
-                        <h1 className="text-xs uppercase tracking-[0.2em] mb-10 text-white/50 font-bold">Cartridges Remaining</h1>
-                        <div className="text-9xl font-black mb-12 text-white tabular-nums drop-shadow-md">{count}</div>
-                        <div className="flex justify-between gap-6">
-                            <button onClick={() => updateCount(count - 1)} className="flex-1 py-6 rounded-2xl border-2 border-white/30 text-4xl text-white hover:bg-white/10 active:scale-95 transition-all">
-                                –
+                <div className={`flex h-screen items-center justify-center p-6 transition-all duration-1000 ${isLowSupply ? 'bg-red-950/50' : ''}`}>
+                    
+                    <div className={`fontaine-card w-full max-w-sm p-10 rounded-lg text-center ${isLowSupply ? 'pyro-glow' : 'hydro-glow'}`}>
+                        
+                        {/* Status Light */}
+                        <div className="flex justify-center mb-6">
+                             <div className={`h-1 w-12 rounded-full ${isLowSupply ? 'bg-red-500 animate-pulse shadow-[0_0_10px_#ef4444]' : 'bg-blue-400 shadow-[0_0_10px_#60a5fa]'}`}></div>
+                        </div>
+
+                        <h1 className="text-[10px] uppercase tracking-[0.4em] mb-8 text-blue-200/60 font-bold font-serif">
+                            {isLowSupply ? "CRITICAL ALERT" : "CARTRIDGE SUPPLY LEVEL"}
+                        </h1>
+                        
+                        <div className="counter-text text-9xl font-black mb-12 text-white tabular-nums drop-shadow-lg">
+                            {count}
+                        </div>
+                        
+                        <div className="flex justify-between gap-8 px-4">
+                            <button 
+                                onClick={() => updateCount(count - 1)} 
+                                className="w-16 h-16 rounded-full border border-blue-400/30 flex items-center justify-center text-2xl hover:bg-white/5 active:scale-90 transition-all text-blue-200">
+                                <span className="mb-1">−</span>
                             </button>
-                            <button onClick={() => updateCount(count + 1)} className="flex-1 py-6 rounded-2xl bg-white text-slate-900 text-4xl font-bold hover:bg-white/90 active:scale-95 transition-all shadow-lg">
-                                +
+                            <button 
+                                onClick={() => updateCount(count + 1)} 
+                                className="w-16 h-16 rounded-full bg-[#d4af37] text-slate-900 flex items-center justify-center text-3xl font-bold hover:brightness-110 active:scale-90 transition-all shadow-lg">
+                                <span className="mb-1">+</span>
                             </button>
                         </div>
+
+                        {isLowSupply && (
+                            <div className="mt-8 text-xs uppercase tracking-[0.2em] text-red-400 font-black animate-bounce">
+                                Ava Wagner Needs her Med's!!
+                            </div>
+                        )}
                     </div>
                 </div>
             );
