@@ -40,44 +40,31 @@ const ArtifactScreen = ({ realm, audioReady }) => {
     };
 
     return (
-        <div className={`artifact-card w-[90vw] max-w-sm h-[75vh] p-10 rounded-2xl text-center flex flex-col justify-between transition-all ${isLowSupply ? 'border-red-500' : ''}`}>
+        <div className={`artifact-card w-[85vw] max-w-sm h-[70vh] p-8 rounded-2xl text-center flex flex-col justify-between transition-all ${isLowSupply ? 'border-red-500' : ''}`}>
             <div className="corner tc_l"></div><div className="corner bc_r"></div>
-
             <div className="flex flex-col items-center">
                 <div className="rarity-slot bg-gradient-to-b from-[#d29762] to-[#7d5a3c] border-2 border-[#f9f0d1] w-20 h-20 rounded-br-2xl flex items-center justify-center">
                     <svg width="67" height="67" viewBox="0 0 100 100">
                         <path d="M40,15 L60,15 L60,75 L40,75 Z" fill="rgba(0,0,0,0.8)" stroke="#f3e5ab" strokeWidth="2" />
-                        <rect x="43" y="35" width="14" height="30" rx="2" fill={isLowSupply ? "#ef4444" : "#60a5fa"} className="animate-pulse" />
+                        <rect x="43" y="35" width="14" height="30" rx="2" fill={isLowSupply ? "#ef4444" : "#60a5fa"} />
                         <path d="M38,20 L62,20 L62,28 L38,28 Z" fill="#d4af37" /><circle cx="50" cy="82" r="6" fill="#f3e5ab" />
                     </svg>
                 </div>
-                <div className="flex gap-1 mt-2 text-[#f3e5ab] text-sm">★ ★ ★ ★ ★</div>
+                <div className="flex gap-1 mt-2 text-[#f3e5ab] text-xs">★ ★ ★ ★ ★</div>
             </div>
-
-            <h1 className="font-serif uppercase tracking-[0.6em] text-[#d4af37] font-black text-xs mt-4">
-                {realm.id} Legendary Supply
+            <h1 className={`chiseled-text uppercase tracking-[0.5em] font-black mt-4 ${realm.id === 'Ava' ? 'text-[#d4af37] text-[16px]' : 'text-yellow-600/60 text-[11px]'}`}>
+                {realm.id}
             </h1>
-            
-            <div className={`font-serif text-[13vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500' : 'text-white'}`}>
-                {count}
+            <div className={`chiseled-text text-[13vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500' : 'text-white'}`}>{count}</div>
+            <div className="flex justify-center gap-8">
+                <button onClick={() => updateCount(count - 1)} className="action-orb w-16 h-16 rounded-full text-2xl font-light">−</button>
+                <button onClick={() => updateCount(count + 1)} className="action-orb w-16 h-16 rounded-full text-3xl font-bold">+</button>
             </div>
-            
-            <div className="flex justify-center gap-10">
-                <button onClick={() => updateCount(count - 1)} className="action-orb w-20 h-20 rounded-full text-3xl font-light">−</button>
-                <button onClick={() => updateCount(count + 1)} className="action-orb w-20 h-20 rounded-full text-4xl font-bold">+</button>
-            </div>
-
-            {isLowSupply && (
-                <div className="mt-4 text-[18.5px] text-red-500 font-black animate-bounce font-serif drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
-                    Ava Wagner Needs her Meds!!!
-                </div>
-            )}
-
+            {isLowSupply && <div className="mt-4 text-[18.5px] text-red-500 font-black animate-bounce chiseled-text drop-shadow-[0_0_10px_black]">Ava Wagner Needs Meds!!!</div>}
             <div className="mt-4 pt-4 border-t border-yellow-600/20 text-left bg-black/40 rounded-b-xl px-4">
                 {history.map((l, i) => (
-                    <div key={i} className="flex justify-between py-1 border-b border-white/5 font-serif text-[10px] text-yellow-600/80 font-bold uppercase">
-                        <span>{l.change_type}</span>
-                        <span>{new Date(l.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                    <div key={i} className="flex justify-between py-1 border-b border-white/5 chiseled-text text-[9px] text-yellow-600/80 font-bold uppercase">
+                        <span>{l.change_type}</span><span>{new Date(l.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                 ))}
             </div>
@@ -86,19 +73,37 @@ const ArtifactScreen = ({ realm, audioReady }) => {
 };
 
 function App() {
-    const [currentIdx, setCurrentIdx] = useState(1); // Default to Fontaine (Ava)
+    const [currentIdx, setCurrentIdx] = useState(1);
     const [audioReady, setAudioReady] = useState(false);
+    const [touchStart, setTouchStart] = useState(null);
+    const [touchEnd, setTouchEnd] = useState(null);
+
+    //     const handleTouchStart = (e) => setTouchStart(e.targetTouches[0].clientX);
+    const handleTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
+    const handleTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        if (distance > 50 && currentIdx < 2) setCurrentIdx(currentIdx + 1);
+        if (distance < -50 && currentIdx > 0) setCurrentIdx(currentIdx - 1);
+        setTouchStart(null); setTouchEnd(null);
+    };
+
+    useEffect(() => {
+        document.body.className = REALMS[currentIdx].theme;
+    }, [currentIdx]);
 
     return (
-        <div onClick={() => setAudioReady(true)} className={`min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-1000 ${REALMS[currentIdx].theme}`}>
+        <div 
+            onClick={() => setAudioReady(true)} 
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            className="min-h-screen flex flex-col items-center justify-center p-4"
+        >
             <ArtifactScreen realm={REALMS[currentIdx]} audioReady={audioReady} />
-
-            <div className="nav-bar fixed bottom-0 left-0 right-0 h-24 flex items-center px-4">
-                {REALMS.map((r, idx) => (
-                    <button key={r.id} onClick={() => setCurrentIdx(idx)} className={`flex-1 flex flex-col items-center gap-1 opacity-40 transition-all ${currentIdx === idx ? 'nav-button active' : ''}`}>
-                        <span className="text-2xl">{r.icon}</span>
-                        <span className="font-serif text-[10px] tracking-widest font-black text-[#d4af37]">{r.name}</span>
-                    </button>
+            <div className="flex gap-4 mt-12">
+                {REALMS.map((_, idx) => (
+                    <div key={idx} className={`indicator-dot ${currentIdx === idx ? 'active' : ''}`} />
                 ))}
             </div>
         </div>
