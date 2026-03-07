@@ -19,68 +19,47 @@
             font-family: 'Quicksand', sans-serif;
             overflow: hidden;
         }
-
         .gear { 
             position: absolute; z-index: -1; opacity: 0.12; 
-            animation: rotate 120s linear infinite; 
-            pointer-events: none;
+            animation: rotate 120s linear infinite; pointer-events: none;
         }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
         .artifact-card {
             background: linear-gradient(180deg, rgba(30, 45, 65, 0.98) 0%, rgba(10, 15, 20, 1) 100%);
             background-image: url("https://www.transparenttextures.com/patterns/dark-matter.png");
             backdrop-filter: blur(40px);
             border: 2px solid #d4af37;
             box-shadow: 0 0 50px rgba(0, 0, 0, 1), inset 0 0 20px rgba(212, 175, 55, 0.1);
-            position: relative;
-            flex: 1;
-            min-width: 0;
-            height: 85vh;
+            position: relative; flex: 1; height: 85vh;
         }
-
-        /* TWO CORNERS ONLY */
         .corner { position: absolute; width: 30px; height: 30px; border: 4px solid #d4af37; z-index: 10; }
         .tc_l { top: -10px; left: -10px; border-right: 0; border-bottom: 0; }
         .bc_r { bottom: -10px; right: -10px; border-left: 0; border-top: 0; }
-
         .chiseled-text { font-family: 'Cinzel', serif; text-shadow: 0 0 15px rgba(255, 255, 255, 0.3); }
-
-        /* BUTTONS: BROWN GRADIENT + 5PX BRIGHT OUTLINE */
         .action-orb {
-            width: 65px; height: 65px;
-            border-radius: 50%;
+            width: 65px; height: 65px; border-radius: 50%;
             background: linear-gradient(180deg, #6b4d34 0%, #4a3522 100%); 
-            border: 5px solid #f9f0d1; 
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.1s ease;
-            color: #f9f0d1;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.7);
+            border: 5px solid #f9f0d1; display: flex; align-items: center; justify-content: center;
+            transition: all 0.1s ease; color: #f9f0d1;
         }
         .action-orb:active { background: #f9f0d1; color: #4a3522; box-shadow: 0 0 50px #f9f0d1; transform: scale(0.9); }
-
         .rarity-slot {
             background: linear-gradient(180deg, #d29762 0%, #7d5a3c 100%);
-            border: 2.5px solid #f9f0d1;
-            width: 60px; height: 60px;
-            border-bottom-right-radius: 15px;
+            border: 2px solid #f9f0d1; width: 60px; height: 60px; border-bottom-right-radius: 15px;
         }
-        .star { color: #f3e5ab; text-shadow: 0 0 10px #d4af37; font-size: 10px; }
+        .star { color: #f3e5ab; font-size: 10px; }
     </style>
 </head>
 <body class="text-white flex items-center justify-center min-h-screen p-4">
-    
     <svg class="gear" style="top: -10%; right: -10%; width: 700px;" viewBox="0 0 100 100">
         <path fill="#d4af37" d="M95,50c0-2.2-1.4-4-3.4-4.8l-4.5-1.8c-0.6-1.9-1.4-3.7-2.5-5.4l2.5-4.2c1.1-1.9,0.7-4.3-1-5.8L78,21c-1.6-1.4-4-1.2-5.4,0.6l-3.2,4.1c-1.8-0.9-3.7-1.6-5.7-2.1l-0.8-4.8c-0.4-2.1-2.2-3.7-4.3-3.7H51.4c-2.1,0-4,1.6-4.3,3.7l-0.8,4.8c-2,0.5-3.9,1.2-5.7,2.1l-3.2-4.1c-1.4-1.8-3.8-2-5.4-0.6L22,28.1c-1.7,1.5-2.1,3.9-1,5.8l2.5,4.2c-1.1,1.7-1.9,3.5-2.5,5.4l-4.5,1.8c-2,0.8-3.4,2.6-3.4,4.8v10c0,2.2,1.4,4,3.4,4.8l4.5,1.8c0.6,1.9,1.4,3.7,2.5,5.4l-2.5,4.2c-1.1,1.9-0.7,4.3,1,5.8L32,79c1.6,1.4,4,1.2,5.4-0.6l3.2-4.1c1.8,0.9,3.7,1.6,5.7,2.1l0.8,4.8c0.4,2.1,2.2,3.7,4.3,3.7h17.1c2.1,0,4-1.6,4.3-3.7l0.8-4.8c2-0.5,3.9-1.2,5.7-2.1l3.2,4.1c1.4,1.8,3.8,2,5.4,0.6L88,71.9c1.7-1.5,2.1-3.9,1-5.8l-2.5-4.2c1.1-1.7,1.9-3.5,2.5-5.4l4.5-1.8c2-0.8,3.4-2.6,3.4-4.8V50z M50,65c-8.3,0-15-6.7-15-15s6.7-15,15-15s15,6.7,15,15S58.3,65,50,65z"/>
     </svg>
-
-    <div id="root" class="w-full h-full max-w-6xl"></div>
+    <div id="root" class="flex flex-row gap-6 w-full h-full max-w-6xl"></div>
     <script type="text/babel">
         const { useState, useEffect, useRef } = React;
         const supabaseUrl = 'https://mrhgitbdobfnelnulnbg.supabase.co';
         const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
-
         const plinkUrl = 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3';
 
         const SupplyCard = ({ label, audioReady }) => {
@@ -88,14 +67,6 @@
             const [history, setHistory] = useState([]);
             const audioRef = useRef(new Audio(plinkUrl));
             const isLowSupply = count <= 2;
-
-            const playPlink = () => {
-                if (audioRef.current && audioReady) {
-                    audioRef.current.currentTime = 0;
-                    audioRef.current.volume = 0.8;
-                    audioRef.current.play().catch(e => console.log("Audio play blocked", e));
-                }
-            };
 
             const fetchData = async () => {
                 const { data: c } = await supabaseClient.from('medicine_supply').select('value').eq('label', label).single();
@@ -107,67 +78,40 @@
             useEffect(() => {
                 fetchData();
                 const channel = supabaseClient.channel(`realtime-${label}`).on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'medicine_supply', filter: `label=eq.${label}` }, () => fetchData()
+                    { event: '*', schema: 'public', table: 'medicine_supply' }, () => fetchData()
                 ).subscribe();
                 return () => supabaseClient.removeChannel(channel);
             }, []);
 
             const updateCount = async (newVal) => {
                 const v = newVal < 0 ? 0 : newVal;
-                playPlink();
-                
-                if (v === 1) console.log(`CRITICAL ALERT: ${label} Supply hit 1.`);
-
+                if (audioReady) { audioRef.current.currentTime = 0; audioRef.current.play(); }
                 setCount(v);
                 await supabaseClient.from('medicine_supply').update({ value: v }).eq('label', label);
-                await supabaseClient.from('medicine_log').insert([{ 
-                    supply_type: label, 
-                    change_type: v > count ? 'RESTOCK' : 'CONSUMED', 
-                    timestamp: new Date().toISOString() 
-                }]);
+                await supabaseClient.from('medicine_log').insert([{ supply_type: label, change_type: v > count ? 'RESTOCK' : 'CONSUMED' }]);
             };
 
             return (
-                <div className={`artifact-card p-4 rounded-xl text-center transition-all flex flex-col justify-between ${isLowSupply ? 'border-red-500 shadow-[0_0_50px_rgba(239,68,68,0.5)]' : ''}`}>
-                    <div className="corner tc_l"></div>
-                    <div className="corner bc_r"></div>
-
+                <div className={`artifact-card p-4 rounded-xl text-center flex flex-col justify-between ${isLowSupply ? 'border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.5)]' : ''}`}>
+                    <div className="corner tc_l"></div><div className="corner bc_r"></div>
                     <div className="flex flex-col items-center">
                         <div className="rarity-slot flex items-center justify-center">
-                            <svg width="50" height="50" viewBox="0 0 100 100">
+                             <svg width="45" height="45" viewBox="0 0 100 100">
                                 <path d="M40,15 L60,15 L60,75 L40,75 Z" fill="rgba(0,0,0,0.8)" stroke="#f3e5ab" strokeWidth="2" />
-                                <rect x="43" y="35" width="14" height="30" rx="2" fill={isLowSupply ? "#ef4444" : "#60a5fa"} className="animate-pulse" />
-                                <path d="M38,20 L62,20 L62,28 L38,28 Z" fill="#d4af37" />
-                                <circle cx="50" cy="82" r="6" fill="#f3e5ab" />
+                                <rect x="43" y="35" width="14" height="30" rx="2" fill={isLowSupply ? "#ef4444" : "#60a5fa"} />
+                                <path d="M38,20 L62,20 L62,28 L38,28 Z" fill="#d4af37" /><circle cx="50" cy="82" r="6" fill="#f3e5ab" />
                             </svg>
                         </div>
-                        <div className="flex gap-1 mt-1">
-                            {[...Array(5)].map((_, i) => <span key={i} className="star">★</span>)}
-                        </div>
+                        <h1 className="chiseled-text text-[10px] uppercase tracking-[0.4em] text-[#d4af37] mt-3 font-black">{label}</h1>
                     </div>
-
-                    <div className="flex items-center justify-center gap-1 mt-2">
-                         <h1 className="chiseled-text text-[10px] uppercase tracking-[0.4em] text-[#d4af37] font-black">{label}</h1>
+                    <div className={`chiseled-text text-[9vh] font-black tabular-nums ${isLowSupply ? 'text-red-500' : 'text-white'}`}>{count}</div>
+                    <div className="flex justify-center gap-4">
+                        <button onClick={() => updateCount(count - 1)} className="action-orb text-2xl">−</button>
+                        <button onClick={() => updateCount(count + 1)} className="action-orb text-3xl">+</button>
                     </div>
-                    
-                    <div className={`chiseled-text text-[11vh] font-black leading-none tabular-nums my-2 ${isLowSupply ? 'text-red-500' : 'text-white'}`}>
-                        {count}
-                    </div>
-                    
-                    <div className="flex justify-center gap-6">
-                        <button onClick={() => updateCount(count - 1)} className="action-orb text-2xl font-light"><span>−</span></button>
-                        <button onClick={() => updateCount(count + 1)} className="action-orb text-3xl font-bold"><span>+</span></button>
-                    </div>
-
-                    {isLowSupply && (
-                        <div className="mt-2 text-[12px] text-red-500 font-black animate-bounce chiseled-text leading-tight">
-                            Ava Wagner Needs Meds!!!
-                        </div>
-                    )}
-
-                    <div className="mt-2 pt-2 border-t border-yellow-600/10 text-left bg-black/40 rounded-b-lg px-2">
+                    <div className="mt-2 pt-2 border-t border-yellow-600/10 text-left bg-black/40 px-2 rounded-b-lg">
                         {history.map((l, i) => (
-                            <div key={i} className="flex justify-between py-1 border-b border-white/5 chiseled-text text-[8px] text-yellow-600/70">
+                            <div key={i} className="flex justify-between text-[8px] text-yellow-600/60 font-bold uppercase">
                                 <span>{l.change_type}</span>
                                 <span>{new Date(l.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                             </div>
@@ -179,26 +123,12 @@
 
         function App() {
             const [audioReady, setAudioReady] = useState(false);
-            const silentAudio = useRef(new Audio(plinkUrl));
-
-            const initAudio = () => {
-                if (!audioReady) {
-                    silentAudio.current.play().then(() => {
-                        silentAudio.current.pause();
-                        setAudioReady(true);
-                    }).catch(() => {});
-                }
-            };
-
             return (
-                <div onClick={initAudio} className="flex flex-row gap-6 w-full h-full">
-                    {['Ash', 'A', 'Lime'].map(label => (
-                        <SupplyCard key={label} label={label} audioReady={audioReady} />
-                    ))}
+                <div onClick={() => setAudioReady(true)} className="flex flex-row gap-6 w-full h-full">
+                    {['Ash', 'A', 'Lime'].map(l => <SupplyCard key={l} label={l} audioReady={audioReady} />)}
                 </div>
             );
         }
-
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
