@@ -151,8 +151,8 @@
 
                     <div className="flex flex-col items-center">
                         <div className="rarity-slot flex items-center justify-center">
-                            {/* DYNAMIC SCALE FIX: Icon width/height increased by 25% (45 to 56) */}
-                            <svg width="56" height="56" viewBox="0 0 100 100">
+                            {/* DYNAMIC SCALE FIX: Icon grown from 56x56 to 67x67 (additional 20% increase) */}
+                            <svg width="67" height="67" viewBox="0 0 100 100">
                                 <path d="M40,15 L60,15 L60,75 L40,75 Z" fill="rgba(0,0,0,0.8)" stroke="#f3e5ab" strokeWidth="2" />
                                 <rect x="43" y="35" width="14" height="30" rx="2" fill={isLowSupply ? "#ef4444" : "#60a5fa"} className="animate-pulse" />
                                 <path d="M38,20 L62,20 L62,28 L38,28 Z" fill="#d4af37" />
@@ -173,6 +173,7 @@
                         </h1>
                     </div>
                     
+                    {/* Preserve Central Number size */}
                     <div className={`chiseled-text text-[13vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500 drop-shadow-[0_0_20px_#ef4444]' : 'text-white'}`}>
                         {count}
                     </div>
@@ -182,6 +183,7 @@
                         <button onClick={() => updateCount(count + 1)} className="action-orb text-4xl font-bold"><span>+</span></button>
                     </div>
 
+                    {/* Preserve Notification size */}
                     {isLowSupply && (
                         <div className="mt-4 text-[18.5px] text-red-500 font-black animate-bounce chiseled-text drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
                             Ava Wagner Needs her Meds!!!
