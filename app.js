@@ -86,15 +86,11 @@ const ArtifactScreen = ({ realm, audioReady }) => {
 };
 
 function App() {
-    const [currentIdx, setCurrentIdx] = useState(1);
+    const [currentIdx, setCurrentIdx] = useState(1); // Default to Fontaine (Ava)
     const [audioReady, setAudioReady] = useState(false);
 
     return (
         <div onClick={() => setAudioReady(true)} className={`min-h-screen flex flex-col items-center justify-center p-4 transition-colors duration-1000 ${REALMS[currentIdx].theme}`}>
-            <svg class="gear" style="top: -10%; right: -10%; width: 650px;" viewBox="0 0 100 100">
-                <path fill="#d4af37" d="M95,50c0-2.2-1.4-4-3.4-4.8l-4.5-1.8c-0.6-1.9-1.4-3.7-2.5-5.4l2.5-4.2c1.1-1.9,0.7-4.3-1-5.8L78,21c-1.6-1.4-4-1.2-5.4,0.6l-3.2,4.1c-1.8-0.9-3.7-1.6-5.7-2.1l-0.8-4.8c-0.4-2.1-2.2-3.7-4.3-3.7H51.4c-2.1,0-4,1.6-4.3,3.7l-0.8,4.8c-2,0.5-3.9,1.2-5.7,2.1l-3.2-4.1c-1.4-1.8-3.8-2-5.4-0.6L22,28.1c-1.7,1.5-2.1,3.9-1,5.8l2.5,4.2c-1.1,1.7-1.9,3.5-2.5,5.4l-4.5,1.8c-2,0.8-3.4,2.6-3.4,4.8v10c0,2.2,1.4,4,3.4,4.8l4.5,1.8c0.6,1.9,1.4,3.7,2.5,5.4l-2.5,4.2c-1.1,1.9-0.7,4.3,1,5.8L32,79c1.6,1.4,4,1.2,5.4-0.6l3.2-4.1c1.8,0.9,3.7,1.6,5.7,2.1l0.8,4.8c0.4,2.1,2.2,3.7,4.3,3.7h17.1c2.1,0,4-1.6,4.3-3.7l0.8-4.8c2-0.5,3.9-1.2,5.7-2.1l3.2,4.1c1.4,1.8,3.8,2,5.4,0.6L88,71.9c1.7-1.5,2.1-3.9,1-5.8l-2.5-4.2c1.1-1.7,1.9-3.5,2.5-5.4l4.5-1.8c2-0.8,3.4-2.6,3.4-4.8V50z M50,65c-8.3,0-15-6.7-15-15s6.7-15,15-15s15,6.7,15,15S58.3,65,50,65z"/>
-            </svg>
-            
             <ArtifactScreen realm={REALMS[currentIdx]} audioReady={audioReady} />
 
             <div className="nav-bar fixed bottom-0 left-0 right-0 h-24 flex items-center px-4">
