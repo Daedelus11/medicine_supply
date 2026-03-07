@@ -5,9 +5,9 @@ const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 const plinkUrl = 'https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.mp3';
 
 const REALMS = [
-    { id: 'Lime', name: 'BELLEAU', theme: 'theme-liyue', icon: '🔶', core: '#fbbf24' },
-    { id: 'Ava', name: 'FONTAINE', theme: 'theme-fontaine', icon: '💧', core: '#60a5fa' },
-    { id: 'Ash', name: 'BERYL', theme: 'theme-inazuma', icon: '⚡', core: '#a855f7' }
+    { id: 'Lime', name: 'BELLEAU', theme: 'theme-liyue', core: '#fbbf24' },
+    { id: 'Ava', name: 'FONTAINE', theme: 'theme-fontaine', core: '#60a5fa' },
+    { id: 'Ash', name: 'BERYL', theme: 'theme-inazuma', core: '#a855f7' }
 ];
 
 const ArtifactScreen = ({ realm, audioReady }) => {
@@ -40,7 +40,7 @@ const ArtifactScreen = ({ realm, audioReady }) => {
     };
 
     return (
-        <div className={`artifact-card w-[90vw] max-w-sm h-[75vh] p-8 rounded-2xl text-center flex flex-col justify-between transition-all ${isLowSupply ? 'border-red-500' : ''}`}>
+        <div className={`artifact-card w-[90vw] max-w-sm h-[75vh] p-8 rounded-2xl text-center flex flex-col justify-between transition-all ${isLowSupply ? 'border-red-500 shadow-[0_0_80px_rgba(239,68,68,0.7)]' : ''}`}>
             <div className="corner tc_l"></div><div className="corner bc_r"></div>
 
             <div className="flex flex-col items-center">
@@ -54,32 +54,26 @@ const ArtifactScreen = ({ realm, audioReady }) => {
                 <div className="flex gap-1 mt-2 text-[#f3e5ab] text-xs">★ ★ ★ ★ ★</div>
             </div>
 
-            {/* Enlarged Legendary Supply Title */}
-            <h1 className="chiseled-text uppercase tracking-[0.6em] text-[#d4af37] font-black text-sm mt-4">
-                LEGENDARY SUPPLY
-            </h1>
+            <h1 className="chiseled-text uppercase tracking-[0.6em] text-[#d4af37] font-black text-sm mt-4">LEGENDARY SUPPLY</h1>
             
             <div className={`chiseled-text uppercase tracking-widest font-black ${realm.id === 'Ava' ? 'text-[#d4af37] text-base' : 'text-yellow-600/60 text-[11px]'}`}>
                 {realm.name} REALM
             </div>
 
-            <div className={`chiseled-text text-[13vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500' : 'text-white'}`}>
-                {count}
-            </div>
+            <div className={`chiseled-text text-[13vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500' : 'text-white'}`}>{count}</div>
             
-            {/* Enlarged Buttons for phone visibility */}
             <div className="flex justify-center gap-10">
                 <button onClick={() => updateCount(count - 1)} className="action-orb w-20 h-20 rounded-full text-4xl font-light">−</button>
                 <button onClick={() => updateCount(count + 1)} className="action-orb w-20 h-20 rounded-full text-5xl font-bold">+</button>
             </div>
 
             {isLowSupply && (
-                <div className="mt-4 text-[18.5px] text-red-500 font-black animate-bounce chiseled-text drop-shadow-[0_0_10px_rgba(0,0,0,0.8)]">
+                <div className="mt-4 text-[18.5px] text-red-500 font-black animate-bounce chiseled-text drop-shadow-[0_0_10px_black]">
                     Ava Wagner Needs Meds!!!
                 </div>
             )}
 
-            {/* RESTORED COUNTER LOG */}
+            {/* Restored Chronicles Log */}
             <div className="mt-4 pt-4 border-t border-yellow-600/20 text-left bg-black/40 rounded-b-xl px-4">
                 <h2 className="chiseled-text text-[8px] uppercase tracking-[0.3em] text-yellow-600/40 font-bold mb-2 text-center italic">Recent Chronicles</h2>
                 {history.map((l, i) => (
@@ -104,8 +98,8 @@ function App() {
     const handleTouchEnd = () => {
         if (!touchStart || !touchEnd) return;
         const distance = touchStart - touchEnd;
-        if (distance > 60 && currentIdx < 2) setCurrentIdx(currentIdx + 1);
-        if (distance < -60 && currentIdx > 0) setCurrentIdx(currentIdx - 1);
+        if (distance > 70 && currentIdx < 2) setCurrentIdx(currentIdx + 1);
+        if (distance < -70 && currentIdx > 0) setCurrentIdx(currentIdx - 1);
         setTouchStart(null); setTouchEnd(null);
     };
 
@@ -122,14 +116,11 @@ function App() {
             className="min-h-screen flex flex-col items-center justify-center p-4"
         >
             <ArtifactScreen realm={REALMS[currentIdx]} audioReady={audioReady} />
-            
             <div className="flex gap-6 mt-10">
                 {REALMS.map((r, idx) => (
                     <div key={idx} className="flex flex-col items-center gap-1">
                         <div className={`indicator-dot ${currentIdx === idx ? 'active' : ''}`} />
-                        <span className={`chiseled-text text-[8px] font-black ${currentIdx === idx ? 'text-[#d4af37]' : 'text-yellow-600/20'}`}>
-                            {r.name}
-                        </span>
+                        <span className={`chiseled-text text-[8px] font-black ${currentIdx === idx ? 'text-[#d4af37]' : 'text-yellow-600/20'}`}>{r.name}</span>
                     </div>
                 ))}
             </div>
