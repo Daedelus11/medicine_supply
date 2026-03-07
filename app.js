@@ -2,7 +2,9 @@ const { useState, useEffect, useRef } = React;
 
 const supabaseUrl = "https://mrhgitbdobfnelnulnbg.supabase.co";
 const supabaseKey = "sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh";
-const supabase = supabasejs.createClient(supabaseUrl, supabaseKey);
+
+// FIX: Initialize using the correct global object provided by the CDN
+const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 const REALMS = [
     { id: 'LIME', name: 'Liyue', color: 'text-yellow-500', theme: 'bg-lime' },
@@ -19,21 +21,21 @@ function App() {
 
     useEffect(() => {
         fetchData();
-        const subscription = supabase
+        const subscription = supabaseClient
             .channel('any')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'medicine_supply' }, fetchData)
             .subscribe();
-        return () => supabase.removeChannel(subscription);
+        return () => supabaseClient.removeChannel(subscription);
     }, [realmIdx]);
 
     const fetchData = async () => {
-        const { data: supply } = await supabase
+        const { data: supply } = await supabaseClient
             .from('medicine_supply')
             .select('value')
             .eq('label', currentRealm.id)
             .single();
         
-        const { data: logData } = await supabase
+        const { data: logData } = await supabaseClient
             .from('medicine_log')
             .select('*')
             .eq('supply_type', currentRealm.id)
@@ -48,8 +50,8 @@ function App() {
         const newValue = Math.max(0, count + delta);
         setCount(newValue); // Optimistic Update
 
-        await supabase.from('medicine_supply').update({ value: newValue }).eq('label', currentRealm.id);
-        await supabase.from('medicine_log').insert([{ 
+        await supabaseClient.from('medicine_supply').update({ value: newValue }).eq('label', currentRealm.id);
+        await supabaseClient.from('medicine_log').insert([{ 
             supply_type: currentRealm.id, 
             change_type: delta > 0 ? 'INCREMENT' : 'DECREMENT' 
         }]);
@@ -61,8 +63,14 @@ function App() {
     const handleTouchEnd = (e) => {
         const touchEnd = e.changedTouches[0].clientX;
         if (!touchStart) return;
-        if (touchStart - touchEnd > 70) setRealmIdx((prev) => Math.min(prev + 1, 2));
-        if (touchStart - touchEnd < -70) setRealmIdx((prev) => Math.max(prev - 1, 0));
+        
+        if (touchStart - touchEnd > 70) {
+            setRealmIdx((prev) => Math.min(prev + 1, 2));
+        }
+        if (touchStart - touchEnd < -70) {
+            setRealmIdx((prev) => Math.max(prev - 1, 0));
+        }
+        setTouchStart(null); // Reset after swipe
     };
 
     return (
