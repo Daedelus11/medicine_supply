@@ -2,309 +2,70 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
+    <title>Ava's Meds</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 fill=%22%23d4af37%22 font-family=%22serif%22 font-weight=%22bold%22>A</text></svg>">
     
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#0a0a0b">
-    
-    <title>Supply Log</title>
-    
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' x='20' font-family='Georgia, serif' font-size='85' font-weight='bold' fill='%23d4af37'>A</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' x='20' font-family='Georgia, serif' font-size='85' font-weight='bold' fill='%23d4af37'>A</text></svg>">
-
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
     
     <style>
-        body { 
-            margin: 0; 
-            overflow: hidden; 
+        /* Theme Configuration */
+        .theme-fontaine { --realm-glow: rgba(0, 150, 255, 0.5); --realm-bg: #111b27; --accent: #60a5fa; }
+        .theme-liyue { --realm-glow: rgba(255, 200, 0, 0.4); --realm-bg: #221a0f; --accent: #fbbf24; }
+        .theme-inazuma { --realm-glow: rgba(180, 0, 255, 0.4); --realm-bg: #1a1025; --accent: #a855f7; }
+
+        body {
+            background: var(--realm-bg);
+            transition: background 1.2s ease;
             font-family: 'Quicksand', sans-serif;
-            background: #050508;
-            overscroll-behavior-y: contain;
-            color: white;
-            user-select: none;
+            margin: 0;
+            overflow: hidden;
+            height: 100vh;
         }
-        .cinzel { font-family: 'Cinzel', serif; }
-        
-        /* Ambient Breathing Backgrounds */
-        @keyframes breathe {
-            0%, 100% { opacity: 0.8; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.05); }
-        }
-        .bg-layer {
-            position: absolute;
-            inset: 0;
-            z-index: -10;
-            transition: opacity 0.8s ease-in-out;
-            animation: breathe 10s infinite ease-in-out;
-        }
-        .bg-lime { background: radial-gradient(circle at center, #2d1804 0%, #050508 80%); } /* Liyue/Geo */
-        .bg-ava { background: radial-gradient(circle at center, #081b33 0%, #050508 80%); } /* Fontaine/Hydro */
-        .bg-ash { background: radial-gradient(circle at center, #1a0b2e 0%, #050508 80%); } /* Inazuma/Beryl */
 
-        /* Enhanced Glassmorphism Artifact Card */
+        .gear { 
+            position: absolute; z-index: -1; opacity: 0.15; 
+            animation: rotate 120s linear infinite; pointer-events: none;
+        }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
         .artifact-card {
-            position: relative;
-            background: rgba(18, 20, 28, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.02);
-            transition: box-shadow 0.5s ease;
-        }
-        
-        /* Gold Corners */
-        .corner-gold {
-            position: absolute;
-            width: 35px;
-            height: 35px;
+            background: linear-gradient(180deg, rgba(30, 45, 65, 0.98) 0%, rgba(10, 15, 20, 1) 100%);
             border: 2px solid #d4af37;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 0 100px var(--realm-glow), inset 0 0 40px rgba(212, 175, 55, 0.2);
+            position: relative;
         }
-        .top-left { top: -1px; left: -1px; border-right: 0; border-bottom: 0; }
-        .bottom-right { bottom: -1px; right: -1px; border-left: 0; border-top: 0; }
 
-        /* Restored Supply Drop Icon Animations */
-        @keyframes pulse-glow {
-            0%, 100% { filter: drop-shadow(0 0 12px var(--glow-color)); transform: scale(1); }
-            50% { filter: drop-shadow(0 0 24px var(--glow-color)); transform: scale(1.08); }
-        }
-        @keyframes flash-pyro {
-            0%, 100% { filter: drop-shadow(0 0 15px #ef4444); transform: scale(1.05); color: #ef4444; }
-            50% { filter: drop-shadow(0 0 30px #dc2626); transform: scale(1.15); color: #f87171; }
-        }
-        
-        .icon-pulse { animation: pulse-glow 3s infinite ease-in-out; }
-        .icon-critical { animation: flash-pyro 0.8s infinite ease-in-out; }
-        
-        @keyframes bounce-alert {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-        .bounce { animation: bounce-alert 1s infinite; }
+        /* Two Corner Geometry */
+        .corner { position: absolute; width: 45px; height: 45px; border: 5px solid #d4af37; z-index: 10; }
+        .tc_l { top: -14px; left: -14px; border-right: 0; border-bottom: 0; }
+        .bc_r { bottom: -14px; right: -14px; border-left: 0; border-top: 0; }
 
-        /* Action Orbs */
+        /* Large Tactile Buttons */
         .action-orb {
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            border: 4px solid #fdf5e6;
-            background: linear-gradient(145deg, #4e342e, #3e2723);
-            color: white;
-            font-size: 2.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6), inset 0 2px 5px rgba(255,255,255,0.2);
-            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
+            background: linear-gradient(180deg, #5c4033 0%, #2b1d0e 100%); 
+            border: 5px solid #f9f0d1; 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.9);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
         }
-        .action-orb:active { transform: scale(0.85); }
+        .action-orb:active { transform: scale(0.9); box-shadow: 0 0 50px #f9f0d1; background: #f9f0d1; color: #2b1d0e; }
 
-        /* Hide scrollbar for logs */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .chiseled-text { font-family: 'Cinzel', serif; }
+
+        .indicator-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(212, 175, 55, 0.2); transition: all 0.4s; }
+        .indicator-dot.active { background: #d4af37; transform: scale(1.4); box-shadow: 0 0 15px #d4af37; }
     </style>
 </head>
-<body>
+<body class="text-white">
+    <svg class="gear" style="top: -10%; right: -10%; width: 750px;" viewBox="0 0 100 100">
+        <path fill="#d4af37" d="M95,50c0-2.2-1.4-4-3.4-4.8l-4.5-1.8c-0.6-1.9-1.4-3.7-2.5-5.4l2.5-4.2c1.1-1.9,0.7-4.3-1-5.8L78,21c-1.6-1.4-4-1.2-5.4,0.6l-3.2,4.1c-1.8-0.9-3.7-1.6-5.7-2.1l-0.8-4.8c-0.4-2.1-2.2-3.7-4.3-3.7H51.4c-2.1,0-4,1.6-4.3,3.7l-0.8,4.8c-2,0.5-3.9,1.2-5.7,2.1l-3.2-4.1c-1.4-1.8-3.8-2-5.4-0.6L22,28.1c-1.7,1.5-2.1,3.9-1,5.8l2.5,4.2c-1.1,1.7-1.9,3.5-2.5,5.4l-4.5,1.8c-2,0.8-3.4,2.6-3.4,4.8v10c0,2.2,1.4,4,3.4,4.8l4.5,1.8c0.6,1.9,1.4,3.7,2.5,5.4l-2.5,4.2c-1.1,1.9-0.7,4.3,1,5.8L32,79c1.6,1.4,4,1.2,5.4-0.6l3.2-4.1c1.8,0.9,3.7,1.6,5.7,2.1l0.8,4.8c0.4,2.1,2.2,3.7,4.3,3.7h17.1c2.1,0,4-1.6,4.3-3.7l0.8-4.8c2-0.5,3.9-1.2,5.7-2.1l3.2,4.1c1.4,1.8,3.8,2,5.4,0.6L88,71.9c1.7-1.5,2.1-3.9,1-5.8l-2.5-4.2c1.1-1.7,1.9-3.5,2.5-5.4l4.5-1.8c2-0.8,3.4-2.6,3.4-4.8V50z M50,65c-8.3,0-15-6.7-15-15s6.7-15,15-15s15,6.7,15,15S58.3,65,50,65z"/>
+    </svg>
     <div id="root"></div>
-    
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-
-        // --- Supabase Client ---
-        const supabaseUrl = "https://mrhgitbdobfnelnulnbg.supabase.co";
-        const supabaseKey = "sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh";
-        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-        const REALMS = [
-            { id: 'LIME', name: 'LIME', colorHex: '#eab308', glowClass: 'text-yellow-500', bgClass: 'bg-lime' },
-            { id: 'AVA', name: 'AVA', colorHex: '#38bdf8', glowClass: 'text-sky-400', bgClass: 'bg-ava' },
-            { id: 'ASH', name: 'ASH', colorHex: '#a855f7', glowClass: 'text-purple-500', bgClass: 'bg-ash' }
-        ];
-
-        function App() {
-            const [realmIdx, setRealmIdx] = useState(1); // Default to AVA
-            const [count, setCount] = useState(null);
-            const [logs, setLogs] = useState([]);
-            const [touchStart, setTouchStart] = useState(null);
-            const currentRealm = REALMS[realmIdx];
-
-            useEffect(() => {
-                fetchData();
-                const subscription = supabaseClient
-                    .channel('any')
-                    .on('postgres_changes', { event: '*', schema: 'public', table: 'medicine_supply' }, (payload) => {
-                        if (payload.new && payload.new.label === REALMS[realmIdx].id) {
-                            setCount(payload.new.value);
-                            fetchLogs();
-                        }
-                    })
-                    .subscribe();
-                    
-                return () => supabaseClient.removeChannel(subscription);
-            }, [realmIdx]);
-
-            const fetchData = async () => {
-                try {
-                    const { data: supply } = await supabaseClient
-                        .from('medicine_supply')
-                        .select('value')
-                        .eq('label', currentRealm.id)
-                        .single();
-                    if (supply) setCount(supply.value);
-                    await fetchLogs();
-                } catch (err) {
-                    console.error("Fetch error:", err);
-                }
-            };
-
-            const fetchLogs = async () => {
-                const { data: logData } = await supabaseClient
-                    .from('medicine_log')
-                    .select('*')
-                    .eq('supply_type', currentRealm.id)
-                    .order('created_at', { ascending: false })
-                    .limit(3);
-                if (logData) setLogs(logData);
-            };
-
-            const updateCount = async (delta) => {
-                if (count === null) return;
-                const newValue = Math.max(0, count + delta);
-                setCount(newValue); // Optimistic UI update
-
-                try {
-                    await supabaseClient.from('medicine_supply').update({ value: newValue }).eq('label', currentRealm.id);
-                    await supabaseClient.from('medicine_log').insert([{ 
-                        supply_type: currentRealm.id, 
-                        change_type: delta > 0 ? 'INCREMENT' : 'DECREMENT' 
-                    }]);
-                } catch (err) {
-                    console.error("Update error:", err);
-                }
-            };
-
-            // Swipe Logic
-            const handleTouchStart = (e) => setTouchStart(e.targetTouches[0].clientX);
-            const handleTouchEnd = (e) => {
-                const touchEnd = e.changedTouches[0].clientX;
-                if (!touchStart) return;
-                
-                const distance = touchStart - touchEnd;
-                if (distance > 60) setRealmIdx((prev) => Math.min(prev + 1, 2)); // Swipe Left
-                if (distance < -60) setRealmIdx((prev) => Math.max(prev - 1, 0)); // Swipe Right
-                setTouchStart(null); 
-            };
-
-            // Dynamic CSS Variable for Glow
-            useEffect(() => {
-                document.documentElement.style.setProperty('--glow-color', currentRealm.colorHex);
-            }, [currentRealm]);
-
-            return (
-                <div 
-                    className="h-screen w-full flex flex-col items-center justify-center relative overflow-hidden"
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
-                >
-                    {/* Ambient Backgrounds */}
-                    {REALMS.map((r, i) => (
-                        <div 
-                            key={r.id}
-                            className={`bg-layer ${r.bgClass}`}
-                            style={{ opacity: i === realmIdx ? 1 : 0, zIndex: -10 }}
-                        />
-                    ))}
-
-                    {/* Artifact Card */}
-                    <div 
-                        className="artifact-card w-11/12 max-w-sm p-8 rounded-sm flex flex-col items-center"
-                        style={{ boxShadow: `0 25px 50px -12px rgba(0,0,0,0.8), 0 0 40px ${currentRealm.colorHex}25` }}
-                    >
-                        <div className="corner-gold top-left"></div>
-                        <div className="corner-gold bottom-right"></div>
-
-                        <h2 className="cinzel text-yellow-500 font-bold uppercase mb-8 w-full text-center" style={{ letterSpacing: '0.4em', fontSize: '1.05rem' }}>
-                            LEGENDARY SUPPLY
-                        </h2>
-
-                        {/* Restored Box/Arrow Icon */}
-                        <div className={`w-20 h-20 mb-6 flex items-center justify-center ${count !== null && count <= 2 ? 'icon-critical' : `icon-pulse ${currentRealm.glowClass}`}`}>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="12" y1="8" x2="12" y2="16"></line>
-                                <polyline points="8 12 12 16 16 12"></polyline>
-                            </svg>
-                        </div>
-
-                        {/* Tally */}
-                        <div className="cinzel font-black leading-none mb-2" style={{ fontSize: '14vh' }}>
-                            {count !== null ? count : '-'}
-                        </div>
-
-                        {/* Alert Message */}
-                        <div className="h-8 flex items-center justify-center">
-                            {count !== null && count <= 2 && (
-                                <div className="text-red-500 font-bold bounce text-center" style={{ fontSize: '18px' }}>
-                                    Ava Wagner Needs her Meds!!!
-                                </div>
-                            )}
-                        </div>
-
-                        {/* Action Orbs */}
-                        <div className="flex justify-between w-full px-2 mt-4 mb-8 relative z-10">
-                            <button onClick={() => updateCount(-1)} className="action-orb">-</button>
-                            <button onClick={() => updateCount(1)} className="action-orb">+</button>
-                        </div>
-
-                        {/* Chronicles */}
-                        <div className="w-full border-t border-gray-600/50 pt-4">
-                            <p className="cinzel text-[10px] text-gray-400 mb-3 tracking-widest uppercase">Recent Chronicles</p>
-                            <div className="space-y-2 h-[72px] overflow-y-auto no-scrollbar">
-                                {logs.map((log) => (
-                                    <div key={log.id} className="flex justify-between text-xs font-semibold tracking-wide">
-                                        <span className={log.change_type === 'INCREMENT' ? 'text-green-400' : 'text-red-400'}>
-                                            {log.change_type}
-                                        </span>
-                                        <span className="text-gray-400">
-                                            {new Date(log.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                        </span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Titled Tabs Navigation */}
-                    <div className="flex space-x-10 mt-12 z-10 cinzel text-sm font-bold tracking-widest">
-                        {REALMS.map((r, i) => (
-                            <div 
-                                key={r.id}
-                                onClick={() => setRealmIdx(i)}
-                                className={`cursor-pointer transition-all duration-300 flex flex-col items-center ${i === realmIdx ? `opacity-100 scale-110 ${r.glowClass}` : 'opacity-40 text-gray-300'}`}
-                            >
-                                <span className="mb-2">{r.name}</span>
-                                <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === realmIdx ? `bg-current scale-150` : 'bg-transparent'}`}></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
-        }
-
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+    <script type="text/babel" src="app.js"></script>
 </body>
 </html>
