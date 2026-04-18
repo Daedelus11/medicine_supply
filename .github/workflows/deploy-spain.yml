@@ -1,0 +1,25 @@
+name: Deploy Spain 2026 to fine-linestudio.com
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'travel/spain-2026/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+        with:
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_HOST }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          local_path: './travel/spain-2026/*'
+          remote_path: '/var/www/html/travel/spain-2026/'
+          sftp_only: true
+          delete_remote_files: false
