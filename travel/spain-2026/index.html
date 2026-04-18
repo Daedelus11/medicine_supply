@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%23c60b1e'/%3E%3Crect y='8' width='32' height='16' fill='%23ffc400'/%3E%3Cpath d='M7 13 Q9 10 13 10 Q18 9 22 11 Q26 12 26 15 Q26 19 23 21 Q19 24 15 23 Q11 22 9 20 Q6 17 7 13Z' fill='%23c60b1e' opacity='0.8'/%3E%3C/svg%3E">
 <meta name="description" content="Trip itinerary for Mark and Rumana, Spain and Basque Country, April 20 – May 1, 2026">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,21 +49,28 @@ a{text-decoration:none;color:inherit}
 .callout{border-left:3px solid var(--yellow);padding:1rem 1.5rem;background:rgba(254,196,34,0.05);margin:1.5rem 0}
 .callout-title{font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:var(--yellow);margin-bottom:0.4rem}
 .callout-text{font-size:0.82rem;color:var(--stone);line-height:1.65}
+/* CALENDAR */
 #calendar{background:var(--white)}
 .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:0;border:1px solid var(--rule);overflow:hidden}
 .cal-header-cell{background:var(--ink);padding:0.6rem;font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5);text-align:center;border-right:1px solid rgba(255,255,255,0.08)}
 .cal-header-cell:last-child{border-right:none}
-.cal-cell{min-height:120px;padding:0.6rem;border-right:1px solid var(--rule);border-top:1px solid var(--rule);position:relative;transition:background 0.15s}
+.cal-cell{min-height:130px;padding:0.6rem;border-right:1px solid var(--rule);border-top:1px solid var(--rule);position:relative;transition:background 0.15s;overflow:hidden}
 .cal-cell:nth-child(7n){border-right:none}
 .cal-cell.empty{background:var(--cream)}
 .cal-cell.trip-day{background:rgba(254,196,34,0.06)}
 .cal-cell.today{background:rgba(254,196,34,0.12)}
+/* Photo background overlay for calendar cells */
+.cal-photo-bg{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0.18;z-index:0;pointer-events:none}
+.cal-cell-content{position:relative;z-index:1}
 .cal-day-num{font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey);margin-bottom:4px}
 .cal-cell.trip-day .cal-day-num{color:var(--yellow);font-weight:600}
-.cal-event{font-size:0.65rem;line-height:1.3;color:var(--stone);margin-top:3px;padding:2px 5px;border-left:2px solid var(--yellow);background:rgba(254,196,34,0.08)}
+.cal-cell.has-photo .cal-day-num{font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,0.4)}
+.cal-event{font-size:0.65rem;line-height:1.3;color:var(--stone);margin-top:3px;padding:2px 5px;border-left:2px solid var(--yellow);background:rgba(247,245,241,0.88);white-space:normal}
 .cal-month-label{font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--ink);margin-bottom:1rem;margin-top:2.5rem}
 .cal-month-label:first-child{margin-top:0}
-.cal-location-tag{display:inline-block;font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:2px 6px;margin-top:3px;background:var(--ink);color:var(--yellow)}
+.cal-location-tag{display:inline-block;font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:2px 6px;margin-top:3px;background:rgba(26,26,24,0.82);color:var(--yellow)}
+.cal-photo-badge{display:inline-block;font-size:0.5rem;margin-top:3px;color:rgba(255,255,255,0.7);background:rgba(0,0,0,0.5);padding:1px 5px;border-radius:2px}
+/* ITINERARY */
 #itinerary{background:var(--cream)}
 .loading-state{text-align:center;padding:4rem;font-family:var(--mono);font-size:0.78rem;color:var(--warm-grey)}
 .day-block{margin-bottom:2.5rem;border:1px solid var(--rule);overflow:hidden;background:var(--white);transition:box-shadow 0.2s}
@@ -88,6 +96,7 @@ a{text-decoration:none;color:inherit}
 .activity-tag{display:inline-block;font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:2px 7px;border:1px solid var(--rule);color:var(--stone);flex-shrink:0;margin-top:2px}
 .tag-confirmed{border-color:#4caf50;color:#4caf50;background:rgba(76,175,80,0.05)}
 .tag-book{border-color:var(--yellow);color:var(--brown);background:rgba(254,196,34,0.08)}
+/* MAP */
 #map-section{background:var(--white)}
 .map-frame-wrap{border:1px solid var(--rule);overflow:hidden}
 .map-frame-wrap iframe{width:100%;height:520px;display:block;border:none}
@@ -96,6 +105,17 @@ a{text-decoration:none;color:inherit}
 .btn-primary:hover{background:#e6b01f}
 .btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--ink);font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.85rem 1.75rem;border:1px solid var(--ink);cursor:pointer;transition:0.2s}
 .btn-secondary:hover{background:var(--ink);color:var(--white)}
+/* PHOTOS */
+.photo-filmstrip{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--yellow) var(--rule)}
+.photo-filmstrip::-webkit-scrollbar{height:4px}
+.photo-filmstrip::-webkit-scrollbar-track{background:var(--rule)}
+.photo-filmstrip::-webkit-scrollbar-thumb{background:var(--yellow)}
+.photo-tile{flex-shrink:0;width:220px;height:165px;scroll-snap-align:start;position:relative;overflow:hidden;cursor:pointer;background:var(--stone)}
+.photo-tile img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s}
+.photo-tile:hover img{transform:scale(1.05)}
+.photo-tile-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.photo-tile-label{position:absolute;bottom:0;left:0;right:0;padding:6px 8px;background:linear-gradient(transparent,rgba(0,0,0,0.6));font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.9)}
+/* BOOKINGS */
 #bookings{background:var(--white)}
 .booking-table{width:100%;border-collapse:collapse}
 .booking-table th{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--warm-grey);padding:0.65rem 1rem;text-align:left;border-bottom:2px solid var(--yellow);background:var(--cream)}
@@ -115,7 +135,7 @@ a{text-decoration:none;color:inherit}
 .keep-parent{font-weight:600;color:var(--ink);margin-top:0.5rem}
 .keep-child{padding-left:1.5rem;font-size:0.8rem}
 .keep-done{text-decoration:line-through;color:var(--warm-grey);font-size:0.8rem}
-@media(max-width:768px){.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:80px;padding:0.35rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-frame-wrap iframe{height:360px}.page-footer{padding:2rem 1.25rem}.booking-table th,.booking-table td{padding:0.65rem 0.5rem}}
+@media(max-width:768px){.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:80px;padding:0.35rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-frame-wrap iframe{height:360px}.page-footer{padding:2rem 1.25rem}.booking-table th,.booking-table td{padding:0.65rem 0.5rem}.photo-tile{width:160px;height:120px}}
 </style>
 </head>
 <body>
@@ -151,23 +171,52 @@ a{text-decoration:none;color:inherit}
     <div class="status-item"><div class="status-label">Rental Car</div><div class="status-value"><span class="status-dot dot-green"></span>National, BCN Sants, Apr 24</div></div>
   </div>
 </header>
+
+<!-- CALENDAR -->
 <section class="section" id="calendar"><header class="section-header"><div class="section-eyebrow">01 &mdash; At a Glance</div><h2 class="section-title">Trip Calendar</h2></header><div id="calendar-container"></div></section>
+
+<!-- ITINERARY -->
 <section class="section" id="itinerary" style="background:var(--cream)"><header class="section-header"><div class="section-eyebrow">02 &mdash; Day by Day</div><h2 class="section-title">Full Itinerary</h2></header><div class="callout"><div class="callout-title">Live Data</div><div class="callout-text" id="sheet-status">Loading from Google Sheets&hellip;</div></div><div id="itinerary-container"><div class="loading-state">Fetching itinerary</div></div></section>
+
+<!-- MAP -->
 <section class="section" id="map-section"><header class="section-header"><div class="section-eyebrow">03 &mdash; Where We Are</div><h2 class="section-title">Trip Map</h2></header>
 <div class="callout"><div class="callout-title">Add Locations</div><div class="callout-text">To add a pin, use the <strong>Edit Map</strong> button below. You can also import locations from the <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv" target="_blank" style="color:var(--yellow)">Google Sheet</a> via Add Layer &rarr; Import in MyMaps.</div></div>
 <div class="map-frame-wrap"><iframe src="https://www.google.com/maps/d/embed?mid=1FXsfBl3nnJWUTrx_gplpkt4oe9D0UyA&ehbc=2E312F" allowfullscreen loading="lazy" title="Spain 2026 Trip Map"></iframe></div>
 <div class="map-actions"><a href="https://www.google.com/maps/d/u/0/edit?mid=1FXsfBl3nnJWUTrx_gplpkt4oe9D0UyA" target="_blank" class="btn-primary">&#43; Edit Map / Add Pins</a><a href="https://www.google.com/maps/d/u/0/viewer?mid=1FXsfBl3nnJWUTrx_gplpkt4oe9D0UyA" target="_blank" class="btn-secondary">Open Full Screen</a></div></section>
+
+<!-- PHOTOS -->
 <section class="section" id="photos" style="background:var(--cream)"><header class="section-header"><div class="section-eyebrow">04 &mdash; Memories</div><h2 class="section-title">Photo Album</h2></header>
 <div style="border:1px solid var(--rule);overflow:hidden;background:var(--white)">
-<div style="background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow)"><span style="font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)">MaRu / Spain &amp; Basque Country 2026</span><span style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)">Google Photos</span></div>
-<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0">
-<a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" style="display:block;position:relative;padding-top:100%;background:linear-gradient(135deg,#1a6b9a,#0d3d5c);overflow:hidden;text-decoration:none"><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span style="font-size:2rem">&#127466;&#127480;</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.7)">Barcelona</span></div></a>
-<a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" style="display:block;position:relative;padding-top:100%;background:linear-gradient(135deg,#7a5c1e,#3d2e0f);overflow:hidden;text-decoration:none"><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span style="font-size:2rem">&#127963;</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.7)">Tarragona</span></div></a>
-<a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" style="display:block;position:relative;padding-top:100%;background:linear-gradient(135deg,#2d6a4f,#1a3d2e);overflow:hidden;text-decoration:none"><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span style="font-size:2rem">&#127981;</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.7)">Bilbao</span></div></a>
-<a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" style="display:block;position:relative;padding-top:100%;background:linear-gradient(135deg,#5c3d6b,#2e1a3d);overflow:hidden;text-decoration:none"><div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px"><span style="font-size:2rem">&#127754;</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.7)">San Sebasti&aacute;n</span></div></a>
+<div style="background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow)">
+  <span style="font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)">MaRu / Spain &amp; Basque Country 2026</span>
+  <span style="font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)" id="photo-count">Google Photos</span>
 </div>
-<div style="padding:1.25rem 1.5rem;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem"><div><div style="font-size:0.82rem;font-weight:600;color:var(--ink);margin-bottom:3px">Shared album &mdash; both Mark &amp; Rumana can add photos</div><div style="font-size:0.75rem;color:var(--warm-grey)">Google Photos blocks direct embedding. Click any tile to open the live album.</div></div><a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="btn-primary">Open Full Album</a></div>
+<!-- PHOTO FILMSTRIP — tiles appear here as you add direct image URLs via PHOTO_URLS below -->
+<div class="photo-filmstrip" id="photo-strip">
+  <!-- Destination placeholders — replaced by real photos as you add PHOTO_URLS -->
+  <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="photo-tile" style="background:linear-gradient(135deg,#1a6b9a,#0d3d5c)">
+    <div class="photo-tile-placeholder"><span style="font-size:2rem">&#127466;&#127480;</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5)">Barcelona</span></div>
+  </a>
+  <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="photo-tile" style="background:linear-gradient(135deg,#7a5c1e,#3d2e0f)">
+    <div class="photo-tile-placeholder"><span style="font-size:2rem">&#127963;</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5)">Tarragona</span></div>
+  </a>
+  <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="photo-tile" style="background:linear-gradient(135deg,#2d6a4f,#1a3d2e)">
+    <div class="photo-tile-placeholder"><span style="font-size:2rem">&#127981;</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5)">Bilbao</span></div>
+  </a>
+  <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="photo-tile" style="background:linear-gradient(135deg,#5c3d6b,#2e1a3d)">
+    <div class="photo-tile-placeholder"><span style="font-size:2rem">&#127754;</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.5)">San Sebasti&aacute;n</span></div>
+  </a>
+</div>
+<div style="padding:1.25rem 1.5rem;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+  <div>
+    <div style="font-size:0.82rem;font-weight:600;color:var(--ink);margin-bottom:3px">Shared album &mdash; both Mark &amp; Rumana can add photos</div>
+    <div style="font-size:0.75rem;color:var(--warm-grey)">As you take photos, tell Claude to add them here and they&rsquo;ll appear in the filmstrip above and as calendar backgrounds.</div>
+  </div>
+  <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="btn-primary">Open Full Album</a>
+</div>
 </div></section>
+
+<!-- NOTES -->
 <section class="section" id="notes"><header class="section-header"><div class="section-eyebrow">05 &mdash; Shared Notes</div><h2 class="section-title">Espagna Checklist</h2></header>
 <div class="callout"><div class="callout-title">Google Keep</div><div class="callout-text">Shared checklist from Google Keep. Google Keep blocks live embedding &mdash; click Open in Keep to edit directly. Ask Claude to sync changes here.</div></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.5rem">
@@ -198,6 +247,8 @@ a{text-decoration:none;color:inherit}
 </div>
 <div style="margin-top:1.25rem;display:flex;gap:1rem;flex-wrap:wrap"><a href="https://keep.google.com/u/0/#LIST/18DMWnckHCVAzSrmtB4qXCKifdKChpqDtHNDbqmvBCfpQsI3NVH_AHSZNbhYAOA" target="_blank" class="btn-primary">Open Espagna in Keep</a><a href="https://keep.google.com" target="_blank" class="btn-secondary">All Keep Notes</a></div>
 </section>
+
+<!-- BOOKINGS -->
 <section class="section" id="bookings"><header class="section-header"><div class="section-eyebrow">06 &mdash; Logistics</div><h2 class="section-title">Booking Status</h2></header>
 <table class="booking-table"><thead><tr><th>Item</th><th>Details</th><th>Dates</th><th>Status</th></tr></thead><tbody>
 <tr><td><div class="booking-item-name">International Flights</div><div class="booking-detail">Delta / Virgin Atlantic</div></td><td>BOI&rarr;ATL&rarr;BCN / BCN&rarr;ATL&rarr;BOI<br><span style="font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey)">DL 874 / VS 3926 / VS 3937 / DL 704</span></td><td>Apr 20&ndash;21 &amp; May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
@@ -213,214 +264,251 @@ a{text-decoration:none;color:inherit}
 <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">Timed entry &mdash; parkguell.barcelona</div></td><td>Book 8am or 9am slot &mdash; only the Monumental Zone requires tickets</td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
 <tr style="background:rgba(254,196,34,0.03)"><td><div class="booking-item-name" style="color:var(--brown)">&#9733; Pro Tips</div><div class="booking-detail">General advice</div></td><td style="font-size:0.78rem;color:var(--stone);line-height:1.8"><strong>Driving:</strong> US license + IDP + passport + rental agreement + insurance always together.<br><strong>Pintxos:</strong> Order at the bar. Pay per round, not at the end.<br><strong>ATL lounge:</strong> The Club at Concourse F (Priority Pass) &mdash; enter before gate fills.<br><strong>Chase Edit $100 credit:</strong> Applies to dining, spa, or room service at Radisson &mdash; confirm on arrival.<br><strong>Currency:</strong> Notify bank before departure. Contactless payment universal in Spain.</td><td>&mdash;</td><td>&mdash;</td></tr>
 </tbody></table></section>
+
 <footer class="page-footer"><div class="footer-brand">MaRu <span>|</span> Spain 2026</div><div class="footer-meta" id="footer-updated">Updated from Google Sheets</div></footer>
+
 <script>
-const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
-document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('nav-menu').classList.toggle('open'));
-const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id});navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c))},{passive:true});
-const TRIP_EVENTS=[
-{date:'2026-04-20',label:'Depart BOI 2:10pm',loc:'Boise',stay:'DL 874 → ATL overnight'},
-{date:'2026-04-21',label:'Arrive BCN 6:50am (Tue)',loc:'Barcelona',stay:'Eixample Airbnb'},
-{date:'2026-04-22',label:'Park Güell + Picasso',loc:'Barcelona',stay:'Eixample Airbnb'},
-{date:'2026-04-23',label:'Sagrada Família 9:30am',loc:'Barcelona',stay:'Eixample Airbnb'},
-{date:'2026-04-24',label:'Drive → Tarragona',loc:'Tarragona',stay:'Dan Manion'},
-{date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona',stay:'Dan Manion'},
-{date:'2026-04-26',label:'Drive → Bilbao',loc:'Bilbao',stay:'Radisson Gran Via'},
-{date:'2026-04-27',label:'Guggenheim',loc:'Bilbao',stay:'Radisson Gran Via'},
-{date:'2026-04-28',label:'San Sebastián day trip',loc:'Bilbao',stay:'Radisson Gran Via'},
-{date:'2026-04-29',label:'Basque Country',loc:'Bilbao',stay:'Radisson Gran Via'},
-{date:'2026-04-30',label:'Drive → Barcelona',loc:'Barcelona',stay:'AC Hotel Sants'},
-{date:'2026-05-01',label:'BCN → ATL → BOI',loc:'Home',stay:'VS 3937 + DL 704'},
+// ============================================================
+// PHOTO URLS — Add direct image URLs here as you take photos
+// Format: { date: 'YYYY-MM-DD', url: 'https://...', caption: 'Description' }
+// URL must be a direct image link (ends in .jpg, .png, or use a CDN link)
+// Claude will update this section during your trip.
+// ============================================================
+const PHOTO_URLS = [
+  // Example (Claude will fill these in):
+  // { date: '2026-04-23', url: 'https://lh3.googleusercontent.com/...', caption: 'Sagrada Familia' },
 ];
-const LOC_COLORS={'Boise':'#5c5c58','Barcelona':'#1a6b9a','Tarragona':'#7a5c1e','Bilbao':'#2d6a4f','Home':'#5c5c58'};
-function buildCalendar(){
-const container=document.getElementById('calendar-container');
-const TRIP_START='2026-04-20',TRIP_END='2026-05-01';
-const eventMap={};
-TRIP_EVENTS.forEach(e=>{eventMap[e.date]=e;});
-const todayStr=new Date().toLocaleDateString('sv');
-const legend=document.createElement('div');
-legend.style.cssText='display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;align-items:center;';
-[['Barcelona','#1a6b9a'],['Tarragona','#7a5c1e'],['Bilbao','#2d6a4f'],['Travel/Home','#5c5c58']].forEach(([name,color])=>{
-const dot=document.createElement('div');
-dot.style.cssText='display:flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);';
-dot.innerHTML='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+color+';flex-shrink:0;"></span>'+name;
-legend.appendChild(dot);
-});
-container.appendChild(legend);
-[{year:2026,month:3},{year:2026,month:4}].forEach(({year,month})=>{
-const mo=String(month+1).padStart(2,'0');
-const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
-const allTripDates=TRIP_EVENTS.filter(e=>e.date.startsWith(year+'-'+mo)).map(e=>e.date);
-if(!allTripDates.length)return;
-const firstD=new Date(allTripDates[0]+'T12:00:00'),lastD=new Date(allTripDates[allTripDates.length-1]+'T12:00:00');
-const startSun=new Date(firstD);startSun.setDate(firstD.getDate()-firstD.getDay());
-const endSat=new Date(lastD);endSat.setDate(lastD.getDate()+(6-lastD.getDay()));
-const lbl=document.createElement('div');lbl.className='cal-month-label';lbl.textContent=monthNames[month]+' '+year;container.appendChild(lbl);
-const grid=document.createElement('div');grid.className='calendar-grid';
-['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{const hc=document.createElement('div');hc.className='cal-header-cell';hc.textContent=d;grid.appendChild(hc);});
-let cur=new Date(startSun);
-while(cur<=endSat){
-const cell=document.createElement('div');
-const y=cur.getFullYear(),m=String(cur.getMonth()+1).padStart(2,'0'),d=String(cur.getDate()).padStart(2,'0');
-const ds=y+'-'+m+'-'+d;
-const inMonth=cur.getMonth()===month;
-const isTrip=ds>=TRIP_START&&ds<=TRIP_END&&inMonth;
-const ev=eventMap[ds];
-const lc=ev?(LOC_COLORS[ev.loc]||'#7d6b57'):null;
-cell.className='cal-cell'+(inMonth?'':' empty')+(isTrip?' trip-day':'')+(ds===todayStr?' today':'');
-if(lc&&inMonth)cell.style.borderTop='3px solid '+lc;
-const dn=document.createElement('div');dn.className='cal-day-num';dn.textContent=inMonth?cur.getDate():'';cell.appendChild(dn);
-if(ev&&inMonth){
-const evEl=document.createElement('div');evEl.className='cal-event';evEl.style.cssText='border-left-color:'+lc+';background:'+lc+'18;white-space:normal;';evEl.textContent=ev.label;cell.appendChild(evEl);
-const locEl=document.createElement('div');locEl.className='cal-location-tag';locEl.style.background=lc;locEl.textContent=ev.loc;cell.appendChild(locEl);
-const stEl=document.createElement('div');stEl.style.cssText='font-size:0.55rem;color:var(--warm-grey);margin-top:4px;line-height:1.3;font-style:italic;';stEl.textContent='\uD83D\uDECF '+ev.stay;cell.appendChild(stEl);
+
+// Build a map for quick lookup: date -> first photo
+const PHOTO_MAP = {};
+PHOTO_URLS.forEach(p => { if (!PHOTO_MAP[p.date]) PHOTO_MAP[p.date] = p; });
+
+// ============================================================
+// CONFIG
+// ============================================================
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
+
+document.getElementById('hamburger').addEventListener('click', () => document.getElementById('nav-menu').classList.toggle('open'));
+const sections = document.querySelectorAll('section[id]'), navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => { let c = ''; sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) c = s.id; }); navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + c)); }, { passive: true });
+
+// ============================================================
+// PHOTO FILMSTRIP — inject real photos if available
+// ============================================================
+function buildPhotoStrip() {
+  const strip = document.getElementById('photo-strip');
+  const count = document.getElementById('photo-count');
+  if (PHOTO_URLS.length === 0) return; // keep placeholders
+
+  // Replace placeholders with real photos
+  strip.innerHTML = '';
+  PHOTO_URLS.forEach(p => {
+    const tile = document.createElement('a');
+    tile.href = 'https://photos.app.goo.gl/7KJMVdykUsxSsS7t6';
+    tile.target = '_blank';
+    tile.className = 'photo-tile';
+    tile.innerHTML = '<img src="' + p.url + '" alt="' + (p.caption || '') + '" loading="lazy"><div class="photo-tile-label">' + (p.caption || new Date(p.date + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric' })) + '</div>';
+    strip.appendChild(tile);
+  });
+
+  // Add placeholder for more
+  const more = document.createElement('a');
+  more.href = 'https://photos.app.goo.gl/7KJMVdykUsxSsS7t6';
+  more.target = '_blank';
+  more.className = 'photo-tile';
+  more.style.cssText = 'background:var(--ink);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:6px';
+  more.innerHTML = '<span style="font-size:2rem;opacity:0.4">+</span><span style="font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:rgba(255,255,255,0.3)">Full Album</span>';
+  strip.appendChild(more);
+
+  count.textContent = PHOTO_URLS.length + ' photo' + (PHOTO_URLS.length !== 1 ? 's' : '');
 }
-grid.appendChild(cell);
-cur.setDate(cur.getDate()+1);
-}
-container.appendChild(grid);
-});
+buildPhotoStrip();
+
+// ============================================================
+// TRIP EVENTS + CALENDAR
+// ============================================================
+const TRIP_EVENTS = [
+  { date: '2026-04-20', label: 'Depart BOI 2:10pm', loc: 'Boise', stay: 'DL 874 \u2192 ATL overnight' },
+  { date: '2026-04-21', label: 'Arrive BCN 6:50am (Tue)', loc: 'Barcelona', stay: 'Eixample Airbnb' },
+  { date: '2026-04-22', label: 'Park G\u00fcell + Picasso', loc: 'Barcelona', stay: 'Eixample Airbnb' },
+  { date: '2026-04-23', label: 'Sagrada Fam\u00edlia 9:30am', loc: 'Barcelona', stay: 'Eixample Airbnb' },
+  { date: '2026-04-24', label: 'Drive \u2192 Tarragona', loc: 'Tarragona', stay: 'Dan Manion' },
+  { date: '2026-04-25', label: 'Roman Ruins + Coast', loc: 'Tarragona', stay: 'Dan Manion' },
+  { date: '2026-04-26', label: 'Drive \u2192 Bilbao', loc: 'Bilbao', stay: 'Radisson Gran Via' },
+  { date: '2026-04-27', label: 'Guggenheim', loc: 'Bilbao', stay: 'Radisson Gran Via' },
+  { date: '2026-04-28', label: 'San Sebasti\u00e1n day trip', loc: 'Bilbao', stay: 'Radisson Gran Via' },
+  { date: '2026-04-29', label: 'Basque Country', loc: 'Bilbao', stay: 'Radisson Gran Via' },
+  { date: '2026-04-30', label: 'Drive \u2192 Barcelona', loc: 'Barcelona', stay: 'AC Hotel Sants' },
+  { date: '2026-05-01', label: 'BCN \u2192 ATL \u2192 BOI', loc: 'Home', stay: 'VS 3937 + DL 704' },
+];
+const LOC_COLORS = { 'Boise': '#5c5c58', 'Barcelona': '#1a6b9a', 'Tarragona': '#7a5c1e', 'Bilbao': '#2d6a4f', 'Home': '#5c5c58' };
+
+function buildCalendar() {
+  const container = document.getElementById('calendar-container');
+  const TRIP_START = '2026-04-20', TRIP_END = '2026-05-01';
+  const eventMap = {};
+  TRIP_EVENTS.forEach(e => { eventMap[e.date] = e; });
+  const todayStr = new Date().toLocaleDateString('sv');
+
+  const legend = document.createElement('div');
+  legend.style.cssText = 'display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;align-items:center;';
+  [['Barcelona', '#1a6b9a'], ['Tarragona', '#7a5c1e'], ['Bilbao', '#2d6a4f'], ['Travel/Home', '#5c5c58']].forEach(([name, color]) => {
+    const dot = document.createElement('div');
+    dot.style.cssText = 'display:flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);';
+    dot.innerHTML = '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + color + ';flex-shrink:0;"></span>' + name;
+    legend.appendChild(dot);
+  });
+  container.appendChild(legend);
+
+  [{ year: 2026, month: 3 }, { year: 2026, month: 4 }].forEach(({ year, month }) => {
+    const mo = String(month + 1).padStart(2, '0');
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const allTripDates = TRIP_EVENTS.filter(e => e.date.startsWith(year + '-' + mo)).map(e => e.date);
+    if (!allTripDates.length) return;
+    const firstD = new Date(allTripDates[0] + 'T12:00:00'), lastD = new Date(allTripDates[allTripDates.length - 1] + 'T12:00:00');
+    const startSun = new Date(firstD); startSun.setDate(firstD.getDate() - firstD.getDay());
+    const endSat = new Date(lastD); endSat.setDate(lastD.getDate() + (6 - lastD.getDay()));
+
+    const lbl = document.createElement('div'); lbl.className = 'cal-month-label'; lbl.textContent = monthNames[month] + ' ' + year; container.appendChild(lbl);
+    const grid = document.createElement('div'); grid.className = 'calendar-grid';
+    ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(d => { const hc = document.createElement('div'); hc.className = 'cal-header-cell'; hc.textContent = d; grid.appendChild(hc); });
+
+    let cur = new Date(startSun);
+    while (cur <= endSat) {
+      const cell = document.createElement('div');
+      const y = cur.getFullYear(), m = String(cur.getMonth() + 1).padStart(2, '0'), d = String(cur.getDate()).padStart(2, '0');
+      const ds = y + '-' + m + '-' + d;
+      const inMonth = cur.getMonth() === month;
+      const isTrip = ds >= TRIP_START && ds <= TRIP_END && inMonth;
+      const ev = eventMap[ds];
+      const lc = ev ? (LOC_COLORS[ev.loc] || '#7d6b57') : null;
+      const photo = PHOTO_MAP[ds];
+
+      cell.className = 'cal-cell' + (inMonth ? '' : ' empty') + (isTrip ? ' trip-day' : '') + (ds === todayStr ? ' today' : '') + (photo ? ' has-photo' : '');
+      if (lc && inMonth) cell.style.borderTop = '3px solid ' + lc;
+
+      // Photo background with washout
+      if (photo && inMonth) {
+        const bg = document.createElement('div');
+        bg.className = 'cal-photo-bg';
+        bg.style.backgroundImage = 'url(' + photo.url + ')';
+        cell.appendChild(bg);
+      }
+
+      // Wrap content so it sits above photo
+      const content = document.createElement('div');
+      content.className = 'cal-cell-content';
+
+      const dn = document.createElement('div'); dn.className = 'cal-day-num'; dn.textContent = inMonth ? cur.getDate() : ''; content.appendChild(dn);
+
+      if (ev && inMonth) {
+        const evEl = document.createElement('div'); evEl.className = 'cal-event'; evEl.style.cssText = 'border-left-color:' + lc + ';background:rgba(247,245,241,0.88);white-space:normal;'; evEl.textContent = ev.label; content.appendChild(evEl);
+        const locEl = document.createElement('div'); locEl.className = 'cal-location-tag'; locEl.style.background = 'rgba(26,26,24,0.82)'; locEl.textContent = ev.loc; content.appendChild(locEl);
+        const stEl = document.createElement('div'); stEl.style.cssText = 'font-size:0.55rem;color:var(--warm-grey);margin-top:4px;line-height:1.3;font-style:italic;'; stEl.textContent = '\uD83D\uDECF ' + ev.stay; content.appendChild(stEl);
+        if (photo) { const pb = document.createElement('div'); pb.className = 'cal-photo-badge'; pb.textContent = '\uD83D\uDCF7 ' + (photo.caption || ''); content.appendChild(pb); }
+      }
+
+      cell.appendChild(content);
+      grid.appendChild(cell);
+      cur.setDate(cur.getDate() + 1);
+    }
+    container.appendChild(grid);
+  });
 }
 buildCalendar();
-const CITY_COORDS={'Barcelona':{lat:41.3851,lon:2.1734},'Tarragona':{lat:41.1189,lon:1.2445},'Bilbao':{lat:43.2630,lon:-2.9350},'Boise':{lat:43.6150,lon:-116.2023},'Home':{lat:43.6150,lon:-116.2023}};
-const WCACHE={};
-async function fetchWeather(loc,date){
-const key=loc+':'+date;if(WCACHE[key])return WCACHE[key];
-const coords=CITY_COORDS[loc];if(!coords)return null;
-try{
-const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+coords.lat+'&longitude='+coords.lon+'&daily=temperature_2m_max,temperature_2m_min,weathercode&temperature_unit=fahrenheit&timezone=Europe%2FMadrid&start_date='+date+'&end_date='+date);
-const d=await r.json();
-if(!d.daily||!d.daily.temperature_2m_max[0])return null;
-const res={hi:Math.round(d.daily.temperature_2m_max[0]),lo:Math.round(d.daily.temperature_2m_min[0]),code:d.daily.weathercode[0]};
-WCACHE[key]=res;return res;
-}catch{return null;}
+
+// ============================================================
+// WEATHER
+// ============================================================
+const CITY_COORDS = { 'Barcelona': { lat: 41.3851, lon: 2.1734 }, 'Tarragona': { lat: 41.1189, lon: 1.2445 }, 'Bilbao': { lat: 43.2630, lon: -2.9350 }, 'Boise': { lat: 43.6150, lon: -116.2023 }, 'Home': { lat: 43.6150, lon: -116.2023 } };
+const WCACHE = {};
+async function fetchWeather(loc, date) {
+  const key = loc + ':' + date; if (WCACHE[key]) return WCACHE[key];
+  const coords = CITY_COORDS[loc]; if (!coords) return null;
+  try {
+    const r = await fetch('https://api.open-meteo.com/v1/forecast?latitude=' + coords.lat + '&longitude=' + coords.lon + '&daily=temperature_2m_max,temperature_2m_min,weathercode&temperature_unit=fahrenheit&timezone=Europe%2FMadrid&start_date=' + date + '&end_date=' + date);
+    const d = await r.json();
+    if (!d.daily || !d.daily.temperature_2m_max[0]) return null;
+    const res = { hi: Math.round(d.daily.temperature_2m_max[0]), lo: Math.round(d.daily.temperature_2m_min[0]), code: d.daily.weathercode[0] };
+    WCACHE[key] = res; return res;
+  } catch { return null; }
 }
-function wIcon(c){if(c===0)return'&#9728;';if(c<=3)return'&#9925;';if(c<=67)return'&#127783;';if(c<=77)return'&#10052;';return'&#9928;';}
-const FALLBACK=[
-{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[
-{time:'2:10pm',text:'<strong>BOI &rarr; ATL</strong> &mdash; DL 874, departs 2:10pm MDT, arrives Atlanta 6:20pm EDT',tag:'confirmed'},
-{time:'6:20pm',text:'ATL layover: The Club at Concourse F (Priority Pass via Chase Sapphire Reserve)'},
-{time:'10:05pm',text:'<strong>ATL &rarr; BCN</strong> &mdash; VS 3926 (Virgin Atlantic), departs 10:05pm EDT &mdash; overnight flight, arrives Barcelona <strong>Tuesday April 21 at 6:50am CEST</strong>',tag:'confirmed'},
-]},
-{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[
-{time:'6:50am',text:'<strong>Arrive Barcelona BCN</strong> &mdash; VS 3926 lands Terminal 1. Tuesday morning, Spain time (CEST / UTC+2)',tag:'confirmed'},
-{time:'',text:'Aerob&uacute;s A1 from T1 to Pla&ccedil;a Catalunya (~35 min, ~&euro;7), then to Eixample Airbnb'},
-{time:'',text:'Check in: Central Apartments, Eixample (Res. 562/2026) &mdash; Host: Enrique Meza',tag:'confirmed'},
-{time:'Afternoon',text:'Recovery day &mdash; slow explore of Eixample neighborhood'},
-{time:'Evening',text:'Dinner at a local spot &mdash; avoid tourist traps near La Rambla'},
-]},
-{date:'2026-04-22',title:'Barcelona',loc:'Barcelona',activities:[
-{time:'Morning',text:'Park G&uuml;ell (book timed entry ahead)',tag:'book'},
-{time:'Afternoon',text:'<strong>Picasso Museum</strong> &mdash; Book tickets (timed entry, sells out in spring) &mdash; &euro;19/person',tag:'book'},
-{time:'',text:'El Born neighborhood &mdash; Carrer dels Banys Nous antique dealers, Els Encants flea market'},
-{time:'Evening',text:'Dinner in El Born &mdash; Bar del Pla or similar'},
-]},
-{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[
-{time:'9:30am',text:'<strong>Sagrada Fam&iacute;lia with Passion Tower</strong> &mdash; Res. 95793090 &mdash; 2x General &euro;36/ea &mdash; Enter via C/ Marina, 08013',tag:'confirmed'},
-{time:'9:45am',text:'Tower access: Passion Tower'},
-{time:'Afternoon',text:"Sant Jordi's Day &mdash; book/rose markets, Gothic Quarter, Mercat G&ograve;tic antiques, Ajuntament courtyards + live music"},
-{time:'Evening',text:"Dinner in Gothic Quarter"},
-]},
-{date:'2026-04-24',title:'To Tarragona',loc:'Tarragona',activities:[
-{time:'Morning',text:'Check out of Eixample Airbnb'},
-{time:'',text:'Pick up rental car at Barcelona Sants (National Car Rental &mdash; automatic)',tag:'confirmed'},
-{time:'',text:'Drive to Tarragona (~1hr)'},
-{time:'Afternoon',text:'Arrive Tarragona &mdash; staying with Dan Manion'},
-{time:'',text:'Explore Roman amphitheatre, old town'},
-]},
-{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[
-{time:'Morning',text:'Cathedral, Ferreres Aqueduct (Pont del Diable)'},
-{time:'Afternoon',text:'Tarragona beaches, local wine and seafood'},
-]},
-{date:'2026-04-26',title:'Drive to Bilbao',loc:'Bilbao',activities:[
-{time:'Morning',text:'Depart Tarragona &mdash; drive to Bilbao via Toulouse, France (~6&ndash;7 hrs)'},
-{time:'Afternoon',text:'Arrive Bilbao &mdash; check in: Radisson Gran Via Bilbao',tag:'confirmed'},
-{time:'Evening',text:'Walk to Casco Viejo for pintxos crawl (Siete Calles, ~15 min walk)'},
-]},
-{date:'2026-04-27',title:'Guggenheim',loc:'Bilbao',activities:[
-{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> &mdash; Res. 95961308',tag:'confirmed'},
-{time:'',text:'Check Carne y Arena VR installation by I&ntilde;&aacute;rritu (through June 20)'},
-{time:'Afternoon',text:'Bilbao Fine Arts Museum, riverside walk'},
-{time:'Evening',text:'Pintxos in Plaza Nueva'},
-]},
-{date:'2026-04-28',title:'San Sebasti&aacute;n',loc:'Bilbao',activities:[
-{time:'Morning',text:'Drive to San Sebasti&aacute;n (~1.5 hrs via coastal road). Optional: Getaria, Zarautz'},
-{time:'',text:'Walk La Concha beach, Monte Urgull'},
-{time:'Lunch',text:'Pintxos in Parte Vieja (old town)'},
-{time:'Afternoon',text:'Old town, harbor, Monte Igueldo funicular'},
-{time:'Evening',text:'Drive back to Bilbao'},
-]},
-{date:'2026-04-29',title:'Basque Country',loc:'Bilbao',activities:[
-{time:'Option A',text:'Guernica + Urdaibai Biosphere Reserve (~40 min) &mdash; Guernica Peace Museum'},
-{time:'Option B',text:'Rioja wine country (~1.5 hrs south) &mdash; Haro, Laguardia, vineyard tours'},
-{time:'Option C',text:'Relaxed Bilbao day &mdash; neighborhoods, caf&eacute;s, antique hunting'},
-{time:'Evening',text:'Farewell pintxos in Casco Viejo'},
-]},
-{date:'2026-04-30',title:'Return to Barcelona',loc:'Barcelona',activities:[
-{time:'Morning',text:'Drive Bilbao &rarr; Barcelona (~6&ndash;7 hrs, via Toulouse or A-8/AP-8)'},
-{time:'',text:'Return rental car at Barcelona Sants (National Car Rental)',tag:'confirmed'},
-{time:'',text:'Check in: AC Hotel Barcelona Sants (Conf. #92299097 &mdash; Marriott Bonvoy, 38,000 pts)',tag:'confirmed'},
-{time:'Evening',text:'Last evening in Barcelona &mdash; farewell dinner'},
-]},
-{date:'2026-05-01',title:'Home',loc:'Home',activities:[
-{time:'6:30am',text:'Wake up &mdash; R2 Nord train from Sants to Terminal 1 &mdash; target 9:35am check-in'},
-{time:'11:35am',text:'<strong>BCN &rarr; Atlanta</strong> &mdash; VS 3937 (Virgin Atlantic), departs 11:35am, arrives Atlanta 9:39pm',tag:'confirmed'},
-{time:'',text:'ATL lounge: The Club at Concourse F (Priority Pass via Chase Sapphire Reserve)'},
-{time:'7:57pm',text:'<strong>ATL &rarr; Boise</strong> &mdash; DL 704 (Delta), departs 7:57pm, arrives 12:28am',tag:'confirmed'},
-]},
+function wIcon(c) { if (c === 0) return '&#9728;'; if (c <= 3) return '&#9925;'; if (c <= 67) return '&#127783;'; if (c <= 77) return '&#10052;'; return '&#9928;'; }
+
+// ============================================================
+// FALLBACK ITINERARY
+// ============================================================
+const FALLBACK = [
+  { date: '2026-04-20', title: 'Departure Day', loc: 'Boise, Idaho', activities: [{ time: '2:10pm', text: '<strong>BOI &rarr; ATL</strong> &mdash; DL 874, departs 2:10pm MDT, arrives Atlanta 6:20pm EDT', tag: 'confirmed' }, { time: '6:20pm', text: 'ATL layover: The Club at Concourse F (Priority Pass via Chase Sapphire Reserve)' }, { time: '10:05pm', text: '<strong>ATL &rarr; BCN</strong> &mdash; VS 3926 (Virgin Atlantic), departs 10:05pm EDT &mdash; overnight flight, arrives Barcelona <strong>Tuesday April 21 at 6:50am CEST</strong>', tag: 'confirmed' }] },
+  { date: '2026-04-21', title: 'Arrival in Barcelona', loc: 'Barcelona, Eixample', activities: [{ time: '6:50am', text: '<strong>Arrive Barcelona BCN</strong> &mdash; VS 3926 lands Terminal 1. Tuesday morning, Spain time (CEST / UTC+2)', tag: 'confirmed' }, { time: '', text: 'Aerob&uacute;s A1 from T1 to Pla&ccedil;a Catalunya (~35 min, ~&euro;7), then to Eixample Airbnb' }, { time: '', text: 'Check in: Central Apartments, Eixample (Res. 562/2026) &mdash; Host: Enrique Meza', tag: 'confirmed' }, { time: 'Afternoon', text: 'Recovery day &mdash; slow explore of Eixample neighborhood' }, { time: 'Evening', text: 'Dinner at a local spot &mdash; avoid tourist traps near La Rambla' }] },
+  { date: '2026-04-22', title: 'Barcelona', loc: 'Barcelona', activities: [{ time: 'Morning', text: 'Park G&uuml;ell (book timed entry ahead)', tag: 'book' }, { time: 'Afternoon', text: '<strong>Picasso Museum</strong> &mdash; Book tickets (timed entry, sells out in spring) &mdash; &euro;19/person', tag: 'book' }, { time: '', text: 'El Born neighborhood &mdash; Carrer dels Banys Nous antique dealers, Els Encants flea market' }, { time: 'Evening', text: 'Dinner in El Born &mdash; Bar del Pla or similar' }] },
+  { date: '2026-04-23', title: "Sant Jordi's Day", loc: 'Barcelona', activities: [{ time: '9:30am', text: '<strong>Sagrada Fam&iacute;lia with Passion Tower</strong> &mdash; Res. 95793090 &mdash; 2x General &euro;36/ea &mdash; Enter via C/ Marina, 08013', tag: 'confirmed' }, { time: '9:45am', text: 'Tower access: Passion Tower' }, { time: 'Afternoon', text: "Sant Jordi's Day &mdash; book/rose markets, Gothic Quarter, Mercat G&ograve;tic antiques, Ajuntament courtyards + live music" }, { time: 'Evening', text: 'Dinner in Gothic Quarter' }] },
+  { date: '2026-04-24', title: 'To Tarragona', loc: 'Tarragona', activities: [{ time: 'Morning', text: 'Check out of Eixample Airbnb' }, { time: '', text: 'Pick up rental car at Barcelona Sants (National Car Rental &mdash; automatic)', tag: 'confirmed' }, { time: '', text: 'Drive to Tarragona (~1hr)' }, { time: 'Afternoon', text: 'Arrive Tarragona &mdash; staying with Dan Manion' }, { time: '', text: 'Explore Roman amphitheatre, old town' }] },
+  { date: '2026-04-25', title: 'Tarragona', loc: 'Tarragona', activities: [{ time: 'Morning', text: 'Cathedral, Ferreres Aqueduct (Pont del Diable)' }, { time: 'Afternoon', text: 'Tarragona beaches, local wine and seafood' }] },
+  { date: '2026-04-26', title: 'Drive to Bilbao', loc: 'Bilbao', activities: [{ time: 'Morning', text: 'Depart Tarragona &mdash; drive to Bilbao via Toulouse, France (~6&ndash;7 hrs)' }, { time: 'Afternoon', text: 'Arrive Bilbao &mdash; check in: Radisson Gran Via Bilbao', tag: 'confirmed' }, { time: 'Evening', text: 'Walk to Casco Viejo for pintxos crawl (Siete Calles, ~15 min walk)' }] },
+  { date: '2026-04-27', title: 'Guggenheim', loc: 'Bilbao', activities: [{ time: 'Morning', text: '<strong>Guggenheim Bilbao</strong> &mdash; Res. 95961308', tag: 'confirmed' }, { time: '', text: 'Check Carne y Arena VR installation by I&ntilde;&aacute;rritu (through June 20)' }, { time: 'Afternoon', text: 'Bilbao Fine Arts Museum, riverside walk' }, { time: 'Evening', text: 'Pintxos in Plaza Nueva' }] },
+  { date: '2026-04-28', title: 'San Sebasti&aacute;n', loc: 'Bilbao', activities: [{ time: 'Morning', text: 'Drive to San Sebasti&aacute;n (~1.5 hrs via coastal road). Optional: Getaria, Zarautz' }, { time: '', text: 'Walk La Concha beach, Monte Urgull' }, { time: 'Lunch', text: 'Pintxos in Parte Vieja (old town)' }, { time: 'Afternoon', text: 'Old town, harbor, Monte Igueldo funicular' }, { time: 'Evening', text: 'Drive back to Bilbao' }] },
+  { date: '2026-04-29', title: 'Basque Country', loc: 'Bilbao', activities: [{ time: 'Option A', text: 'Guernica + Urdaibai Biosphere Reserve (~40 min) &mdash; Guernica Peace Museum' }, { time: 'Option B', text: 'Rioja wine country (~1.5 hrs south) &mdash; Haro, Laguardia, vineyard tours' }, { time: 'Option C', text: 'Relaxed Bilbao day &mdash; neighborhoods, caf&eacute;s, antique hunting' }, { time: 'Evening', text: 'Farewell pintxos in Casco Viejo' }] },
+  { date: '2026-04-30', title: 'Return to Barcelona', loc: 'Barcelona', activities: [{ time: 'Morning', text: 'Drive Bilbao &rarr; Barcelona (~6&ndash;7 hrs, via Toulouse or A-8/AP-8)' }, { time: '', text: 'Return rental car at Barcelona Sants (National Car Rental)', tag: 'confirmed' }, { time: '', text: 'Check in: AC Hotel Barcelona Sants (Conf. #92299097 &mdash; Marriott Bonvoy, 38,000 pts)', tag: 'confirmed' }, { time: 'Evening', text: 'Last evening in Barcelona &mdash; farewell dinner' }] },
+  { date: '2026-05-01', title: 'Home', loc: 'Home', activities: [{ time: '6:30am', text: 'Wake up &mdash; R2 Nord train from Sants to Terminal 1 &mdash; target 9:35am check-in' }, { time: '11:35am', text: '<strong>BCN &rarr; Atlanta</strong> &mdash; VS 3937 (Virgin Atlantic), departs 11:35am, arrives Atlanta 9:39pm', tag: 'confirmed' }, { time: '', text: 'ATL lounge: The Club at Concourse F (Priority Pass via Chase Sapphire Reserve)' }, { time: '7:57pm', text: '<strong>ATL &rarr; Boise</strong> &mdash; DL 704 (Delta), departs 7:57pm, arrives 12:28am', tag: 'confirmed' }] },
 ];
-function renderItinerary(days){
-const c=document.getElementById('itinerary-container');c.innerHTML='';
-days.forEach(day=>{
-const block=document.createElement('div');block.className='day-block';block.id='day-'+day.date;
-const d=new Date(day.date+'T12:00:00');
-block.innerHTML='<div class="day-header"><div class="day-num-col"><div class="day-num">'+d.getDate()+'</div><div class="day-abbr">'+d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+'</div></div><div class="day-title-col"><div class="day-label">'+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</div><div class="day-title-text">'+day.title+'</div><div class="day-location">&#127759; '+day.loc+'</div></div><div class="day-weather-col" id="weather-'+day.date+'"><div class="weather-loading">Loading weather&hellip;</div></div></div><div class="day-body">'+day.activities.map(a=>'<div class="activity-row"><div class="activity-time">'+(a.time||'')+'</div><div class="activity-text">'+a.text+'</div>'+(a.tag==='confirmed'?'<span class="activity-tag tag-confirmed">Confirmed</span>':'')+(a.tag==='book'?'<span class="activity-tag tag-book">Book Now</span>':'')+'</div>').join('')+'</div>';
-c.appendChild(block);
-fetchWeather(day.loc,day.date).then(w=>{
-const el=document.getElementById('weather-'+day.date);if(!el)return;
-if(w)el.innerHTML='<div class="weather-icon">'+wIcon(w.code)+'</div><div class="weather-temps">'+w.hi+'&deg; / '+w.lo+'&deg;F</div>';
-else el.innerHTML='<div class="weather-loading">No forecast yet</div>';
-});
-});
+
+// ============================================================
+// RENDER ITINERARY
+// ============================================================
+function renderItinerary(days) {
+  const c = document.getElementById('itinerary-container'); c.innerHTML = '';
+  days.forEach(day => {
+    const block = document.createElement('div'); block.className = 'day-block'; block.id = 'day-' + day.date;
+    const d = new Date(day.date + 'T12:00:00');
+    const photo = PHOTO_MAP[day.date];
+    const photoThumb = photo ? '<div style="float:right;margin:-0.5rem -0.5rem 0.5rem 1rem;width:80px;height:60px;border-radius:2px;overflow:hidden;flex-shrink:0"><img src="' + photo.url + '" style="width:100%;height:100%;object-fit:cover" alt="' + (photo.caption || '') + '"></div>' : '';
+    block.innerHTML = '<div class="day-header"><div class="day-num-col"><div class="day-num">' + d.getDate() + '</div><div class="day-abbr">' + d.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase() + '</div></div><div class="day-title-col"><div class="day-label">' + d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) + '</div><div class="day-title-text">' + day.title + '</div><div class="day-location">&#127759; ' + day.loc + '</div></div><div class="day-weather-col" id="weather-' + day.date + '"><div class="weather-loading">Loading&hellip;</div></div></div><div class="day-body">' + photoThumb + day.activities.map(a => '<div class="activity-row"><div class="activity-time">' + (a.time || '') + '</div><div class="activity-text">' + a.text + '</div>' + (a.tag === 'confirmed' ? '<span class="activity-tag tag-confirmed">Confirmed</span>' : '') + (a.tag === 'book' ? '<span class="activity-tag tag-book">Book Now</span>' : '') + '</div>').join('') + '</div>';
+    c.appendChild(block);
+    fetchWeather(day.loc, day.date).then(w => {
+      const el = document.getElementById('weather-' + day.date); if (!el) return;
+      if (w) el.innerHTML = '<div class="weather-icon">' + wIcon(w.code) + '</div><div class="weather-temps">' + w.hi + '&deg; / ' + w.lo + '&deg;F</div>';
+      else el.innerHTML = '<div class="weather-loading">No forecast yet</div>';
+    });
+  });
 }
-function parseCSV(text){
-const rows=[];const lines=text.split(/\r?\n/);
-lines.forEach(line=>{
-if(!line.trim())return;const row=[];let inQ=false,cur='';
-for(let i=0;i<line.length;i++){const ch=line[i];if(ch=='"'){if(inQ&&line[i+1]=='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch==','&&!inQ){row.push(cur.trim());cur='';}else cur+=ch;}
-row.push(cur.trim());rows.push(row);});
-return rows;
+
+// ============================================================
+// CSV PARSER + SHEET FETCH
+// ============================================================
+function parseCSV(text) {
+  const rows = []; const lines = text.split(/\r?\n/);
+  lines.forEach(line => { if (!line.trim()) return; const row = []; let inQ = false, cur = ''; for (let i = 0; i < line.length; i++) { const ch = line[i]; if (ch == '"') { if (inQ && line[i + 1] == '"') { cur += '"'; i++; } else inQ = !inQ; } else if (ch == ',' && !inQ) { row.push(cur.trim()); cur = ''; } else cur += ch; } row.push(cur.trim()); rows.push(row); });
+  return rows;
 }
-async function loadFromSheet(){
-try{
-const res=await fetch(SHEET_CSV_URL,{cache:'no-cache'});
-if(!res.ok)throw new Error('HTTP '+res.status);
-const text=await res.text();
-const rows=parseCSV(text);
-if(rows.length<2)throw new Error('No data rows');
-const header=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));
-const idx={date:header.indexOf('date'),title:header.indexOf('title'),loc:header.indexOf('location'),time:header.indexOf('time'),act:header.indexOf('activity'),tag:header.indexOf('tag')};
-const days=[];
-rows.slice(1).forEach(row=>{
-const date=row[idx.date]||'',title=row[idx.title]||'',loc=row[idx.loc]||'',time=row[idx.time]||'',actText=row[idx.act]||'',tag=row[idx.tag]||'';
-if(!date||!actText)return;
-let ex=days.find(d=>d.date===date);
-if(!ex){ex={date,title,loc,activities:[]};days.push(ex);}
-ex.activities.push({time,text:actText,tag:tag.toLowerCase()});
-});
-if(days.length>0){
-renderItinerary(days);
-document.getElementById('sheet-status').innerHTML='Live from Google Sheets &mdash; <a href="https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub" target="_blank" style="color:var(--yellow)">Edit Sheet</a>';
-document.getElementById('footer-updated').textContent='Live — Google Sheets — '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
-}else throw new Error('No parseable rows');
-}catch(e){
-console.warn('Sheet failed:',e.message);
-document.getElementById('sheet-status').innerHTML='Using built-in itinerary data. <span style="color:var(--warm-grey);font-size:0.75em">('+e.message+')</span>';
-renderItinerary(FALLBACK);
-document.getElementById('footer-updated').textContent='Built-in fallback data';
-}
+async function loadFromSheet() {
+  try {
+    const res = await fetch(SHEET_CSV_URL, { cache: 'no-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const rows = parseCSV(text);
+    if (rows.length < 2) throw new Error('No data rows');
+    const header = rows[0].map(h => h.toLowerCase().replace(/\s+/g, ''));
+    const idx = { date: header.indexOf('date'), title: header.indexOf('title'), loc: header.indexOf('location'), time: header.indexOf('time'), act: header.indexOf('activity'), tag: header.indexOf('tag') };
+    const days = [];
+    rows.slice(1).forEach(row => {
+      const date = row[idx.date] || '', title = row[idx.title] || '', loc = row[idx.loc] || '', time = row[idx.time] || '', actText = row[idx.act] || '', tag = row[idx.tag] || '';
+      if (!date || !actText) return;
+      let ex = days.find(d => d.date === date);
+      if (!ex) { ex = { date, title, loc, activities: [] }; days.push(ex); }
+      ex.activities.push({ time, text: actText, tag: tag.toLowerCase() });
+    });
+    if (days.length > 0) {
+      renderItinerary(days);
+      document.getElementById('sheet-status').innerHTML = 'Live from Google Sheets &mdash; <a href="https://docs.google.com/spreadsheets/d/1ZxX9u3CgIJ6WISCk438kJ8D86Tx7oIpRofXGEFsFgQI/edit" target="_blank" style="color:var(--yellow)">Edit Sheet</a>';
+      document.getElementById('footer-updated').textContent = 'Live \u2014 Google Sheets \u2014 ' + new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } else throw new Error('No parseable rows');
+  } catch (e) {
+    console.warn('Sheet failed:', e.message);
+    document.getElementById('sheet-status').innerHTML = 'Using built-in itinerary data. <span style="color:var(--warm-grey);font-size:0.75em">(' + e.message + ')</span>';
+    renderItinerary(FALLBACK);
+    document.getElementById('footer-updated').textContent = 'Built-in fallback data';
+  }
 }
 loadFromSheet();
 </script>
