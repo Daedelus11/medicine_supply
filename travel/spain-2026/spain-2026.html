@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v16: Leaflet.js OpenStreetMap — real tiles, proper pins, no API key -->
+<!-- v17: hero+Tarragona, May1 in April row, BOI arrival, no Driving Directions, photos card=link, footer silent -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -13,7 +13,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
-<!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
 <style>
 :root{
@@ -50,7 +49,7 @@ a{text-decoration:none;color:inherit}
 .hero-stat-n{font-family:var(--serif);font-size:2rem;font-weight:300;color:var(--yellow);line-height:1}
 .hero-stat-l{font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:rgba(255,255,255,0.35);margin-top:2px}
 .hero-status-bar{margin-top:3rem;display:flex;flex-wrap:wrap;gap:0;border:1px solid rgba(255,255,255,0.1)}
-.status-item{flex:1;min-width:160px;padding:1rem 1.25rem;border-right:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:3px}
+.status-item{flex:1;min-width:140px;padding:1rem 1.25rem;border-right:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;gap:3px}
 .status-item:last-child{border-right:none}
 .status-label{font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--brown)}
 .status-value{font-size:0.8rem;color:rgba(255,255,255,0.7);font-weight:300}
@@ -104,10 +103,8 @@ a{text-decoration:none;color:inherit}
 .activity-tag{display:inline-block;font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:2px 7px;border:1px solid var(--rule);color:var(--stone);flex-shrink:0;margin-top:2px}
 .tag-confirmed{border-color:#4caf50;color:#4caf50;background:rgba(76,175,80,0.05)}
 .tag-book{border-color:var(--accent);color:var(--accent);background:rgba(192,112,0,0.07)}
-/* MAP */
 #map-section{background:var(--white)}
 #leaflet-map{height:500px;border:1px solid var(--rule);z-index:1}
-/* Override Leaflet popup to match site style */
 .leaflet-popup-content-wrapper{border-radius:3px;font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:0.82rem}
 .leaflet-popup-content{margin:10px 14px}
 .leaflet-popup-content strong{color:#1a1a18;font-size:0.88rem;display:block;margin-bottom:3px}
@@ -118,6 +115,10 @@ a{text-decoration:none;color:inherit}
 .btn-primary:hover{background:#a06000}
 .btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--ink);font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.85rem 1.75rem;border:1px solid var(--ink);cursor:pointer;transition:0.2s;text-decoration:none}
 .btn-secondary:hover{background:var(--ink);color:var(--white)}
+/* Photo card link */
+.photo-card{display:block;border:1px solid var(--rule);background:var(--white);padding:2.5rem;text-decoration:none;color:inherit;transition:box-shadow 0.2s,border-color 0.2s}
+.photo-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.06);border-color:var(--accent)}
+.photo-card-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem}
 #bookings{background:var(--white)}
 .booking-table{width:100%;border-collapse:collapse}
 .booking-table th{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--warm-grey);padding:0.65rem 1rem;text-align:left;border-bottom:2px solid var(--accent);background:var(--cream)}
@@ -160,6 +161,7 @@ a{text-decoration:none;color:inherit}
   #leaflet-map{height:360px}
   .page-footer{padding:2rem 1.25rem}
   .booking-table th,.booking-table td{padding:0.65rem 0.5rem}.shop-grid{grid-template-columns:1fr}
+  .photo-card-inner{flex-direction:column}
 }
 </style>
 </head>
@@ -188,9 +190,11 @@ a{text-decoration:none;color:inherit}
       <div class="hero-stat"><span class="hero-stat-n">11</span><span class="hero-stat-l">Nights</span></div>
     </div>
   </div>
+  <!-- CHANGE 1: Added Tarragona to hero status bar -->
   <div class="hero-status-bar">
     <div class="status-item"><div class="status-label">Flights</div><div class="status-value"><span class="status-dot dot-green"></span>BOI-ATL-BCN / BCN-ATL-BOI</div></div>
     <div class="status-item"><div class="status-label">Barcelona</div><div class="status-value"><span class="status-dot dot-green"></span>Eixample Airbnb + AC Sants</div></div>
+    <div class="status-item"><div class="status-label">Tarragona</div><div class="status-value"><span class="status-dot dot-green"></span>Dan Manion</div></div>
     <div class="status-item"><div class="status-label">Bilbao</div><div class="status-value"><span class="status-dot dot-green"></span>Radisson Gran Via</div></div>
   </div>
 </header>
@@ -208,21 +212,24 @@ a{text-decoration:none;color:inherit}
 <section class="section" id="map-section">
   <header class="section-header"><div class="section-eyebrow">03 &mdash; Where We Are</div><h2 class="section-title">Trip Map</h2></header>
   <div id="leaflet-map"></div>
+  <!-- CHANGE 4: Removed Driving Directions button -->
   <div class="map-actions">
     <a href="https://www.google.com/maps/d/u/0/viewer?mid=1FXsfBl3nnJWUTrx_gplpkt4oe9D0UyA" target="_blank" class="btn-primary">Open in Google My Maps</a>
-    <a href="https://www.google.com/maps/dir/Barcelona,Spain/Tarragona,Spain/Bilbao,Spain" target="_blank" class="btn-secondary">Driving Directions &rarr;</a>
   </div>
 </section>
 
+<!-- CHANGE 5: Entire photo card is now a clickable link -->
 <section class="section" id="photos" style="background:var(--cream)">
   <header class="section-header"><div class="section-eyebrow">04 &mdash; Memories</div><h2 class="section-title">Photo Album</h2></header>
-  <div style="border:1px solid var(--rule);background:var(--white);padding:2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem">
-    <div>
-      <div style="font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--ink);margin-bottom:0.5rem">MaRu / Spain &amp; Basque Country 2026</div>
-      <div style="font-size:0.82rem;color:var(--stone);max-width:480px;line-height:1.6">Shared Google Photos album. Both Mark and Rumana can add photos. Click to open the live album &mdash; photos appear as you take them.</div>
+  <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="photo-card">
+    <div class="photo-card-inner">
+      <div>
+        <div style="font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--ink);margin-bottom:0.5rem">MaRu / Spain &amp; Basque Country 2026</div>
+        <div style="font-size:0.82rem;color:var(--stone);max-width:480px;line-height:1.6">Shared album &mdash; both Mark and Rumana can add photos as the trip unfolds. Tap anywhere to open.</div>
+      </div>
+      <span style="font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);white-space:nowrap">&#128247; Open Album &rarr;</span>
     </div>
-    <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="btn-primary" style="font-size:0.8rem;padding:1rem 2rem">&#128247; Open Photo Album &rarr;</a>
-  </div>
+  </a>
 </section>
 
 <section class="section" id="notes">
@@ -331,148 +338,50 @@ a{text-decoration:none;color:inherit}
   </div>
 </section>
 
-<footer class="page-footer"><div class="footer-brand">MaRu <span>|</span> Spain 2026</div><div class="footer-meta" id="footer-updated">Updated</div></footer>
+<!-- CHANGE 6: footer-meta starts empty; only populated if Sheet loads -->
+<footer class="page-footer"><div class="footer-brand">MaRu <span>|</span> Spain 2026</div><div class="footer-meta" id="footer-updated"></div></footer>
 
-<!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script>
-// ============================================================
-// LEAFLET MAP — OpenStreetMap tiles, no API key needed
-// ============================================================
 function initMap() {
-  const map = L.map('leaflet-map', {
-    center: [41.8, -0.5],
-    zoom: 6,
-    scrollWheelZoom: false  // prevent accidental zoom while scrolling page
-  });
-
-  // OpenStreetMap tiles — free, open source
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 18
-  }).addTo(map);
-
-  // Custom colored circle markers
-  function circlePin(color) {
-    return L.divIcon({
-      className: '',
-      html: '<div style="width:14px;height:14px;background:' + color + ';border:2.5px solid white;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.35)"></div>',
-      iconSize: [14, 14],
-      iconAnchor: [7, 7],
-      popupAnchor: [0, -10]
-    });
-  }
-  function starPin(color) {
-    return L.divIcon({
-      className: '',
-      html: '<div style="width:12px;height:12px;background:' + color + ';border:2px solid white;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,0.3);transform:rotate(45deg)"></div>',
-      iconSize: [12, 12],
-      iconAnchor: [6, 6],
-      popupAnchor: [0, -10]
-    });
-  }
-
-  // Route polyline
-  const route = [
-    [41.3944, 2.1620],  // Barcelona
-    [41.1189, 1.2445],  // Tarragona
-    [43.2627, -2.9253], // Bilbao
-    [43.3183, -1.9845], // San Sebastián
+  const map = L.map('leaflet-map', {center:[41.8,-0.5],zoom:6,scrollWheelZoom:false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',maxZoom:18}).addTo(map);
+  function circlePin(color){return L.divIcon({className:'',html:'<div style="width:14px;height:14px;background:'+color+';border:2.5px solid white;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.35)"></div>',iconSize:[14,14],iconAnchor:[7,7],popupAnchor:[0,-10]});}
+  function starPin(color){return L.divIcon({className:'',html:'<div style="width:12px;height:12px;background:'+color+';border:2px solid white;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,0.3);transform:rotate(45deg)"></div>',iconSize:[12,12],iconAnchor:[6,6],popupAnchor:[0,-10]});}
+  L.polyline([[41.3944,2.1620],[41.1189,1.2445],[43.2627,-2.9253],[43.3183,-1.9845]],{color:'#c07000',weight:2.5,dashArray:'8, 6',opacity:0.75}).addTo(map);
+  const stays=[
+    {lat:41.3944,lng:2.1620,color:'#1a6b9a',name:'Eixample Airbnb',sub:'Barcelona · Apr 21\u201324',desc:'Central Apartments. Host: Enrique Meza. Res. 562/2026.'},
+    {lat:41.3791,lng:2.1408,color:'#1a6b9a',name:'AC Hotel Barcelona Sants',sub:'Barcelona · Apr 30\u2013May 1',desc:'Marriott Bonvoy \u2014 Conf. #92299097. R2 Nord to T1 ~19 min.'},
+    {lat:41.1189,lng:1.2445,color:'#7a5c1e',name:'Tarragona \u2014 Dan Manion',sub:'Tarragona · Apr 24\u201326',desc:'Roman ruins, beaches, local wine.'},
+    {lat:43.2627,lng:-2.9253,color:'#2d6a4f',name:'Radisson Gran Via Bilbao',sub:'Bilbao · Apr 26\u201330',desc:'5-star Chase Edit \u2014 breakfast + $100 credit. Ask for upgrade at check-in.'},
   ];
-  L.polyline(route, {color: '#c07000', weight: 2.5, dashArray: '8, 6', opacity: 0.75}).addTo(map);
-
-  // ---- STAYS ----
-  const stays = [
-    { lat: 41.3944, lng: 2.1620, color: '#1a6b9a',
-      name: 'Eixample Airbnb',
-      sub: 'Barcelona · Apr 21–24',
-      desc: 'Central Apartments. Host: Enrique Meza. Res. 562/2026. Walkable to Sagrada Família & Passeig de Gràcia.' },
-    { lat: 41.3791, lng: 2.1408, color: '#1a6b9a',
-      name: 'AC Hotel Barcelona Sants',
-      sub: 'Barcelona · Apr 30–May 1',
-      desc: 'Marriott Bonvoy — Conf. #92299097. Adjacent to Sants. R2 Nord to T1 ~19 min.' },
-    { lat: 41.1189, lng: 1.2445, color: '#7a5c1e',
-      name: 'Tarragona — Dan Manion',
-      sub: 'Tarragona · Apr 24–26',
-      desc: 'Roman ruins, beaches, local wine.' },
-    { lat: 43.2627, lng: -2.9253, color: '#2d6a4f',
-      name: 'Radisson Gran Via Bilbao',
-      sub: 'Bilbao · Apr 26–30',
-      desc: '5-star Chase Edit — breakfast + $100 credit. Ask for upgrade at check-in. Gran Vía, 66.' },
+  stays.forEach(s=>{L.marker([s.lat,s.lng],{icon:circlePin(s.color)}).bindPopup('<strong>'+s.name+'</strong><em>'+s.sub+'</em><p>'+s.desc+'</p>').addTo(map);});
+  const sites=[
+    {lat:41.4036,lng:2.1744,name:'\u2605 Sagrada Fam\u00edlia',sub:'Barcelona \u00b7 Apr 23 at 9:30am',desc:'Res. 95793090. Enter via C/ Marina. Passion Tower at 9:45am. Download app before arrival \u2014 it IS the audioguide.'},
+    {lat:41.4145,lng:2.1527,name:'Park G\u00fcell',sub:'Barcelona \u00b7 Apr 22',desc:'Book timed entry at parkguell.barcelona. Morning slot (8\u20139am) best.'},
+    {lat:41.3851,lng:2.1800,name:'Museu Picasso',sub:'Barcelona \u00b7 Apr 22',desc:'Book at museupicassobcn.cat (\u20ac19/person). Sells out in spring.'},
+    {lat:43.2688,lng:-2.9341,name:'\u2605 Guggenheim Bilbao',sub:'Bilbao \u00b7 Apr 28',desc:'Res. 95961308. Carne y Arena VR by I\u00f1\u00e1rritu (through June 20). Arrive when doors open.'},
+    {lat:43.2590,lng:-2.9230,name:'Casco Viejo \u2014 Pintxos',sub:'Bilbao evenings',desc:'Siete Calles. ~15 min walk from Radisson. Plaza Nueva + surrounding bars.'},
+    {lat:43.3183,lng:-1.9845,name:'La Concha Beach',sub:'San Sebasti\u00e1n \u00b7 Apr 28 day trip',desc:'~1.5 hrs from Bilbao via A-8 coastal road.'},
+    {lat:43.3236,lng:-1.9756,name:'Parte Vieja \u2014 Pintxos',sub:'San Sebasti\u00e1n \u00b7 Apr 28 lunch',desc:'Old town pintxos bars.'},
+    {lat:41.3835,lng:2.1757,name:'Mercat G\u00f2tic (Antiques)',sub:'Barcelona \u00b7 Thu Apr 23',desc:'Thursday antique market. Sant Jordi\u2019s Day alignment is rare.'},
+    {lat:41.3825,lng:2.1740,name:'Carrer dels Banys Nous',sub:'Barcelona \u00b7 Gothic Quarter',desc:'Best street for antique maps, prints, atlases.'},
+    {lat:41.1183,lng:1.2534,name:'Tarragona Cathedral',sub:'Tarragona \u00b7 Apr 25',desc:'Pla\u00e7a de la Seu. Morning visit with Dan Manion.'},
+    {lat:41.1424,lng:1.2246,name:'Ferreres Aqueduct',sub:'Tarragona \u00b7 Apr 25',desc:'Roman aqueduct off AP-7.'},
   ];
-  stays.forEach(s => {
-    L.marker([s.lat, s.lng], {icon: circlePin(s.color)})
-      .bindPopup('<strong>' + s.name + '</strong><em>' + s.sub + '</em><p>' + s.desc + '</p>')
-      .addTo(map);
-  });
-
-  // ---- KEY SITES ----
-  const sites = [
-    { lat: 41.4036, lng: 2.1744,
-      name: '★ Sagrada Família',
-      sub: 'Barcelona · Apr 23 at 9:30am',
-      desc: 'Res. 95793090. Enter via C/ Marina. Passion Tower at 9:45am. Download app before arrival — it IS the audioguide. Bring photo ID.' },
-    { lat: 41.4145, lng: 2.1527,
-      name: 'Park Güell',
-      sub: 'Barcelona · Apr 22',
-      desc: 'Book timed entry at parkguell.barcelona. Morning slot (8–9am) best.' },
-    { lat: 41.3851, lng: 2.1800,
-      name: 'Museu Picasso',
-      sub: 'Barcelona · Apr 22',
-      desc: 'Book at museupicassobcn.cat (€19/person). Sells out in spring — book earliest slot.' },
-    { lat: 43.2688, lng: -2.9341,
-      name: '★ Guggenheim Bilbao',
-      sub: 'Bilbao · Apr 28',
-      desc: 'Res. 95961308. Check Carne y Arena VR by Iñárritu (through June 20). Arrive when doors open.' },
-    { lat: 43.2590, lng: -2.9230,
-      name: 'Casco Viejo — Pintxos',
-      sub: 'Bilbao evenings',
-      desc: 'Siete Calles. ~15 min walk from Radisson. Plaza Nueva + surrounding bars.' },
-    { lat: 43.3183, lng: -1.9845,
-      name: 'La Concha Beach',
-      sub: 'San Sebastián · Apr 28 day trip',
-      desc: '~1.5 hrs from Bilbao via A-8 coastal road.' },
-    { lat: 43.3236, lng: -1.9756,
-      name: 'Parte Vieja — Pintxos',
-      sub: 'San Sebastián · Apr 28 lunch',
-      desc: 'Old town pintxos bars.' },
-    { lat: 41.3835, lng: 2.1757,
-      name: 'Mercat Gòtic (Antiques)',
-      sub: 'Barcelona · Thu Apr 23',
-      desc: 'Thursday antique market — Sant Jordi\'s Day alignment is rare. Outdoor stalls at Plaça Nova.' },
-    { lat: 41.3825, lng: 2.1740,
-      name: 'Carrer dels Banys Nous (Maps)',
-      sub: 'Barcelona · Gothic Quarter',
-      desc: 'Best street for antique maps, prints, atlases. Walk the whole length.' },
-    { lat: 41.1183, lng: 1.2534,
-      name: 'Tarragona Cathedral',
-      sub: 'Tarragona · Apr 25',
-      desc: 'Plaça de la Seu. Morning visit with Dan Manion.' },
-    { lat: 41.1424, lng: 1.2246,
-      name: 'Ferreres Aqueduct (Pont del Diable)',
-      sub: 'Tarragona · Apr 25',
-      desc: 'Roman aqueduct. Off AP-7, outside Tarragona.' },
-  ];
-  sites.forEach(s => {
-    L.marker([s.lat, s.lng], {icon: starPin('#c07000')})
-      .bindPopup('<strong>' + s.name + '</strong><em>' + s.sub + '</em><p>' + s.desc + '</p>')
-      .addTo(map);
-  });
-
-  // Enable scroll zoom on click/focus
-  map.on('click', () => map.scrollWheelZoom.enable());
-  map.on('blur', () => map.scrollWheelZoom.disable());
+  sites.forEach(s=>{L.marker([s.lat,s.lng],{icon:starPin('#c07000')}).bindPopup('<strong>'+s.name+'</strong><em>'+s.sub+'</em><p>'+s.desc+'</p>').addTo(map);});
+  map.on('click',()=>map.scrollWheelZoom.enable());
+  map.on('blur',()=>map.scrollWheelZoom.disable());
 }
 
-// ============================================================
-// REST OF SCRIPTS
-// ============================================================
 const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
 function mapsUrl(address,lat,lng){if(lat&&lng)return'https://www.google.com/maps/dir/?api=1&destination='+lat+','+lng;return'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(address);}
 function parseCSV(text){const rows=[];const lines=text.split(/\r?\n/);lines.forEach(line=>{if(!line.trim())return;const row=[];let inQ=false,cur='';for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch===','&&!inQ){row.push(cur.trim());cur='';}else cur+=ch;}row.push(cur.trim());rows.push(row);});return rows;}
 document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('nav-menu').classList.toggle('open'));
 const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id;});navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));},{passive:true});
+
+// CHANGE 2+3: TRIP_EVENTS — May 1 label includes BOI arrival; calendar only renders April (which now extends to include May 1)
 const TRIP_EVENTS=[
   {date:'2026-04-20',label:'Depart BOI 2:10pm',loc:'Boise'},
   {date:'2026-04-21',label:'Arrive BCN 6:50am',loc:'Barcelona'},
@@ -485,11 +394,71 @@ const TRIP_EVENTS=[
   {date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},
   {date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},
   {date:'2026-04-30',label:'Drive \u2192 Barcelona',loc:'Barcelona'},
-  {date:'2026-05-01',label:'Depart BCN 11:35am',loc:'Home'}
+  {date:'2026-05-01',label:'Depart BCN 11:35am \u00b7 Arrive BOI 12:28am',loc:'Home'}
 ];
 const LOC_COLORS={'Boise':'#5c5c58','Barcelona':'#1a6b9a','Tarragona':'#7a5c1e','Bilbao':'#2d6a4f','Home':'#5c5c58'};
-function buildCalendar(){const container=document.getElementById('calendar-container');const TRIP_START='2026-04-20',TRIP_END='2026-05-01';const eventMap={};TRIP_EVENTS.forEach(e=>{eventMap[e.date]=e;});const todayStr=new Date().toLocaleDateString('sv');const legend=document.createElement('div');legend.style.cssText='display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;align-items:center;';[['Barcelona','#1a6b9a'],['Tarragona','#7a5c1e'],['Bilbao','#2d6a4f'],['Travel/Home','#5c5c58']].forEach(([name,color])=>{const dot=document.createElement('div');dot.style.cssText='display:flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);';dot.innerHTML='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+color+';flex-shrink:0;"></span>'+name;legend.appendChild(dot);});container.appendChild(legend);[{year:2026,month:3},{year:2026,month:4}].forEach(({year,month})=>{const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];const allTripDates=TRIP_EVENTS.filter(e=>e.date.startsWith(year+'-'+String(month+1).padStart(2,'0'))).map(e=>e.date);if(!allTripDates.length)return;const firstD=new Date(allTripDates[0]+'T12:00:00'),lastD=new Date(allTripDates[allTripDates.length-1]+'T12:00:00');const startSun=new Date(firstD);startSun.setDate(firstD.getDate()-firstD.getDay());const endSat=new Date(lastD);endSat.setDate(lastD.getDate()+(6-lastD.getDay()));const lbl=document.createElement('div');lbl.className='cal-month-label';lbl.textContent=monthNames[month]+' '+year;container.appendChild(lbl);const grid=document.createElement('div');grid.className='calendar-grid';['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{const hc=document.createElement('div');hc.className='cal-header-cell';hc.textContent=d;grid.appendChild(hc);});let cur=new Date(startSun);while(cur<=endSat){const cell=document.createElement('div');const y=cur.getFullYear(),m=String(cur.getMonth()+1).padStart(2,'0'),d=String(cur.getDate()).padStart(2,'0');const ds=y+'-'+m+'-'+d;const inMonth=cur.getMonth()===month;const isTrip=ds>=TRIP_START&&ds<=TRIP_END&&inMonth;const ev=eventMap[ds];const lc=ev?(LOC_COLORS[ev.loc]||'#7d6b57'):null;cell.className='cal-cell'+(inMonth?'':' empty')+(isTrip?' trip-day':'')+(ds===todayStr?' today':'');if(lc&&inMonth)cell.style.borderTop='3px solid '+lc;const content=document.createElement('div');content.className='cal-cell-content';const dn=document.createElement('div');dn.className='cal-day-num';dn.textContent=inMonth?cur.getDate():'';content.appendChild(dn);if(ev&&inMonth){const evEl=document.createElement('div');evEl.className='cal-event';evEl.style.cssText='border-left-color:'+lc+';background:rgba(247,245,241,0.9);white-space:normal;';evEl.textContent=ev.label;content.appendChild(evEl);const locEl=document.createElement('div');locEl.className='cal-location-tag';locEl.style.background='rgba(26,26,24,0.85)';locEl.textContent=ev.loc;content.appendChild(locEl);}cell.appendChild(content);grid.appendChild(cell);cur.setDate(cur.getDate()+1);}container.appendChild(grid);});}
+
+function buildCalendar(){
+  const container=document.getElementById('calendar-container');
+  const TRIP_START='2026-04-20',TRIP_END='2026-05-01';
+  const eventMap={};TRIP_EVENTS.forEach(e=>{eventMap[e.date]=e;});
+  const todayStr=new Date().toLocaleDateString('sv');
+  const legend=document.createElement('div');
+  legend.style.cssText='display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;align-items:center;';
+  [['Barcelona','#1a6b9a'],['Tarragona','#7a5c1e'],['Bilbao','#2d6a4f'],['Travel/Home','#5c5c58']].forEach(([name,color])=>{
+    const dot=document.createElement('div');
+    dot.style.cssText='display:flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);';
+    dot.innerHTML='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+color+';flex-shrink:0;"></span>'+name;
+    legend.appendChild(dot);
+  });
+  container.appendChild(legend);
+
+  // CHANGE 2: Only render April; extend end date to include May 1 on the same row
+  const year=2026,month=3; // April
+  const monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const firstD=new Date(2026,3,20); // Apr 20
+  const lastD=new Date(2026,4,1);   // May 1 — extend into May
+  const startSun=new Date(firstD);startSun.setDate(firstD.getDate()-firstD.getDay());
+  // endSat = Saturday of the week containing May 1
+  const may1=new Date(2026,4,1);
+  const endSat=new Date(may1);endSat.setDate(may1.getDate()+(6-may1.getDay()));
+
+  const lbl=document.createElement('div');lbl.className='cal-month-label';lbl.textContent='April \u2013 May 2026';container.appendChild(lbl);
+  const grid=document.createElement('div');grid.className='calendar-grid';
+  ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{const hc=document.createElement('div');hc.className='cal-header-cell';hc.textContent=d;grid.appendChild(hc);});
+
+  let cur=new Date(startSun);
+  while(cur<=endSat){
+    const cell=document.createElement('div');
+    const y=cur.getFullYear(),m=String(cur.getMonth()+1).padStart(2,'0'),d=String(cur.getDate()).padStart(2,'0');
+    const ds=y+'-'+m+'-'+d;
+    // Show cells in April AND May 1
+    const inRange=(cur.getMonth()===3)||(ds==='2026-05-01');
+    const isTrip=ds>=TRIP_START&&ds<=TRIP_END&&inRange;
+    const ev=eventMap[ds];
+    const lc=ev?(LOC_COLORS[ev.loc]||'#7d6b57'):null;
+    cell.className='cal-cell'+(inRange?'':' empty')+(isTrip?' trip-day':'')+(ds===todayStr?' today':'');
+    if(lc&&inRange)cell.style.borderTop='3px solid '+lc;
+    const content=document.createElement('div');content.className='cal-cell-content';
+    const dn=document.createElement('div');dn.className='cal-day-num';dn.textContent=inRange?cur.getDate():'';content.appendChild(dn);
+    if(ev&&inRange){
+      const evEl=document.createElement('div');
+      evEl.className='cal-event';
+      evEl.style.cssText='border-left-color:'+lc+';background:rgba(247,245,241,0.9);white-space:normal;';
+      evEl.textContent=ev.label;
+      content.appendChild(evEl);
+      const locEl=document.createElement('div');
+      locEl.className='cal-location-tag';
+      locEl.style.background='rgba(26,26,24,0.85)';
+      locEl.textContent=ev.loc;
+      content.appendChild(locEl);
+    }
+    cell.appendChild(content);grid.appendChild(cell);cur.setDate(cur.getDate()+1);
+  }
+  container.appendChild(grid);
+}
 buildCalendar();
+
 const CITY_COORDS={'Barcelona':{lat:41.3851,lon:2.1734},'Tarragona':{lat:41.1189,lon:1.2445},'Bilbao':{lat:43.2630,lon:-2.9350},'Boise':{lat:43.6150,lon:-116.2023},'Home':{lat:43.6150,lon:-116.2023}};
 const WCACHE={};
 async function fetchWeather(loc,date){const key=loc+':'+date;if(WCACHE[key])return WCACHE[key];const coords=CITY_COORDS[loc];if(!coords)return null;try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+coords.lat+'&longitude='+coords.lon+'&daily=temperature_2m_max,temperature_2m_min,weathercode&temperature_unit=fahrenheit&timezone=Europe%2FMadrid&start_date='+date+'&end_date='+date);const d=await r.json();if(!d.daily||!d.daily.temperature_2m_max[0])return null;const res={hi:Math.round(d.daily.temperature_2m_max[0]),lo:Math.round(d.daily.temperature_2m_min[0]),code:d.daily.weathercode[0]};WCACHE[key]=res;return res;}catch{return null;}}
@@ -497,7 +466,7 @@ function wIcon(c){if(c===0)return'&#9728;';if(c<=3)return'&#9925;';if(c<=67)retu
 function addr(a,lat,lng){if(!a)return'';const url=mapsUrl(a,lat,lng);return'<span class="activity-addr"><a href="'+url+'" target="_blank">&#128205; '+a+'</a></span>';}
 const FALLBACK=[{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[{time:'2:10pm',text:'<strong>BOI &rarr; ATL</strong> &mdash; DL 874',tag:'confirmed'},{time:'6:20pm',text:'ATL layover &mdash; The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'10:05pm',text:'<strong>ATL &rarr; BCN</strong> &mdash; VS 3926, overnight',tag:'confirmed'}]},{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[{time:'6:50am',text:'<strong>Arrive Barcelona BCN</strong> &mdash; VS 3926'+addr('Terminal 1, Aeroport de Barcelona-El Prat',41.2974,2.0833),tag:'confirmed'},{time:'',text:'Aerob&uacute;s A1 from T1 &rarr; Pla&ccedil;a Catalunya (~35 min)'},{time:'',text:'Check in: Central Apartments, Eixample'+addr('Eixample, 08009 Barcelona',41.3944,2.1620),tag:'confirmed'},{time:'Afternoon',text:'Recovery day &mdash; slow explore of Eixample'},{time:'Evening',text:'Dinner at a local spot'}]},{date:'2026-04-22',title:'Barcelona',loc:'Barcelona',activities:[{time:'Morning',text:'Park G&uuml;ell &mdash; Monumental Zone'+addr("Carrer d'Olot, s/n, 08024 Barcelona",41.4145,2.1527),tag:'book'},{time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15-23, 08003 Barcelona',41.3851,2.1800),tag:'book'},{time:'',text:'El Born &mdash; Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous, 08002 Barcelona',41.3825,2.1740)},{time:'Evening',text:'Dinner in El Born'}]},{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[{time:'9:30am',text:'<strong>Sagrada Fam&iacute;lia with Passion Tower</strong> &mdash; Res. 95793090'+addr('C/ de Mallorca, 401, 08013 Barcelona',41.4036,2.1744),tag:'confirmed'},{time:'9:45am',text:'Passion Tower access (enter via C/ Marina entrance)'},{time:'Afternoon',text:"Sant Jordi's Day &mdash; book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic, 08002 Barcelona',41.3826,2.1769)},{time:'',text:'Mercat G&ograve;tic antiques + Carrer dels Banys Nous map dealers'+addr('Pla\u00e7a Nova, 08002 Barcelona',41.3835,2.1757)},{time:'Evening',text:'Dinner in Gothic Quarter'}]},{date:'2026-04-24',title:'To Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Check out of Eixample Airbnb'},{time:'',text:'Pick up rental car at Barcelona Sants (National Car Rental)'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'',text:'Drive to Tarragona (~1 hr via AP-7)'},{time:'Afternoon',text:'Arrive Tarragona &mdash; staying with Dan Manion'+addr('Tarragona, Spain',41.1189,1.2445)}]},{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Tarragona Cathedral'+addr('Pla\u00e7a de la Seu, s/n, 43003 Tarragona',41.1183,1.2534)},{time:'',text:'Ferreres Aqueduct (Pont del Diable)'+addr('Autopista AP-7, km 1160, 43007 Tarragona',41.1424,1.2246)},{time:'Afternoon',text:'Tarragona beaches &mdash; Platja del Miracle'+addr('Platja del Miracle, 43004 Tarragona',41.1104,1.2502)},{time:'',text:'Local wine and seafood'}]},{date:'2026-04-26',title:'Drive to Bilbao',loc:'Bilbao',activities:[{time:'Morning',text:'Depart Tarragona &mdash; drive to Bilbao (~6&ndash;7 hrs via AP-7/A-2/AP-68)'},{time:'Afternoon',text:'Check in: Radisson Gran Via Bilbao'+addr('Gran V\u00eda, 66, 48011 Bilbao',43.2627,-2.9253),tag:'confirmed'},{time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo, 48005 Bilbao',43.2590,-2.9230)}]},{date:'2026-04-27',title:'Guggenheim',loc:'Bilbao',activities:[{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> &mdash; Res. 95961308'+addr('Abandoibarra Etorb., 2, 48009 Bilbao',43.2688,-2.9341),tag:'confirmed'},{time:'',text:'Check Carne y Arena VR installation (I&ntilde;&aacute;rritu, through June 20)'},{time:'Afternoon',text:'Bilbao Museo de Bellas Artes'+addr('Pla\u00e7a del Museo, 2, 48009 Bilbao',43.2665,-2.9302)},{time:'',text:'Riverside walk along R\u00eda del Nervi\u00f3n'},{time:'Evening',text:'Pintxos in Plaza Nueva'+addr('Plaza Nueva, 48005 Bilbao',43.2587,-2.9232)}]},{date:'2026-04-28',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[{time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},{time:'',text:'La Concha beach'+addr('Paseo de la Concha, 20007 San Sebasti\u00e1n',43.3183,-1.9845)},{time:'Lunch',text:'Pintxos in Parte Vieja (old town)'+addr('Parte Vieja, 20003 San Sebasti\u00e1n',43.3236,-1.9756)},{time:'Afternoon',text:'Monte Igueldo funicular'+addr('Paseo del Faro, 134, 20008 San Sebasti\u00e1n',43.3121,-2.0028)},{time:'Evening',text:'Drive back to Bilbao'}]},{date:'2026-04-29',title:'Basque Country',loc:'Bilbao',activities:[{time:'Option A',text:'Guernica Peace Museum'+addr('Foru Plaza, 1, 48300 Gernika-Lumo',43.3152,-2.6797)},{time:'Option B',text:'Rioja wine country &mdash; Haro, Laguardia'+addr('Haro, La Rioja, Spain',42.5780,-2.8490)},{time:'Option C',text:'Relaxed Bilbao day &mdash; neighborhoods, caf\u00e9s, antiques'},{time:'Evening',text:'Farewell pintxos in Casco Viejo'+addr('Casco Viejo, 48005 Bilbao',43.2590,-2.9230)}]},{date:'2026-04-30',title:'Return to Barcelona',loc:'Barcelona',activities:[{time:'Morning',text:'Drive Bilbao &rarr; Barcelona (~6&ndash;7 hrs)'},{time:'',text:'Return rental car at Barcelona Sants'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'',text:'Check in: AC Hotel Barcelona Sants (Conf. #92299097)'+addr('Carrer de la Ning\u00fcna, 2, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'Evening',text:'Last evening in Barcelona &mdash; farewell dinner'}]},{date:'2026-05-01',title:'Home',loc:'Home',activities:[{time:'6:30am',text:'R2 Nord train: Sants &rarr; Terminal 1 (~19 min)'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408)},{time:'11:35am',text:'<strong>Depart BCN</strong> &mdash; VS 3937'+addr('Terminal 1, Aeroport de Barcelona-El Prat',41.2974,2.0833),tag:'confirmed'},{time:'9:39pm',text:'<strong>Arrive ATL</strong> &mdash; The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'7:57pm',text:'<strong>Depart ATL</strong> &mdash; DL 704',tag:'confirmed'},{time:'12:28am',text:'<strong>Arrive Boise BOI</strong> (May 2)',tag:'confirmed'}]}];
 function renderItinerary(days){const c=document.getElementById('itinerary-container');c.innerHTML='';days.forEach(day=>{const block=document.createElement('div');block.className='day-block';block.id='day-'+day.date;const d=new Date(day.date+'T12:00:00');block.innerHTML='<div class="day-header"><div class="day-num-col"><div class="day-num">'+d.getDate()+'</div><div class="day-abbr">'+d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+'</div></div><div class="day-title-col"><div class="day-label">'+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</div><div class="day-title-text">'+day.title+'</div><div class="day-location">&#127759; '+day.loc+'</div></div><div class="day-weather-col" id="weather-'+day.date+'"><div class="weather-loading">Loading&hellip;</div></div></div><div class="day-body">'+day.activities.map(a=>'<div class="activity-row"><div class="activity-time">'+(a.time||'')+'</div><div class="activity-text">'+a.text+'</div>'+(a.tag==='confirmed'?'<span class="activity-tag tag-confirmed">Confirmed</span>':'')+(a.tag==='book'?'<span class="activity-tag tag-book">Book Now</span>':'')+'</div>').join('')+'</div>';c.appendChild(block);fetchWeather(day.loc,day.date).then(w=>{const el=document.getElementById('weather-'+day.date);if(!el)return;if(w)el.innerHTML='<div class="weather-icon">'+wIcon(w.code)+'</div><div class="weather-temps">'+w.hi+'&deg; / '+w.lo+'&deg;F</div>';else el.innerHTML='<div class="weather-loading">No forecast yet</div>';});})}
-async function loadFromSheet(){try{const res=await fetch(SHEET_CSV_URL,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data rows');const header=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));const idx={date:header.indexOf('date'),title:header.indexOf('title'),loc:header.indexOf('location'),time:header.indexOf('time'),act:header.indexOf('activity'),tag:header.indexOf('tag')};const days=[];rows.slice(1).forEach(row=>{const date=row[idx.date]||'',title=row[idx.title]||'',loc=row[idx.loc]||'',time=row[idx.time]||'',actText=row[idx.act]||'',tag=row[idx.tag]||'';if(!date||!actText)return;let ex=days.find(d=>d.date===date);if(!ex){ex={date,title,loc,activities:[]};days.push(ex);}ex.activities.push({time,text:actText,tag:tag.toLowerCase()});});if(days.length>0){renderItinerary(days);document.getElementById('footer-updated').textContent='Live \u2014 Google Sheets \u2014 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}else throw new Error('No parseable rows');}catch(e){renderItinerary(FALLBACK);document.getElementById('footer-updated').textContent='Built-in data';}}
+async function loadFromSheet(){try{const res=await fetch(SHEET_CSV_URL,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data rows');const header=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));const idx={date:header.indexOf('date'),title:header.indexOf('title'),loc:header.indexOf('location'),time:header.indexOf('time'),act:header.indexOf('activity'),tag:header.indexOf('tag')};const days=[];rows.slice(1).forEach(row=>{const date=row[idx.date]||'',title=row[idx.title]||'',loc=row[idx.loc]||'',time=row[idx.time]||'',actText=row[idx.act]||'',tag=row[idx.tag]||'';if(!date||!actText)return;let ex=days.find(d=>d.date===date);if(!ex){ex={date,title,loc,activities:[]};days.push(ex);}ex.activities.push({time,text:actText,tag:tag.toLowerCase()});});if(days.length>0){renderItinerary(days);document.getElementById('footer-updated').textContent='Live \u2014 Google Sheets \u2014 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}else throw new Error('No parseable rows');}catch(e){renderItinerary(FALLBACK);/* CHANGE 6: footer silent on fallback */}}
 loadFromSheet();
 initMap();
 </script>
