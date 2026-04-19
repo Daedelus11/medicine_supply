@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v27: Park Guell confirmed — Res. 8337300, 10:30am, Apr 22 -->
+<!-- v28: Park Guell ticket download link added -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -154,6 +154,8 @@ a{text-decoration:none;color:inherit}
 .badge{display:inline-block;font-size:0.58rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:3px 8px}
 .badge-confirmed{background:rgba(76,175,80,0.1);color:#4caf50}
 .badge-book{background:rgba(192,112,0,0.1);color:var(--accent)}
+.ticket-link{display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;font-weight:600;color:var(--accent);border:1px solid rgba(192,112,0,0.3);padding:3px 8px;margin-top:5px;transition:background 0.15s}
+.ticket-link:hover{background:rgba(192,112,0,0.07)}
 .page-footer{background:var(--dark);padding:3rem 4rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1.5rem}
 .footer-brand{font-family:var(--sans);font-size:0.65rem;font-weight:300;text-transform:uppercase;letter-spacing:0.22em;color:rgba(255,255,255,0.4)}
 .footer-brand span{color:var(--brown);margin:0 6px;opacity:0.6}
@@ -305,7 +307,7 @@ a{text-decoration:none;color:inherit}
   <tr><td><div class="booking-item-name">Rental Car</div><div class="booking-detail">National Car Rental &mdash; Automatic</div></td><td>Pick up BCN Sants Apr 24 / Drop off BCN Sants Apr 30</td><td>Apr 24&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Radisson Gran Via Bilbao</div><div class="booking-detail">5-star &mdash; Chase Edit &mdash; Breakfast incl. + $100 credit</div></td><td><span style="font-size:0.78rem;color:#4caf50;font-weight:600">&#10003; Ask for room upgrade at check-in</span><br><span style="font-size:0.75rem;color:var(--warm-grey)">Mention Chase Edit status &mdash; 5-star properties often upgrade loyalty guests. Ask warmly at the front desk, not via app.</span></td><td>Apr 26&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Sagrada Familia</div><div class="booking-detail">Res. 95793090 &mdash; 2x General w/ Passion Tower</div></td><td>Enter via C/ Marina 9:30am / Tower 9:45am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Download Sagrada Familia app before arrival &mdash; it IS your audioguide. Tickets are non-transferable; bring photo ID.</span></td><td>Apr 23</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
-  <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">Res. 8337300 &mdash; 2x General ticket &mdash; &euro;36 total</div></td><td>10:30am entry &mdash; valid until 11:00am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Tickets non-transferable &mdash; bring photo ID. No re-entry once you leave. Download Park G&uuml;ell Official App. E-ticket on phone is sufficient.</span></td><td>Apr 22</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">Res. 8337300 &mdash; 2x General ticket &mdash; &euro;36 total</div></td><td>10:30am entry &mdash; valid until 11:00am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Non-transferable &mdash; bring photo ID. No re-entry. Download Park G&uuml;ell Official App.</span><br><a href="https://drive.google.com/file/d/1PFEldZb0dVM-gIwxuDB_s-WxAlAU5Nvq/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Tickets</a></td><td>Apr 22</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Guggenheim Bilbao</div><div class="booking-detail">Res. 95961308</div></td><td>Morning visit + possible Carne y Arena VR<br><span style="font-size:0.75rem;color:var(--warm-grey)">Carne y Arena (I&ntilde;&aacute;rritu VR) runs through June 20 &mdash; book separately at guggenheim-bilbao.eus.</span></td><td>Apr 28</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">AC Hotel Barcelona Sants</div><div class="booking-detail">Marriott Bonvoy &mdash; Conf. #92299097</div></td><td>Adjacent to Sants station &mdash; easy May 1 departure<br><span style="font-size:0.75rem;color:var(--warm-grey)">Check in online via Marriott app. R2 Nord train to T1 ~19 min, buy tickets at station.</span></td><td>Apr 30&ndash;May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Picasso Museum</div><div class="booking-detail">museupicassobcn.cat</div></td><td>Timed entry sells out in spring &mdash; book earliest slot</td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
@@ -353,6 +355,7 @@ a{text-decoration:none;color:inherit}
 const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
 const CHECKLIST_GID='1309362457';
 const CHECKLIST_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxCx1SRJCK0EGg1N0K0YP_3GpPhKlHWUkwcsaRzrVj0z9zUACCJ9PjHtYTdEbukOW0X/exec';
+const GUELL_TICKETS='https://drive.google.com/file/d/1PFEldZb0dVM-gIwxuDB_s-WxAlAU5Nvq/view?usp=drive_link';
 function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
 function mapsRoute(o,w,d){return'https://www.google.com/maps/dir/'+encodeURIComponent(o)+'/'+encodeURIComponent(w)+'/'+encodeURIComponent(d);}
 function addr(label,url){if(!url)url=mapsSearch(label);return'<span class="activity-addr"><a href="'+url+'" target="_blank">&#128205; '+label+'</a></span>';}
@@ -422,8 +425,8 @@ const FALLBACK=[
   {time:'Evening',text:'Dinner at a local spot'}
 ]},
 {date:'2026-04-22',title:'Park G\u00fcell + Picasso',loc:'Barcelona',activities:[
-  {time:'10:30am',text:'<strong>Park G\u00fcell \u2014 Monumental Zone</strong> \u2014 Res. 8337300'+addr('Park G\u00fcell, Barcelona',mapsSearch('Park Guell Barcelona Monumental Zone')),tag:'confirmed'},
-  {time:'',text:'Valid until 11:00am entry (30-min grace). No re-entry. Download Park G\u00fcell app. Bring photo ID.'},
+  {time:'10:30am',text:'<strong>Park G\u00fcell \u2014 Monumental Zone</strong> \u2014 Res. 8337300 \u2014 <a href="'+GUELL_TICKETS+'" target="_blank" style="color:var(--accent);border-bottom:1px solid rgba(192,112,0,0.35);">&#128196; tickets</a>'+addr('Park G\u00fcell, Barcelona',mapsSearch('Park Guell Barcelona Monumental Zone')),tag:'confirmed'},
+  {time:'',text:'Valid until 11:00am entry (30-min grace). No re-entry. Bring photo ID.'},
   {time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15\u201323',mapsSearch('Museu Picasso Barcelona Carrer de Montcada')),tag:'book'},
   {time:'',text:'El Born \u2014 Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous',mapsSearch('Carrer dels Banys Nous Barcelona antiques'))},
   {time:'Evening',text:'Dinner in El Born'}
