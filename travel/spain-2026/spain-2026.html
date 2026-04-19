@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v26: Map link audit, Apr26/30 routing fixes, checklist add-item form -->
+<!-- v27: Park Guell confirmed — Res. 8337300, 10:30am, Apr 22 -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -112,7 +112,6 @@ a{text-decoration:none;color:inherit}
 .photo-card{display:block;border:1px solid var(--rule);background:var(--white);padding:2.5rem;text-decoration:none;color:inherit;transition:box-shadow 0.2s,border-color 0.2s}
 .photo-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.06);border-color:var(--accent)}
 .photo-card-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem}
-/* ── CHECKLIST ── */
 #notes{background:var(--white)}
 .checklist-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 .checklist-panel{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
@@ -138,7 +137,6 @@ a{text-decoration:none;color:inherit}
 .cl-item.is-parent .cl-label{color:var(--ink)}
 .checklist-status{font-size:0.72rem;color:var(--warm-grey);padding:0.75rem 1.25rem;font-family:var(--mono);border-top:1px solid var(--rule)}
 .checklist-error{padding:2rem;text-align:center;font-size:0.82rem;color:var(--warm-grey)}
-/* Add item form */
 .cl-add-form{display:flex;gap:0;border-top:2px solid var(--yellow);background:var(--cream)}
 .cl-add-select{flex-shrink:0;border:none;border-right:1px solid var(--rule);background:transparent;font-family:var(--sans);font-size:0.72rem;color:var(--stone);padding:0.6rem 0.75rem;cursor:pointer;outline:none;max-width:130px}
 .cl-add-input{flex:1;border:none;background:transparent;font-family:var(--sans);font-size:0.82rem;color:var(--ink);padding:0.6rem 0.75rem;outline:none}
@@ -146,7 +144,6 @@ a{text-decoration:none;color:inherit}
 .cl-add-btn{flex-shrink:0;background:var(--accent);color:var(--white);border:none;padding:0.6rem 1rem;font-family:var(--sans);font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;transition:background 0.15s}
 .cl-add-btn:hover{background:#a06000}
 .cl-add-btn:disabled{opacity:0.4;cursor:not-allowed}
-/* ── BOOKINGS ── */
 #bookings{background:var(--white)}
 .booking-table{width:100%;border-collapse:collapse}
 .booking-table th{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--warm-grey);padding:0.65rem 1rem;text-align:left;border-bottom:2px solid var(--accent);background:var(--cream)}
@@ -275,7 +272,6 @@ a{text-decoration:none;color:inherit}
         <span class="checklist-head-meta" id="todo-count">Loading&hellip;</span>
       </div>
       <div class="checklist-body" id="todo-list"><div class="checklist-error">Loading&hellip;</div></div>
-      <!-- Add item form -->
       <div class="cl-add-form">
         <select class="cl-add-select" id="cl-section">
           <option value="Tarragona">Tarragona</option>
@@ -309,10 +305,10 @@ a{text-decoration:none;color:inherit}
   <tr><td><div class="booking-item-name">Rental Car</div><div class="booking-detail">National Car Rental &mdash; Automatic</div></td><td>Pick up BCN Sants Apr 24 / Drop off BCN Sants Apr 30</td><td>Apr 24&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Radisson Gran Via Bilbao</div><div class="booking-detail">5-star &mdash; Chase Edit &mdash; Breakfast incl. + $100 credit</div></td><td><span style="font-size:0.78rem;color:#4caf50;font-weight:600">&#10003; Ask for room upgrade at check-in</span><br><span style="font-size:0.75rem;color:var(--warm-grey)">Mention Chase Edit status &mdash; 5-star properties often upgrade loyalty guests. Ask warmly at the front desk, not via app.</span></td><td>Apr 26&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Sagrada Familia</div><div class="booking-detail">Res. 95793090 &mdash; 2x General w/ Passion Tower</div></td><td>Enter via C/ Marina 9:30am / Tower 9:45am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Download Sagrada Familia app before arrival &mdash; it IS your audioguide. Tickets are non-transferable; bring photo ID.</span></td><td>Apr 23</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">Res. 8337300 &mdash; 2x General ticket &mdash; &euro;36 total</div></td><td>10:30am entry &mdash; valid until 11:00am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Tickets non-transferable &mdash; bring photo ID. No re-entry once you leave. Download Park G&uuml;ell Official App. E-ticket on phone is sufficient.</span></td><td>Apr 22</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Guggenheim Bilbao</div><div class="booking-detail">Res. 95961308</div></td><td>Morning visit + possible Carne y Arena VR<br><span style="font-size:0.75rem;color:var(--warm-grey)">Carne y Arena (I&ntilde;&aacute;rritu VR) runs through June 20 &mdash; book separately at guggenheim-bilbao.eus.</span></td><td>Apr 28</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">AC Hotel Barcelona Sants</div><div class="booking-detail">Marriott Bonvoy &mdash; Conf. #92299097</div></td><td>Adjacent to Sants station &mdash; easy May 1 departure<br><span style="font-size:0.75rem;color:var(--warm-grey)">Check in online via Marriott app. R2 Nord train to T1 ~19 min, buy tickets at station.</span></td><td>Apr 30&ndash;May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Picasso Museum</div><div class="booking-detail">museupicassobcn.cat</div></td><td>Timed entry sells out in spring &mdash; book earliest slot</td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
-  <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">parkguell.barcelona</div></td><td>Book morning slot (8am or 9am best)</td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
   </tbody></table>
 </section>
 
@@ -354,49 +350,31 @@ a{text-decoration:none;color:inherit}
 <footer class="page-footer"><div class="footer-brand">MaRu <span>|</span> Spain 2026</div><div class="footer-meta" id="footer-updated"></div></footer>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────────────────
-const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
-const CHECKLIST_GID = '1309362457';
-const CHECKLIST_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxCx1SRJCK0EGg1N0K0YP_3GpPhKlHWUkwcsaRzrVj0z9zUACCJ9PjHtYTdEbukOW0X/exec';
-
-// ── MAP HELPERS ───────────────────────────────────────────────────────────────
-// Use business name + city for ambiguous addresses — far more reliable than raw address strings
+const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
+const CHECKLIST_GID='1309362457';
+const CHECKLIST_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxCx1SRJCK0EGg1N0K0YP_3GpPhKlHWUkwcsaRzrVj0z9zUACCJ9PjHtYTdEbukOW0X/exec';
 function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
-// Multi-stop directions: origin → waypoint → destination
-function mapsRoute(origin,waypoint,dest){
-  return'https://www.google.com/maps/dir/'+encodeURIComponent(origin)+'/'+encodeURIComponent(waypoint)+'/'+encodeURIComponent(dest);
-}
+function mapsRoute(o,w,d){return'https://www.google.com/maps/dir/'+encodeURIComponent(o)+'/'+encodeURIComponent(w)+'/'+encodeURIComponent(d);}
 function addr(label,url){if(!url)url=mapsSearch(label);return'<span class="activity-addr"><a href="'+url+'" target="_blank">&#128205; '+label+'</a></span>';}
-
 function parseCSV(text){const rows=[];text.split(/\r?\n/).forEach(line=>{if(!line.trim())return;const row=[];let inQ=false,cur='';for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch===','&&!inQ){row.push(cur.trim());cur='';}else cur+=ch;}row.push(cur.trim());rows.push(row);});return rows;}
-
 document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('nav-menu').classList.toggle('open'));
 const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id;});navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));},{passive:true});
-
-// Enter key submits add form
 document.getElementById('cl-new-item').addEventListener('keydown',e=>{if(e.key==='Enter')addChecklistItem();});
-
-// ── CALENDAR ─────────────────────────────────────────────────────────────────
-const TRIP_EVENTS=[{date:'2026-04-20',label:'Depart BOI 2:10pm',loc:'Boise'},{date:'2026-04-21',label:'Arrive BCN 6:50am',loc:'Barcelona'},{date:'2026-04-22',label:'Park G\u00fcell + Picasso',loc:'Barcelona'},{date:'2026-04-23',label:'Sagrada Fam\u00edlia 9:30am',loc:'Barcelona'},{date:'2026-04-24',label:'Drive \u2192 Tarragona',loc:'Tarragona'},{date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona'},{date:'2026-04-26',label:'Drive \u2192 Bilbao',loc:'Bilbao'},{date:'2026-04-27',label:'Guggenheim',loc:'Bilbao'},{date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},{date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},{date:'2026-04-30',label:'Drive \u2192 Barcelona via Toulouse',loc:'Barcelona'},{date:'2026-05-01',label:'Depart BCN 11:35am \u00b7 Arrive BOI 12:28am',loc:'Home'}];
+const TRIP_EVENTS=[{date:'2026-04-20',label:'Depart BOI 2:10pm',loc:'Boise'},{date:'2026-04-21',label:'Arrive BCN 6:50am',loc:'Barcelona'},{date:'2026-04-22',label:'Park G\u00fcell 10:30am + Picasso',loc:'Barcelona'},{date:'2026-04-23',label:'Sagrada Fam\u00edlia 9:30am',loc:'Barcelona'},{date:'2026-04-24',label:'Drive \u2192 Tarragona',loc:'Tarragona'},{date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona'},{date:'2026-04-26',label:'Drive \u2192 Bilbao',loc:'Bilbao'},{date:'2026-04-27',label:'Guggenheim',loc:'Bilbao'},{date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},{date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},{date:'2026-04-30',label:'Drive \u2192 Barcelona via Toulouse',loc:'Barcelona'},{date:'2026-05-01',label:'Depart BCN 11:35am \u00b7 Arrive BOI 12:28am',loc:'Home'}];
 const LOC_COLORS={'Boise':'#5c5c58','Barcelona':'#1a6b9a','Tarragona':'#7a5c1e','Bilbao':'#2d6a4f','Home':'#5c5c58'};
 function buildCalendar(){const container=document.getElementById('calendar-container');const eventMap={};TRIP_EVENTS.forEach(e=>{eventMap[e.date]=e;});const todayStr=new Date().toLocaleDateString('sv');const legend=document.createElement('div');legend.style.cssText='display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;align-items:center;';[['Barcelona','#1a6b9a'],['Tarragona','#7a5c1e'],['Bilbao','#2d6a4f'],['Travel/Home','#5c5c58']].forEach(([name,color])=>{const dot=document.createElement('div');dot.style.cssText='display:flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);';dot.innerHTML='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+color+';flex-shrink:0;"></span>'+name;legend.appendChild(dot);});container.appendChild(legend);const firstD=new Date(2026,3,20);const startSun=new Date(firstD);startSun.setDate(firstD.getDate()-firstD.getDay());const may1=new Date(2026,4,1);const endSat=new Date(may1);endSat.setDate(may1.getDate()+(6-may1.getDay()));const lbl=document.createElement('div');lbl.className='cal-month-label';lbl.textContent='April \u2013 May 2026';container.appendChild(lbl);const grid=document.createElement('div');grid.className='calendar-grid';['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{const hc=document.createElement('div');hc.className='cal-header-cell';hc.textContent=d;grid.appendChild(hc);});let cur=new Date(startSun);while(cur<=endSat){const y=cur.getFullYear(),m=String(cur.getMonth()+1).padStart(2,'0'),d=String(cur.getDate()).padStart(2,'0'),ds=y+'-'+m+'-'+d;const inRange=(cur.getMonth()===3)||(ds==='2026-05-01'),isTrip=ds>='2026-04-20'&&ds<='2026-05-01'&&inRange,ev=eventMap[ds],lc=ev?(LOC_COLORS[ev.loc]||'#7d6b57'):null;const cell=document.createElement('div');cell.className='cal-cell'+(inRange?'':' empty')+(isTrip?' trip-day':'')+(ds===todayStr?' today':'');if(lc&&inRange)cell.style.borderTop='3px solid '+lc;const content=document.createElement('div');content.className='cal-cell-content';const dn=document.createElement('div');dn.className='cal-day-num';dn.textContent=inRange?cur.getDate():'';content.appendChild(dn);if(ev&&inRange){const evEl=document.createElement('div');evEl.className='cal-event';evEl.style.cssText='border-left-color:'+lc+';background:rgba(247,245,241,0.9);white-space:normal;';evEl.textContent=ev.label;content.appendChild(evEl);const locEl=document.createElement('div');locEl.className='cal-location-tag';locEl.style.background='rgba(26,26,24,0.85)';locEl.textContent=ev.loc;content.appendChild(locEl);}cell.appendChild(content);grid.appendChild(cell);cur.setDate(cur.getDate()+1);}container.appendChild(grid);}
 buildCalendar();
-
-// ── WEATHER ───────────────────────────────────────────────────────────────────
 const CITY_COORDS={'Barcelona':{lat:41.3851,lon:2.1734,tz:'Europe%2FMadrid'},'Tarragona':{lat:41.1189,lon:1.2445,tz:'Europe%2FMadrid'},'Bilbao':{lat:43.2630,lon:-2.9350,tz:'Europe%2FMadrid'},'Boise':{lat:43.6150,lon:-116.2023,tz:'America%2FBoise'},'Home':{lat:43.6150,lon:-116.2023,tz:'America%2FBoise'}};
 const WCACHE={};
 async function fetchWeather(loc,date){const key=loc+':'+date;if(WCACHE[key])return WCACHE[key];const coords=CITY_COORDS[loc];if(!coords)return null;try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+coords.lat+'&longitude='+coords.lon+'&daily=temperature_2m_max,temperature_2m_min,weathercode&temperature_unit=fahrenheit&timezone='+coords.tz+'&start_date='+date+'&end_date='+date);const d=await r.json();if(!d.daily||!d.daily.temperature_2m_max[0])return null;const res={hi:Math.round(d.daily.temperature_2m_max[0]),lo:Math.round(d.daily.temperature_2m_min[0]),code:d.daily.weathercode[0]};WCACHE[key]=res;return res;}catch{return null;}}
 function wIcon(c){if(c===0)return'&#9728;';if(c<=3)return'&#9925;';if(c<=67)return'&#127783;';if(c<=77)return'&#10052;';return'&#9928;';}
-
-// ── CHECKLIST ─────────────────────────────────────────────────────────────────
 async function loadChecklist(){
   const todoEl=document.getElementById('todo-list'),doneEl=document.getElementById('done-list');
   const todoCount=document.getElementById('todo-count'),doneCount=document.getElementById('done-count'),statusEl=document.getElementById('checklist-status');
   const csvUrl='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv&gid='+CHECKLIST_GID;
   try{
-    const res=await fetch(csvUrl,{cache:'no-cache'});
-    if(!res.ok)throw new Error('HTTP '+res.status);
+    const res=await fetch(csvUrl,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);
     const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');
     const header=rows[0].map(h=>h.toLowerCase().trim());
     const iItem=header.indexOf('item'),iDone=header.indexOf('done'),iParent=header.indexOf('isparent');
@@ -414,46 +392,22 @@ async function loadChecklist(){
     todoCount.textContent=todoN+' remaining';
     doneCount.textContent=doneN+' item'+(doneN!==1?'s':'');
     statusEl.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  }catch(e){
-    todoEl.innerHTML='<div class="checklist-error">Could not load checklist.</div>';
-    todoCount.textContent='Error';console.error('Checklist error:',e);
-  }
+  }catch(e){todoEl.innerHTML='<div class="checklist-error">Could not load checklist.</div>';todoCount.textContent='Error';console.error('Checklist error:',e);}
 }
-
 async function toggleItem(sheetRow,currentDone){
-  const el=document.querySelector('[data-row="'+sheetRow+'"]');
-  if(!el)return;
+  const el=document.querySelector('[data-row="'+sheetRow+'"]');if(!el)return;
   el.classList.add('saving');
-  try{
-    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({row:sheetRow,done:!currentDone}),mode:'no-cors'});
-    setTimeout(loadChecklist,800);
-  }catch(e){el.classList.remove('saving');console.error('Toggle error:',e);}
+  try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({row:sheetRow,done:!currentDone}),mode:'no-cors'});setTimeout(loadChecklist,800);}
+  catch(e){el.classList.remove('saving');console.error('Toggle error:',e);}
 }
-
 async function addChecklistItem(){
-  const sectionEl=document.getElementById('cl-section');
-  const inputEl=document.getElementById('cl-new-item');
-  const btn=document.getElementById('cl-add-btn');
-  const item=inputEl.value.trim();
-  const section=sectionEl.value;
-  if(!item)return;
+  const sectionEl=document.getElementById('cl-section'),inputEl=document.getElementById('cl-new-item'),btn=document.getElementById('cl-add-btn');
+  const item=inputEl.value.trim(),section=sectionEl.value;if(!item)return;
   btn.disabled=true;btn.textContent='Adding\u2026';
-  try{
-    await fetch(CHECKLIST_SCRIPT_URL,{
-      method:'POST',
-      headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({action:'add',section:section,item:item,done:'FALSE',isParent:'FALSE'}),
-      mode:'no-cors'
-    });
-    inputEl.value='';
-    setTimeout(loadChecklist,1000);
-  }catch(e){console.error('Add error:',e);}
+  try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'add',section:section,item:item,done:'FALSE',isParent:'FALSE'}),mode:'no-cors'});inputEl.value='';setTimeout(loadChecklist,1000);}
+  catch(e){console.error('Add error:',e);}
   finally{btn.disabled=false;btn.textContent='Add';}
 }
-
-// ── ITINERARY ─────────────────────────────────────────────────────────────────
-// All map links use mapsSearch(businessName + city) or mapsRoute() for routing
-// to avoid address ambiguity. Raw address strings are shown as labels only.
 const FALLBACK=[
 {date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[
   {time:'2:10pm',text:'<strong>BOI \u2192 ATL</strong> \u2014 DL 874',tag:'confirmed'},
@@ -467,14 +421,15 @@ const FALLBACK=[
   {time:'Afternoon',text:'Recovery day \u2014 slow explore of Eixample'},
   {time:'Evening',text:'Dinner at a local spot'}
 ]},
-{date:'2026-04-22',title:'Barcelona',loc:'Barcelona',activities:[
-  {time:'Morning',text:'Park G\u00fcell \u2014 Monumental Zone'+addr("Carrer d'Olot, s/n, 08024",mapsSearch("Park Guell Barcelona Monumental Zone")),tag:'book'},
+{date:'2026-04-22',title:'Park G\u00fcell + Picasso',loc:'Barcelona',activities:[
+  {time:'10:30am',text:'<strong>Park G\u00fcell \u2014 Monumental Zone</strong> \u2014 Res. 8337300'+addr('Park G\u00fcell, Barcelona',mapsSearch('Park Guell Barcelona Monumental Zone')),tag:'confirmed'},
+  {time:'',text:'Valid until 11:00am entry (30-min grace). No re-entry. Download Park G\u00fcell app. Bring photo ID.'},
   {time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15\u201323',mapsSearch('Museu Picasso Barcelona Carrer de Montcada')),tag:'book'},
   {time:'',text:'El Born \u2014 Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous',mapsSearch('Carrer dels Banys Nous Barcelona antiques'))},
   {time:'Evening',text:'Dinner in El Born'}
 ]},
 {date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[
-  {time:'9:30am',text:'<strong>Sagrada Fam\u00edlia with Passion Tower</strong> \u2014 Res. 95793090'+addr('C/ de Mallorca, 401, 08013',mapsSearch('Sagrada Familia Barcelona')),tag:'confirmed'},
+  {time:'9:30am',text:'<strong>Sagrada Fam\u00edlia with Passion Tower</strong> \u2014 Res. 95793090'+addr('Sagrada Fam\u00edlia',mapsSearch('Sagrada Familia Barcelona')),tag:'confirmed'},
   {time:'9:45am',text:'Passion Tower access (enter via C/ Marina entrance)'},
   {time:'Afternoon',text:"Sant Jordi's Day \u2014 book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic',mapsSearch('Barri Gotic Barcelona'))},
   {time:'',text:'Mercat G\u00f2tic antiques + Carrer dels Banys Nous map dealers'+addr('Mercat G\u00f2tic, Pla\u00e7a Nova',mapsSearch('Mercat Gotic Barcelona Placa Nova'))},
@@ -488,7 +443,7 @@ const FALLBACK=[
   {time:'',text:'Cambrils is a coastal fishing village ~15 min south of Tarragona city'}
 ]},
 {date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[
-  {time:'Morning',text:'Tarragona Cathedral'+addr('Pla\u00e7a de la Seu, Tarragona',mapsSearch('Catedral de Tarragona'))},
+  {time:'Morning',text:'Tarragona Cathedral'+addr('Catedral de Tarragona',mapsSearch('Catedral de Tarragona'))},
   {time:'',text:'Ferreres Aqueduct (Pont del Diable)'+addr('Ferreres Aqueduct',mapsSearch('Ferreres Aqueduct Pont del Diable Tarragona'))},
   {time:'Afternoon',text:'Tarragona beaches \u2014 Platja del Miracle'+addr('Platja del Miracle',mapsSearch('Platja del Miracle Tarragona'))},
   {time:'',text:'Local wine and seafood'}
@@ -533,14 +488,11 @@ const FALLBACK=[
   {time:'12:28am',text:'<strong>Arrive Boise BOI</strong> (May 2)',tag:'confirmed'}
 ]}
 ];
-
 function renderItinerary(days){const c=document.getElementById('itinerary-container');c.innerHTML='';days.forEach(day=>{const block=document.createElement('div');block.className='day-block';block.id='day-'+day.date;const d=new Date(day.date+'T12:00:00');block.innerHTML='<div class="day-header"><div class="day-num-col"><div class="day-num">'+d.getDate()+'</div><div class="day-abbr">'+d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+'</div></div><div class="day-title-col"><div class="day-label">'+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</div><div class="day-title-text">'+day.title+'</div><div class="day-location">&#127759; '+day.loc+'</div></div><div class="day-weather-col" id="weather-'+day.date+'"><div class="weather-loading">Loading&hellip;</div></div></div><div class="day-body">'+day.activities.map(a=>'<div class="activity-row"><div class="activity-time">'+(a.time||'')+'</div><div class="activity-text">'+a.text+'</div>'+(a.tag==='confirmed'?'<span class="activity-tag tag-confirmed">Confirmed</span>':'')+(a.tag==='book'?'<span class="activity-tag tag-book">Book Now</span>':'')+'</div>').join('')+'</div>';c.appendChild(block);
   const wloc=day.loc.split(',')[0].trim();
   fetchWeather(wloc,day.date).then(w=>{const el=document.getElementById('weather-'+day.date);if(!el)return;if(w)el.innerHTML='<div class="weather-icon">'+wIcon(w.code)+'</div><div class="weather-temps">'+w.hi+'&deg; / '+w.lo+'&deg;F</div>';else el.innerHTML='';});
 })}
-
 async function loadFromSheet(){try{const res=await fetch(SHEET_CSV_URL,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');const header=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));const idx={date:header.indexOf('date'),title:header.indexOf('title'),loc:header.indexOf('location'),time:header.indexOf('time'),act:header.indexOf('activity'),tag:header.indexOf('tag')};const days=[];rows.slice(1).forEach(row=>{const date=row[idx.date]||'',title=row[idx.title]||'',loc=row[idx.loc]||'',time=row[idx.time]||'',actText=row[idx.act]||'',tag=row[idx.tag]||'';if(!date||!actText)return;let ex=days.find(d=>d.date===date);if(!ex){ex={date,title,loc,activities:[]};days.push(ex);}ex.activities.push({time,text:actText,tag:tag.toLowerCase()});});if(days.length>0){renderItinerary(days);document.getElementById('footer-updated').textContent='Live \u2014 Google Sheets \u2014 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}else throw new Error('No rows');}catch(e){renderItinerary(FALLBACK);}}
-
 loadFromSheet();
 loadChecklist();
 </script>
