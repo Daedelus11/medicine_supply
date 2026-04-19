@@ -13,17 +13,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy via FTP
+      - name: Deploy via FTP (TLS Explicit)
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
-          protocol: ftps
+          protocol: ftpes
           port: 21
           local-dir: ./travel/spain-2026/
           server-dir: /travel/spain-2026/
           exclude: |
             **/.git*
             **/.git*/**
-            **/deploy-test.txt
