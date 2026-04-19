@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v24: Checklist GID wired in — live from Google Sheets -->
+<!-- v25: Apps Script URL wired in — checklist fully live with write-back -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -332,13 +332,8 @@ a{text-decoration:none;color:inherit}
 <script>
 // ── CONFIG ────────────────────────────────────────────────────────────────────
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
-
-// Checklist GID — confirmed from Apps Script execution log
 const CHECKLIST_GID = '1309362457';
-
-// Apps Script web app URL — paste here after deploying
-// Apps Script → Deploy → New deployment → Web App → Execute as Me, Anyone can access
-const CHECKLIST_SCRIPT_URL = 'PASTE_YOUR_APPS_SCRIPT_URL_HERE';
+const CHECKLIST_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxCx1SRJCK0EGg1N0K0YP_3GpPhKlHWUkwcsaRzrVj0z9zUACCJ9PjHtYTdEbukOW0X/exec';
 
 // ── HELPERS ──────────────────────────────────────────────────────────────────
 function mapsUrl(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a);}
@@ -378,7 +373,7 @@ async function loadChecklist(){
       const sheetRow=idx+2,item=row[iItem]||'',done=(row[iDone]||'').toUpperCase()==='TRUE',isParent=(row[iParent]||'').toUpperCase()==='TRUE';
       if(!item)return;
       const css=['cl-item',isParent?'is-parent':'is-child',done?'is-done':''].join(' ').trim();
-      const html='<div class="'+css+'" data-row="'+sheetRow+'" onclick="toggleItem('+sheetRow+','+done+')"><div class="cl-box">'+checkSvg+'</div><span class="cl-label">'+item+'</span></div>';
+      const html='<div class="'+css+'" data-row="'+sheetRow+'" data-done="'+done+'" onclick="toggleItem('+sheetRow+','+done+')"><div class="cl-box">'+checkSvg+'</div><span class="cl-label">'+item+'</span></div>';
       if(done){doneHtml+=html;doneN++;}else{todoHtml+=html;todoN++;}
     });
     todoEl.innerHTML=todoHtml||'<div class="checklist-error">All done! &#127881;</div>';
@@ -387,25 +382,30 @@ async function loadChecklist(){
     doneCount.textContent=doneN+' item'+(doneN!==1?'s':'');
     statusEl.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   }catch(e){
-    todoEl.innerHTML='<div class="checklist-error">Could not load checklist &mdash; Sheet may need republishing.</div>';
+    todoEl.innerHTML='<div class="checklist-error">Could not load checklist.</div>';
     todoCount.textContent='Error';console.error('Checklist error:',e);
   }
 }
 
 async function toggleItem(sheetRow,currentDone){
-  if(CHECKLIST_SCRIPT_URL==='PASTE_YOUR_APPS_SCRIPT_URL_HERE'){
-    // Script not deployed yet — optimistic UI update only
-    const el=document.querySelector('[data-row="'+sheetRow+'"]');
-    if(el){el.classList.toggle('is-done');const lbl=el.querySelector('.cl-label');if(lbl)lbl.style.textDecoration=el.classList.contains('is-done')?'line-through':'none';}
-    return;
-  }
   const el=document.querySelector('[data-row="'+sheetRow+'"]');
   if(!el)return;
   el.classList.add('saving');
+  const newDone=!currentDone;
   try{
-    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({row:sheetRow,done:!currentDone}),mode:'no-cors'});
-    await loadChecklist();
-  }catch(e){el.classList.remove('saving');console.error('Toggle error:',e);}
+    // no-cors: write goes through, response opaque — we reload from sheet to confirm
+    await fetch(CHECKLIST_SCRIPT_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({row:sheetRow,done:newDone}),
+      mode:'no-cors'
+    });
+    // Brief pause to let Sheets propagate, then reload
+    setTimeout(loadChecklist,800);
+  }catch(e){
+    el.classList.remove('saving');
+    console.error('Toggle error:',e);
+  }
 }
 
 // ── ITINERARY ─────────────────────────────────────────────────────────────────
