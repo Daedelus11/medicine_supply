@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v25: Apps Script URL wired in — checklist fully live with write-back -->
+<!-- v26: Map link audit, Apr26/30 routing fixes, checklist add-item form -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -112,6 +112,7 @@ a{text-decoration:none;color:inherit}
 .photo-card{display:block;border:1px solid var(--rule);background:var(--white);padding:2.5rem;text-decoration:none;color:inherit;transition:box-shadow 0.2s,border-color 0.2s}
 .photo-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.06);border-color:var(--accent)}
 .photo-card-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem}
+/* ── CHECKLIST ── */
 #notes{background:var(--white)}
 .checklist-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 .checklist-panel{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
@@ -137,6 +138,15 @@ a{text-decoration:none;color:inherit}
 .cl-item.is-parent .cl-label{color:var(--ink)}
 .checklist-status{font-size:0.72rem;color:var(--warm-grey);padding:0.75rem 1.25rem;font-family:var(--mono);border-top:1px solid var(--rule)}
 .checklist-error{padding:2rem;text-align:center;font-size:0.82rem;color:var(--warm-grey)}
+/* Add item form */
+.cl-add-form{display:flex;gap:0;border-top:2px solid var(--yellow);background:var(--cream)}
+.cl-add-select{flex-shrink:0;border:none;border-right:1px solid var(--rule);background:transparent;font-family:var(--sans);font-size:0.72rem;color:var(--stone);padding:0.6rem 0.75rem;cursor:pointer;outline:none;max-width:130px}
+.cl-add-input{flex:1;border:none;background:transparent;font-family:var(--sans);font-size:0.82rem;color:var(--ink);padding:0.6rem 0.75rem;outline:none}
+.cl-add-input::placeholder{color:var(--warm-grey)}
+.cl-add-btn{flex-shrink:0;background:var(--accent);color:var(--white);border:none;padding:0.6rem 1rem;font-family:var(--sans);font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;transition:background 0.15s}
+.cl-add-btn:hover{background:#a06000}
+.cl-add-btn:disabled{opacity:0.4;cursor:not-allowed}
+/* ── BOOKINGS ── */
 #bookings{background:var(--white)}
 .booking-table{width:100%;border-collapse:collapse}
 .booking-table th{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--warm-grey);padding:0.65rem 1rem;text-align:left;border-bottom:2px solid var(--accent);background:var(--cream)}
@@ -177,6 +187,7 @@ a{text-decoration:none;color:inherit}
   .shop-grid{grid-template-columns:1fr}
   .photo-card-inner{flex-direction:column}
   .checklist-wrap{grid-template-columns:1fr}
+  .cl-add-select{max-width:100px;font-size:0.65rem}
 }
 </style>
 </head>
@@ -264,6 +275,19 @@ a{text-decoration:none;color:inherit}
         <span class="checklist-head-meta" id="todo-count">Loading&hellip;</span>
       </div>
       <div class="checklist-body" id="todo-list"><div class="checklist-error">Loading&hellip;</div></div>
+      <!-- Add item form -->
+      <div class="cl-add-form">
+        <select class="cl-add-select" id="cl-section">
+          <option value="Tarragona">Tarragona</option>
+          <option value="Bilbao">Bilbao</option>
+          <option value="Barcelona">Barcelona</option>
+          <option value="General">General</option>
+          <option value="Shopping - Vintage">Vintage</option>
+          <option value="Shopping - Maps &amp; Books">Maps &amp; Books</option>
+        </select>
+        <input class="cl-add-input" id="cl-new-item" type="text" placeholder="Add item&hellip;" maxlength="120">
+        <button class="cl-add-btn" id="cl-add-btn" onclick="addChecklistItem()">Add</button>
+      </div>
     </div>
     <div class="checklist-panel">
       <div class="checklist-head checklist-head-done">
@@ -285,7 +309,7 @@ a{text-decoration:none;color:inherit}
   <tr><td><div class="booking-item-name">Rental Car</div><div class="booking-detail">National Car Rental &mdash; Automatic</div></td><td>Pick up BCN Sants Apr 24 / Drop off BCN Sants Apr 30</td><td>Apr 24&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Radisson Gran Via Bilbao</div><div class="booking-detail">5-star &mdash; Chase Edit &mdash; Breakfast incl. + $100 credit</div></td><td><span style="font-size:0.78rem;color:#4caf50;font-weight:600">&#10003; Ask for room upgrade at check-in</span><br><span style="font-size:0.75rem;color:var(--warm-grey)">Mention Chase Edit status &mdash; 5-star properties often upgrade loyalty guests. Ask warmly at the front desk, not via app.</span></td><td>Apr 26&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Sagrada Familia</div><div class="booking-detail">Res. 95793090 &mdash; 2x General w/ Passion Tower</div></td><td>Enter via C/ Marina 9:30am / Tower 9:45am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Download Sagrada Familia app before arrival &mdash; it IS your audioguide. Tickets are non-transferable; bring photo ID.</span></td><td>Apr 23</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
-  <tr><td><div class="booking-item-name">Guggenheim Bilbao</div><div class="booking-detail">Res. 95961308</div></td><td>Morning visit + possible Carne y Arena VR<br><span style="font-size:0.75rem;color:var(--warm-grey)">Carne y Arena (Inarritu VR) runs through June 20 &mdash; book separately at guggenheim-bilbao.eus if interested.</span></td><td>Apr 28</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Guggenheim Bilbao</div><div class="booking-detail">Res. 95961308</div></td><td>Morning visit + possible Carne y Arena VR<br><span style="font-size:0.75rem;color:var(--warm-grey)">Carne y Arena (I&ntilde;&aacute;rritu VR) runs through June 20 &mdash; book separately at guggenheim-bilbao.eus.</span></td><td>Apr 28</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">AC Hotel Barcelona Sants</div><div class="booking-detail">Marriott Bonvoy &mdash; Conf. #92299097</div></td><td>Adjacent to Sants station &mdash; easy May 1 departure<br><span style="font-size:0.75rem;color:var(--warm-grey)">Check in online via Marriott app. R2 Nord train to T1 ~19 min, buy tickets at station.</span></td><td>Apr 30&ndash;May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Picasso Museum</div><div class="booking-detail">museupicassobcn.cat</div></td><td>Timed entry sells out in spring &mdash; book earliest slot</td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
   <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">parkguell.barcelona</div></td><td>Book morning slot (8am or 9am best)</td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
@@ -299,9 +323,9 @@ a{text-decoration:none;color:inherit}
     <div class="shop-section-head">Vintage &mdash; El Born</div>
     <div class="shop-section-sub">El Born / Gothic Quarter cluster &mdash; all within a 10-minute walk of each other.</div>
     <div class="shop-grid">
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Placa+de+Sant+Agusti+Vell+14+Barcelona" target="_blank"><div class="shop-card-name">Zoetrope Vintage</div><div class="shop-card-addr">Pla&ccedil;a de Sant Agust&iacute; Vell, 14 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Hand-picked indie pieces. Rack outside at &euro;5. Good for jewelry and accessories.</div><span class="shop-tag">Accessories</span><span class="shop-tag">Budget rack</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+dels+Flassaders+42+Barcelona" target="_blank"><div class="shop-card-name">Loisaida</div><div class="shop-card-addr">Carrer dels Flassaders, 42 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Vintage home pieces, vinyl, telephones, jewelry. Open daily 11&ndash;21.</div><span class="shop-tag">Home &amp; vinyl</span><span class="shop-tag">Daily 11&ndash;21</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+de+Sant+Pere+Mes+Alt+36+Barcelona" target="_blank"><div class="shop-card-name">Atelier Resistance</div><div class="shop-card-addr">Carrer de Sant Pere M&eacute;s Alt, 36 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Curated, personality-driven. Designer pieces without trophy-gallery pricing.</div><span class="shop-tag">Curated</span><span class="shop-tag">Designer</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Zoetrope+Vintage+Barcelona+Placa+Sant+Agusti+Vell" target="_blank"><div class="shop-card-name">Zoetrope Vintage</div><div class="shop-card-addr">Pla&ccedil;a de Sant Agust&iacute; Vell, 14 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Hand-picked indie pieces. Rack outside at &euro;5. Good for jewelry and accessories.</div><span class="shop-tag">Accessories</span><span class="shop-tag">Budget rack</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Loisaida+Barcelona+Carrer+dels+Flassaders" target="_blank"><div class="shop-card-name">Loisaida</div><div class="shop-card-addr">Carrer dels Flassaders, 42 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Vintage home pieces, vinyl, telephones, jewelry. Open daily 11&ndash;21.</div><span class="shop-tag">Home &amp; vinyl</span><span class="shop-tag">Daily 11&ndash;21</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Atelier+Resistance+Barcelona+Sant+Pere+Mes+Alt" target="_blank"><div class="shop-card-name">Atelier Resistance</div><div class="shop-card-addr">Carrer de Sant Pere M&eacute;s Alt, 36 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Curated, personality-driven. Designer pieces without trophy-gallery pricing.</div><span class="shop-tag">Curated</span><span class="shop-tag">Designer</span></a>
       <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Antiguedades+El+Pecado+El+Born+Barcelona" target="_blank"><div class="shop-card-name">Antigu&uuml;edades El Pecado</div><div class="shop-card-addr">El Born &#x2197;</div><div class="shop-card-desc">European decorative arts, vintage furniture, crystal, fine porcelain.</div><span class="shop-tag">Antiques</span><span class="shop-tag">Decorative arts</span></a>
     </div>
   </div>
@@ -309,20 +333,20 @@ a{text-decoration:none;color:inherit}
     <div class="shop-section-head">Vintage &mdash; Gothic Quarter &amp; Gr&agrave;cia</div>
     <div class="shop-section-sub">Gothic Quarter stores are walkable from the Eixample. Gr&agrave;cia is a 20-minute walk or short metro.</div>
     <div class="shop-grid">
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+del+Rec+13+Barcelona" target="_blank"><div class="shop-card-name">Le Swing</div><div class="shop-card-addr">Carrer del Rec, 13 &mdash; Gothic Quarter &#x2197;</div><div class="shop-card-desc">Highest-quality vintage in the quarter. Steals under &euro;30 even with designer stock.</div><span class="shop-tag">Designer</span><span class="shop-tag">Best quality</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=L%27Arca+Carrer+dels+Banys+Nous+20+Barcelona" target="_blank"><div class="shop-card-name">L&rsquo;Arca</div><div class="shop-card-addr">Carrer dels Banys Nous, 20 &mdash; Gothic Quarter &#x2197;</div><div class="shop-card-desc">Fifth-generation family antique dealer. Fashion 1920s&ndash;1980s inside a 16th-century stone arch.</div><span class="shop-tag">Antique textiles</span><span class="shop-tag">Historic</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=La+Principal+Retro+Gracia+Barcelona" target="_blank"><div class="shop-card-name">La Principal Retro &amp; Co</div><div class="shop-card-addr">Gr&agrave;cia &#x2197;</div><div class="shop-card-desc">Curated vintage, particularly strong for denim and leather.</div><span class="shop-tag">Denim &amp; leather</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Love+Vintage+Gracia+Barcelona" target="_blank"><div class="shop-card-name">LOVE Vintage</div><div class="shop-card-addr">Gr&agrave;cia &#x2197;</div><div class="shop-card-desc">Elegant accessories, regularly restocked.</div><span class="shop-tag">Accessories</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Le+Swing+vintage+Barcelona+Carrer+del+Rec" target="_blank"><div class="shop-card-name">Le Swing</div><div class="shop-card-addr">Carrer del Rec, 13 &mdash; Gothic Quarter &#x2197;</div><div class="shop-card-desc">Highest-quality vintage in the quarter. Steals under &euro;30 even with designer stock.</div><span class="shop-tag">Designer</span><span class="shop-tag">Best quality</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=L%27Arca+vintage+Barcelona+Carrer+dels+Banys+Nous+20" target="_blank"><div class="shop-card-name">L&rsquo;Arca</div><div class="shop-card-addr">Carrer dels Banys Nous, 20 &mdash; Gothic Quarter &#x2197;</div><div class="shop-card-desc">Fifth-generation family antique dealer. Fashion 1920s&ndash;1980s inside a 16th-century stone arch.</div><span class="shop-tag">Antique textiles</span><span class="shop-tag">Historic</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=La+Principal+Retro+vintage+Gracia+Barcelona" target="_blank"><div class="shop-card-name">La Principal Retro &amp; Co</div><div class="shop-card-addr">Gr&agrave;cia &#x2197;</div><div class="shop-card-desc">Curated vintage, particularly strong for denim and leather.</div><span class="shop-tag">Denim &amp; leather</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Love+Vintage+boutique+Gracia+Barcelona" target="_blank"><div class="shop-card-name">LOVE Vintage</div><div class="shop-card-addr">Gr&agrave;cia &#x2197;</div><div class="shop-card-desc">Elegant accessories, regularly restocked.</div><span class="shop-tag">Accessories</span></a>
     </div>
   </div>
   <div style="margin-bottom:3rem">
     <div class="shop-section-head">Maps, Atlases &amp; Antiquarian Books</div>
     <div class="shop-section-sub">The April 23 alignment is exceptional: Sagrada Fam&iacute;lia 9:30am, then Mercat G&ograve;tic + Sant Jordi&rsquo;s Day book markets + Carrer dels Banys Nous all afternoon.</div>
     <div class="shop-grid">
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+dels+Banys+Nous+Barcelona" target="_blank"><div class="shop-card-name">Carrer dels Banys Nous</div><div class="shop-card-addr">Gothic Quarter &mdash; the whole street &#x2197;</div><div class="shop-card-desc">Lined with antique dealers specializing in maps, prints, and books. Best single street for old atlases in Barcelona.</div><span class="shop-tag">Maps &amp; prints</span><span class="shop-tag">Top pick</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Bulevard+dels+Antiquaris+Passeig+de+Gracia+55+Barcelona" target="_blank"><div class="shop-card-name">Bulevard dels Antiquaris</div><div class="shop-card-addr">Passeig de Gr&agrave;cia, 55 &mdash; Eixample &#x2197;</div><div class="shop-card-desc">60+ antique dealers under one roof. Tue&ndash;Sat. Close to the Airbnb.</div><span class="shop-tag">60+ dealers</span><span class="shop-tag">Tue&ndash;Sat</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Els+Encants+Vells+Placa+de+les+Glories+Barcelona" target="_blank"><div class="shop-card-name">Els Encants Vells</div><div class="shop-card-addr">Pla&ccedil;a de les Gl&ograve;ries &mdash; Gl&ograve;ries metro &#x2197;</div><div class="shop-card-desc">Old maps, atlases, and prints among 301 stalls. Mon/Wed/Fri/Sat 9am&ndash;8pm.</div><span class="shop-tag">Flea market</span><span class="shop-tag">Mon/Wed/Fri/Sat</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Sant+Jordi+book+stalls+Gothic+Quarter+Barcelona" target="_blank"><div class="shop-card-name">Sant Jordi&rsquo;s Day Book Stalls</div><div class="shop-card-addr">Gothic Quarter &amp; Las Ramblas &mdash; April 23 only &#x2197;</div><div class="shop-card-desc">The best day of the year to buy books in Barcelona. Every publisher sets up outdoors, city-wide.</div><span class="shop-tag">April 23 only</span><span class="shop-tag">All day</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+dels+Banys+Nous+antiques+maps+Barcelona" target="_blank"><div class="shop-card-name">Carrer dels Banys Nous</div><div class="shop-card-addr">Gothic Quarter &mdash; the whole street &#x2197;</div><div class="shop-card-desc">Lined with antique dealers specializing in maps, prints, and books. Best single street for old atlases in Barcelona.</div><span class="shop-tag">Maps &amp; prints</span><span class="shop-tag">Top pick</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Bulevard+dels+Antiquaris+Passeig+de+Gracia+Barcelona" target="_blank"><div class="shop-card-name">Bulevard dels Antiquaris</div><div class="shop-card-addr">Passeig de Gr&agrave;cia, 55 &mdash; Eixample &#x2197;</div><div class="shop-card-desc">60+ antique dealers under one roof. Tue&ndash;Sat. Close to the Airbnb.</div><span class="shop-tag">60+ dealers</span><span class="shop-tag">Tue&ndash;Sat</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Els+Encants+Vells+flea+market+Barcelona+Glories" target="_blank"><div class="shop-card-name">Els Encants Vells</div><div class="shop-card-addr">Pla&ccedil;a de les Gl&ograve;ries &mdash; Gl&ograve;ries metro &#x2197;</div><div class="shop-card-desc">Old maps, atlases, and prints among 301 stalls. Mon/Wed/Fri/Sat 9am&ndash;8pm.</div><span class="shop-tag">Flea market</span><span class="shop-tag">Mon/Wed/Fri/Sat</span></a>
+      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Las+Ramblas+Barcelona+book+stalls" target="_blank"><div class="shop-card-name">Sant Jordi&rsquo;s Day Book Stalls</div><div class="shop-card-addr">Gothic Quarter &amp; Las Ramblas &mdash; April 23 only &#x2197;</div><div class="shop-card-desc">The best day of the year to buy books in Barcelona. Every publisher sets up outdoors, city-wide.</div><span class="shop-tag">April 23 only</span><span class="shop-tag">All day</span></a>
     </div>
   </div>
 </section>
@@ -335,17 +359,26 @@ const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvV
 const CHECKLIST_GID = '1309362457';
 const CHECKLIST_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxCx1SRJCK0EGg1N0K0YP_3GpPhKlHWUkwcsaRzrVj0z9zUACCJ9PjHtYTdEbukOW0X/exec';
 
-// ── HELPERS ──────────────────────────────────────────────────────────────────
-function mapsUrl(a){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(a);}
+// ── MAP HELPERS ───────────────────────────────────────────────────────────────
+// Use business name + city for ambiguous addresses — far more reliable than raw address strings
+function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
+// Multi-stop directions: origin → waypoint → destination
+function mapsRoute(origin,waypoint,dest){
+  return'https://www.google.com/maps/dir/'+encodeURIComponent(origin)+'/'+encodeURIComponent(waypoint)+'/'+encodeURIComponent(dest);
+}
+function addr(label,url){if(!url)url=mapsSearch(label);return'<span class="activity-addr"><a href="'+url+'" target="_blank">&#128205; '+label+'</a></span>';}
+
 function parseCSV(text){const rows=[];text.split(/\r?\n/).forEach(line=>{if(!line.trim())return;const row=[];let inQ=false,cur='';for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch===','&&!inQ){row.push(cur.trim());cur='';}else cur+=ch;}row.push(cur.trim());rows.push(row);});return rows;}
-function addr(a){if(!a)return'';return'<span class="activity-addr"><a href="'+mapsUrl(a)+'" target="_blank">&#128205; '+a+'</a></span>';}
 
 document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('nav-menu').classList.toggle('open'));
 const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id;});navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));},{passive:true});
 
+// Enter key submits add form
+document.getElementById('cl-new-item').addEventListener('keydown',e=>{if(e.key==='Enter')addChecklistItem();});
+
 // ── CALENDAR ─────────────────────────────────────────────────────────────────
-const TRIP_EVENTS=[{date:'2026-04-20',label:'Depart BOI 2:10pm',loc:'Boise'},{date:'2026-04-21',label:'Arrive BCN 6:50am',loc:'Barcelona'},{date:'2026-04-22',label:'Park G\u00fcell + Picasso',loc:'Barcelona'},{date:'2026-04-23',label:'Sagrada Fam\u00edlia 9:30am',loc:'Barcelona'},{date:'2026-04-24',label:'Drive \u2192 Tarragona',loc:'Tarragona'},{date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona'},{date:'2026-04-26',label:'Drive \u2192 Bilbao',loc:'Bilbao'},{date:'2026-04-27',label:'Guggenheim',loc:'Bilbao'},{date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},{date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},{date:'2026-04-30',label:'Drive \u2192 Barcelona',loc:'Barcelona'},{date:'2026-05-01',label:'Depart BCN 11:35am \u00b7 Arrive BOI 12:28am',loc:'Home'}];
+const TRIP_EVENTS=[{date:'2026-04-20',label:'Depart BOI 2:10pm',loc:'Boise'},{date:'2026-04-21',label:'Arrive BCN 6:50am',loc:'Barcelona'},{date:'2026-04-22',label:'Park G\u00fcell + Picasso',loc:'Barcelona'},{date:'2026-04-23',label:'Sagrada Fam\u00edlia 9:30am',loc:'Barcelona'},{date:'2026-04-24',label:'Drive \u2192 Tarragona',loc:'Tarragona'},{date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona'},{date:'2026-04-26',label:'Drive \u2192 Bilbao',loc:'Bilbao'},{date:'2026-04-27',label:'Guggenheim',loc:'Bilbao'},{date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},{date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},{date:'2026-04-30',label:'Drive \u2192 Barcelona via Toulouse',loc:'Barcelona'},{date:'2026-05-01',label:'Depart BCN 11:35am \u00b7 Arrive BOI 12:28am',loc:'Home'}];
 const LOC_COLORS={'Boise':'#5c5c58','Barcelona':'#1a6b9a','Tarragona':'#7a5c1e','Bilbao':'#2d6a4f','Home':'#5c5c58'};
 function buildCalendar(){const container=document.getElementById('calendar-container');const eventMap={};TRIP_EVENTS.forEach(e=>{eventMap[e.date]=e;});const todayStr=new Date().toLocaleDateString('sv');const legend=document.createElement('div');legend.style.cssText='display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;align-items:center;';[['Barcelona','#1a6b9a'],['Tarragona','#7a5c1e'],['Bilbao','#2d6a4f'],['Travel/Home','#5c5c58']].forEach(([name,color])=>{const dot=document.createElement('div');dot.style.cssText='display:flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);';dot.innerHTML='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+color+';flex-shrink:0;"></span>'+name;legend.appendChild(dot);});container.appendChild(legend);const firstD=new Date(2026,3,20);const startSun=new Date(firstD);startSun.setDate(firstD.getDate()-firstD.getDay());const may1=new Date(2026,4,1);const endSat=new Date(may1);endSat.setDate(may1.getDate()+(6-may1.getDay()));const lbl=document.createElement('div');lbl.className='cal-month-label';lbl.textContent='April \u2013 May 2026';container.appendChild(lbl);const grid=document.createElement('div');grid.className='calendar-grid';['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{const hc=document.createElement('div');hc.className='cal-header-cell';hc.textContent=d;grid.appendChild(hc);});let cur=new Date(startSun);while(cur<=endSat){const y=cur.getFullYear(),m=String(cur.getMonth()+1).padStart(2,'0'),d=String(cur.getDate()).padStart(2,'0'),ds=y+'-'+m+'-'+d;const inRange=(cur.getMonth()===3)||(ds==='2026-05-01'),isTrip=ds>='2026-04-20'&&ds<='2026-05-01'&&inRange,ev=eventMap[ds],lc=ev?(LOC_COLORS[ev.loc]||'#7d6b57'):null;const cell=document.createElement('div');cell.className='cal-cell'+(inRange?'':' empty')+(isTrip?' trip-day':'')+(ds===todayStr?' today':'');if(lc&&inRange)cell.style.borderTop='3px solid '+lc;const content=document.createElement('div');content.className='cal-cell-content';const dn=document.createElement('div');dn.className='cal-day-num';dn.textContent=inRange?cur.getDate():'';content.appendChild(dn);if(ev&&inRange){const evEl=document.createElement('div');evEl.className='cal-event';evEl.style.cssText='border-left-color:'+lc+';background:rgba(247,245,241,0.9);white-space:normal;';evEl.textContent=ev.label;content.appendChild(evEl);const locEl=document.createElement('div');locEl.className='cal-location-tag';locEl.style.background='rgba(26,26,24,0.85)';locEl.textContent=ev.loc;content.appendChild(locEl);}cell.appendChild(content);grid.appendChild(cell);cur.setDate(cur.getDate()+1);}container.appendChild(grid);}
 buildCalendar();
@@ -391,25 +424,115 @@ async function toggleItem(sheetRow,currentDone){
   const el=document.querySelector('[data-row="'+sheetRow+'"]');
   if(!el)return;
   el.classList.add('saving');
-  const newDone=!currentDone;
   try{
-    // no-cors: write goes through, response opaque — we reload from sheet to confirm
+    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({row:sheetRow,done:!currentDone}),mode:'no-cors'});
+    setTimeout(loadChecklist,800);
+  }catch(e){el.classList.remove('saving');console.error('Toggle error:',e);}
+}
+
+async function addChecklistItem(){
+  const sectionEl=document.getElementById('cl-section');
+  const inputEl=document.getElementById('cl-new-item');
+  const btn=document.getElementById('cl-add-btn');
+  const item=inputEl.value.trim();
+  const section=sectionEl.value;
+  if(!item)return;
+  btn.disabled=true;btn.textContent='Adding\u2026';
+  try{
     await fetch(CHECKLIST_SCRIPT_URL,{
       method:'POST',
       headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({row:sheetRow,done:newDone}),
+      body:JSON.stringify({action:'add',section:section,item:item,done:'FALSE',isParent:'FALSE'}),
       mode:'no-cors'
     });
-    // Brief pause to let Sheets propagate, then reload
-    setTimeout(loadChecklist,800);
-  }catch(e){
-    el.classList.remove('saving');
-    console.error('Toggle error:',e);
-  }
+    inputEl.value='';
+    setTimeout(loadChecklist,1000);
+  }catch(e){console.error('Add error:',e);}
+  finally{btn.disabled=false;btn.textContent='Add';}
 }
 
 // ── ITINERARY ─────────────────────────────────────────────────────────────────
-const FALLBACK=[{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[{time:'2:10pm',text:'<strong>BOI &rarr; ATL</strong> &mdash; DL 874',tag:'confirmed'},{time:'6:20pm',text:'ATL layover &mdash; The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'10:05pm',text:'<strong>ATL &rarr; BCN</strong> &mdash; VS 3926, overnight',tag:'confirmed'}]},{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[{time:'6:50am',text:'<strong>Arrive Barcelona BCN</strong> &mdash; VS 3926'+addr('Terminal 1, Aeroport de Barcelona-El Prat'),tag:'confirmed'},{time:'',text:'Aerob&uacute;s A1 from T1 &rarr; Pla&ccedil;a Catalunya (~35 min, &euro;7)'},{time:'',text:'Check in: Central Apartments, Eixample'+addr('Carrer de Bail\u00e8n, 125, Barcelona'),tag:'confirmed'},{time:'Afternoon',text:'Recovery day &mdash; slow explore of Eixample'},{time:'Evening',text:'Dinner at a local spot'}]},{date:'2026-04-22',title:'Barcelona',loc:'Barcelona',activities:[{time:'Morning',text:'Park G&uuml;ell &mdash; Monumental Zone'+addr("Carrer d'Olot, s/n, 08024 Barcelona"),tag:'book'},{time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15-23, 08003 Barcelona'),tag:'book'},{time:'',text:'El Born &mdash; Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous, 08002 Barcelona')},{time:'Evening',text:'Dinner in El Born'}]},{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[{time:'9:30am',text:'<strong>Sagrada Fam&iacute;lia with Passion Tower</strong> &mdash; Res. 95793090'+addr('C/ de Mallorca, 401, 08013 Barcelona'),tag:'confirmed'},{time:'9:45am',text:'Passion Tower access (enter via C/ Marina entrance)'},{time:'Afternoon',text:"Sant Jordi's Day &mdash; book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic, 08002 Barcelona')},{time:'',text:'Mercat G&ograve;tic antiques + Carrer dels Banys Nous map dealers'+addr('Pla\u00e7a Nova, 08002 Barcelona')},{time:'Evening',text:'Dinner in Gothic Quarter'}]},{date:'2026-04-24',title:'To Cambrils / Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Check out of Eixample Airbnb &mdash; Carrer de Bail\u00e8n, 125'},{time:'',text:'Pick up rental car at Barcelona Sants (National Car Rental)'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona'),tag:'confirmed'},{time:'',text:'Drive to Cambrils (~1.5 hrs via AP-7)'},{time:'Afternoon',text:'Arrive &mdash; staying with Dan Mannion'+addr('Apartado Correos 56, Cambrils, Tarragona 43850')},{time:'',text:'Cambrils is a coastal fishing village ~15 min south of Tarragona city'}]},{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Tarragona Cathedral'+addr('Pla\u00e7a de la Seu, s/n, 43003 Tarragona')},{time:'',text:'Ferreres Aqueduct (Pont del Diable)'+addr('Ferreres Aqueduct, 43007 Tarragona')},{time:'Afternoon',text:'Tarragona beaches &mdash; Platja del Miracle'+addr('Platja del Miracle, 43004 Tarragona')},{time:'',text:'Local wine and seafood'}]},{date:'2026-04-26',title:'Drive to Bilbao via Toulouse',loc:'Bilbao',activities:[{time:'Morning',text:'Depart Cambrils &mdash; route: AP-7 north \u2192 Toulouse, France \u2192 A-63 \u2192 Bilbao (~6\u20137 hrs)'},{time:'',text:'Toulouse is a natural midpoint \u2014 good stop for fuel and food'},{time:'Afternoon',text:'Check in: Radisson Gran Via Bilbao'+addr('Gran V\u00eda, 66, 48011 Bilbao'),tag:'confirmed'},{time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo, 48005 Bilbao')}]},{date:'2026-04-27',title:'Guggenheim',loc:'Bilbao',activities:[{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> &mdash; Res. 95961308'+addr('Abandoibarra Etorb., 2, 48009 Bilbao'),tag:'confirmed'},{time:'',text:'Check Carne y Arena VR installation (I&ntilde;&aacute;rritu, through June 20)'},{time:'Afternoon',text:'Bilbao Museo de Bellas Artes'+addr('Plaza del Museo 2, 48009 Bilbao')},{time:'',text:'Riverside walk along R\u00eda del Nervi\u00f3n'},{time:'Evening',text:'Pintxos in Plaza Nueva'+addr('Plaza Nueva, 48005 Bilbao')}]},{date:'2026-04-28',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[{time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},{time:'',text:'La Concha beach'+addr('Paseo de la Concha, 20007 San Sebasti\u00e1n')},{time:'Lunch',text:'Pintxos in Parte Vieja (old town)'+addr('Parte Vieja, 20003 San Sebasti\u00e1n')},{time:'Afternoon',text:'Monte Igueldo funicular'+addr('Monte Igueldo, San Sebasti\u00e1n')},{time:'Evening',text:'Drive back to Bilbao'}]},{date:'2026-04-29',title:'Basque Country',loc:'Bilbao',activities:[{time:'Option A',text:'Guernica Peace Museum'+addr('Foru Plaza, 1, 48300 Gernika-Lumo')},{time:'Option B',text:'Rioja wine country &mdash; Haro, Laguardia'+addr('Haro, La Rioja, Spain')},{time:'Option C',text:'Relaxed Bilbao day &mdash; neighborhoods, caf\u00e9s, antiques'},{time:'Evening',text:'Farewell pintxos in Casco Viejo'+addr('Casco Viejo, 48005 Bilbao')}]},{date:'2026-04-30',title:'Return to Barcelona',loc:'Barcelona',activities:[{time:'Morning',text:'Drive Bilbao &rarr; Barcelona (~6&ndash;7 hrs)'},{time:'',text:'Return rental car at Barcelona Sants'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona'),tag:'confirmed'},{time:'',text:'Check in: AC Hotel Barcelona Sants (Conf. #92299097)'+addr('Carrer de la Ning\u00fcna, 2, 08014 Barcelona'),tag:'confirmed'},{time:'Evening',text:'Last evening in Barcelona &mdash; farewell dinner'}]},{date:'2026-05-01',title:'Home',loc:'Home',activities:[{time:'6:30am',text:'R2 Nord train: Sants &rarr; Terminal 1 (~19 min)'+addr('Barcelona Sants Station')},{time:'11:35am',text:'<strong>Depart BCN</strong> &mdash; VS 3937'+addr('Terminal 1, Aeroport de Barcelona-El Prat'),tag:'confirmed'},{time:'9:39pm',text:'<strong>Arrive ATL</strong> &mdash; The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'7:57pm',text:'<strong>Depart ATL</strong> &mdash; DL 704',tag:'confirmed'},{time:'12:28am',text:'<strong>Arrive Boise BOI</strong> (May 2)',tag:'confirmed'}]}];
+// All map links use mapsSearch(businessName + city) or mapsRoute() for routing
+// to avoid address ambiguity. Raw address strings are shown as labels only.
+const FALLBACK=[
+{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[
+  {time:'2:10pm',text:'<strong>BOI \u2192 ATL</strong> \u2014 DL 874',tag:'confirmed'},
+  {time:'6:20pm',text:'ATL layover \u2014 The Club at Concourse F (Priority Pass)',tag:'confirmed'},
+  {time:'10:05pm',text:'<strong>ATL \u2192 BCN</strong> \u2014 VS 3926, overnight',tag:'confirmed'}
+]},
+{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[
+  {time:'6:50am',text:'<strong>Arrive Barcelona BCN</strong> \u2014 VS 3926'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},
+  {time:'',text:'Aerob\u00fas A1 from T1 \u2192 Pla\u00e7a Catalunya (~35 min, \u20ac7)'},
+  {time:'',text:'Check in: Central Apartments, Eixample'+addr('Carrer de Bail\u00e8n, 125, Barcelona',mapsSearch('Carrer de Bailen 125 Barcelona Eixample')),tag:'confirmed'},
+  {time:'Afternoon',text:'Recovery day \u2014 slow explore of Eixample'},
+  {time:'Evening',text:'Dinner at a local spot'}
+]},
+{date:'2026-04-22',title:'Barcelona',loc:'Barcelona',activities:[
+  {time:'Morning',text:'Park G\u00fcell \u2014 Monumental Zone'+addr("Carrer d'Olot, s/n, 08024",mapsSearch("Park Guell Barcelona Monumental Zone")),tag:'book'},
+  {time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15\u201323',mapsSearch('Museu Picasso Barcelona Carrer de Montcada')),tag:'book'},
+  {time:'',text:'El Born \u2014 Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous',mapsSearch('Carrer dels Banys Nous Barcelona antiques'))},
+  {time:'Evening',text:'Dinner in El Born'}
+]},
+{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[
+  {time:'9:30am',text:'<strong>Sagrada Fam\u00edlia with Passion Tower</strong> \u2014 Res. 95793090'+addr('C/ de Mallorca, 401, 08013',mapsSearch('Sagrada Familia Barcelona')),tag:'confirmed'},
+  {time:'9:45am',text:'Passion Tower access (enter via C/ Marina entrance)'},
+  {time:'Afternoon',text:"Sant Jordi's Day \u2014 book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic',mapsSearch('Barri Gotic Barcelona'))},
+  {time:'',text:'Mercat G\u00f2tic antiques + Carrer dels Banys Nous map dealers'+addr('Mercat G\u00f2tic, Pla\u00e7a Nova',mapsSearch('Mercat Gotic Barcelona Placa Nova'))},
+  {time:'Evening',text:'Dinner in Gothic Quarter'}
+]},
+{date:'2026-04-24',title:'To Cambrils / Tarragona',loc:'Tarragona',activities:[
+  {time:'Morning',text:'Check out of Eixample Airbnb \u2014 Carrer de Bail\u00e8n, 125'},
+  {time:'',text:'Pick up rental car at Barcelona Sants (National Car Rental)'+addr('Barcelona Sants Station',mapsSearch('National Car Rental Barcelona Sants')),tag:'confirmed'},
+  {time:'',text:'Drive to Cambrils (~1.5 hrs via AP-7)'},
+  {time:'Afternoon',text:'Arrive \u2014 staying with Dan Mannion'+addr('Cambrils, Tarragona',mapsSearch('Cambrils Tarragona Spain'))},
+  {time:'',text:'Cambrils is a coastal fishing village ~15 min south of Tarragona city'}
+]},
+{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[
+  {time:'Morning',text:'Tarragona Cathedral'+addr('Pla\u00e7a de la Seu, Tarragona',mapsSearch('Catedral de Tarragona'))},
+  {time:'',text:'Ferreres Aqueduct (Pont del Diable)'+addr('Ferreres Aqueduct',mapsSearch('Ferreres Aqueduct Pont del Diable Tarragona'))},
+  {time:'Afternoon',text:'Tarragona beaches \u2014 Platja del Miracle'+addr('Platja del Miracle',mapsSearch('Platja del Miracle Tarragona'))},
+  {time:'',text:'Local wine and seafood'}
+]},
+{date:'2026-04-26',title:'Drive to Bilbao',loc:'Bilbao',activities:[
+  {time:'Morning',text:'Depart Cambrils \u2014 route: AP-7 north \u2192 A-8 coastal \u2192 Bilbao (~5\u20136 hrs)'},
+  {time:'Afternoon',text:'Check in: Radisson Gran Via Bilbao'+addr('Radisson Collection Hotel, Gran Via Bilbao',mapsSearch('Radisson Collection Hotel Gran Via Bilbao')),tag:'confirmed'},
+  {time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo (Siete Calles)',mapsSearch('Casco Viejo Siete Calles Bilbao'))}
+]},
+{date:'2026-04-27',title:'Guggenheim',loc:'Bilbao',activities:[
+  {time:'Morning',text:'<strong>Guggenheim Bilbao</strong> \u2014 Res. 95961308'+addr('Guggenheim Bilbao',mapsSearch('Guggenheim Museum Bilbao')),tag:'confirmed'},
+  {time:'',text:'Check Carne y Arena VR installation (I\u00f1\u00e1rritu, through June 20)'},
+  {time:'Afternoon',text:'Bilbao Museo de Bellas Artes'+addr('Museo de Bellas Artes Bilbao',mapsSearch('Museo de Bellas Artes Bilbao'))},
+  {time:'',text:'Riverside walk along R\u00eda del Nervi\u00f3n'},
+  {time:'Evening',text:'Pintxos in Plaza Nueva'+addr('Plaza Nueva, Bilbao',mapsSearch('Plaza Nueva Bilbao'))}
+]},
+{date:'2026-04-28',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[
+  {time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},
+  {time:'',text:'La Concha beach'+addr('La Concha, San Sebasti\u00e1n',mapsSearch('Playa de La Concha San Sebastian'))},
+  {time:'Lunch',text:'Pintxos in Parte Vieja (old town)'+addr('Parte Vieja, San Sebasti\u00e1n',mapsSearch('Parte Vieja San Sebastian'))},
+  {time:'Afternoon',text:'Monte Igueldo funicular'+addr('Monte Igueldo funicular',mapsSearch('Monte Igueldo funicular San Sebastian'))},
+  {time:'Evening',text:'Drive back to Bilbao'}
+]},
+{date:'2026-04-29',title:'Basque Country',loc:'Bilbao',activities:[
+  {time:'Option A',text:'Guernica Peace Museum'+addr('Gernika Peace Museum',mapsSearch('Gernika Peace Museum Guernica'))},
+  {time:'Option B',text:'Rioja wine country \u2014 Haro, Laguardia'+addr('Haro, La Rioja',mapsSearch('Haro La Rioja Spain'))},
+  {time:'Option C',text:'Relaxed Bilbao day \u2014 neighborhoods, caf\u00e9s, antiques'},
+  {time:'Evening',text:'Farewell pintxos in Casco Viejo'+addr('Casco Viejo, Bilbao',mapsSearch('Casco Viejo Bilbao'))}
+]},
+{date:'2026-04-30',title:'Return to Barcelona via Toulouse',loc:'Barcelona',activities:[
+  {time:'Morning',text:'Depart Bilbao \u2014 route: A-8 east \u2192 Toulouse, France \u2192 AP-7 south \u2192 Barcelona (~7\u20138 hrs)'},
+  {time:'',text:'Toulouse is a natural midpoint \u2014 good stop for lunch and fuel'+addr('Toulouse city centre',mapsSearch('Toulouse city centre France'))},
+  {time:'',text:'Return rental car at Barcelona Sants'+addr('Barcelona Sants Station',mapsSearch('National Car Rental Barcelona Sants')),tag:'confirmed'},
+  {time:'',text:'Check in: AC Hotel Barcelona Sants (Conf. #92299097)'+addr('AC Hotel Barcelona Sants',mapsRoute('Bilbao Spain','Toulouse France','AC Hotel Barcelona Sants')),tag:'confirmed'},
+  {time:'Evening',text:'Last evening in Barcelona \u2014 farewell dinner'}
+]},
+{date:'2026-05-01',title:'Home',loc:'Home',activities:[
+  {time:'6:30am',text:'R2 Nord train: Sants \u2192 Terminal 1 (~19 min)'+addr('Barcelona Sants Station',mapsSearch('Barcelona Sants Railway Station'))},
+  {time:'11:35am',text:'<strong>Depart BCN</strong> \u2014 VS 3937'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},
+  {time:'9:39pm',text:'<strong>Arrive ATL</strong> \u2014 The Club at Concourse F (Priority Pass)',tag:'confirmed'},
+  {time:'7:57pm',text:'<strong>Depart ATL</strong> \u2014 DL 704',tag:'confirmed'},
+  {time:'12:28am',text:'<strong>Arrive Boise BOI</strong> (May 2)',tag:'confirmed'}
+]}
+];
 
 function renderItinerary(days){const c=document.getElementById('itinerary-container');c.innerHTML='';days.forEach(day=>{const block=document.createElement('div');block.className='day-block';block.id='day-'+day.date;const d=new Date(day.date+'T12:00:00');block.innerHTML='<div class="day-header"><div class="day-num-col"><div class="day-num">'+d.getDate()+'</div><div class="day-abbr">'+d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+'</div></div><div class="day-title-col"><div class="day-label">'+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</div><div class="day-title-text">'+day.title+'</div><div class="day-location">&#127759; '+day.loc+'</div></div><div class="day-weather-col" id="weather-'+day.date+'"><div class="weather-loading">Loading&hellip;</div></div></div><div class="day-body">'+day.activities.map(a=>'<div class="activity-row"><div class="activity-time">'+(a.time||'')+'</div><div class="activity-text">'+a.text+'</div>'+(a.tag==='confirmed'?'<span class="activity-tag tag-confirmed">Confirmed</span>':'')+(a.tag==='book'?'<span class="activity-tag tag-book">Book Now</span>':'')+'</div>').join('')+'</div>';c.appendChild(block);
   const wloc=day.loc.split(',')[0].trim();
