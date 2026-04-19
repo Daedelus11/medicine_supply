@@ -19,7 +19,7 @@ jobs:
           server: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
-          protocol: ftpes
+          protocol: ftps
           port: 21
           local-dir: ./travel/spain-2026/
           server-dir: /travel/spain-2026/
