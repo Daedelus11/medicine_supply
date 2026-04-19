@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v14: map pins fixed, IDP removed, callouts removed, All Keep Notes removed -->
+<!-- v15: SVG route map (no external API), all other v14 fixes retained -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -103,8 +103,11 @@ a{text-decoration:none;color:inherit}
 .tag-confirmed{border-color:#4caf50;color:#4caf50;background:rgba(76,175,80,0.05)}
 .tag-book{border-color:var(--accent);color:var(--accent);background:rgba(192,112,0,0.07)}
 #map-section{background:var(--white)}
-.map-wrap{border:1px solid var(--rule);overflow:hidden}
-.map-wrap iframe{width:100%;height:500px;display:block;border:none}
+.map-wrap{border:1px solid var(--rule);overflow:hidden;background:#e8f0e8}
+.map-wrap svg{width:100%;height:auto;display:block}
+.map-pin{cursor:pointer}
+.map-pin circle{transition:r 0.15s}
+.map-pin:hover circle{r:10}
 .map-actions{display:flex;gap:1rem;margin-top:1.25rem;flex-wrap:wrap;align-items:center}
 .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--white);font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.85rem 1.75rem;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none}
 .btn-primary:hover{background:#a06000}
@@ -149,7 +152,7 @@ a{text-decoration:none;color:inherit}
   .section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}
   .day-header{flex-wrap:wrap}
   .day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}
-  .map-wrap iframe{height:360px}.page-footer{padding:2rem 1.25rem}
+  .page-footer{padding:2rem 1.25rem}
   .booking-table th,.booking-table td{padding:0.65rem 0.5rem}.shop-grid{grid-template-columns:1fr}
 }
 </style>
@@ -196,25 +199,94 @@ a{text-decoration:none;color:inherit}
   <div id="itinerary-container"><div class="loading-state">Loading itinerary&hellip;</div></div>
 </section>
 
+<!-- MAP: self-contained SVG — no external APIs, always renders -->
 <section class="section" id="map-section">
   <header class="section-header"><div class="section-eyebrow">03 &mdash; Where We Are</div><h2 class="section-title">Trip Map</h2></header>
   <div class="map-wrap">
-    <!-- Static Google Maps Embed — shows pins without requiring login -->
-    <iframe
-      src="https://maps.googleapis.com/maps/api/staticmap?center=41.5,0.5&zoom=6&size=1200x500&scale=2&maptype=roadmap&markers=color:red%7Clabel:B%7C41.3944,2.1620&markers=color:red%7Clabel:B%7C41.4036,2.1744&markers=color:red%7Clabel:B%7C41.3851,2.1800&markers=color:red%7Clabel:B%7C41.4145,2.1527&markers=color:red%7Clabel:T%7C41.1189,1.2445&markers=color:blue%7Clabel:G%7C43.2688,-2.9341&markers=color:blue%7Clabel:G%7C43.2627,-2.9253&markers=color:green%7Clabel:S%7C43.3236,-1.9756&key=AIzaSyB3rUkqLSDezXgHQQIURcEjHwOobRhzrTk"
-      style="display:none" id="static-map-img">
-    </iframe>
-    <iframe
-      src="https://www.google.com/maps/embed?pb=!1m54!1m12!1m3!1d3022442!2d-0.5!3d41.5!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m39!3e0!4m5!1s0x12a49816718e30e5%3A0x44b0fb3d4f47660a!2sSagrada%20Familia%2C%20Barcelona!3m2!1d41.4036299!2d2.1743558!4m5!1s0x12a4a2eeb0b5c0b5%3A0x0!2sEixample%2C%20Barcelona!3m2!1d41.3944!2d2.162!4m5!1s0x12a4a274e0d86073%3A0x1c3e7ed3e30ad0e7!2sMuseu%20Picasso%2C%20Barcelona!3m2!1d41.3851!2d2.18!4m5!1s0x12a499602e3adfed%3A0x5f7e0c7e8a58b3e1!2sTarragona!3m2!1d41.1189!2d1.2445!4m5!1s0x43e879b79e940879%3A0xae7267a7bb7d9d5f!2sGuggenheim%20Bilbao!3m2!1d43.2688!2d-2.9341!4m5!1s0x43e879b1dc79817d%3A0x4e7d87b21e2d4e4d!2sRadisson%20Gran%20Via%20Bilbao!3m2!1d43.2627!2d-2.9253!5e0!3m2!1sen!2ses!4v1713480000000"
-      loading="lazy"
-      allowfullscreen
-      referrerpolicy="no-referrer-when-downgrade"
-      title="MaRu Spain 2026 Trip Map">
-    </iframe>
+    <svg viewBox="0 0 900 480" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Sans, system-ui, sans-serif">
+      <!-- Background -->
+      <rect width="900" height="480" fill="#d4e6c3"/>
+      <!-- Sea -->
+      <rect x="580" y="0" width="320" height="480" fill="#b8d4e8"/>
+      <rect x="0" y="380" width="900" height="100" fill="#b8d4e8"/>
+      <!-- Rough Iberian Peninsula outline -->
+      <path d="M 140 10 L 560 10 L 580 30 L 600 80 L 620 120 L 640 160 L 660 200 L 650 240 L 640 270 L 620 300 L 600 330 L 570 355 L 540 370 L 510 380 L 480 385 L 450 385 L 420 380 L 390 375 L 360 380 L 330 390 L 300 400 L 270 405 L 240 400 L 210 390 L 180 380 L 150 365 L 120 350 L 100 330 L 85 310 L 75 290 L 70 260 L 72 230 L 78 200 L 90 170 L 105 140 L 118 110 L 128 75 L 135 40 Z" fill="#e8d5b0" stroke="#c8b890" stroke-width="1.5"/>
+      <!-- France (top) -->
+      <path d="M 140 10 L 560 10 L 560 0 L 140 0 Z" fill="#d4c8a0" stroke="#b8a880" stroke-width="1"/>
+      <!-- Bay of Biscay label -->
+      <text x="200" y="60" font-size="9" fill="#6a94b0" font-style="italic" opacity="0.8">Bay of Biscay</text>
+      <!-- Mediterranean label -->
+      <text x="630" y="220" font-size="9" fill="#6a94b0" font-style="italic" opacity="0.8">Mediterranean</text>
+      <!-- Route line: Barcelona → Tarragona → Bilbao → San Sebastián -->
+      <!-- BCN to Tarragona -->
+      <line x1="490" y1="235" x2="460" y2="270" stroke="#c07000" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.7"/>
+      <!-- Tarragona to Bilbao -->
+      <line x1="460" y1="270" x2="270" y2="125" stroke="#c07000" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.7"/>
+      <!-- Bilbao to San Sebastián -->
+      <line x1="270" y1="125" x2="310" y2="110" stroke="#2d6a4f" stroke-width="2" stroke-dasharray="4,3" opacity="0.7"/>
+
+      <!-- BILBAO pin -->
+      <a href="https://www.google.com/maps/search/?api=1&query=Bilbao+Spain" target="_blank" class="map-pin">
+        <circle cx="270" cy="125" r="8" fill="#2d6a4f" stroke="white" stroke-width="2"/>
+        <text x="270" y="129" text-anchor="middle" font-size="9" fill="white" font-weight="600">B</text>
+        <rect x="280" y="110" width="68" height="22" rx="3" fill="white" opacity="0.92"/>
+        <text x="286" y="125" font-size="10" fill="#1a1a18" font-weight="600">Bilbao</text>
+        <text x="286" y="134" font-size="8" fill="#7d6b57">Apr 26–30</text>
+      </a>
+
+      <!-- SAN SEBASTIÁN pin -->
+      <a href="https://www.google.com/maps/search/?api=1&query=San+Sebastian+Spain" target="_blank" class="map-pin">
+        <circle cx="310" cy="110" r="6" fill="#5a8a6a" stroke="white" stroke-width="1.5"/>
+        <rect x="320" y="96" width="88" height="22" rx="3" fill="white" opacity="0.92"/>
+        <text x="326" y="111" font-size="10" fill="#1a1a18" font-weight="600">San Sebastián</text>
+        <text x="326" y="120" font-size="8" fill="#7d6b57">Day trip Apr 28</text>
+      </a>
+
+      <!-- BARCELONA pin -->
+      <a href="https://www.google.com/maps/search/?api=1&query=Barcelona+Spain" target="_blank" class="map-pin">
+        <circle cx="490" cy="235" r="9" fill="#1a6b9a" stroke="white" stroke-width="2"/>
+        <text x="490" y="239" text-anchor="middle" font-size="9" fill="white" font-weight="600">B</text>
+        <rect x="502" y="220" width="82" height="22" rx="3" fill="white" opacity="0.92"/>
+        <text x="508" y="235" font-size="10" fill="#1a1a18" font-weight="600">Barcelona</text>
+        <text x="508" y="244" font-size="8" fill="#7d6b57">Apr 21–24, 30</text>
+      </a>
+
+      <!-- TARRAGONA pin -->
+      <a href="https://www.google.com/maps/search/?api=1&query=Tarragona+Spain" target="_blank" class="map-pin">
+        <circle cx="460" cy="270" r="7" fill="#7a5c1e" stroke="white" stroke-width="1.5"/>
+        <rect x="470" y="257" width="78" height="22" rx="3" fill="white" opacity="0.92"/>
+        <text x="476" y="272" font-size="10" fill="#1a1a18" font-weight="600">Tarragona</text>
+        <text x="476" y="281" font-size="8" fill="#7d6b57">Apr 24–26</text>
+      </a>
+
+      <!-- KEY SITES — small dots -->
+      <!-- Sagrada Família -->
+      <circle cx="492" cy="230" r="3" fill="#c07000" opacity="0.8"/>
+      <!-- Guggenheim Bilbao -->
+      <circle cx="268" cy="128" r="3" fill="#c07000" opacity="0.8"/>
+
+      <!-- Legend -->
+      <rect x="18" y="18" width="175" height="108" rx="4" fill="white" opacity="0.92" stroke="#d8d5cf" stroke-width="1"/>
+      <text x="30" y="38" font-size="10" fill="#1a1a18" font-weight="600">Trip Route</text>
+      <line x1="30" y1="52" x2="60" y2="52" stroke="#c07000" stroke-width="2.5" stroke-dasharray="6,4"/>
+      <text x="68" y="56" font-size="9" fill="#5c5c58">Driving route</text>
+      <circle cx="44" cy="68" r="5" fill="#1a6b9a" stroke="white" stroke-width="1.5"/>
+      <text x="56" y="72" font-size="9" fill="#5c5c58">Barcelona (4 nights)</text>
+      <circle cx="44" cy="84" r="5" fill="#2d6a4f" stroke="white" stroke-width="1.5"/>
+      <text x="56" y="88" font-size="9" fill="#5c5c58">Bilbao (4 nights)</text>
+      <circle cx="44" cy="100" r="5" fill="#7a5c1e" stroke="white" stroke-width="1.5"/>
+      <text x="56" y="104" font-size="9" fill="#5c5c58">Tarragona (2 nights)</text>
+      <text x="30" y="118" font-size="8" fill="#a09e98">Click any pin to open in Maps</text>
+
+      <!-- North arrow -->
+      <text x="858" y="28" font-size="11" fill="#5c5c58" text-anchor="middle">N</text>
+      <line x1="858" y1="32" x2="858" y2="48" stroke="#5c5c58" stroke-width="1.5"/>
+      <path d="M 854 40 L 858 32 L 862 40" fill="#5c5c58"/>
+    </svg>
   </div>
   <div class="map-actions">
     <a href="https://www.google.com/maps/d/u/0/viewer?mid=1FXsfBl3nnJWUTrx_gplpkt4oe9D0UyA" target="_blank" class="btn-primary">Open Custom Map</a>
-    <a href="https://www.google.com/maps/d/u/0/edit?mid=1FXsfBl3nnJWUTrx_gplpkt4oe9D0UyA" target="_blank" class="btn-secondary">Edit Map &rarr;</a>
+    <a href="https://www.google.com/maps/dir/Barcelona,Spain/Tarragona,Spain/Bilbao,Spain/San+Sebastián,Spain" target="_blank" class="btn-secondary">Directions in Google Maps &rarr;</a>
   </div>
 </section>
 
