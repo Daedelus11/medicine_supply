@@ -13,13 +13,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy via SFTP
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
+      - name: Deploy via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          username: ${{ secrets.SFTP_USERNAME }}
           server: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
-          local_path: './travel/spain-2026/*'
-          remote_path: '/var/www/html/travel/spain-2026/'
-          sftp_only: true
-          delete_remote_files: false
+          protocol: ftps
+          port: 21
+          local-dir: ./travel/spain-2026/
+          server-dir: /travel/spain-2026/
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/deploy-test.txt
