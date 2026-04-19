@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v18: Espana Checklist, Dan Mannion fix, weather timezone fix, remove Keep button, itinerary section header links -->
+<!-- v19: PDF link → Google Drive, Dan Mannion address in Tarragona -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -59,7 +59,6 @@ a{text-decoration:none;color:inherit}
 .section-eyebrow{font-size:0.62rem;font-weight:600;text-transform:uppercase;letter-spacing:0.22em;color:var(--brown);margin-bottom:0.5rem}
 .section-title{font-family:var(--serif);font-size:clamp(28px,4vw,44px);font-weight:300;line-height:1.1;color:var(--ink)}
 .section-header{margin-bottom:3rem}
-/* itinerary doc links row */
 .itinerary-doc-links{display:flex;gap:1rem;margin-top:1rem;flex-wrap:wrap;align-items:center}
 .doc-link{display:inline-flex;align-items:center;gap:6px;font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);border:1px solid rgba(192,112,0,0.3);padding:0.45rem 0.9rem;transition:background 0.15s,border-color 0.15s}
 .doc-link:hover{background:rgba(192,112,0,0.07);border-color:var(--accent)}
@@ -117,8 +116,6 @@ a{text-decoration:none;color:inherit}
 .map-actions{display:flex;gap:1rem;margin-top:1.25rem;flex-wrap:wrap;align-items:center}
 .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--white);font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.85rem 1.75rem;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none}
 .btn-primary:hover{background:#a06000}
-.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--ink);font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.85rem 1.75rem;border:1px solid var(--ink);cursor:pointer;transition:0.2s;text-decoration:none}
-.btn-secondary:hover{background:var(--ink);color:var(--white)}
 .photo-card{display:block;border:1px solid var(--rule);background:var(--white);padding:2.5rem;text-decoration:none;color:inherit;transition:box-shadow 0.2s,border-color 0.2s}
 .photo-card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.06);border-color:var(--accent)}
 .photo-card-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem}
@@ -210,10 +207,9 @@ a{text-decoration:none;color:inherit}
   <header class="section-header">
     <div class="section-eyebrow">02 &mdash; Day by Day</div>
     <h2 class="section-title">Full Itinerary</h2>
-    <!-- doc links row: itinerary image thumbnail + PDF download -->
+    <!-- PDF link goes directly to Google Drive file -->
     <div class="itinerary-doc-links">
-      <a href="https://fine-linestudio.com/travel/2026/Spain_Trip_2026_Itinerary.pdf" target="_blank" class="doc-link">&#128196; Download PDF</a>
-      <a href="https://fine-linestudio.com/travel/2026/Spain_Trip_2026_Itinerary.docx" target="_blank" class="doc-link">&#128196; Download Word Doc</a>
+      <a href="https://drive.google.com/file/d/16GzyEfW1Gf9PMvubE3KzftaQ_j3xxVI4/view" target="_blank" class="doc-link">&#128196; Spain Trip 2026 Itinerary PDF</a>
     </div>
   </header>
   <div id="itinerary-container"><div class="loading-state">Loading itinerary&hellip;</div></div>
@@ -240,7 +236,6 @@ a{text-decoration:none;color:inherit}
   </a>
 </section>
 
-<!-- CHANGE 4: "Espana Checklist" title; CHANGE 5: removed bottom Keep button -->
 <section class="section" id="notes">
   <header class="section-header"><div class="section-eyebrow">05 &mdash; Shared Notes</div><h2 class="section-title">Espana Checklist</h2></header>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem">
@@ -291,7 +286,6 @@ a{text-decoration:none;color:inherit}
       </div>
     </div>
   </div>
-  <!-- CHANGE 5: bottom button removed -->
 </section>
 
 <section class="section" id="bookings">
@@ -299,15 +293,14 @@ a{text-decoration:none;color:inherit}
   <table class="booking-table"><thead><tr><th>Item</th><th>Details</th><th>Dates</th><th>Status</th></tr></thead><tbody>
   <tr><td><div class="booking-item-name">International Flights</div><div class="booking-detail">Delta / Virgin Atlantic</div></td><td>BOI&rarr;ATL&rarr;BCN / BCN&rarr;ATL&rarr;BOI<br><span style="font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey)">DL 874 / VS 3926 / VS 3937 / DL 704</span></td><td>Apr 20&ndash;21 &amp; May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Barcelona Airbnb</div><div class="booking-detail">Central Apartments &mdash; Eixample<br>Host: Enrique Meza &mdash; Res. 562/2026</div></td><td>Walkable to Sagrada Familia, Passeig de Gr&agrave;cia</td><td>Apr 21&ndash;24</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
-  <!-- CHANGE 3: Dan Mannion — double n -->
-  <tr><td><div class="booking-item-name">Tarragona</div><div class="booking-detail">Staying with Dan Mannion</div></td><td>Roman ruins, beaches, local wine</td><td>Apr 24&ndash;26</td><td><span class="badge badge-confirmed">Arranged</span></td></tr>
+  <tr><td><div class="booking-item-name">Tarragona</div><div class="booking-detail">Dan Mannion &mdash; Apartado Correos 56, Cambrils, 43850</div></td><td>Roman ruins, beaches, local wine. Cambrils is ~15 min south of Tarragona.</td><td>Apr 24&ndash;26</td><td><span class="badge badge-confirmed">Arranged</span></td></tr>
   <tr><td><div class="booking-item-name">Rental Car</div><div class="booking-detail">National Car Rental &mdash; Automatic</div></td><td>Pick up BCN Sants Apr 24 / Drop off BCN Sants Apr 30</td><td>Apr 24&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Radisson Gran Via Bilbao</div><div class="booking-detail">5-star &mdash; Chase Edit &mdash; Breakfast incl. + $100 credit</div></td><td><span style="font-size:0.78rem;color:#4caf50;font-weight:600">&#10003; Ask for room upgrade at check-in</span><br><span style="font-size:0.75rem;color:var(--warm-grey)">Mention Chase Edit status &mdash; 5-star properties often upgrade loyalty guests. Ask warmly at the front desk, not via app.</span></td><td>Apr 26&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Sagrada Familia</div><div class="booking-detail">Res. 95793090 &mdash; 2x General w/ Passion Tower</div></td><td>Enter via C/ Marina 9:30am / Tower 9:45am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Download Sagrada Familia app before arrival &mdash; it IS your audioguide. Tickets are non-transferable; bring photo ID.</span></td><td>Apr 23</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">Guggenheim Bilbao</div><div class="booking-detail">Res. 95961308</div></td><td>Morning visit + possible Carne y Arena VR<br><span style="font-size:0.75rem;color:var(--warm-grey)">Carne y Arena (Inarritu VR) runs through June 20 &mdash; book separately at guggenheim-bilbao.eus if interested. Arrive when doors open to beat tour groups.</span></td><td>Apr 28</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
   <tr><td><div class="booking-item-name">AC Hotel Barcelona Sants</div><div class="booking-detail">Marriott Bonvoy &mdash; Conf. #92299097</div></td><td>Adjacent to Sants station &mdash; easy May 1 departure<br><span style="font-size:0.75rem;color:var(--warm-grey)">Check in online via Marriott app for faster arrival. R2 Nord train to T1 departs from Sants &mdash; ~19 min, buy tickets at station.</span></td><td>Apr 30&ndash;May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
-  <tr><td><div class="booking-item-name">Picasso Museum</div><div class="booking-detail">museupicassobcn.cat</div></td><td>Timed entry sells out in spring<br><span style="font-size:0.75rem;color:var(--warm-grey)">Book the earliest slot available &mdash; crowds build by 11am. The medieval courtyard alone is worth the visit.</span></td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
-  <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">Timed entry required &mdash; parkguell.barcelona</div></td><td>Book morning slot (8am or 9am best)<br><span style="font-size:0.75rem;color:var(--warm-grey)">Only the Monumental Zone requires tickets. Arrive 10 min early. The free park areas above are less crowded and have better views.</span></td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
+  <tr><td><div class="booking-item-name">Picasso Museum</div><div class="booking-detail">museupicassobcn.cat</div></td><td>Timed entry sells out in spring<br><span style="font-size:0.75rem;color:var(--warm-grey)">Book the earliest slot available &mdash; crowds build by 11am.</span></td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
+  <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">Timed entry required &mdash; parkguell.barcelona</div></td><td>Book morning slot (8am or 9am best)<br><span style="font-size:0.75rem;color:var(--warm-grey)">Only the Monumental Zone requires tickets. Free park areas above are less crowded with better views.</span></td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
   </tbody></table>
 </section>
 
@@ -359,7 +352,8 @@ function initMap() {
   const stays=[
     {lat:41.3944,lng:2.1620,color:'#1a6b9a',name:'Eixample Airbnb',sub:'Barcelona \u00b7 Apr 21\u201324',desc:'Central Apartments. Host: Enrique Meza. Res. 562/2026.'},
     {lat:41.3791,lng:2.1408,color:'#1a6b9a',name:'AC Hotel Barcelona Sants',sub:'Barcelona \u00b7 Apr 30\u2013May 1',desc:'Marriott Bonvoy \u2014 Conf. #92299097. R2 Nord to T1 ~19 min.'},
-    {lat:41.1189,lng:1.2445,color:'#7a5c1e',name:'Tarragona \u2014 Dan Mannion',sub:'Tarragona \u00b7 Apr 24\u201326',desc:'Roman ruins, beaches, local wine.'},
+    // Dan Mannion address added to map popup
+    {lat:41.0674,lng:1.0554,color:'#7a5c1e',name:'Dan Mannion \u2014 Cambrils',sub:'Tarragona area \u00b7 Apr 24\u201326',desc:'Apartado Correos 56, Cambrils, 43850. ~15 min south of Tarragona city.'},
     {lat:43.2627,lng:-2.9253,color:'#2d6a4f',name:'Radisson Gran Via Bilbao',sub:'Bilbao \u00b7 Apr 26\u201330',desc:'5-star Chase Edit \u2014 breakfast + $100 credit. Ask for upgrade at check-in.'},
   ];
   stays.forEach(s=>{L.marker([s.lat,s.lng],{icon:circlePin(s.color)}).bindPopup('<strong>'+s.name+'</strong><em>'+s.sub+'</em><p>'+s.desc+'</p>').addTo(map);});
@@ -418,16 +412,13 @@ function buildCalendar(){
     legend.appendChild(dot);
   });
   container.appendChild(legend);
-
   const firstD=new Date(2026,3,20);
   const startSun=new Date(firstD);startSun.setDate(firstD.getDate()-firstD.getDay());
   const may1=new Date(2026,4,1);
   const endSat=new Date(may1);endSat.setDate(may1.getDate()+(6-may1.getDay()));
-
   const lbl=document.createElement('div');lbl.className='cal-month-label';lbl.textContent='April \u2013 May 2026';container.appendChild(lbl);
   const grid=document.createElement('div');grid.className='calendar-grid';
   ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{const hc=document.createElement('div');hc.className='cal-header-cell';hc.textContent=d;grid.appendChild(hc);});
-
   let cur=new Date(startSun);
   while(cur<=endSat){
     const cell=document.createElement('div');
@@ -442,16 +433,11 @@ function buildCalendar(){
     const content=document.createElement('div');content.className='cal-cell-content';
     const dn=document.createElement('div');dn.className='cal-day-num';dn.textContent=inRange?cur.getDate():'';content.appendChild(dn);
     if(ev&&inRange){
-      const evEl=document.createElement('div');
-      evEl.className='cal-event';
+      const evEl=document.createElement('div');evEl.className='cal-event';
       evEl.style.cssText='border-left-color:'+lc+';background:rgba(247,245,241,0.9);white-space:normal;';
-      evEl.textContent=ev.label;
-      content.appendChild(evEl);
-      const locEl=document.createElement('div');
-      locEl.className='cal-location-tag';
-      locEl.style.background='rgba(26,26,24,0.85)';
-      locEl.textContent=ev.loc;
-      content.appendChild(locEl);
+      evEl.textContent=ev.label;content.appendChild(evEl);
+      const locEl=document.createElement('div');locEl.className='cal-location-tag';
+      locEl.style.background='rgba(26,26,24,0.85)';locEl.textContent=ev.loc;content.appendChild(locEl);
     }
     cell.appendChild(content);grid.appendChild(cell);cur.setDate(cur.getDate()+1);
   }
@@ -459,8 +445,6 @@ function buildCalendar(){
 }
 buildCalendar();
 
-// CHANGE 6: weather — correct timezone per location
-// Spanish cities: Europe/Madrid; Boise/Home: America/Boise
 const CITY_COORDS={
   'Barcelona':{lat:41.3851,lon:2.1734,tz:'Europe%2FMadrid'},
   'Tarragona':{lat:41.1189,lon:1.2445,tz:'Europe%2FMadrid'},
@@ -482,9 +466,8 @@ async function fetchWeather(loc,date){
 }
 function wIcon(c){if(c===0)return'&#9728;';if(c<=3)return'&#9925;';if(c<=67)return'&#127783;';if(c<=77)return'&#10052;';return'&#9928;';}
 function addr(a,lat,lng){if(!a)return'';const url=mapsUrl(a,lat,lng);return'<span class="activity-addr"><a href="'+url+'" target="_blank">&#128205; '+a+'</a></span>';}
-const FALLBACK=[{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[{time:'2:10pm',text:'<strong>BOI &rarr; ATL</strong> &mdash; DL 874',tag:'confirmed'},{time:'6:20pm',text:'ATL layover &mdash; The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'10:05pm',text:'<strong>ATL &rarr; BCN</strong> &mdash; VS 3926, overnight',tag:'confirmed'}]},{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[{time:'6:50am',text:'<strong>Arrive Barcelona BCN</strong> &mdash; VS 3926'+addr('Terminal 1, Aeroport de Barcelona-El Prat',41.2974,2.0833),tag:'confirmed'},{time:'',text:'Aerob&uacute;s A1 from T1 &rarr; Pla&ccedil;a Catalunya (~35 min)'},{time:'',text:'Check in: Central Apartments, Eixample'+addr('Eixample, 08009 Barcelona',41.3944,2.1620),tag:'confirmed'},{time:'Afternoon',text:'Recovery day &mdash; slow explore of Eixample'},{time:'Evening',text:'Dinner at a local spot'}]},{date:'2026-04-22',title:'Barcelona',loc:'Barcelona',activities:[{time:'Morning',text:'Park G&uuml;ell &mdash; Monumental Zone'+addr("Carrer d'Olot, s/n, 08024 Barcelona",41.4145,2.1527),tag:'book'},{time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15-23, 08003 Barcelona',41.3851,2.1800),tag:'book'},{time:'',text:'El Born &mdash; Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous, 08002 Barcelona',41.3825,2.1740)},{time:'Evening',text:'Dinner in El Born'}]},{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[{time:'9:30am',text:'<strong>Sagrada Fam&iacute;lia with Passion Tower</strong> &mdash; Res. 95793090'+addr('C/ de Mallorca, 401, 08013 Barcelona',41.4036,2.1744),tag:'confirmed'},{time:'9:45am',text:'Passion Tower access (enter via C/ Marina entrance)'},{time:'Afternoon',text:"Sant Jordi's Day &mdash; book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic, 08002 Barcelona',41.3826,2.1769)},{time:'',text:'Mercat G&ograve;tic antiques + Carrer dels Banys Nous map dealers'+addr('Pla\u00e7a Nova, 08002 Barcelona',41.3835,2.1757)},{time:'Evening',text:'Dinner in Gothic Quarter'}]},{date:'2026-04-24',title:'To Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Check out of Eixample Airbnb'},{time:'',text:'Pick up rental car at Barcelona Sants (National Car Rental)'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'',text:'Drive to Tarragona (~1 hr via AP-7)'},{time:'Afternoon',text:'Arrive Tarragona &mdash; staying with Dan Mannion'+addr('Tarragona, Spain',41.1189,1.2445)}]},{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Tarragona Cathedral'+addr('Pla\u00e7a de la Seu, s/n, 43003 Tarragona',41.1183,1.2534)},{time:'',text:'Ferreres Aqueduct (Pont del Diable)'+addr('Autopista AP-7, km 1160, 43007 Tarragona',41.1424,1.2246)},{time:'Afternoon',text:'Tarragona beaches &mdash; Platja del Miracle'+addr('Platja del Miracle, 43004 Tarragona',41.1104,1.2502)},{time:'',text:'Local wine and seafood'}]},{date:'2026-04-26',title:'Drive to Bilbao',loc:'Bilbao',activities:[{time:'Morning',text:'Depart Tarragona &mdash; drive to Bilbao (~6&ndash;7 hrs via AP-7/A-2/AP-68)'},{time:'Afternoon',text:'Check in: Radisson Gran Via Bilbao'+addr('Gran V\u00eda, 66, 48011 Bilbao',43.2627,-2.9253),tag:'confirmed'},{time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo, 48005 Bilbao',43.2590,-2.9230)}]},{date:'2026-04-27',title:'Guggenheim',loc:'Bilbao',activities:[{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> &mdash; Res. 95961308'+addr('Abandoibarra Etorb., 2, 48009 Bilbao',43.2688,-2.9341),tag:'confirmed'},{time:'',text:'Check Carne y Arena VR installation (I&ntilde;&aacute;rritu, through June 20)'},{time:'Afternoon',text:'Bilbao Museo de Bellas Artes'+addr('Pla\u00e7a del Museo, 2, 48009 Bilbao',43.2665,-2.9302)},{time:'',text:'Riverside walk along R\u00eda del Nervi\u00f3n'},{time:'Evening',text:'Pintxos in Plaza Nueva'+addr('Plaza Nueva, 48005 Bilbao',43.2587,-2.9232)}]},{date:'2026-04-28',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[{time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},{time:'',text:'La Concha beach'+addr('Paseo de la Concha, 20007 San Sebasti\u00e1n',43.3183,-1.9845)},{time:'Lunch',text:'Pintxos in Parte Vieja (old town)'+addr('Parte Vieja, 20003 San Sebasti\u00e1n',43.3236,-1.9756)},{time:'Afternoon',text:'Monte Igueldo funicular'+addr('Paseo del Faro, 134, 20008 San Sebasti\u00e1n',43.3121,-2.0028)},{time:'Evening',text:'Drive back to Bilbao'}]},{date:'2026-04-29',title:'Basque Country',loc:'Bilbao',activities:[{time:'Option A',text:'Guernica Peace Museum'+addr('Foru Plaza, 1, 48300 Gernika-Lumo',43.3152,-2.6797)},{time:'Option B',text:'Rioja wine country &mdash; Haro, Laguardia'+addr('Haro, La Rioja, Spain',42.5780,-2.8490)},{time:'Option C',text:'Relaxed Bilbao day &mdash; neighborhoods, caf\u00e9s, antiques'},{time:'Evening',text:'Farewell pintxos in Casco Viejo'+addr('Casco Viejo, 48005 Bilbao',43.2590,-2.9230)}]},{date:'2026-04-30',title:'Return to Barcelona',loc:'Barcelona',activities:[{time:'Morning',text:'Drive Bilbao &rarr; Barcelona (~6&ndash;7 hrs)'},{time:'',text:'Return rental car at Barcelona Sants'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'',text:'Check in: AC Hotel Barcelona Sants (Conf. #92299097)'+addr('Carrer de la Ning\u00fcna, 2, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'Evening',text:'Last evening in Barcelona &mdash; farewell dinner'}]},{date:'2026-05-01',title:'Home',loc:'Home',activities:[{time:'6:30am',text:'R2 Nord train: Sants &rarr; Terminal 1 (~19 min)'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408)},{time:'11:35am',text:'<strong>Depart BCN</strong> &mdash; VS 3937'+addr('Terminal 1, Aeroport de Barcelona-El Prat',41.2974,2.0833),tag:'confirmed'},{time:'9:39pm',text:'<strong>Arrive ATL</strong> &mdash; The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'7:57pm',text:'<strong>Depart ATL</strong> &mdash; DL 704',tag:'confirmed'},{time:'12:28am',text:'<strong>Arrive Boise BOI</strong> (May 2)',tag:'confirmed'}]}];
+const FALLBACK=[{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[{time:'2:10pm',text:'<strong>BOI &rarr; ATL</strong> &mdash; DL 874',tag:'confirmed'},{time:'6:20pm',text:'ATL layover &mdash; The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'10:05pm',text:'<strong>ATL &rarr; BCN</strong> &mdash; VS 3926, overnight',tag:'confirmed'}]},{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[{time:'6:50am',text:'<strong>Arrive Barcelona BCN</strong> &mdash; VS 3926'+addr('Terminal 1, Aeroport de Barcelona-El Prat',41.2974,2.0833),tag:'confirmed'},{time:'',text:'Aerob&uacute;s A1 from T1 &rarr; Pla&ccedil;a Catalunya (~35 min)'},{time:'',text:'Check in: Central Apartments, Eixample'+addr('Eixample, 08009 Barcelona',41.3944,2.1620),tag:'confirmed'},{time:'Afternoon',text:'Recovery day &mdash; slow explore of Eixample'},{time:'Evening',text:'Dinner at a local spot'}]},{date:'2026-04-22',title:'Barcelona',loc:'Barcelona',activities:[{time:'Morning',text:'Park G&uuml;ell &mdash; Monumental Zone'+addr("Carrer d'Olot, s/n, 08024 Barcelona",41.4145,2.1527),tag:'book'},{time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15-23, 08003 Barcelona',41.3851,2.1800),tag:'book'},{time:'',text:'El Born &mdash; Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous, 08002 Barcelona',41.3825,2.1740)},{time:'Evening',text:'Dinner in El Born'}]},{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[{time:'9:30am',text:'<strong>Sagrada Fam&iacute;lia with Passion Tower</strong> &mdash; Res. 95793090'+addr('C/ de Mallorca, 401, 08013 Barcelona',41.4036,2.1744),tag:'confirmed'},{time:'9:45am',text:'Passion Tower access (enter via C/ Marina entrance)'},{time:'Afternoon',text:"Sant Jordi's Day &mdash; book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic, 08002 Barcelona',41.3826,2.1769)},{time:'',text:'Mercat G&ograve;tic antiques + Carrer dels Banys Nous map dealers'+addr('Pla\u00e7a Nova, 08002 Barcelona',41.3835,2.1757)},{time:'Evening',text:'Dinner in Gothic Quarter'}]},{date:'2026-04-24',title:'To Cambrils / Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Check out of Eixample Airbnb'},{time:'',text:'Pick up rental car at Barcelona Sants (National Car Rental)'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'',text:'Drive to Cambrils (~1.5 hrs via AP-7)'},{time:'Afternoon',text:'Arrive &mdash; staying with Dan Mannion'+addr('Cambrils, Tarragona 43850',41.0674,1.0554)},{time:'',text:'Cambrils is a coastal fishing village ~15 min south of Tarragona city'}]},{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Tarragona Cathedral'+addr('Pla\u00e7a de la Seu, s/n, 43003 Tarragona',41.1183,1.2534)},{time:'',text:'Ferreres Aqueduct (Pont del Diable)'+addr('Autopista AP-7, km 1160, 43007 Tarragona',41.1424,1.2246)},{time:'Afternoon',text:'Tarragona beaches &mdash; Platja del Miracle'+addr('Platja del Miracle, 43004 Tarragona',41.1104,1.2502)},{time:'',text:'Local wine and seafood'}]},{date:'2026-04-26',title:'Drive to Bilbao',loc:'Bilbao',activities:[{time:'Morning',text:'Depart Cambrils &mdash; drive to Bilbao (~6&ndash;7 hrs via AP-7/A-2/AP-68)'},{time:'Afternoon',text:'Check in: Radisson Gran Via Bilbao'+addr('Gran V\u00eda, 66, 48011 Bilbao',43.2627,-2.9253),tag:'confirmed'},{time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo, 48005 Bilbao',43.2590,-2.9230)}]},{date:'2026-04-27',title:'Guggenheim',loc:'Bilbao',activities:[{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> &mdash; Res. 95961308'+addr('Abandoibarra Etorb., 2, 48009 Bilbao',43.2688,-2.9341),tag:'confirmed'},{time:'',text:'Check Carne y Arena VR installation (I&ntilde;&aacute;rritu, through June 20)'},{time:'Afternoon',text:'Bilbao Museo de Bellas Artes'+addr('Pla\u00e7a del Museo, 2, 48009 Bilbao',43.2665,-2.9302)},{time:'',text:'Riverside walk along R\u00eda del Nervi\u00f3n'},{time:'Evening',text:'Pintxos in Plaza Nueva'+addr('Plaza Nueva, 48005 Bilbao',43.2587,-2.9232)}]},{date:'2026-04-28',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[{time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},{time:'',text:'La Concha beach'+addr('Paseo de la Concha, 20007 San Sebasti\u00e1n',43.3183,-1.9845)},{time:'Lunch',text:'Pintxos in Parte Vieja (old town)'+addr('Parte Vieja, 20003 San Sebasti\u00e1n',43.3236,-1.9756)},{time:'Afternoon',text:'Monte Igueldo funicular'+addr('Paseo del Faro, 134, 20008 San Sebasti\u00e1n',43.3121,-2.0028)},{time:'Evening',text:'Drive back to Bilbao'}]},{date:'2026-04-29',title:'Basque Country',loc:'Bilbao',activities:[{time:'Option A',text:'Guernica Peace Museum'+addr('Foru Plaza, 1, 48300 Gernika-Lumo',43.3152,-2.6797)},{time:'Option B',text:'Rioja wine country &mdash; Haro, Laguardia'+addr('Haro, La Rioja, Spain',42.5780,-2.8490)},{time:'Option C',text:'Relaxed Bilbao day &mdash; neighborhoods, caf\u00e9s, antiques'},{time:'Evening',text:'Farewell pintxos in Casco Viejo'+addr('Casco Viejo, 48005 Bilbao',43.2590,-2.9230)}]},{date:'2026-04-30',title:'Return to Barcelona',loc:'Barcelona',activities:[{time:'Morning',text:'Drive Bilbao &rarr; Barcelona (~6&ndash;7 hrs)'},{time:'',text:'Return rental car at Barcelona Sants'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'',text:'Check in: AC Hotel Barcelona Sants (Conf. #92299097)'+addr('Carrer de la Ning\u00fcna, 2, 08014 Barcelona',41.3791,2.1408),tag:'confirmed'},{time:'Evening',text:'Last evening in Barcelona &mdash; farewell dinner'}]},{date:'2026-05-01',title:'Home',loc:'Home',activities:[{time:'6:30am',text:'R2 Nord train: Sants &rarr; Terminal 1 (~19 min)'+addr('Pl. dels Pa\u00efsos Catalans, 1-7, 08014 Barcelona',41.3791,2.1408)},{time:'11:35am',text:'<strong>Depart BCN</strong> &mdash; VS 3937'+addr('Terminal 1, Aeroport de Barcelona-El Prat',41.2974,2.0833),tag:'confirmed'},{time:'9:39pm',text:'<strong>Arrive ATL</strong> &mdash; The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'7:57pm',text:'<strong>Depart ATL</strong> &mdash; DL 704',tag:'confirmed'},{time:'12:28am',text:'<strong>Arrive Boise BOI</strong> (May 2)',tag:'confirmed'}]}];
 function renderItinerary(days){const c=document.getElementById('itinerary-container');c.innerHTML='';days.forEach(day=>{const block=document.createElement('div');block.className='day-block';block.id='day-'+day.date;const d=new Date(day.date+'T12:00:00');block.innerHTML='<div class="day-header"><div class="day-num-col"><div class="day-num">'+d.getDate()+'</div><div class="day-abbr">'+d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+'</div></div><div class="day-title-col"><div class="day-label">'+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</div><div class="day-title-text">'+day.title+'</div><div class="day-location">&#127759; '+day.loc+'</div></div><div class="day-weather-col" id="weather-'+day.date+'"><div class="weather-loading">Loading&hellip;</div></div></div><div class="day-body">'+day.activities.map(a=>'<div class="activity-row"><div class="activity-time">'+(a.time||'')+'</div><div class="activity-text">'+a.text+'</div>'+(a.tag==='confirmed'?'<span class="activity-tag tag-confirmed">Confirmed</span>':'')+(a.tag==='book'?'<span class="activity-tag tag-book">Book Now</span>':'')+'</div>').join('')+'</div>';c.appendChild(block);
-  // Weather: use correct loc key — strip city suffix if needed
   const wloc=day.loc.split(',')[0].trim();
   fetchWeather(wloc,day.date).then(w=>{const el=document.getElementById('weather-'+day.date);if(!el)return;if(w)el.innerHTML='<div class="weather-icon">'+wIcon(w.code)+'</div><div class="weather-temps">'+w.hi+'&deg; / '+w.lo+'&deg;F</div>';else el.innerHTML='';});
 })}
