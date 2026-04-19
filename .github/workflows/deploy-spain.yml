@@ -21,8 +21,8 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           protocol: ftps
           port: 21
-          local-dir: ./travel/2026/
-          server-dir: /travel/2026/
+          local-dir: ./travel/spain-2026/
+          server-dir: /var/www/html/travel/2026/
           exclude: |
             **/.git*
             **/.git*/**
