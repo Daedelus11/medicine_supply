@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v30: Updated itinerary PDF link -->
+<!-- v31: Expense tracker added -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -170,6 +170,55 @@ a{text-decoration:none;color:inherit}
 .shop-card:hover .shop-card-name{color:var(--accent)}
 .shop-section-head{font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--ink);margin-bottom:0.25rem}
 .shop-section-sub{font-size:0.82rem;color:var(--warm-grey);margin-bottom:1.5rem}
+/* ===== EXPENSE TRACKER ===== */
+#expenses{background:var(--cream)}
+.expense-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule);margin-bottom:2.5rem;overflow:hidden}
+.expense-summary-card{padding:1.5rem 1.75rem;border-right:1px solid var(--rule);background:var(--white)}
+.expense-summary-card:last-child{border-right:none;background:var(--ink)}
+.expense-summary-label{font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;color:var(--brown);margin-bottom:0.5rem}
+.expense-summary-card:last-child .expense-summary-label{color:var(--yellow)}
+.expense-summary-amount{font-family:var(--serif);font-size:2.2rem;font-weight:300;color:var(--ink);line-height:1}
+.expense-summary-card:last-child .expense-summary-amount{color:var(--white)}
+.expense-summary-sub{font-family:var(--mono);font-size:0.65rem;color:var(--warm-grey);margin-top:4px}
+.expense-summary-card:last-child .expense-summary-sub{color:rgba(255,255,255,0.3)}
+.expense-form{border:1px solid var(--rule);background:var(--white);margin-bottom:2rem;overflow:hidden}
+.expense-form-header{background:var(--ink);padding:1rem 1.5rem;border-bottom:2px solid var(--yellow);font-family:var(--serif);font-size:1.1rem;font-weight:300;color:var(--white)}
+.expense-form-body{padding:1.5rem;display:grid;grid-template-columns:1fr 140px 120px 110px auto;gap:0.75rem;align-items:end}
+.expense-field{display:flex;flex-direction:column;gap:5px}
+.expense-label{font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.16em;color:var(--brown)}
+.expense-input,.expense-select{background:var(--cream);border:1px solid var(--rule);padding:0.6rem 0.75rem;font-family:var(--sans);font-size:0.85rem;color:var(--ink);outline:none;width:100%;transition:border-color 0.2s;appearance:none;-webkit-appearance:none}
+.expense-input:focus,.expense-select:focus{border-color:var(--yellow)}
+.expense-select-wrap{position:relative}
+.expense-select-wrap::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--warm-grey);pointer-events:none;font-size:0.75rem}
+.btn-add-expense{background:var(--yellow);border:none;cursor:pointer;padding:0.6rem 1.25rem;font-family:var(--sans);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--dark);white-space:nowrap;transition:background 0.2s;height:36px;align-self:end}
+.btn-add-expense:hover{background:#e6b01f}
+.expense-table-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
+.expense-table-header{background:var(--ink);padding:0.9rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--yellow)}
+.expense-table-title{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--white)}
+.btn-clear-expenses{background:none;border:1px solid rgba(255,255,255,0.15);cursor:pointer;padding:4px 12px;font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.35);transition:0.2s}
+.btn-clear-expenses:hover{border-color:var(--yellow);color:var(--yellow)}
+.expense-table{width:100%;border-collapse:collapse}
+.expense-table th{font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--warm-grey);padding:0.6rem 1rem;text-align:left;border-bottom:1px solid var(--rule);background:var(--cream)}
+.expense-table td{padding:0.75rem 1rem;border-bottom:1px solid var(--rule);font-size:0.82rem;color:var(--stone);vertical-align:middle}
+.expense-table tr:last-child td{border-bottom:none}
+.expense-table tr:hover td{background:rgba(254,196,34,0.03)}
+.expense-who-badge{display:inline-block;font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:2px 8px}
+.badge-mark{background:rgba(254,196,34,0.15);color:var(--brown)}
+.badge-rumana{background:rgba(76,175,80,0.1);color:#4caf50}
+.badge-shared{background:rgba(92,92,88,0.1);color:var(--stone)}
+.expense-amount-cell{font-family:var(--mono);font-weight:600;color:var(--ink)}
+.btn-delete-expense{background:none;border:none;cursor:pointer;color:var(--warm-grey);font-size:1rem;line-height:1;padding:2px 6px;transition:color 0.2s}
+.btn-delete-expense:hover{color:#c0392b}
+.expense-empty{text-align:center;padding:3rem;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)}
+.expense-quick-link{display:inline-flex;align-items:center;gap:6px;background:var(--yellow);color:var(--dark);font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:8px 16px;position:fixed;bottom:24px;right:24px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,0.25);transition:background 0.2s;text-decoration:none}
+.expense-quick-link:hover{background:#e6b01f}
+@media(max-width:768px){
+  .expense-summary{grid-template-columns:1fr}
+  .expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}
+  .expense-form-body{grid-template-columns:1fr 1fr}
+  .btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}
+  .expense-quick-link{bottom:16px;right:16px}
+}
 @media(max-width:768px){
   .nav{padding:0 1.25rem}.nav-links{display:none}
   .nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}
@@ -201,6 +250,7 @@ a{text-decoration:none;color:inherit}
     <li><a href="#notes">Notes</a></li>
     <li><a href="#bookings">Bookings</a></li>
     <li><a href="#shopping">Shopping</a></li>
+    <li><a href="#expenses">Expenses</a></li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
@@ -399,6 +449,79 @@ a{text-decoration:none;color:inherit}
   </div>
 </section>
 
+<!-- EXPENSES -->
+<section class="section" id="expenses">
+  <header class="section-header">
+    <div class="section-eyebrow">08 &mdash; Money</div>
+    <h2 class="section-title">Shared Expenses</h2>
+  </header>
+  <div class="expense-summary">
+    <div class="expense-summary-card">
+      <div class="expense-summary-label">Mark</div>
+      <div class="expense-summary-amount" id="total-mark">0.00</div>
+      <div class="expense-summary-sub" id="count-mark">0 expenses</div>
+    </div>
+    <div class="expense-summary-card">
+      <div class="expense-summary-label">Rumana</div>
+      <div class="expense-summary-amount" id="total-rumana">0.00</div>
+      <div class="expense-summary-sub" id="count-rumana">0 expenses</div>
+    </div>
+    <div class="expense-summary-card">
+      <div class="expense-summary-label">Trip Total</div>
+      <div class="expense-summary-amount" id="total-all">0.00</div>
+      <div class="expense-summary-sub" id="count-all">0 entries</div>
+    </div>
+  </div>
+  <div class="expense-form">
+    <div class="expense-form-header">Add an Expense</div>
+    <div class="expense-form-body">
+      <div class="expense-field" style="grid-column:span 2">
+        <label class="expense-label" for="exp-desc">What</label>
+        <input class="expense-input" id="exp-desc" type="text" placeholder="e.g. Lunch at Cal Pep" autocomplete="off">
+      </div>
+      <div class="expense-field">
+        <label class="expense-label" for="exp-amount">Amount</label>
+        <input class="expense-input" id="exp-amount" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+      <div class="expense-field">
+        <label class="expense-label" for="exp-currency">Currency</label>
+        <div class="expense-select-wrap">
+          <select class="expense-select" id="exp-currency">
+            <option value="&euro;">&euro; Euro</option>
+            <option value="$">$ USD</option>
+          </select>
+        </div>
+      </div>
+      <div class="expense-field">
+        <label class="expense-label" for="exp-who">Who Paid</label>
+        <div class="expense-select-wrap">
+          <select class="expense-select" id="exp-who">
+            <option value="Mark">Mark</option>
+            <option value="Rumana">Rumana</option>
+            <option value="Shared">Shared</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn-add-expense" onclick="addExpense()">+ Add</button>
+    </div>
+  </div>
+  <div class="expense-table-wrap">
+    <div class="expense-table-header">
+      <div class="expense-table-title">Expense Log</div>
+      <button class="btn-clear-expenses" onclick="clearExpenses()">Clear All</button>
+    </div>
+    <div id="expense-list-wrap">
+      <div class="expense-empty" id="expense-empty">No expenses yet &mdash; add your first above.</div>
+      <table class="expense-table" id="expense-table" style="display:none">
+        <thead><tr><th>#</th><th>Description</th><th>Who</th><th>Amount</th><th></th></tr></thead>
+        <tbody id="expense-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<a class="expense-quick-link" href="#expenses">&#36;&nbsp;Expenses</a>
+
 <footer class="page-footer"><div class="footer-brand">MaRu <span>|</span> Spain 2026</div><div class="footer-meta" id="footer-updated"></div></footer>
 
 <script>
@@ -417,7 +540,7 @@ function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+
 function mapsRoute(o,w,d){return'https://www.google.com/maps/dir/'+encodeURIComponent(o)+'/'+encodeURIComponent(w)+'/'+encodeURIComponent(d);}
 function addr(label,url){if(!url)url=mapsSearch(label);return'<span class="activity-addr"><a href="'+url+'" target="_blank">&#128205; '+label+'</a></span>';}
 function docLink(url,label){return' <a href="'+url+'" target="_blank" style="color:var(--accent);border-bottom:1px solid rgba(192,112,0,0.35);font-size:0.8em;">&#128196; '+label+'</a>';}
-function parseCSV(text){const rows=[];text.split(/\r?\n/).forEach(line=>{if(!line.trim())return;const row=[];let inQ=false,cur='';for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch===','&&!inQ){row.push(cur.trim());cur='';}else cur+=ch;}row.push(cur.trim());rows.push(row);});return rows;}
+function parseCSV(text){const rows=[];text.split(/\r?\n/).forEach(line=>{if(!line.trim())return;const row=[];let inQ=false,cur='';for(let i=0;i<line.length;i++){const ch=line[i];if(ch=='"'){if(inQ&&line[i+1]=='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch==','&&!inQ){row.push(cur.trim());cur='';}else cur+=ch;}row.push(cur.trim());rows.push(row);});return rows;}
 document.getElementById('hamburger').addEventListener('click',()=>document.getElementById('nav-menu').classList.toggle('open'));
 const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id;});navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));},{passive:true});
@@ -570,6 +693,68 @@ function renderItinerary(days){const c=document.getElementById('itinerary-contai
 async function loadFromSheet(){try{const res=await fetch(SHEET_CSV_URL,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');const header=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));const idx={date:header.indexOf('date'),title:header.indexOf('title'),loc:header.indexOf('location'),time:header.indexOf('time'),act:header.indexOf('activity'),tag:header.indexOf('tag')};const days=[];rows.slice(1).forEach(row=>{const date=row[idx.date]||'',title=row[idx.title]||'',loc=row[idx.loc]||'',time=row[idx.time]||'',actText=row[idx.act]||'',tag=row[idx.tag]||'';if(!date||!actText)return;let ex=days.find(d=>d.date===date);if(!ex){ex={date,title,loc,activities:[]};days.push(ex);}ex.activities.push({time,text:actText,tag:tag.toLowerCase()});});if(days.length>0){renderItinerary(days);document.getElementById('footer-updated').textContent='Live \u2014 Google Sheets \u2014 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}else throw new Error('No rows');}catch(e){renderItinerary(FALLBACK);}}
 loadFromSheet();
 loadChecklist();
+// ============================================================
+// EXPENSE TRACKER
+// ============================================================
+const EXPENSE_KEY='spain2026_expenses';
+function loadExpenses(){try{return JSON.parse(localStorage.getItem(EXPENSE_KEY))||[];}catch{return[];}}
+function saveExpenses(arr){localStorage.setItem(EXPENSE_KEY,JSON.stringify(arr));}
+function formatAmount(amount,currency){return currency+parseFloat(amount).toFixed(2);}
+function renderExpenses(){
+  const expenses=loadExpenses();
+  const tbody=document.getElementById('expense-tbody');
+  const table=document.getElementById('expense-table');
+  const empty=document.getElementById('expense-empty');
+  if(!tbody)return;
+  tbody.innerHTML='';
+  let totalMark=0,totalRumana=0,totalAll=0,countMark=0,countRumana=0;
+  expenses.forEach((e,i)=>{
+    const amount=parseFloat(e.amount);
+    totalAll+=amount;
+    if(e.who==='Mark'){totalMark+=amount;countMark++;}
+    else if(e.who==='Rumana'){totalRumana+=amount;countRumana++;}
+    else{totalMark+=amount/2;totalRumana+=amount/2;countMark++;countRumana++;}
+    const badgeClass=e.who==='Mark'?'badge-mark':e.who==='Rumana'?'badge-rumana':'badge-shared';
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td style="font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem;">'+(i+1)+'</td><td>'+e.desc+'</td><td><span class="expense-who-badge '+badgeClass+'">'+e.who+'</span></td><td class="expense-amount-cell">'+formatAmount(e.amount,e.currency)+'</td><td><button class="btn-delete-expense" onclick="deleteExpense('+i+')" title="Delete">&times;</button></td>';
+    tbody.appendChild(tr);
+  });
+  if(expenses.length===0){empty.style.display='';table.style.display='none';}
+  else{empty.style.display='none';table.style.display='';}
+  const sym=expenses.length>0?(expenses[0].currency||'\u20ac'):'\u20ac';
+  document.getElementById('total-mark').textContent=sym+totalMark.toFixed(2);
+  document.getElementById('total-rumana').textContent=sym+totalRumana.toFixed(2);
+  document.getElementById('total-all').textContent=sym+totalAll.toFixed(2);
+  document.getElementById('count-mark').textContent=countMark+' expense'+(countMark!==1?'s':'');
+  document.getElementById('count-rumana').textContent=countRumana+' expense'+(countRumana!==1?'s':'');
+  document.getElementById('count-all').textContent=expenses.length+' entr'+(expenses.length!==1?'ies':'y');
+}
+function addExpense(){
+  const desc=document.getElementById('exp-desc').value.trim();
+  const amount=parseFloat(document.getElementById('exp-amount').value);
+  const currency=document.getElementById('exp-currency').value;
+  const who=document.getElementById('exp-who').value;
+  if(!desc||isNaN(amount)||amount<=0){document.getElementById('exp-desc').focus();return;}
+  const expenses=loadExpenses();
+  expenses.push({desc,amount,currency,who,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});
+  saveExpenses(expenses);
+  renderExpenses();
+  document.getElementById('exp-desc').value='';
+  document.getElementById('exp-amount').value='';
+  document.getElementById('exp-desc').focus();
+}
+function deleteExpense(i){
+  const expenses=loadExpenses();
+  expenses.splice(i,1);
+  saveExpenses(expenses);
+  renderExpenses();
+}
+function clearExpenses(){
+  if(confirm('Clear all expenses? This cannot be undone.')){saveExpenses([]);renderExpenses();}
+}
+document.getElementById('exp-desc') && document.getElementById('exp-desc').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
+document.getElementById('exp-amount') && document.getElementById('exp-amount').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
+renderExpenses();
 </script>
 </body>
 </html>
