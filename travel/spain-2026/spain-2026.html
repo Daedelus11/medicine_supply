@@ -1,11 +1,11 @@
-<!-- v37: Auto-discover Expenses tab GID + write working -->
+<!-- v38: Delete button on expense rows -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v37: Expenses GID auto-discovery; write via Apps Script -->
+<!-- v38: Expense delete; GID auto-discovery -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -15,17 +15,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
-:root{
-  --yellow:#fec422;--accent:#c07000;--brown:#7d6b57;--ink:#1a1a18;--stone:#5c5c58;
-  --warm-grey:#a09e98;--rule:#d8d5cf;--cream:#f7f5f1;--white:#ffffff;--dark:#111110;
-  --serif:'Cormorant Garamond',Georgia,serif;
-  --sans:'IBM Plex Sans',system-ui,sans-serif;
-  --mono:'IBM Plex Mono',monospace;--max:1200px
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--cream);color:var(--ink);font-size:15px;line-height:1.6}
-a{text-decoration:none;color:inherit}
+:root{--yellow:#fec422;--accent:#c07000;--brown:#7d6b57;--ink:#1a1a18;--stone:#5c5c58;--warm-grey:#a09e98;--rule:#d8d5cf;--cream:#f7f5f1;--white:#ffffff;--dark:#111110;--serif:'Cormorant Garamond',Georgia,serif;--sans:'IBM Plex Sans',system-ui,sans-serif;--mono:'IBM Plex Mono',monospace;--max:1200px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth}body{font-family:var(--sans);background:var(--cream);color:var(--ink);font-size:15px;line-height:1.6}a{text-decoration:none;color:inherit}
 .nav{position:sticky;top:0;z-index:200;background:var(--ink);border-bottom:2px solid var(--yellow);display:flex;align-items:center;justify-content:space-between;padding:0 3rem;height:64px}
 .nav-brand{font-family:var(--sans);font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.22em;color:var(--white)}
 .nav-brand span{color:var(--warm-grey);font-weight:300;margin:0 8px}
@@ -223,51 +214,13 @@ a{text-decoration:none;color:inherit}
 .badge-shared{background:rgba(92,92,88,0.1);color:var(--stone)}
 .expense-amount-cell{font-family:var(--mono);font-weight:600;color:var(--ink)}
 .expense-empty{text-align:center;padding:3rem;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)}
+.exp-del-btn{background:none;border:none;cursor:pointer;color:var(--warm-grey);font-size:1rem;line-height:1;padding:3px 7px;transition:color 0.15s,background 0.15s;border-radius:3px}
+.exp-del-btn:hover{color:#c0392b;background:rgba(192,57,43,0.08)}
+.exp-del-btn:disabled{opacity:0.35;cursor:not-allowed}
 .expense-quick-link{display:inline-flex;align-items:center;gap:6px;background:var(--yellow);color:var(--dark);font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:8px 16px;position:fixed;bottom:24px;right:24px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,0.25);transition:background 0.2s;text-decoration:none}
 .expense-quick-link:hover{background:#e6b01f}
-@media(min-width:769px) and (max-width:1024px){
-  .nav{padding:0 1.5rem}
-  .nav-links a{padding:0 0.6rem;font-size:0.6rem}
-  .hero{padding:4rem 2rem 3.5rem}
-  .section{padding:3.5rem 2rem}
-  .booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}
-  .booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}
-  .booking-detail{font-size:0.68rem}
-  .expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}
-  .expense-form-body .expense-field:first-child{grid-column:1 / -1}
-  .btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}
-  .checklist-wrap{gap:1rem}
-  .cl-add-select{max-width:100px;font-size:0.65rem}
-  .map-iframe-wrap iframe{height:580px}
-  .shop-grid{grid-template-columns:repeat(2,1fr)}
-  .flickr-frame{width:200px;height:150px}
-}
-@media(max-width:768px){
-  .expense-summary{grid-template-columns:1fr}
-  .expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}
-  .expense-form-body{grid-template-columns:1fr 1fr}
-  .btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}
-  .expense-quick-link{bottom:16px;right:16px}
-  .nav{padding:0 1.25rem}.nav-links{display:none}
-  .nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}
-  .nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}
-  .hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}
-  .hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}
-  .status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}
-  .section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}
-  .day-header{flex-wrap:wrap}
-  .day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}
-  .map-iframe-wrap iframe{height:400px}
-  .page-footer{padding:2rem 1.25rem}
-  .booking-table th:nth-child(2),.booking-table td:nth-child(2),
-  .booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}
-  .booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}
-  .shop-grid{grid-template-columns:1fr}
-  .checklist-wrap{grid-template-columns:1fr}
-  .cl-add-select{max-width:100px;font-size:0.65rem}
-  .flickr-frame{width:160px;height:120px}
-  .flickr-footer{flex-direction:column;align-items:flex-start}
-}
+@media(min-width:769px) and (max-width:1024px){.nav{padding:0 1.5rem}.nav-links a{padding:0 0.6rem;font-size:0.6rem}.hero{padding:4rem 2rem 3.5rem}.section{padding:3.5rem 2rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}.booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}.booking-detail{font-size:0.68rem}.expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}.expense-form-body .expense-field:first-child{grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.checklist-wrap{gap:1rem}.cl-add-select{max-width:100px;font-size:0.65rem}.map-iframe-wrap iframe{height:580px}.shop-grid{grid-template-columns:repeat(2,1fr)}.flickr-frame{width:200px;height:150px}}
+@media(max-width:768px){.expense-summary{grid-template-columns:1fr}.expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}.expense-form-body{grid-template-columns:1fr 1fr}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.expense-quick-link{bottom:16px;right:16px}.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-iframe-wrap iframe{height:400px}.page-footer{padding:2rem 1.25rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2),.booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}.booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}.shop-grid{grid-template-columns:1fr}.checklist-wrap{grid-template-columns:1fr}.cl-add-select{max-width:100px;font-size:0.65rem}.flickr-frame{width:160px;height:120px}.flickr-footer{flex-direction:column;align-items:flex-start}}
 </style>
 </head>
 <body>
@@ -337,9 +290,7 @@ a{text-decoration:none;color:inherit}
       <div class="flickr-title">MaRu / Spain &amp; Basque Country 2026</div>
       <div class="flickr-meta" id="flickr-count">Loading&hellip;</div>
     </div>
-    <div class="flickr-strip" id="flickr-strip">
-      <div class="flickr-empty">Loading photos&hellip;</div>
-    </div>
+    <div class="flickr-strip" id="flickr-strip"><div class="flickr-empty">Loading photos&hellip;</div></div>
     <div class="flickr-footer">
       <div class="flickr-footer-text"><strong>Scroll to browse &rarr;</strong> &nbsp; New photos added via Flickr appear here automatically.</div>
       <a href="https://www.flickr.com/photos/204527065@N06/albums/72177720333247088" target="_blank" class="btn-primary">&#128247; Open Full Album</a>
@@ -348,35 +299,23 @@ a{text-decoration:none;color:inherit}
 </section>
 
 <section class="section" id="notes">
-  <header class="section-header">
-    <div class="section-eyebrow">05 &mdash; Shared Notes</div>
-    <h2 class="section-title">Espana Checklist</h2>
-  </header>
+  <header class="section-header"><div class="section-eyebrow">05 &mdash; Shared Notes</div><h2 class="section-title">Espana Checklist</h2></header>
   <div class="checklist-wrap">
     <div class="checklist-panel">
-      <div class="checklist-head">
-        <span class="checklist-head-title">To Do</span>
-        <span class="checklist-head-meta" id="todo-count">Loading&hellip;</span>
-      </div>
+      <div class="checklist-head"><span class="checklist-head-title">To Do</span><span class="checklist-head-meta" id="todo-count">Loading&hellip;</span></div>
       <div class="checklist-body" id="todo-list"><div class="checklist-error">Loading&hellip;</div></div>
       <div class="cl-add-form">
         <select class="cl-add-select" id="cl-section">
-          <option value="Tarragona">Tarragona</option>
-          <option value="Bilbao">Bilbao</option>
-          <option value="Barcelona">Barcelona</option>
-          <option value="General">General</option>
-          <option value="Shopping - Vintage">Vintage</option>
-          <option value="Shopping - Maps &amp; Books">Maps &amp; Books</option>
+          <option value="Tarragona">Tarragona</option><option value="Bilbao">Bilbao</option>
+          <option value="Barcelona">Barcelona</option><option value="General">General</option>
+          <option value="Shopping - Vintage">Vintage</option><option value="Shopping - Maps &amp; Books">Maps &amp; Books</option>
         </select>
         <input class="cl-add-input" id="cl-new-item" type="text" placeholder="Add item&hellip;" maxlength="120">
         <button class="cl-add-btn" id="cl-add-btn" onclick="addChecklistItem()">Add</button>
       </div>
     </div>
     <div class="checklist-panel">
-      <div class="checklist-head checklist-head-done">
-        <span class="checklist-head-title">Completed</span>
-        <span class="checklist-head-meta" id="done-count">0 items</span>
-      </div>
+      <div class="checklist-head checklist-head-done"><span class="checklist-head-title">Completed</span><span class="checklist-head-meta" id="done-count">0 items</span></div>
       <div class="checklist-body" id="done-list"></div>
       <div class="checklist-status" id="checklist-status">Synced with Google Sheets</div>
     </div>
@@ -386,109 +325,29 @@ a{text-decoration:none;color:inherit}
 <section class="section" id="bookings">
   <header class="section-header"><div class="section-eyebrow">06 &mdash; Logistics</div><h2 class="section-title">Booking Status</h2></header>
   <table class="booking-table"><thead><tr><th>Item</th><th>Details</th><th>Dates</th><th>Status</th></tr></thead><tbody>
-  <tr>
-    <td><div class="booking-item-name">International Flights</div><div class="booking-detail">Delta / Virgin Atlantic<br>Confs: GVNDYZ &amp; DQSKOJ<br>E-tickets: #932-7461554504 / #932-7461554505</div></td>
-    <td>BOI&rarr;ATL: DL 874, dep 2:10pm / arr 8:28pm (Apr 20)<br>ATL&rarr;BCN: VS 3926, dep 10:05pm (Apr 20) / arr 12:50pm (Apr 21) T1<br>BCN&rarr;ATL: VS 3937, dep 11:00am / arr 3:04pm (May 1)<br>ATL&rarr;BOI: DL 704, dep 7:57pm / arr 10:28pm (May 1)<br><a href="https://drive.google.com/file/d/1fLHnLr04lwGLPTf7PazpSg-wsttD7agn/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Reservation</a></td>
-    <td>Apr 20&ndash;21 &amp; May 1</td>
-    <td><span class="badge badge-confirmed">Confirmed</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">Barcelona Airbnb</div><div class="booking-detail">Central Apartments &mdash; Eixample<br>Host: Enrique Meza<br>Res. 562/2026 &mdash; Origin: HMZXBAMARF</div></td>
-    <td>Carrer de Bail&egrave;n, 125, Barcelona, Espa&ntilde;a &mdash; 3 nights &mdash; &euro;810<br><span style="font-size:0.75rem;color:var(--warm-grey)">Walkable to Sagrada Fam&iacute;lia, Passeig de Gr&agrave;cia, El Born</span><br><a href="https://drive.google.com/file/d/1zHf9wjDG1O3yBiX0vEfpmmKi21j7k0A3/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Reservation</a></td>
-    <td>Apr 21&ndash;24</td>
-    <td><span class="badge badge-confirmed">Confirmed</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">Tarragona</div><div class="booking-detail">Dan Mannion &mdash; Carrer del Cardinal Vidal I Barrequer 28, Cambrils, Tarragona</div></td>
-    <td>Roman ruins, beaches, local wine. Cambrils is ~15 min south of Tarragona.<br><a href="https://www.google.com/maps/search/?api=1&query=Carrer+del+Cardinal+Vidal+I+Barrequer+28+Cambrils+Tarragona+Spain" target="_blank" class="ticket-link">&#128205; Map</a></td>
-    <td>Apr 24&ndash;26</td>
-    <td><span class="badge badge-confirmed">Arranged</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">Rental Car</div><div class="booking-detail">National Car Rental &mdash; Emerald Club<br>Conf. 1797553757 &mdash; Mark Wagner #415847868</div></td>
-    <td>Pick up: Barcelona Estacion Ave, Apr 24 2:00pm<br>Return: Barcelona Estacion Ave, May 1 12:00pm<br><span style="font-size:0.75rem;color:var(--warm-grey)">From inside Sants station follow signs to underground parking level -1. Ford Focus or similar, est. &euro;213.87.</span><br><a href="https://drive.google.com/file/d/1plEGpjQRzy9yHDchMOCSbcdafjV8q4rl/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Reservation</a></td>
-    <td>Apr 24 &ndash; May 1</td>
-    <td><span class="badge badge-confirmed">Confirmed</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">Radisson Gran Via Bilbao</div><div class="booking-detail">5-star &mdash; Chase Edit &mdash; Breakfast incl. + $100 credit<br>Hotel Conf. 0159730000 &mdash; Trip ID 1014623164</div></td>
-    <td><span style="font-size:0.78rem;color:#4caf50;font-weight:600">&#10003; Ask for room upgrade at check-in</span><br><span style="font-size:0.75rem;color:var(--warm-grey)">Mention Chase Edit status. Cancel by 6pm Apr 26 no penalty.</span><br><a href="https://drive.google.com/file/d/1EW28lNUnLfVD9pMACVVzSeSQZmgdz-fb/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Confirmation</a></td>
-    <td>Apr 26&ndash;30</td>
-    <td><span class="badge badge-confirmed">Confirmed</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">Sagrada Familia</div><div class="booking-detail">Res. 95793090 &mdash; 2x General w/ Passion Tower<br>Locators: 285907110 (Rumana) / 285907111 (Mark)</div></td>
-    <td>Enter via C/ Marina 9:30am / Tower 9:45am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Download Sagrada Fam&iacute;lia app &mdash; it IS your audioguide. Non-transferable; bring photo ID.</span><br><a href="https://apps.apple.com/us/app/sagrada-familia-official/id1570335095" target="_blank" class="ticket-link">&#127822; iOS App &mdash; Rumana</a> &nbsp; <a href="https://play.google.com/store/apps/details?id=org.sagradafamilia.droid" target="_blank" class="ticket-link">&#129504; Android App &mdash; Mark</a><br><a href="https://drive.google.com/file/d/104w2XcQRl95HCEDyi8StY-F0LpLBslVt/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Tickets</a></td>
-    <td>Apr 23</td>
-    <td><span class="badge badge-confirmed">Confirmed</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">Res. 8337300 &mdash; 2x General ticket &mdash; &euro;36 total</div></td>
-    <td>10:30am entry &mdash; valid until 11:00am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Non-transferable &mdash; bring photo ID. No re-entry. Download Park G&uuml;ell Official App.</span><br><a href="https://drive.google.com/file/d/1PFEldZb0dVM-gIwxuDB_s-WxAlAU5Nvq/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Tickets</a></td>
-    <td>Apr 22</td>
-    <td><span class="badge badge-confirmed">Confirmed</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">Guggenheim Bilbao</div><div class="booking-detail">Res. 95961308</div></td>
-    <td>Morning visit + possible Carne y Arena VR<br><span style="font-size:0.75rem;color:var(--warm-grey)">Carne y Arena (I&ntilde;&aacute;rritu VR) runs through June 20 &mdash; book separately at guggenheim-bilbao.eus.</span><br><a href="https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FCKZH6jsb/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Tickets</a></td>
-    <td>Apr 28</td>
-    <td><span class="badge badge-confirmed">Confirmed</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">AC Hotel Barcelona Sants</div><div class="booking-detail">Marriott Bonvoy &mdash; Conf. #92299097<br>38,000 pts redeemed &mdash; 53,941 remaining</div></td>
-    <td>Passeig de Sant Antoni, 36-40, Barcelona 08014<br><span style="font-size:0.75rem;color:var(--warm-grey)">Check in online via Marriott app. R2 Nord train to T1 ~19 min. Cancel by 11:59pm Apr 29.</span><br><a href="https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Confirmation</a></td>
-    <td>Apr 30&ndash;May 1</td>
-    <td><span class="badge badge-confirmed">Confirmed</span></td>
-  </tr>
-  <tr>
-    <td><div class="booking-item-name">Picasso Museum</div><div class="booking-detail">museupicassobcn.cat</div></td>
-    <td>Timed entry sells out in spring &mdash; book earliest slot</td>
-    <td>Apr 22</td>
-    <td><span class="badge badge-book">Book Now</span></td>
-  </tr>
+  <tr><td><div class="booking-item-name">International Flights</div><div class="booking-detail">Delta / Virgin Atlantic<br>Confs: GVNDYZ &amp; DQSKOJ<br>E-tickets: #932-7461554504 / #932-7461554505</div></td><td>BOI&rarr;ATL: DL 874, dep 2:10pm / arr 8:28pm (Apr 20)<br>ATL&rarr;BCN: VS 3926, dep 10:05pm (Apr 20) / arr 12:50pm (Apr 21) T1<br>BCN&rarr;ATL: VS 3937, dep 11:00am / arr 3:04pm (May 1)<br>ATL&rarr;BOI: DL 704, dep 7:57pm / arr 10:28pm (May 1)<br><a href="https://drive.google.com/file/d/1fLHnLr04lwGLPTf7PazpSg-wsttD7agn/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Reservation</a></td><td>Apr 20&ndash;21 &amp; May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Barcelona Airbnb</div><div class="booking-detail">Central Apartments &mdash; Eixample<br>Host: Enrique Meza<br>Res. 562/2026 &mdash; Origin: HMZXBAMARF</div></td><td>Carrer de Bail&egrave;n, 125, Barcelona, Espa&ntilde;a &mdash; 3 nights &mdash; &euro;810<br><span style="font-size:0.75rem;color:var(--warm-grey)">Walkable to Sagrada Fam&iacute;lia, Passeig de Gr&agrave;cia, El Born</span><br><a href="https://drive.google.com/file/d/1zHf9wjDG1O3yBiX0vEfpmmKi21j7k0A3/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Reservation</a></td><td>Apr 21&ndash;24</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Tarragona</div><div class="booking-detail">Dan Mannion &mdash; Carrer del Cardinal Vidal I Barrequer 28, Cambrils, Tarragona</div></td><td>Roman ruins, beaches, local wine. Cambrils is ~15 min south of Tarragona.<br><a href="https://www.google.com/maps/search/?api=1&query=Carrer+del+Cardinal+Vidal+I+Barrequer+28+Cambrils+Tarragona+Spain" target="_blank" class="ticket-link">&#128205; Map</a></td><td>Apr 24&ndash;26</td><td><span class="badge badge-confirmed">Arranged</span></td></tr>
+  <tr><td><div class="booking-item-name">Rental Car</div><div class="booking-detail">National Car Rental &mdash; Emerald Club<br>Conf. 1797553757 &mdash; Mark Wagner #415847868</div></td><td>Pick up: Barcelona Estacion Ave, Apr 24 2:00pm<br>Return: Barcelona Estacion Ave, May 1 12:00pm<br><span style="font-size:0.75rem;color:var(--warm-grey)">From inside Sants station follow signs to underground parking level -1. Ford Focus or similar, est. &euro;213.87.</span><br><a href="https://drive.google.com/file/d/1plEGpjQRzy9yHDchMOCSbcdafjV8q4rl/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Reservation</a></td><td>Apr 24 &ndash; May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Radisson Gran Via Bilbao</div><div class="booking-detail">5-star &mdash; Chase Edit &mdash; Breakfast incl. + $100 credit<br>Hotel Conf. 0159730000 &mdash; Trip ID 1014623164</div></td><td><span style="font-size:0.78rem;color:#4caf50;font-weight:600">&#10003; Ask for room upgrade at check-in</span><br><span style="font-size:0.75rem;color:var(--warm-grey)">Mention Chase Edit status. Cancel by 6pm Apr 26 no penalty.</span><br><a href="https://drive.google.com/file/d/1EW28lNUnLfVD9pMACVVzSeSQZmgdz-fb/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Confirmation</a></td><td>Apr 26&ndash;30</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Sagrada Familia</div><div class="booking-detail">Res. 95793090 &mdash; 2x General w/ Passion Tower<br>Locators: 285907110 (Rumana) / 285907111 (Mark)</div></td><td>Enter via C/ Marina 9:30am / Tower 9:45am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Download Sagrada Fam&iacute;lia app &mdash; it IS your audioguide. Non-transferable; bring photo ID.</span><br><a href="https://apps.apple.com/us/app/sagrada-familia-official/id1570335095" target="_blank" class="ticket-link">&#127822; iOS App &mdash; Rumana</a> &nbsp; <a href="https://play.google.com/store/apps/details?id=org.sagradafamilia.droid" target="_blank" class="ticket-link">&#129504; Android App &mdash; Mark</a><br><a href="https://drive.google.com/file/d/104w2XcQRl95HCEDyi8StY-F0LpLBslVt/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Tickets</a></td><td>Apr 23</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Park G&uuml;ell</div><div class="booking-detail">Res. 8337300 &mdash; 2x General ticket &mdash; &euro;36 total</div></td><td>10:30am entry &mdash; valid until 11:00am<br><span style="font-size:0.75rem;color:var(--warm-grey)">Non-transferable &mdash; bring photo ID. No re-entry. Download Park G&uuml;ell Official App.</span><br><a href="https://drive.google.com/file/d/1PFEldZb0dVM-gIwxuDB_s-WxAlAU5Nvq/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Tickets</a></td><td>Apr 22</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Guggenheim Bilbao</div><div class="booking-detail">Res. 95961308</div></td><td>Morning visit + possible Carne y Arena VR<br><span style="font-size:0.75rem;color:var(--warm-grey)">Carne y Arena (I&ntilde;&aacute;rritu VR) runs through June 20 &mdash; book separately at guggenheim-bilbao.eus.</span><br><a href="https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FCKZH6jsb/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Tickets</a></td><td>Apr 28</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">AC Hotel Barcelona Sants</div><div class="booking-detail">Marriott Bonvoy &mdash; Conf. #92299097<br>38,000 pts redeemed &mdash; 53,941 remaining</div></td><td>Passeig de Sant Antoni, 36-40, Barcelona 08014<br><span style="font-size:0.75rem;color:var(--warm-grey)">Check in online via Marriott app. R2 Nord train to T1 ~19 min. Cancel by 11:59pm Apr 29.</span><br><a href="https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link" target="_blank" class="ticket-link">&#128196; Download Confirmation</a></td><td>Apr 30&ndash;May 1</td><td><span class="badge badge-confirmed">Confirmed</span></td></tr>
+  <tr><td><div class="booking-item-name">Picasso Museum</div><div class="booking-detail">museupicassobcn.cat</div></td><td>Timed entry sells out in spring &mdash; book earliest slot</td><td>Apr 22</td><td><span class="badge badge-book">Book Now</span></td></tr>
   </tbody></table>
 </section>
 
 <section class="section" id="shopping" style="background:var(--cream)">
   <header class="section-header"><div class="section-eyebrow">07 &mdash; Shopping</div><h2 class="section-title">Vintage, Art &amp; Books</h2></header>
   <p style="font-size:0.82rem;color:var(--stone);margin-bottom:2rem">Click any card for Google Maps directions.</p>
-  <div style="margin-bottom:3rem">
-    <div class="shop-section-head">Vintage &mdash; El Born</div>
-    <div class="shop-section-sub">El Born / Gothic Quarter cluster &mdash; all within a 10-minute walk of each other.</div>
-    <div class="shop-grid">
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Zoetrope+Vintage+Barcelona+Placa+Sant+Agusti+Vell" target="_blank"><div class="shop-card-name">Zoetrope Vintage</div><div class="shop-card-addr">Pla&ccedil;a de Sant Agust&iacute; Vell, 14 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Hand-picked indie pieces. Rack outside at &euro;5. Good for jewelry and accessories.</div><span class="shop-tag">Accessories</span><span class="shop-tag">Budget rack</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Loisaida+Barcelona+Carrer+dels+Flassaders" target="_blank"><div class="shop-card-name">Loisaida</div><div class="shop-card-addr">Carrer dels Flassaders, 42 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Vintage home pieces, vinyl, telephones, jewelry. Open daily 11&ndash;21.</div><span class="shop-tag">Home &amp; vinyl</span><span class="shop-tag">Daily 11&ndash;21</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Atelier+Resistance+Barcelona+Sant+Pere+Mes+Alt" target="_blank"><div class="shop-card-name">Atelier Resistance</div><div class="shop-card-addr">Carrer de Sant Pere M&eacute;s Alt, 36 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Curated, personality-driven. Designer pieces without trophy-gallery pricing.</div><span class="shop-tag">Curated</span><span class="shop-tag">Designer</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Antiguedades+El+Pecado+El+Born+Barcelona" target="_blank"><div class="shop-card-name">Antigu&uuml;edades El Pecado</div><div class="shop-card-addr">El Born &#x2197;</div><div class="shop-card-desc">European decorative arts, vintage furniture, crystal, fine porcelain.</div><span class="shop-tag">Antiques</span><span class="shop-tag">Decorative arts</span></a>
-    </div>
-  </div>
-  <div style="margin-bottom:3rem">
-    <div class="shop-section-head">Vintage &mdash; Gothic Quarter &amp; Gr&agrave;cia</div>
-    <div class="shop-section-sub">Gothic Quarter stores are walkable from the Eixample. Gr&agrave;cia is a 20-minute walk or short metro.</div>
-    <div class="shop-grid">
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Le+Swing+vintage+Barcelona+Carrer+del+Rec" target="_blank"><div class="shop-card-name">Le Swing</div><div class="shop-card-addr">Carrer del Rec, 13 &mdash; Gothic Quarter &#x2197;</div><div class="shop-card-desc">Highest-quality vintage in the quarter. Steals under &euro;30 even with designer stock.</div><span class="shop-tag">Designer</span><span class="shop-tag">Best quality</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=L%27Arca+vintage+Barcelona+Carrer+dels+Banys+Nous+20" target="_blank"><div class="shop-card-name">L&rsquo;Arca</div><div class="shop-card-addr">Carrer dels Banys Nous, 20 &mdash; Gothic Quarter &#x2197;</div><div class="shop-card-desc">Fifth-generation family antique dealer. Fashion 1920s&ndash;1980s inside a 16th-century stone arch.</div><span class="shop-tag">Antique textiles</span><span class="shop-tag">Historic</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=La+Principal+Retro+vintage+Gracia+Barcelona" target="_blank"><div class="shop-card-name">La Principal Retro &amp; Co</div><div class="shop-card-addr">Gr&agrave;cia &#x2197;</div><div class="shop-card-desc">Curated vintage, particularly strong for denim and leather.</div><span class="shop-tag">Denim &amp; leather</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Love+Vintage+boutique+Gracia+Barcelona" target="_blank"><div class="shop-card-name">LOVE Vintage</div><div class="shop-card-addr">Gr&agrave;cia &#x2197;</div><div class="shop-card-desc">Elegant accessories, regularly restocked.</div><span class="shop-tag">Accessories</span></a>
-    </div>
-  </div>
-  <div style="margin-bottom:3rem">
-    <div class="shop-section-head">Maps, Atlases &amp; Antiquarian Books</div>
-    <div class="shop-section-sub">The April 23 alignment is exceptional: Sagrada Fam&iacute;lia 9:30am, then Mercat G&ograve;tic + Sant Jordi&rsquo;s Day book markets + Carrer dels Banys Nous all afternoon.</div>
-    <div class="shop-grid">
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+dels+Banys+Nous+antiques+maps+Barcelona" target="_blank"><div class="shop-card-name">Carrer dels Banys Nous</div><div class="shop-card-addr">Gothic Quarter &mdash; the whole street &#x2197;</div><div class="shop-card-desc">Lined with antique dealers specializing in maps, prints, and books. Best single street for old atlases in Barcelona.</div><span class="shop-tag">Maps &amp; prints</span><span class="shop-tag">Top pick</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Bulevard+dels+Antiquaris+Passeig+de+Gracia+Barcelona" target="_blank"><div class="shop-card-name">Bulevard dels Antiquaris</div><div class="shop-card-addr">Passeig de Gr&agrave;cia, 55 &mdash; Eixample &#x2197;</div><div class="shop-card-desc">60+ antique dealers under one roof. Tue&ndash;Sat. Close to the Airbnb.</div><span class="shop-tag">60+ dealers</span><span class="shop-tag">Tue&ndash;Sat</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Els+Encants+Vells+flea+market+Barcelona+Glories" target="_blank"><div class="shop-card-name">Els Encants Vells</div><div class="shop-card-addr">Pla&ccedil;a de les Gl&ograve;ries &mdash; Gl&ograve;ries metro &#x2197;</div><div class="shop-card-desc">Old maps, atlases, and prints among 301 stalls. Mon/Wed/Fri/Sat 9am&ndash;8pm.</div><span class="shop-tag">Flea market</span><span class="shop-tag">Mon/Wed/Fri/Sat</span></a>
-      <a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Las+Ramblas+Barcelona+book+stalls" target="_blank"><div class="shop-card-name">Sant Jordi&rsquo;s Day Book Stalls</div><div class="shop-card-addr">Gothic Quarter &amp; Las Ramblas &mdash; April 23 only &#x2197;</div><div class="shop-card-desc">The best day of the year to buy books in Barcelona. Every publisher sets up outdoors, city-wide.</div><span class="shop-tag">April 23 only</span><span class="shop-tag">All day</span></a>
-    </div>
-  </div>
+  <div style="margin-bottom:3rem"><div class="shop-section-head">Vintage &mdash; El Born</div><div class="shop-section-sub">El Born / Gothic Quarter cluster &mdash; all within a 10-minute walk of each other.</div><div class="shop-grid"><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Zoetrope+Vintage+Barcelona+Placa+Sant+Agusti+Vell" target="_blank"><div class="shop-card-name">Zoetrope Vintage</div><div class="shop-card-addr">Pla&ccedil;a de Sant Agust&iacute; Vell, 14 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Hand-picked indie pieces. Rack outside at &euro;5. Good for jewelry and accessories.</div><span class="shop-tag">Accessories</span><span class="shop-tag">Budget rack</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Loisaida+Barcelona+Carrer+dels+Flassaders" target="_blank"><div class="shop-card-name">Loisaida</div><div class="shop-card-addr">Carrer dels Flassaders, 42 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Vintage home pieces, vinyl, telephones, jewelry. Open daily 11&ndash;21.</div><span class="shop-tag">Home &amp; vinyl</span><span class="shop-tag">Daily 11&ndash;21</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Atelier+Resistance+Barcelona+Sant+Pere+Mes+Alt" target="_blank"><div class="shop-card-name">Atelier Resistance</div><div class="shop-card-addr">Carrer de Sant Pere M&eacute;s Alt, 36 &mdash; El Born &#x2197;</div><div class="shop-card-desc">Curated, personality-driven. Designer pieces without trophy-gallery pricing.</div><span class="shop-tag">Curated</span><span class="shop-tag">Designer</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Antiguedades+El+Pecado+El+Born+Barcelona" target="_blank"><div class="shop-card-name">Antigu&uuml;edades El Pecado</div><div class="shop-card-addr">El Born &#x2197;</div><div class="shop-card-desc">European decorative arts, vintage furniture, crystal, fine porcelain.</div><span class="shop-tag">Antiques</span><span class="shop-tag">Decorative arts</span></a></div></div>
+  <div style="margin-bottom:3rem"><div class="shop-section-head">Vintage &mdash; Gothic Quarter &amp; Gr&agrave;cia</div><div class="shop-section-sub">Gothic Quarter stores are walkable from the Eixample. Gr&agrave;cia is a 20-minute walk or short metro.</div><div class="shop-grid"><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Le+Swing+vintage+Barcelona+Carrer+del+Rec" target="_blank"><div class="shop-card-name">Le Swing</div><div class="shop-card-addr">Carrer del Rec, 13 &mdash; Gothic Quarter &#x2197;</div><div class="shop-card-desc">Highest-quality vintage in the quarter. Steals under &euro;30 even with designer stock.</div><span class="shop-tag">Designer</span><span class="shop-tag">Best quality</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=L%27Arca+vintage+Barcelona+Carrer+dels+Banys+Nous+20" target="_blank"><div class="shop-card-name">L&rsquo;Arca</div><div class="shop-card-addr">Carrer dels Banys Nous, 20 &mdash; Gothic Quarter &#x2197;</div><div class="shop-card-desc">Fifth-generation family antique dealer. Fashion 1920s&ndash;1980s inside a 16th-century stone arch.</div><span class="shop-tag">Antique textiles</span><span class="shop-tag">Historic</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=La+Principal+Retro+vintage+Gracia+Barcelona" target="_blank"><div class="shop-card-name">La Principal Retro &amp; Co</div><div class="shop-card-addr">Gr&agrave;cia &#x2197;</div><div class="shop-card-desc">Curated vintage, particularly strong for denim and leather.</div><span class="shop-tag">Denim &amp; leather</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Love+Vintage+boutique+Gracia+Barcelona" target="_blank"><div class="shop-card-name">LOVE Vintage</div><div class="shop-card-addr">Gr&agrave;cia &#x2197;</div><div class="shop-card-desc">Elegant accessories, regularly restocked.</div><span class="shop-tag">Accessories</span></a></div></div>
+  <div style="margin-bottom:3rem"><div class="shop-section-head">Maps, Atlases &amp; Antiquarian Books</div><div class="shop-section-sub">The April 23 alignment is exceptional: Sagrada Fam&iacute;lia 9:30am, then Mercat G&ograve;tic + Sant Jordi&rsquo;s Day book markets + Carrer dels Banys Nous all afternoon.</div><div class="shop-grid"><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+dels+Banys+Nous+antiques+maps+Barcelona" target="_blank"><div class="shop-card-name">Carrer dels Banys Nous</div><div class="shop-card-addr">Gothic Quarter &mdash; the whole street &#x2197;</div><div class="shop-card-desc">Lined with antique dealers specializing in maps, prints, and books. Best single street for old atlases in Barcelona.</div><span class="shop-tag">Maps &amp; prints</span><span class="shop-tag">Top pick</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Bulevard+dels+Antiquaris+Passeig+de+Gracia+Barcelona" target="_blank"><div class="shop-card-name">Bulevard dels Antiquaris</div><div class="shop-card-addr">Passeig de Gr&agrave;cia, 55 &mdash; Eixample &#x2197;</div><div class="shop-card-desc">60+ antique dealers under one roof. Tue&ndash;Sat. Close to the Airbnb.</div><span class="shop-tag">60+ dealers</span><span class="shop-tag">Tue&ndash;Sat</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Els+Encants+Vells+flea+market+Barcelona+Glories" target="_blank"><div class="shop-card-name">Els Encants Vells</div><div class="shop-card-addr">Pla&ccedil;a de les Gl&ograve;ries &mdash; Gl&ograve;ries metro &#x2197;</div><div class="shop-card-desc">Old maps, atlases, and prints among 301 stalls. Mon/Wed/Fri/Sat 9am&ndash;8pm.</div><span class="shop-tag">Flea market</span><span class="shop-tag">Mon/Wed/Fri/Sat</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Las+Ramblas+Barcelona+book+stalls" target="_blank"><div class="shop-card-name">Sant Jordi&rsquo;s Day Book Stalls</div><div class="shop-card-addr">Gothic Quarter &amp; Las Ramblas &mdash; April 23 only &#x2197;</div><div class="shop-card-desc">The best day of the year to buy books in Barcelona. Every publisher sets up outdoors, city-wide.</div><span class="shop-tag">April 23 only</span><span class="shop-tag">All day</span></a></div></div>
 </section>
 
 <section class="section" id="expenses">
-  <header class="section-header">
-    <div class="section-eyebrow">08 &mdash; Money</div>
-    <h2 class="section-title">Shared Expenses</h2>
-  </header>
+  <header class="section-header"><div class="section-eyebrow">08 &mdash; Money</div><h2 class="section-title">Shared Expenses</h2></header>
   <div class="expense-summary">
     <div class="expense-summary-card"><div class="expense-summary-label">Mark</div><div class="expense-summary-amount" id="total-mark">&mdash;</div><div class="expense-summary-sub" id="count-mark">Loading&hellip;</div></div>
     <div class="expense-summary-card"><div class="expense-summary-label">Rumana</div><div class="expense-summary-amount" id="total-rumana">&mdash;</div><div class="expense-summary-sub" id="count-rumana">Loading&hellip;</div></div>
@@ -512,7 +371,7 @@ a{text-decoration:none;color:inherit}
     <div id="expense-list-wrap">
       <div class="expense-empty" id="expense-empty">Loading expenses&hellip;</div>
       <table class="expense-table" id="expense-table" style="display:none">
-        <thead><tr><th>#</th><th>Date</th><th>Description</th><th>Who</th><th>Amount</th></tr></thead>
+        <thead><tr><th>#</th><th>Date</th><th>Description</th><th>Who</th><th>Amount</th><th style="width:44px"></th></tr></thead>
         <tbody id="expense-tbody"></tbody>
       </table>
     </div>
@@ -569,13 +428,9 @@ loadFromSheet();
 loadChecklist();
 
 // ============================================================
-// EXPENSE TRACKER — Google Sheets backed, shared real-time
-// Auto-discovers the Expenses tab GID by scanning published GIDs
-// Writes via Apps Script. No localStorage — works everywhere.
+// EXPENSE TRACKER — Sheets-backed, auto-discovers GID, delete support
 // ============================================================
 function currencySymbol(code){return code==='USD'?'$':'\u20ac';}
-
-// Try these GIDs in order to find the Expenses tab
 const CANDIDATE_GIDS=['1039893554','734067895','471855652','1988829223','0','1','2'];
 let EXPENSES_GID_FOUND=null;
 
@@ -588,16 +443,22 @@ async function findExpensesGID(){
       const text=await res.text();
       const rows=parseCSV(text);
       if(rows.length>0){
-        const header=rows[0].map(h=>h.toLowerCase().trim());
-        // Look for 'description' or 'who' in header — unique to Expenses tab
-        if(header.includes('description')&&header.includes('who')&&header.includes('amount')){
-          EXPENSES_GID_FOUND=gid;
-          return gid;
-        }
+        const h=rows[0].map(x=>x.toLowerCase().trim());
+        if(h.includes('description')&&h.includes('who')&&h.includes('amount')){EXPENSES_GID_FOUND=gid;return gid;}
       }
     }catch(e){continue;}
   }
   return null;
+}
+
+async function deleteExpense(sheetRow,btn){
+  if(!confirm('Delete this expense?'))return;
+  btn.disabled=true;btn.textContent='\u22ef';
+  try{
+    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'deleteExpense',row:sheetRow}),mode:'no-cors'});
+    EXPENSES_GID_FOUND=null;setTimeout(loadExpenses,1500);
+  }catch(e){btn.disabled=false;btn.textContent='\u2715';}
 }
 
 async function loadExpenses(){
@@ -610,9 +471,7 @@ async function loadExpenses(){
     if(!gid){
       empty.textContent='Expenses tab not yet published. Add an expense to start.';
       empty.style.display='';table.style.display='none';
-      updateTotals([]);
-      status.textContent='Ready to record';
-      return;
+      updateTotals([]);status.textContent='Ready to record';return;
     }
     const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});
     if(!res.ok)throw new Error('HTTP '+res.status);
@@ -627,28 +486,32 @@ async function loadExpenses(){
     empty.style.display='none';table.style.display='';
     tbody.innerHTML='';
     data.forEach((r,i)=>{
+      const sheetRow=i+2;
       const sym=currencySymbol(r[4]||'EUR');
       const badgeClass=r[2]==='Mark'?'badge-mark':r[2]==='Rumana'?'badge-rumana':'badge-shared';
       const tr=document.createElement('tr');
-      tr.innerHTML='<td style="font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem;">'+(i+1)+'</td><td style="font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey);">'+r[0]+'</td><td>'+r[1]+'</td><td><span class="expense-who-badge '+badgeClass+'">'+r[2]+'</span></td><td class="expense-amount-cell">'+sym+parseFloat(r[3]).toFixed(2)+'</td>';
+      tr.innerHTML=
+        '<td style="font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem;">'+(i+1)+'</td>'+
+        '<td style="font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey);">'+r[0]+'</td>'+
+        '<td>'+r[1]+'</td>'+
+        '<td><span class="expense-who-badge '+badgeClass+'">'+r[2]+'</span></td>'+
+        '<td class="expense-amount-cell">'+sym+parseFloat(r[3]).toFixed(2)+'</td>'+
+        '<td><button class="exp-del-btn" onclick="deleteExpense('+sheetRow+',this)" title="Delete">\u2715</button></td>';
       tbody.appendChild(tr);
     });
     updateTotals(data);
     status.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   }catch(e){
-    empty.textContent='Could not load expenses. Check connection.';
+    empty.textContent='Could not load expenses.';
     empty.style.display='';table.style.display='none';
-    status.textContent='Error loading';
+    status.textContent='Error';
   }
 }
 
 function updateTotals(data){
-  let markTotal=0,rumanaTotal=0,allTotal=0,markCount=0,rumanaCount=0;
-  let sym='\u20ac';
+  let markTotal=0,rumanaTotal=0,allTotal=0,markCount=0,rumanaCount=0,sym='\u20ac';
   data.forEach(r=>{
-    const amt=parseFloat(r[3])||0;
-    sym=currencySymbol(r[4]||'EUR');
-    allTotal+=amt;
+    const amt=parseFloat(r[3])||0;sym=currencySymbol(r[4]||'EUR');allTotal+=amt;
     if(r[2]==='Mark'){markTotal+=amt;markCount++;}
     else if(r[2]==='Rumana'){rumanaTotal+=amt;rumanaCount++;}
     else{markTotal+=amt/2;rumanaTotal+=amt/2;markCount++;rumanaCount++;}
@@ -662,36 +525,23 @@ function updateTotals(data){
 }
 
 async function addExpense(){
-  const descEl=document.getElementById('exp-desc');
-  const amountEl=document.getElementById('exp-amount');
-  const currency=document.getElementById('exp-currency').value;
-  const who=document.getElementById('exp-who').value;
-  const desc=descEl.value.trim();
-  const amount=parseFloat(amountEl.value);
+  const descEl=document.getElementById('exp-desc'),amountEl=document.getElementById('exp-amount');
+  const currency=document.getElementById('exp-currency').value,who=document.getElementById('exp-who').value;
+  const desc=descEl.value.trim(),amount=parseFloat(amountEl.value);
   const btn=document.getElementById('btn-add-expense');
   if(!desc||isNaN(amount)||amount<=0){descEl.focus();return;}
   btn.disabled=true;btn.textContent='Saving\u2026';
   const date=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
   try{
-    await fetch(CHECKLIST_SCRIPT_URL,{
-      method:'POST',
-      headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({action:'expense',date,desc,who,amount,currency}),
-      mode:'no-cors'
-    });
-    descEl.value='';amountEl.value='';
-    EXPENSES_GID_FOUND=null; // reset so next load re-scans
-    setTimeout(loadExpenses,2000);
-  }catch(e){
-    alert('Could not save expense. Please try again.');
-  }finally{
-    btn.disabled=false;btn.textContent='+ Add';
-  }
+    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'expense',date,desc,who,amount,currency}),mode:'no-cors'});
+    descEl.value='';amountEl.value='';EXPENSES_GID_FOUND=null;setTimeout(loadExpenses,2000);
+  }catch(e){alert('Could not save expense.');}
+  finally{btn.disabled=false;btn.textContent='+ Add';}
 }
 
 document.getElementById('exp-desc')&&document.getElementById('exp-desc').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
 document.getElementById('exp-amount')&&document.getElementById('exp-amount').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
-
 loadExpenses();
 </script>
 </body>
