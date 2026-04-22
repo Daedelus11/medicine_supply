@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v34: Dan Mannion address corrected; Sagrada Familia app links added -->
+<!-- v35: iOS Chrome/Safari localStorage fix for expense tracker -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -534,7 +534,6 @@ const GUGGENHEIM_DOC='https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FC
 const AC_HOTEL_DOC='https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link';
 const FLICKR_USER='204527065@N06';
 const FLICKR_ALBUM='72177720333247088';
-const FLICKR_ALBUM_URL='https://www.flickr.com/photos/204527065@N06/albums/72177720333247088';
 
 function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
 function mapsRoute(o,w,d){return'https://www.google.com/maps/dir/'+encodeURIComponent(o)+'/'+encodeURIComponent(w)+'/'+encodeURIComponent(d);}
@@ -571,7 +570,6 @@ async function loadFlickr(){
   }catch(e){
     strip.innerHTML='<div class="flickr-empty">&#128247; Photos will appear here once added to the Flickr album.</div>';
     countEl.textContent='Live via Flickr';
-    console.warn('Flickr load:',e.message);
   }
 }
 loadFlickr();
@@ -605,9 +603,40 @@ function renderItinerary(days){const c=document.getElementById('itinerary-contai
 async function loadFromSheet(){try{const res=await fetch(SHEET_CSV_URL,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');const header=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));const idx={date:header.indexOf('date'),title:header.indexOf('title'),loc:header.indexOf('location'),time:header.indexOf('time'),act:header.indexOf('activity'),tag:header.indexOf('tag')};const days=[];rows.slice(1).forEach(row=>{const date=row[idx.date]||'',title=row[idx.title]||'',loc=row[idx.loc]||'',time=row[idx.time]||'',actText=row[idx.act]||'',tag=row[idx.tag]||'';if(!date||!actText)return;let ex=days.find(d=>d.date===date);if(!ex){ex={date,title,loc,activities:[]};days.push(ex);}ex.activities.push({time,text:actText,tag:tag.toLowerCase()});});if(days.length>0){renderItinerary(days);document.getElementById('footer-updated').textContent='Live \u2014 Google Sheets \u2014 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}else throw new Error('No rows');}catch(e){renderItinerary(FALLBACK);}}
 loadFromSheet();
 loadChecklist();
-const EXPENSE_KEY='spain2026_expenses';
-function loadExpenses(){try{return JSON.parse(localStorage.getItem(EXPENSE_KEY))||[];}catch{return[];}}
-function saveExpenses(arr){localStorage.setItem(EXPENSE_KEY,JSON.stringify(arr));}
+
+// ============================================================
+// EXPENSE TRACKER — Safari/iOS Chrome safe storage
+// localStorage is blocked in private mode and some iOS contexts.
+// Falls back to in-memory store so the UI always works.
+// ============================================================
+const EXPENSE_KEY = 'spain2026_expenses';
+let _memStore = null; // in-memory fallback
+
+function _storageAvailable() {
+  try {
+    const t = '__test__';
+    localStorage.setItem(t, t);
+    localStorage.removeItem(t);
+    return true;
+  } catch(e) { return false; }
+}
+
+function loadExpenses() {
+  if (_memStore !== null) return _memStore.slice();
+  if (_storageAvailable()) {
+    try { return JSON.parse(localStorage.getItem(EXPENSE_KEY)) || []; } catch(e) {}
+  }
+  _memStore = [];
+  return [];
+}
+
+function saveExpenses(arr) {
+  if (_storageAvailable()) {
+    try { localStorage.setItem(EXPENSE_KEY, JSON.stringify(arr)); return; } catch(e) {}
+  }
+  _memStore = arr.slice();
+}
+
 function renderExpenses(){const expenses=loadExpenses();const tbody=document.getElementById('expense-tbody');const table=document.getElementById('expense-table');const empty=document.getElementById('expense-empty');if(!tbody)return;tbody.innerHTML='';let totalMark=0,totalRumana=0,totalAll=0,countMark=0,countRumana=0;expenses.forEach((e,i)=>{const amount=parseFloat(e.amount);totalAll+=amount;if(e.who==='Mark'){totalMark+=amount;countMark++;}else if(e.who==='Rumana'){totalRumana+=amount;countRumana++;}else{totalMark+=amount/2;totalRumana+=amount/2;countMark++;countRumana++;}const badgeClass=e.who==='Mark'?'badge-mark':e.who==='Rumana'?'badge-rumana':'badge-shared';const tr=document.createElement('tr');tr.innerHTML='<td style="font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem;">'+(i+1)+'</td><td>'+e.desc+'</td><td><span class="expense-who-badge '+badgeClass+'">'+e.who+'</span></td><td class="expense-amount-cell">'+e.currency+parseFloat(e.amount).toFixed(2)+'</td><td><button class="btn-delete-expense" onclick="deleteExpense('+i+')" title="Delete">&times;</button></td>';tbody.appendChild(tr);});if(expenses.length===0){empty.style.display='';table.style.display='none';}else{empty.style.display='none';table.style.display='';}const sym=expenses.length>0?(expenses[0].currency||'\u20ac'):'\u20ac';document.getElementById('total-mark').textContent=sym+totalMark.toFixed(2);document.getElementById('total-rumana').textContent=sym+totalRumana.toFixed(2);document.getElementById('total-all').textContent=sym+totalAll.toFixed(2);document.getElementById('count-mark').textContent=countMark+' expense'+(countMark!==1?'s':'');document.getElementById('count-rumana').textContent=countRumana+' expense'+(countRumana!==1?'s':'');document.getElementById('count-all').textContent=expenses.length+' entr'+(expenses.length!==1?'ies':'y');}
 function addExpense(){const desc=document.getElementById('exp-desc').value.trim();const amount=parseFloat(document.getElementById('exp-amount').value);const currency=document.getElementById('exp-currency').value;const who=document.getElementById('exp-who').value;if(!desc||isNaN(amount)||amount<=0){document.getElementById('exp-desc').focus();return;}const expenses=loadExpenses();expenses.push({desc,amount,currency,who,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});saveExpenses(expenses);renderExpenses();document.getElementById('exp-desc').value='';document.getElementById('exp-amount').value='';document.getElementById('exp-desc').focus();}
 function deleteExpense(i){const expenses=loadExpenses();expenses.splice(i,1);saveExpenses(expenses);renderExpenses();}
