@@ -1,10 +1,11 @@
+<!-- v37: Auto-discover Expenses tab GID + write working -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v36: Expenses backed by Google Sheets — shared, real-time, no localStorage -->
+<!-- v37: Expenses GID auto-discovery; write via Apps Script -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -483,7 +484,6 @@ a{text-decoration:none;color:inherit}
   </div>
 </section>
 
-<!-- EXPENSES — Google Sheets backed, shared between Mark & Rumana -->
 <section class="section" id="expenses">
   <header class="section-header">
     <div class="section-eyebrow">08 &mdash; Money</div>
@@ -525,8 +525,8 @@ a{text-decoration:none;color:inherit}
 <script>
 const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
 const CHECKLIST_GID='1309362457';
-const EXPENSES_GID='1988829223';
 const CHECKLIST_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxCx1SRJCK0EGg1N0K0YP_3GpPhKlHWUkwcsaRzrVj0z9zUACCJ9PjHtYTdEbukOW0X/exec';
+const SHEET_PUB_BASE='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv&gid=';
 const GUELL_TICKETS='https://drive.google.com/file/d/1PFEldZb0dVM-gIwxuDB_s-WxAlAU5Nvq/view?usp=drive_link';
 const SF_TICKETS='https://drive.google.com/file/d/104w2XcQRl95HCEDyi8StY-F0LpLBslVt/view?usp=drive_link';
 const FLIGHTS_DOC='https://drive.google.com/file/d/1fLHnLr04lwGLPTf7PazpSg-wsttD7agn/view?usp=drive_link';
@@ -559,7 +559,7 @@ const CITY_COORDS={'Barcelona':{lat:41.3851,lon:2.1734,tz:'Europe%2FMadrid'},'Ta
 const WCACHE={};
 async function fetchWeather(loc,date){const key=loc+':'+date;if(WCACHE[key])return WCACHE[key];const coords=CITY_COORDS[loc];if(!coords)return null;try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+coords.lat+'&longitude='+coords.lon+'&daily=temperature_2m_max,temperature_2m_min,weathercode&temperature_unit=fahrenheit&timezone='+coords.tz+'&start_date='+date+'&end_date='+date);const d=await r.json();if(!d.daily||!d.daily.temperature_2m_max[0])return null;const res={hi:Math.round(d.daily.temperature_2m_max[0]),lo:Math.round(d.daily.temperature_2m_min[0]),code:d.daily.weathercode[0]};WCACHE[key]=res;return res;}catch{return null;}}
 function wIcon(c){if(c===0)return'&#9728;';if(c<=3)return'&#9925;';if(c<=67)return'&#127783;';if(c<=77)return'&#10052;';return'&#9928;';}
-async function loadChecklist(){const todoEl=document.getElementById('todo-list'),doneEl=document.getElementById('done-list');const todoCount=document.getElementById('todo-count'),doneCount=document.getElementById('done-count'),statusEl=document.getElementById('checklist-status');const csvUrl='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv&gid='+CHECKLIST_GID;try{const res=await fetch(csvUrl,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');const header=rows[0].map(h=>h.toLowerCase().trim());const iItem=header.indexOf('item'),iDone=header.indexOf('done'),iParent=header.indexOf('isparent');let todoHtml='',doneHtml='',todoN=0,doneN=0;const checkSvg='<svg class="cl-check-svg" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>';rows.slice(1).forEach((row,idx)=>{const sheetRow=idx+2,item=row[iItem]||'',done=(row[iDone]||'').toUpperCase()==='TRUE',isParent=(row[iParent]||'').toUpperCase()==='TRUE';if(!item)return;const css=['cl-item',isParent?'is-parent':'is-child',done?'is-done':''].join(' ').trim();const html='<div class="'+css+'" data-row="'+sheetRow+'" data-done="'+done+'" onclick="toggleItem('+sheetRow+','+done+')"><div class="cl-box">'+checkSvg+'</div><span class="cl-label">'+item+'</span></div>';if(done){doneHtml+=html;doneN++;}else{todoHtml+=html;todoN++;}});todoEl.innerHTML=todoHtml||'<div class="checklist-error">All done! &#127881;</div>';doneEl.innerHTML=doneHtml;todoCount.textContent=todoN+' remaining';doneCount.textContent=doneN+' item'+(doneN!==1?'s':'');statusEl.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){todoEl.innerHTML='<div class="checklist-error">Could not load checklist.</div>';todoCount.textContent='Error';}}
+async function loadChecklist(){const todoEl=document.getElementById('todo-list'),doneEl=document.getElementById('done-list');const todoCount=document.getElementById('todo-count'),doneCount=document.getElementById('done-count'),statusEl=document.getElementById('checklist-status');const csvUrl=SHEET_PUB_BASE+CHECKLIST_GID;try{const res=await fetch(csvUrl,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');const header=rows[0].map(h=>h.toLowerCase().trim());const iItem=header.indexOf('item'),iDone=header.indexOf('done'),iParent=header.indexOf('isparent');let todoHtml='',doneHtml='',todoN=0,doneN=0;const checkSvg='<svg class="cl-check-svg" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>';rows.slice(1).forEach((row,idx)=>{const sheetRow=idx+2,item=row[iItem]||'',done=(row[iDone]||'').toUpperCase()==='TRUE',isParent=(row[iParent]||'').toUpperCase()==='TRUE';if(!item)return;const css=['cl-item',isParent?'is-parent':'is-child',done?'is-done':''].join(' ').trim();const html='<div class="'+css+'" data-row="'+sheetRow+'" data-done="'+done+'" onclick="toggleItem('+sheetRow+','+done+')"><div class="cl-box">'+checkSvg+'</div><span class="cl-label">'+item+'</span></div>';if(done){doneHtml+=html;doneN++;}else{todoHtml+=html;todoN++;}});todoEl.innerHTML=todoHtml||'<div class="checklist-error">All done! &#127881;</div>';doneEl.innerHTML=doneHtml;todoCount.textContent=todoN+' remaining';doneCount.textContent=doneN+' item'+(doneN!==1?'s':'');statusEl.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){todoEl.innerHTML='<div class="checklist-error">Could not load checklist.</div>';todoCount.textContent='Error';}}
 async function toggleItem(sheetRow,currentDone){const el=document.querySelector('[data-row="'+sheetRow+'"]');if(!el)return;el.classList.add('saving');try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({row:sheetRow,done:!currentDone}),mode:'no-cors'});setTimeout(loadChecklist,800);}catch(e){el.classList.remove('saving');}}
 async function addChecklistItem(){const sectionEl=document.getElementById('cl-section'),inputEl=document.getElementById('cl-new-item'),btn=document.getElementById('cl-add-btn');const item=inputEl.value.trim(),section=sectionEl.value;if(!item)return;btn.disabled=true;btn.textContent='Adding\u2026';try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'add',section:section,item:item,done:'FALSE',isParent:'FALSE'}),mode:'no-cors'});inputEl.value='';setTimeout(loadChecklist,1000);}catch(e){}finally{btn.disabled=false;btn.textContent='Add';}}
 const FALLBACK=[{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[{time:'2:10pm',text:'<strong>BOI \u2192 ATL</strong> \u2014 DL 874 \u2014 arr 8:28pm'+docLink(FLIGHTS_DOC,'flights'),tag:'confirmed'},{time:'Evening',text:'ATL layover \u2014 The Club at Concourse F (Priority Pass)'},{time:'10:05pm',text:'<strong>ATL \u2192 BCN</strong> \u2014 VS 3926, overnight \u2014 Terminal I',tag:'confirmed'}]},{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[{time:'12:50pm',text:'<strong>Arrive Barcelona BCN</strong> \u2014 VS 3926 \u2014 Terminal 1'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},{time:'',text:'Aerob\u00fas A1 from T1 \u2192 Pla\u00e7a Catalunya (~35 min, \u20ac7)'},{time:'',text:'Check in: Central Apartments \u2014 Res. 562/2026'+addr('Carrer de Bail\u00e8n, 125, Barcelona',mapsSearch('Carrer de Bailen 125 Barcelona Eixample'))+docLink(AIRBNB_DOC,'reservation'),tag:'confirmed'},{time:'Afternoon',text:'Recovery day \u2014 slow explore of Eixample'},{time:'Evening',text:'Dinner at a local spot'}]},{date:'2026-04-22',title:'Park G\u00fcell + Picasso',loc:'Barcelona',activities:[{time:'10:30am',text:'<strong>Park G\u00fcell \u2014 Monumental Zone</strong> \u2014 Res. 8337300'+docLink(GUELL_TICKETS,'tickets')+addr('Park G\u00fcell, Barcelona',mapsSearch('Park Guell Barcelona Monumental Zone')),tag:'confirmed'},{time:'',text:'Valid until 11:00am entry. No re-entry. Bring photo ID.'},{time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15\u201323',mapsSearch('Museu Picasso Barcelona Carrer de Montcada')),tag:'book'},{time:'',text:'El Born \u2014 Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous',mapsSearch('Carrer dels Banys Nous Barcelona antiques'))},{time:'Evening',text:'Dinner in El Born'}]},{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[{time:'9:30am',text:'<strong>Sagrada Fam\u00edlia with Passion Tower</strong> \u2014 Res. 95793090'+docLink(SF_TICKETS,'tickets')+addr('Sagrada Fam\u00edlia',mapsSearch('Sagrada Familia Barcelona')),tag:'confirmed'},{time:'9:45am',text:'Passion Tower access \u2014 enter via C/ Marina entrance. Locators: 285907110 (Rumana) / 285907111 (Mark)'},{time:'Afternoon',text:"Sant Jordi's Day \u2014 book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic',mapsSearch('Barri Gotic Barcelona'))},{time:'',text:'Mercat G\u00f2tic antiques + Carrer dels Banys Nous map dealers'+addr('Mercat G\u00f2tic, Pla\u00e7a Nova',mapsSearch('Mercat Gotic Barcelona Placa Nova'))},{time:'Evening',text:'Dinner in Gothic Quarter'}]},{date:'2026-04-24',title:'To Cambrils / Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Check out of Eixample Airbnb \u2014 Carrer de Bail\u00e8n, 125'},{time:'2:00pm',text:'Pick up rental car \u2014 National, Conf. 1797553757'+docLink(CAR_DOC,'reservation')+addr('Barcelona Estacion Ave, Parking SABA, Pl. de Joan Peiro',mapsSearch('National Car Rental Barcelona Sants')),tag:'confirmed'},{time:'',text:'From inside Sants station follow signs to underground parking level -1'},{time:'',text:'Drive to Cambrils (~1.5 hrs via AP-7)'},{time:'Afternoon',text:'Arrive \u2014 staying with Dan Mannion'+addr('Carrer del Cardinal Vidal I Barrequer 28, Cambrils',mapsSearch('Carrer del Cardinal Vidal I Barrequer 28 Cambrils Tarragona Spain'))}]},{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Tarragona Cathedral'+addr('Catedral de Tarragona',mapsSearch('Catedral de Tarragona'))},{time:'',text:'Ferreres Aqueduct (Pont del Diable)'+addr('Ferreres Aqueduct',mapsSearch('Ferreres Aqueduct Pont del Diable Tarragona'))},{time:'Afternoon',text:'Tarragona beaches \u2014 Platja del Miracle'+addr('Platja del Miracle',mapsSearch('Platja del Miracle Tarragona'))},{time:'',text:'Local wine and seafood'}]},{date:'2026-04-26',title:'Drive to Bilbao',loc:'Bilbao',activities:[{time:'Morning',text:'Depart Cambrils \u2014 route: AP-7 north \u2192 A-8 coastal \u2192 Bilbao (~5\u20136 hrs)'},{time:'3:00pm',text:'Check in: Radisson Gran Via Bilbao \u2014 Conf. 0159730000'+docLink(RADISSON_DOC,'confirmation')+addr('Radisson Collection Hotel, Gran Via Bilbao',mapsSearch('Radisson Collection Hotel Gran Via Bilbao')),tag:'confirmed'},{time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo (Siete Calles)',mapsSearch('Casco Viejo Siete Calles Bilbao'))}]},{date:'2026-04-27',title:'Guggenheim',loc:'Bilbao',activities:[{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> \u2014 Res. 95961308'+docLink(GUGGENHEIM_DOC,'tickets')+addr('Guggenheim Bilbao',mapsSearch('Guggenheim Museum Bilbao')),tag:'confirmed'},{time:'',text:'Check Carne y Arena VR installation (I\u00f1\u00e1rritu, through June 20)'},{time:'Afternoon',text:'Bilbao Museo de Bellas Artes'+addr('Museo de Bellas Artes Bilbao',mapsSearch('Museo de Bellas Artes Bilbao'))},{time:'',text:'Riverside walk along R\u00eda del Nervi\u00f3n'},{time:'Evening',text:'Pintxos in Plaza Nueva'+addr('Plaza Nueva, Bilbao',mapsSearch('Plaza Nueva Bilbao'))}]},{date:'2026-04-28',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[{time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},{time:'',text:'La Concha beach'+addr('La Concha, San Sebasti\u00e1n',mapsSearch('Playa de La Concha San Sebastian'))},{time:'Lunch',text:'Pintxos in Parte Vieja (old town)'+addr('Parte Vieja, San Sebasti\u00e1n',mapsSearch('Parte Vieja San Sebastian'))},{time:'Afternoon',text:'Monte Igueldo funicular'+addr('Monte Igueldo funicular',mapsSearch('Monte Igueldo funicular San Sebastian'))},{time:'Evening',text:'Drive back to Bilbao'}]},{date:'2026-04-29',title:'Basque Country',loc:'Bilbao',activities:[{time:'Option A',text:'Guernica Peace Museum'+addr('Gernika Peace Museum',mapsSearch('Gernika Peace Museum Guernica'))},{time:'Option B',text:'Rioja wine country \u2014 Haro, Laguardia'+addr('Haro, La Rioja',mapsSearch('Haro La Rioja Spain'))},{time:'Option C',text:'Relaxed Bilbao day \u2014 neighborhoods, caf\u00e9s, antiques'},{time:'Evening',text:'Farewell pintxos in Casco Viejo'+addr('Casco Viejo, Bilbao',mapsSearch('Casco Viejo Bilbao'))}]},{date:'2026-04-30',title:'Return to Barcelona via Toulouse',loc:'Barcelona',activities:[{time:'Morning',text:'Depart Bilbao \u2014 route: A-8 east \u2192 Toulouse, France \u2192 AP-7 south \u2192 Barcelona (~7\u20138 hrs)'},{time:'',text:'Toulouse \u2014 good midpoint for lunch and fuel'+addr('Toulouse city centre',mapsSearch('Toulouse city centre France'))},{time:'',text:'Return rental car at Barcelona Estacion Ave (May 1 12:00pm deadline)'+addr('Barcelona Sants Station',mapsSearch('National Car Rental Barcelona Sants')),tag:'confirmed'},{time:'3:00pm',text:'Check in: AC Hotel Barcelona Sants \u2014 Conf. #92299097'+docLink(AC_HOTEL_DOC,'confirmation')+addr('Passeig de Sant Antoni, 36-40, Barcelona',mapsRoute('Bilbao Spain','Toulouse France','AC Hotel Barcelona Sants')),tag:'confirmed'},{time:'Evening',text:'Last evening in Barcelona \u2014 farewell dinner'}]},{date:'2026-05-01',title:'Home',loc:'Home',activities:[{time:'6:30am',text:'R2 Nord train: Sants \u2192 Terminal 1 (~19 min)'+addr('Barcelona Sants Station',mapsSearch('Barcelona Sants Railway Station'))},{time:'Noon',text:'Return rental car deadline \u2014 Barcelona Estacion Ave',tag:'confirmed'},{time:'11:00am',text:'<strong>Depart BCN</strong> \u2014 VS 3937'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},{time:'3:04pm',text:'<strong>Arrive ATL</strong> \u2014 The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'7:57pm',text:'<strong>Depart ATL</strong> \u2014 DL 704, Terminal S',tag:'confirmed'},{time:'10:28pm',text:'<strong>Arrive Boise BOI</strong>',tag:'confirmed'}]}];
@@ -569,14 +569,36 @@ loadFromSheet();
 loadChecklist();
 
 // ============================================================
-// EXPENSE TRACKER — Google Sheets backed
-// Reads from Expenses tab (GID 1988829223) via published CSV
-// Writes via Apps Script (same URL as checklist)
-// No localStorage — works on all browsers/devices
+// EXPENSE TRACKER — Google Sheets backed, shared real-time
+// Auto-discovers the Expenses tab GID by scanning published GIDs
+// Writes via Apps Script. No localStorage — works everywhere.
 // ============================================================
-const EXPENSES_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv&gid='+EXPENSES_GID;
-
 function currencySymbol(code){return code==='USD'?'$':'\u20ac';}
+
+// Try these GIDs in order to find the Expenses tab
+const CANDIDATE_GIDS=['1039893554','734067895','471855652','1988829223','0','1','2'];
+let EXPENSES_GID_FOUND=null;
+
+async function findExpensesGID(){
+  if(EXPENSES_GID_FOUND)return EXPENSES_GID_FOUND;
+  for(const gid of CANDIDATE_GIDS){
+    try{
+      const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});
+      if(!res.ok)continue;
+      const text=await res.text();
+      const rows=parseCSV(text);
+      if(rows.length>0){
+        const header=rows[0].map(h=>h.toLowerCase().trim());
+        // Look for 'description' or 'who' in header — unique to Expenses tab
+        if(header.includes('description')&&header.includes('who')&&header.includes('amount')){
+          EXPENSES_GID_FOUND=gid;
+          return gid;
+        }
+      }
+    }catch(e){continue;}
+  }
+  return null;
+}
 
 async function loadExpenses(){
   const empty=document.getElementById('expense-empty');
@@ -584,11 +606,18 @@ async function loadExpenses(){
   const table=document.getElementById('expense-table');
   const status=document.getElementById('expense-sync-status');
   try{
-    const res=await fetch(EXPENSES_CSV,{cache:'no-cache'});
+    const gid=await findExpensesGID();
+    if(!gid){
+      empty.textContent='Expenses tab not yet published. Add an expense to start.';
+      empty.style.display='';table.style.display='none';
+      updateTotals([]);
+      status.textContent='Ready to record';
+      return;
+    }
+    const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});
     if(!res.ok)throw new Error('HTTP '+res.status);
     const text=await res.text();
     const rows=parseCSV(text);
-    // Row 0: Date, Description, Who, Amount, Currency
     const data=rows.slice(1).filter(r=>r[1]&&r[3]);
     if(data.length===0){
       empty.textContent='No expenses yet \u2014 add your first above.';
@@ -651,8 +680,8 @@ async function addExpense(){
       mode:'no-cors'
     });
     descEl.value='';amountEl.value='';
-    // Reload after short delay to let Sheet update
-    setTimeout(loadExpenses,1500);
+    EXPENSES_GID_FOUND=null; // reset so next load re-scans
+    setTimeout(loadExpenses,2000);
   }catch(e){
     alert('Could not save expense. Please try again.');
   }finally{
