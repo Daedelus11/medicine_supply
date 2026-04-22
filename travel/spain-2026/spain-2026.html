@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v35: iOS Chrome/Safari localStorage fix for expense tracker -->
+<!-- v36: Expenses backed by Google Sheets — shared, real-time, no localStorage -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -206,11 +206,11 @@ a{text-decoration:none;color:inherit}
 .expense-select-wrap::after{content:'▾';position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--warm-grey);pointer-events:none;font-size:0.75rem}
 .btn-add-expense{background:var(--yellow);border:none;cursor:pointer;padding:0.6rem 1.25rem;font-family:var(--sans);font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--dark);white-space:nowrap;transition:background 0.2s;height:36px;align-self:end}
 .btn-add-expense:hover{background:#e6b01f}
+.btn-add-expense:disabled{opacity:0.5;cursor:not-allowed}
 .expense-table-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
 .expense-table-header{background:var(--ink);padding:0.9rem 1.25rem;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--yellow)}
 .expense-table-title{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--white)}
-.btn-clear-expenses{background:none;border:1px solid rgba(255,255,255,0.15);cursor:pointer;padding:4px 12px;font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:rgba(255,255,255,0.35);transition:0.2s}
-.btn-clear-expenses:hover{border-color:var(--yellow);color:var(--yellow)}
+.expense-table-meta{font-family:var(--mono);font-size:0.6rem;color:rgba(255,255,255,0.3)}
 .expense-table{width:100%;border-collapse:collapse}
 .expense-table th{font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--warm-grey);padding:0.6rem 1rem;text-align:left;border-bottom:1px solid var(--rule);background:var(--cream)}
 .expense-table td{padding:0.75rem 1rem;border-bottom:1px solid var(--rule);font-size:0.82rem;color:var(--stone);vertical-align:middle}
@@ -221,8 +221,6 @@ a{text-decoration:none;color:inherit}
 .badge-rumana{background:rgba(76,175,80,0.1);color:#4caf50}
 .badge-shared{background:rgba(92,92,88,0.1);color:var(--stone)}
 .expense-amount-cell{font-family:var(--mono);font-weight:600;color:var(--ink)}
-.btn-delete-expense{background:none;border:none;cursor:pointer;color:var(--warm-grey);font-size:1rem;line-height:1;padding:2px 6px;transition:color 0.2s}
-.btn-delete-expense:hover{color:#c0392b}
 .expense-empty{text-align:center;padding:3rem;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)}
 .expense-quick-link{display:inline-flex;align-items:center;gap:6px;background:var(--yellow);color:var(--dark);font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:8px 16px;position:fixed;bottom:24px;right:24px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,0.25);transition:background 0.2s;text-decoration:none}
 .expense-quick-link:hover{background:#e6b01f}
@@ -485,32 +483,36 @@ a{text-decoration:none;color:inherit}
   </div>
 </section>
 
+<!-- EXPENSES — Google Sheets backed, shared between Mark & Rumana -->
 <section class="section" id="expenses">
   <header class="section-header">
     <div class="section-eyebrow">08 &mdash; Money</div>
     <h2 class="section-title">Shared Expenses</h2>
   </header>
   <div class="expense-summary">
-    <div class="expense-summary-card"><div class="expense-summary-label">Mark</div><div class="expense-summary-amount" id="total-mark">0.00</div><div class="expense-summary-sub" id="count-mark">0 expenses</div></div>
-    <div class="expense-summary-card"><div class="expense-summary-label">Rumana</div><div class="expense-summary-amount" id="total-rumana">0.00</div><div class="expense-summary-sub" id="count-rumana">0 expenses</div></div>
-    <div class="expense-summary-card"><div class="expense-summary-label">Trip Total</div><div class="expense-summary-amount" id="total-all">0.00</div><div class="expense-summary-sub" id="count-all">0 entries</div></div>
+    <div class="expense-summary-card"><div class="expense-summary-label">Mark</div><div class="expense-summary-amount" id="total-mark">&mdash;</div><div class="expense-summary-sub" id="count-mark">Loading&hellip;</div></div>
+    <div class="expense-summary-card"><div class="expense-summary-label">Rumana</div><div class="expense-summary-amount" id="total-rumana">&mdash;</div><div class="expense-summary-sub" id="count-rumana">Loading&hellip;</div></div>
+    <div class="expense-summary-card"><div class="expense-summary-label">Trip Total</div><div class="expense-summary-amount" id="total-all">&mdash;</div><div class="expense-summary-sub" id="count-all">Loading&hellip;</div></div>
   </div>
   <div class="expense-form">
     <div class="expense-form-header">Add an Expense</div>
     <div class="expense-form-body">
       <div class="expense-field" style="grid-column:span 2"><label class="expense-label" for="exp-desc">What</label><input class="expense-input" id="exp-desc" type="text" placeholder="e.g. Lunch at Cal Pep" autocomplete="off"></div>
       <div class="expense-field"><label class="expense-label" for="exp-amount">Amount</label><input class="expense-input" id="exp-amount" type="number" min="0" step="0.01" placeholder="0.00"></div>
-      <div class="expense-field"><label class="expense-label" for="exp-currency">Currency</label><div class="expense-select-wrap"><select class="expense-select" id="exp-currency"><option value="&euro;">&euro; Euro</option><option value="$">$ USD</option></select></div></div>
+      <div class="expense-field"><label class="expense-label" for="exp-currency">Currency</label><div class="expense-select-wrap"><select class="expense-select" id="exp-currency"><option value="EUR">&euro; Euro</option><option value="USD">$ USD</option></select></div></div>
       <div class="expense-field"><label class="expense-label" for="exp-who">Who Paid</label><div class="expense-select-wrap"><select class="expense-select" id="exp-who"><option value="Mark">Mark</option><option value="Rumana">Rumana</option><option value="Shared">Shared</option></select></div></div>
-      <button class="btn-add-expense" onclick="addExpense()">+ Add</button>
+      <button class="btn-add-expense" id="btn-add-expense" onclick="addExpense()">+ Add</button>
     </div>
   </div>
   <div class="expense-table-wrap">
-    <div class="expense-table-header"><div class="expense-table-title">Expense Log</div><button class="btn-clear-expenses" onclick="clearExpenses()">Clear All</button></div>
+    <div class="expense-table-header">
+      <div class="expense-table-title">Expense Log</div>
+      <div class="expense-table-meta" id="expense-sync-status">Live &mdash; Google Sheets</div>
+    </div>
     <div id="expense-list-wrap">
-      <div class="expense-empty" id="expense-empty">No expenses yet &mdash; add your first above.</div>
+      <div class="expense-empty" id="expense-empty">Loading expenses&hellip;</div>
       <table class="expense-table" id="expense-table" style="display:none">
-        <thead><tr><th>#</th><th>Description</th><th>Who</th><th>Amount</th><th></th></tr></thead>
+        <thead><tr><th>#</th><th>Date</th><th>Description</th><th>Who</th><th>Amount</th></tr></thead>
         <tbody id="expense-tbody"></tbody>
       </table>
     </div>
@@ -523,6 +525,7 @@ a{text-decoration:none;color:inherit}
 <script>
 const SHEET_CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv';
 const CHECKLIST_GID='1309362457';
+const EXPENSES_GID='1988829223';
 const CHECKLIST_SCRIPT_URL='https://script.google.com/macros/s/AKfycbxCx1SRJCK0EGg1N0K0YP_3GpPhKlHWUkwcsaRzrVj0z9zUACCJ9PjHtYTdEbukOW0X/exec';
 const GUELL_TICKETS='https://drive.google.com/file/d/1PFEldZb0dVM-gIwxuDB_s-WxAlAU5Nvq/view?usp=drive_link';
 const SF_TICKETS='https://drive.google.com/file/d/104w2XcQRl95HCEDyi8StY-F0LpLBslVt/view?usp=drive_link';
@@ -545,49 +548,10 @@ const sections=document.querySelectorAll('section[id]'),navLinks=document.queryS
 window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id;});navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));},{passive:true});
 document.getElementById('cl-new-item').addEventListener('keydown',e=>{if(e.key==='Enter')addChecklistItem();});
 
-async function loadFlickr(){
-  const strip=document.getElementById('flickr-strip');
-  const countEl=document.getElementById('flickr-count');
-  try{
-    const url='https://api.flickr.com/services/feeds/photoset.gne?set='+FLICKR_ALBUM+'&nsid='+FLICKR_USER+'&lang=en-us&format=json&nojsoncallback=1';
-    const res=await fetch(url);
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    const data=await res.json();
-    const items=data.items||[];
-    if(items.length===0){strip.innerHTML='<div class="flickr-empty">No photos yet &mdash; add photos to the Flickr album to see them here.</div>';countEl.textContent='0 photos';return;}
-    strip.innerHTML='';
-    items.forEach(item=>{
-      const photoUrl=item.link;
-      const imgSrc=(item.media&&item.media.m)?item.media.m.replace('_m.','_z.'):item.media.m;
-      const frame=document.createElement('div');
-      frame.className='flickr-frame';
-      frame.title=item.title||'Spain 2026';
-      frame.onclick=()=>window.open(photoUrl,'_blank');
-      frame.innerHTML='<img src="'+imgSrc+'" alt="'+(item.title||'Spain 2026')+'" loading="lazy"><div class="flickr-frame-overlay"></div>';
-      strip.appendChild(frame);
-    });
-    countEl.textContent=items.length+' photo'+(items.length!==1?'s':'');
-  }catch(e){
-    strip.innerHTML='<div class="flickr-empty">&#128247; Photos will appear here once added to the Flickr album.</div>';
-    countEl.textContent='Live via Flickr';
-  }
-}
+async function loadFlickr(){const strip=document.getElementById('flickr-strip');const countEl=document.getElementById('flickr-count');try{const url='https://api.flickr.com/services/feeds/photoset.gne?set='+FLICKR_ALBUM+'&nsid='+FLICKR_USER+'&lang=en-us&format=json&nojsoncallback=1';const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);const data=await res.json();const items=data.items||[];if(items.length===0){strip.innerHTML='<div class="flickr-empty">No photos yet.</div>';countEl.textContent='0 photos';return;}strip.innerHTML='';items.forEach(item=>{const photoUrl=item.link;const imgSrc=(item.media&&item.media.m)?item.media.m.replace('_m.','_z.'):item.media.m;const frame=document.createElement('div');frame.className='flickr-frame';frame.title=item.title||'Spain 2026';frame.onclick=()=>window.open(photoUrl,'_blank');frame.innerHTML='<img src="'+imgSrc+'" alt="'+(item.title||'Spain 2026')+'" loading="lazy"><div class="flickr-frame-overlay"></div>';strip.appendChild(frame);});countEl.textContent=items.length+' photo'+(items.length!==1?'s':'');}catch(e){strip.innerHTML='<div class="flickr-empty">&#128247; Photos will appear here once added to the Flickr album.</div>';countEl.textContent='Live via Flickr';}}
 loadFlickr();
 
-const TRIP_EVENTS=[
-  {date:'2026-04-20',label:'Depart BOI 2:10pm \u00b7 ATL \u2192 BCN 10:05pm',loc:'Boise'},
-  {date:'2026-04-21',label:'Arrive BCN 12:50pm',loc:'Barcelona'},
-  {date:'2026-04-22',label:'Park G\u00fcell 10:30am + Picasso',loc:'Barcelona'},
-  {date:'2026-04-23',label:'Sagrada Fam\u00edlia 9:30am \u00b7 Sant Jordi',loc:'Barcelona'},
-  {date:'2026-04-24',label:'Drive \u2192 Tarragona / Cambrils',loc:'Tarragona'},
-  {date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona'},
-  {date:'2026-04-26',label:'Drive \u2192 Bilbao',loc:'Bilbao'},
-  {date:'2026-04-27',label:'Guggenheim Bilbao',loc:'Bilbao'},
-  {date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},
-  {date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},
-  {date:'2026-04-30',label:'Drive \u2192 Barcelona via Toulouse',loc:'Barcelona'},
-  {date:'2026-05-01',label:'Depart BCN 11:00am \u00b7 Arrive BOI 10:28pm',loc:'Home'}
-];
+const TRIP_EVENTS=[{date:'2026-04-20',label:'Depart BOI 2:10pm \u00b7 ATL \u2192 BCN 10:05pm',loc:'Boise'},{date:'2026-04-21',label:'Arrive BCN 12:50pm',loc:'Barcelona'},{date:'2026-04-22',label:'Park G\u00fcell 10:30am + Picasso',loc:'Barcelona'},{date:'2026-04-23',label:'Sagrada Fam\u00edlia 9:30am \u00b7 Sant Jordi',loc:'Barcelona'},{date:'2026-04-24',label:'Drive \u2192 Tarragona / Cambrils',loc:'Tarragona'},{date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona'},{date:'2026-04-26',label:'Drive \u2192 Bilbao',loc:'Bilbao'},{date:'2026-04-27',label:'Guggenheim Bilbao',loc:'Bilbao'},{date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},{date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},{date:'2026-04-30',label:'Drive \u2192 Barcelona via Toulouse',loc:'Barcelona'},{date:'2026-05-01',label:'Depart BCN 11:00am \u00b7 Arrive BOI 10:28pm',loc:'Home'}];
 const LOC_COLORS={'Boise':'#5c5c58','Barcelona':'#1a6b9a','Tarragona':'#7a5c1e','Bilbao':'#2d6a4f','Home':'#5c5c58'};
 function buildCalendar(){const container=document.getElementById('calendar-container');const eventMap={};TRIP_EVENTS.forEach(e=>{eventMap[e.date]=e;});const todayStr=new Date().toLocaleDateString('sv');const legend=document.createElement('div');legend.style.cssText='display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem;align-items:center;';[['Barcelona','#1a6b9a'],['Tarragona','#7a5c1e'],['Bilbao','#2d6a4f'],['Travel/Home','#5c5c58']].forEach(([name,color])=>{const dot=document.createElement('div');dot.style.cssText='display:flex;align-items:center;gap:5px;font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--stone);';dot.innerHTML='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+color+';flex-shrink:0;"></span>'+name;legend.appendChild(dot);});container.appendChild(legend);const firstD=new Date(2026,3,20);const startSun=new Date(firstD);startSun.setDate(firstD.getDate()-firstD.getDay());const may1=new Date(2026,4,1);const endSat=new Date(may1);endSat.setDate(may1.getDate()+(6-may1.getDay()));const lbl=document.createElement('div');lbl.className='cal-month-label';lbl.textContent='April \u2013 May 2026';container.appendChild(lbl);const grid=document.createElement('div');grid.className='calendar-grid';['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d=>{const hc=document.createElement('div');hc.className='cal-header-cell';hc.textContent=d;grid.appendChild(hc);});let cur=new Date(startSun);while(cur<=endSat){const y=cur.getFullYear(),m=String(cur.getMonth()+1).padStart(2,'0'),d=String(cur.getDate()).padStart(2,'0'),ds=y+'-'+m+'-'+d;const inRange=(cur.getMonth()===3)||(ds==='2026-05-01'),isTrip=ds>='2026-04-20'&&ds<='2026-05-01'&&inRange,ev=eventMap[ds],lc=ev?(LOC_COLORS[ev.loc]||'#7d6b57'):null;const cell=document.createElement('div');cell.className='cal-cell'+(inRange?'':' empty')+(isTrip?' trip-day':'')+(ds===todayStr?' today':'');if(lc&&inRange)cell.style.borderTop='3px solid '+lc;const content=document.createElement('div');content.className='cal-cell-content';const dn=document.createElement('div');dn.className='cal-day-num';dn.textContent=inRange?cur.getDate():'';content.appendChild(dn);if(ev&&inRange){const evEl=document.createElement('div');evEl.className='cal-event';evEl.style.cssText='border-left-color:'+lc+';background:rgba(247,245,241,0.9);white-space:normal;';evEl.textContent=ev.label;content.appendChild(evEl);const locEl=document.createElement('div');locEl.className='cal-location-tag';locEl.style.background='rgba(26,26,24,0.85)';locEl.textContent=ev.loc;content.appendChild(locEl);}cell.appendChild(content);grid.appendChild(cell);cur.setDate(cur.getDate()+1);}container.appendChild(grid);}
 buildCalendar();
@@ -605,45 +569,101 @@ loadFromSheet();
 loadChecklist();
 
 // ============================================================
-// EXPENSE TRACKER — Safari/iOS Chrome safe storage
-// localStorage is blocked in private mode and some iOS contexts.
-// Falls back to in-memory store so the UI always works.
+// EXPENSE TRACKER — Google Sheets backed
+// Reads from Expenses tab (GID 1988829223) via published CSV
+// Writes via Apps Script (same URL as checklist)
+// No localStorage — works on all browsers/devices
 // ============================================================
-const EXPENSE_KEY = 'spain2026_expenses';
-let _memStore = null; // in-memory fallback
+const EXPENSES_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vTOAGzCvVpdzyORRh1jZev-cM_On_Q8GYk-nYuqrSDVHkzz_8qYWvbNCkcapoEJxaTbvGhri8-vhI5M/pub?output=csv&gid='+EXPENSES_GID;
 
-function _storageAvailable() {
-  try {
-    const t = '__test__';
-    localStorage.setItem(t, t);
-    localStorage.removeItem(t);
-    return true;
-  } catch(e) { return false; }
-}
+function currencySymbol(code){return code==='USD'?'$':'\u20ac';}
 
-function loadExpenses() {
-  if (_memStore !== null) return _memStore.slice();
-  if (_storageAvailable()) {
-    try { return JSON.parse(localStorage.getItem(EXPENSE_KEY)) || []; } catch(e) {}
+async function loadExpenses(){
+  const empty=document.getElementById('expense-empty');
+  const tbody=document.getElementById('expense-tbody');
+  const table=document.getElementById('expense-table');
+  const status=document.getElementById('expense-sync-status');
+  try{
+    const res=await fetch(EXPENSES_CSV,{cache:'no-cache'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const text=await res.text();
+    const rows=parseCSV(text);
+    // Row 0: Date, Description, Who, Amount, Currency
+    const data=rows.slice(1).filter(r=>r[1]&&r[3]);
+    if(data.length===0){
+      empty.textContent='No expenses yet \u2014 add your first above.';
+      empty.style.display='';table.style.display='none';
+      updateTotals([]);return;
+    }
+    empty.style.display='none';table.style.display='';
+    tbody.innerHTML='';
+    data.forEach((r,i)=>{
+      const sym=currencySymbol(r[4]||'EUR');
+      const badgeClass=r[2]==='Mark'?'badge-mark':r[2]==='Rumana'?'badge-rumana':'badge-shared';
+      const tr=document.createElement('tr');
+      tr.innerHTML='<td style="font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem;">'+(i+1)+'</td><td style="font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey);">'+r[0]+'</td><td>'+r[1]+'</td><td><span class="expense-who-badge '+badgeClass+'">'+r[2]+'</span></td><td class="expense-amount-cell">'+sym+parseFloat(r[3]).toFixed(2)+'</td>';
+      tbody.appendChild(tr);
+    });
+    updateTotals(data);
+    status.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  }catch(e){
+    empty.textContent='Could not load expenses. Check connection.';
+    empty.style.display='';table.style.display='none';
+    status.textContent='Error loading';
   }
-  _memStore = [];
-  return [];
 }
 
-function saveExpenses(arr) {
-  if (_storageAvailable()) {
-    try { localStorage.setItem(EXPENSE_KEY, JSON.stringify(arr)); return; } catch(e) {}
+function updateTotals(data){
+  let markTotal=0,rumanaTotal=0,allTotal=0,markCount=0,rumanaCount=0;
+  let sym='\u20ac';
+  data.forEach(r=>{
+    const amt=parseFloat(r[3])||0;
+    sym=currencySymbol(r[4]||'EUR');
+    allTotal+=amt;
+    if(r[2]==='Mark'){markTotal+=amt;markCount++;}
+    else if(r[2]==='Rumana'){rumanaTotal+=amt;rumanaCount++;}
+    else{markTotal+=amt/2;rumanaTotal+=amt/2;markCount++;rumanaCount++;}
+  });
+  document.getElementById('total-mark').textContent=data.length?sym+markTotal.toFixed(2):'\u2014';
+  document.getElementById('total-rumana').textContent=data.length?sym+rumanaTotal.toFixed(2):'\u2014';
+  document.getElementById('total-all').textContent=data.length?sym+allTotal.toFixed(2):'\u2014';
+  document.getElementById('count-mark').textContent=markCount+' expense'+(markCount!==1?'s':'');
+  document.getElementById('count-rumana').textContent=rumanaCount+' expense'+(rumanaCount!==1?'s':'');
+  document.getElementById('count-all').textContent=data.length+' entr'+(data.length!==1?'ies':'y');
+}
+
+async function addExpense(){
+  const descEl=document.getElementById('exp-desc');
+  const amountEl=document.getElementById('exp-amount');
+  const currency=document.getElementById('exp-currency').value;
+  const who=document.getElementById('exp-who').value;
+  const desc=descEl.value.trim();
+  const amount=parseFloat(amountEl.value);
+  const btn=document.getElementById('btn-add-expense');
+  if(!desc||isNaN(amount)||amount<=0){descEl.focus();return;}
+  btn.disabled=true;btn.textContent='Saving\u2026';
+  const date=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+  try{
+    await fetch(CHECKLIST_SCRIPT_URL,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({action:'expense',date,desc,who,amount,currency}),
+      mode:'no-cors'
+    });
+    descEl.value='';amountEl.value='';
+    // Reload after short delay to let Sheet update
+    setTimeout(loadExpenses,1500);
+  }catch(e){
+    alert('Could not save expense. Please try again.');
+  }finally{
+    btn.disabled=false;btn.textContent='+ Add';
   }
-  _memStore = arr.slice();
 }
 
-function renderExpenses(){const expenses=loadExpenses();const tbody=document.getElementById('expense-tbody');const table=document.getElementById('expense-table');const empty=document.getElementById('expense-empty');if(!tbody)return;tbody.innerHTML='';let totalMark=0,totalRumana=0,totalAll=0,countMark=0,countRumana=0;expenses.forEach((e,i)=>{const amount=parseFloat(e.amount);totalAll+=amount;if(e.who==='Mark'){totalMark+=amount;countMark++;}else if(e.who==='Rumana'){totalRumana+=amount;countRumana++;}else{totalMark+=amount/2;totalRumana+=amount/2;countMark++;countRumana++;}const badgeClass=e.who==='Mark'?'badge-mark':e.who==='Rumana'?'badge-rumana':'badge-shared';const tr=document.createElement('tr');tr.innerHTML='<td style="font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem;">'+(i+1)+'</td><td>'+e.desc+'</td><td><span class="expense-who-badge '+badgeClass+'">'+e.who+'</span></td><td class="expense-amount-cell">'+e.currency+parseFloat(e.amount).toFixed(2)+'</td><td><button class="btn-delete-expense" onclick="deleteExpense('+i+')" title="Delete">&times;</button></td>';tbody.appendChild(tr);});if(expenses.length===0){empty.style.display='';table.style.display='none';}else{empty.style.display='none';table.style.display='';}const sym=expenses.length>0?(expenses[0].currency||'\u20ac'):'\u20ac';document.getElementById('total-mark').textContent=sym+totalMark.toFixed(2);document.getElementById('total-rumana').textContent=sym+totalRumana.toFixed(2);document.getElementById('total-all').textContent=sym+totalAll.toFixed(2);document.getElementById('count-mark').textContent=countMark+' expense'+(countMark!==1?'s':'');document.getElementById('count-rumana').textContent=countRumana+' expense'+(countRumana!==1?'s':'');document.getElementById('count-all').textContent=expenses.length+' entr'+(expenses.length!==1?'ies':'y');}
-function addExpense(){const desc=document.getElementById('exp-desc').value.trim();const amount=parseFloat(document.getElementById('exp-amount').value);const currency=document.getElementById('exp-currency').value;const who=document.getElementById('exp-who').value;if(!desc||isNaN(amount)||amount<=0){document.getElementById('exp-desc').focus();return;}const expenses=loadExpenses();expenses.push({desc,amount,currency,who,date:new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})});saveExpenses(expenses);renderExpenses();document.getElementById('exp-desc').value='';document.getElementById('exp-amount').value='';document.getElementById('exp-desc').focus();}
-function deleteExpense(i){const expenses=loadExpenses();expenses.splice(i,1);saveExpenses(expenses);renderExpenses();}
-function clearExpenses(){if(confirm('Clear all expenses? This cannot be undone.')){saveExpenses([]);renderExpenses();}}
 document.getElementById('exp-desc')&&document.getElementById('exp-desc').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
 document.getElementById('exp-amount')&&document.getElementById('exp-amount').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
-renderExpenses();
+
+loadExpenses();
 </script>
 </body>
 </html>
