@@ -67,10 +67,10 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
 .stop-dir-btn {
   display: inline-flex; align-items: center; gap: 4px;
   font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
-  padding: 2px 8px; border: 1px solid rgba(254,196,34,0.3); color: var(--yellow);
-  background: rgba(254,196,34,0.06); text-decoration: none; transition: background 0.15s;
+  padding: 2px 8px; border: 1px solid rgba(167,139,250,0.35); color: #a78bfa;
+  background: rgba(167,139,250,0.07); text-decoration: none; transition: background 0.15s;
 }
-.stop-dir-btn:hover { background: rgba(254,196,34,0.15); }
+.stop-dir-btn:hover { background: rgba(167,139,250,0.15); }
 .transit { display: flex; align-items: center; gap: 6px; padding: 0.4rem 1.5rem 0.4rem 52px; font-family: var(--mono); font-size: 0.58rem; color: rgba(255,255,255,0.2); letter-spacing: 0.08em; border-bottom: 1px solid rgba(255,255,255,0.03); }
 .transit-icon { opacity: 0.4; font-size: 0.75rem; }
 .map-panel { position: relative; }
@@ -84,8 +84,8 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
 .popup-time { font-family: var(--mono); font-size: 0.62rem; color: var(--yellow); margin-bottom: 3px; }
 .popup-name { font-family: var(--serif); font-size: 1.1rem; font-weight: 400; color: var(--white); margin-bottom: 4px; }
 .popup-note { font-size: 0.72rem; color: rgba(255,255,255,0.5); line-height: 1.5; }
-.popup-dir { display: inline-block; margin-top: 8px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--yellow); text-decoration: none; border-bottom: 1px solid rgba(254,196,34,0.3); }
-.popup-dir:hover { border-bottom-color: var(--yellow); }
+.popup-dir { display: inline-block; margin-top: 8px; font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: #a78bfa; text-decoration: none; border-bottom: 1px solid rgba(167,139,250,0.3); }
+.popup-dir:hover { border-bottom-color: #a78bfa; }
 @media (max-width: 768px) {
   .layout { grid-template-columns: 1fr; grid-template-rows: auto 55vh; }
   .sidebar { overflow-y: visible; }
@@ -131,64 +131,58 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
 </div>
 
 <script>
+// showDir: true = show Directions button (vintage/antique stops only)
 const STOPS = [
-  { id:0, time:'9:30 AM', name:'Sagrada Família', lat:41.4036, lng:2.1744, color:'#fec422', tagClass:'tag-anchor', tagText:'Confirmed · Res. 95793090',
+  { id:0, time:'9:30 AM', name:'Sagrada Família', lat:41.4036, lng:2.1744, color:'#fec422', tagClass:'tag-anchor', tagText:'Confirmed · Res. 95793090', showDir:false,
     desc:'Enter via C/ Marina. Basilica 9:30am · Passion Tower 9:45am. Allow 2 hours.',
     note:'Enter via C/ Marina · Res. 95793090<br>Passion Tower 9:45am · Allow 2 hours',
     query:'Sagrada Familia Barcelona' },
-  { id:1, time:'11:45 AM', name:'Bon Vent', lat:41.3837, lng:2.1802, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Antiques &amp; Objects',
+  { id:1, time:'11:45 AM', name:'Bon Vent', lat:41.3837, lng:2.1802, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Antiques &amp; Objects', showDir:true,
     desc:'C/ Argenteria 41 · Vintage tableware &amp; objects · Open 10am–8:30pm',
     note:'C/ Argenteria 41 · Vintage tableware &amp; objects',
     query:'Bon Vent Carrer Argenteria 41 Barcelona' },
-  { id:2, time:'12:00 PM', name:'Taller Antic', lat:41.3848, lng:2.1800, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Jewelry &amp; Objects',
+  { id:2, time:'12:00 PM', name:'Taller Antic', lat:41.3848, lng:2.1800, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Jewelry &amp; Objects', showDir:true,
     desc:'C/ Princesa 14 · Early 20th-c jewelry &amp; objects · Open 11am–8:30pm',
     note:'C/ Princesa 14 · Early 20th-c jewelry &amp; objects',
     query:'Taller Antic Carrer Princesa 14 Barcelona' },
-  { id:3, time:'12:15 PM', name:'Antiguitats les Liles', lat:41.3861, lng:2.1815, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Antiques · Cash Only',
+  { id:3, time:'12:15 PM', name:'Antiguitats les Liles', lat:41.3861, lng:2.1815, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Antiques · Cash Only', showDir:true,
     desc:'C/ Princesa 40 · Cash only, negotiates · Open 10am–2pm &amp; 6–9pm',
     note:'C/ Princesa 40 · Cash only · Open 10am–2pm &amp; 6–9pm',
     query:'Antiguitats les Liles Carrer Princesa 40 Barcelona' },
-  { id:4, time:'12:30 PM', name:'Carlos Segura Vintage', lat:41.3838, lng:2.1826, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Vintage Objects',
+  { id:4, time:'12:30 PM', name:'Carlos Segura Vintage', lat:41.3838, lng:2.1826, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Vintage Objects', showDir:true,
     desc:'Pl. Fossar de les Moreres 10 · Opens noon · 5.0 stars',
     note:'Pl. Fossar de les Moreres 10 · Opens noon · 5.0 stars',
     query:'Carlos Segura Vintage Barcelona' },
-  { id:5, time:'12:45 PM', name:'Los Féliz Vintage', lat:41.3813, lng:2.1774, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Vintage Clothing',
+  { id:5, time:'12:45 PM', name:'Los Féliz Vintage', lat:41.3813, lng:2.1774, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Vintage Clothing', showDir:true,
     desc:'C/ Cervantes 5 · Designer vintage clothing · 4.9 stars · Opens noon–7pm',
     note:'C/ Cervantes 5 · Designer vintage clothing · 4.9 stars',
     query:'Los Feliz Vintage Carrer Cervantes 5 Barcelona' },
-  { id:6, time:'1:00 PM', name:'Ziryab Fusió — Lunch', lat:41.3840, lng:2.1803, color:'#34d399', tagClass:'tag-food', tagText:'Lunch · Book Now',
+  { id:6, time:'1:00 PM', name:'Ziryab Fusió — Lunch', lat:41.3840, lng:2.1803, color:'#34d399', tagClass:'tag-food', tagText:'Lunch · Book Now', showDir:false,
     desc:'C/ Grunyi 5 · Moorish-Med fusion · 4.7 stars · Book via TheFork or +34 931 87 42 10',
     note:'C/ Grunyi 5 · Moorish-Med fusion · 4.7 stars<br>+34 931 87 42 10',
     query:'Ziryab Fusio Carrer Grunyi 5 Barcelona' },
-  { id:7, time:'2:30 PM', name:'Scooter House Colón 24', lat:41.3774, lng:2.1788, color:'#60a5fa', tagClass:'tag-activity', tagText:'E-Bikes',
+  { id:7, time:'2:30 PM', name:'Scooter House Colón 24', lat:41.3774, lng:2.1788, color:'#60a5fa', tagClass:'tag-activity', tagText:'E-Bikes', showDir:false,
     desc:'Pg. de Colom 24 · E-bikes ~€30/day · Open 10am–7pm · Ride Passeig Marítim east to Barceloneta',
     note:'Pg. de Colom 24 · E-bikes ~€30/day<br>Ride east along Passeig Marítim',
     query:'Scooter House Passeig Colon 24 Barcelona' },
-  { id:8, time:'3:00 PM', name:'Barceloneta Beach', lat:41.3793, lng:2.1930, color:'#60a5fa', tagClass:'tag-activity', tagText:'Coastal Ride',
+  { id:8, time:'3:00 PM', name:'Barceloneta Beach', lat:41.3793, lng:2.1930, color:'#60a5fa', tagClass:'tag-activity', tagText:'Coastal Ride', showDir:false,
     desc:'Ride the coastal path · Barceloneta beach · Parc de la Ciutadella · Return bikes by 4pm',
     note:'Coastal ride · Barceloneta beach<br>Parc de la Ciutadella · Return bikes by 4pm',
     query:'Barceloneta Beach Barcelona' },
-  { id:9, time:'4:30 PM', name:'Montjuïc Castle', lat:41.3630, lng:2.1651, color:'#60a5fa', tagClass:'tag-activity', tagText:'Closes 6pm',
+  { id:9, time:'4:30 PM', name:'Montjuïc Castle', lat:41.3630, lng:2.1651, color:'#60a5fa', tagClass:'tag-activity', tagText:'Closes 6pm', showDir:false,
     desc:'Ctra. de Montjuïc 66 · Open 10am–6pm · ~€9 · 360° views of port and city',
     note:'Closes 6pm · ~€9 · 360° views<br>Cable car from Paral·lel metro',
     query:'Montjuic Castle Barcelona' },
-  { id:10, time:'7:00 PM', name:'el SET — Dinner', lat:41.3843, lng:2.1831, color:'#f87171', tagClass:'tag-dinner', tagText:'Dinner · Reserve Now',
+  { id:10, time:'7:00 PM', name:'el SET — Dinner', lat:41.3843, lng:2.1831, color:'#f87171', tagClass:'tag-dinner', tagText:'Dinner · Reserve Now', showDir:false,
     desc:'C/ Esparteria 7, El Born · 4.9 stars · Open 7pm–11:45pm · Book via TheFork or +34 930 11 40 86 · Stuffed aubergine essential',
     note:'C/ Esparteria 7 · 4.9 stars · 7pm–11:45pm<br>+34 930 11 40 86 · Book via TheFork',
     query:'el SET restaurant Carrer Esparteria 7 Born Barcelona' },
 ];
 
-// Build a Google Maps directions URL.
-// On mobile, Google Maps app intercepts the URL automatically.
-// We use lat/lng as destination so it's precise regardless of query language.
 function directionsUrl(stop) {
-  const dest = stop.lat + ',' + stop.lng;
-  // This URL opens native Google Maps on iOS/Android and browser Maps on desktop.
-  // Google Maps will use device GPS as origin when no origin is specified.
-  return 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
+  return 'https://www.google.com/maps/dir/?api=1&destination=' + stop.lat + ',' + stop.lng + '&travelmode=walking';
 }
 
-// Transit labels that appear BEFORE the stop at the given index
 const TRANSITS = {
   1: { icon: '🚶', text: '15 min walk south to El Born' },
   6: { icon: '🚶', text: '3 min walk to Ziryab' },
@@ -237,17 +231,19 @@ STOPS.forEach((stop, i) => {
   const tag = document.createElement('span');
   tag.className = 'stop-tag ' + stop.tagClass;
   tag.innerHTML = stop.tagText;
-
-  // Directions link — opens Google Maps with device GPS as origin
-  const dirLink = document.createElement('a');
-  dirLink.className = 'stop-dir-btn';
-  dirLink.href = directionsUrl(stop);
-  dirLink.target = '_blank';
-  dirLink.rel = 'noopener';
-  dirLink.innerHTML = '&#128205; Directions';
-
   actions.appendChild(tag);
-  actions.appendChild(dirLink);
+
+  // Directions button — vintage/shopping stops only
+  if (stop.showDir) {
+    const dirLink = document.createElement('a');
+    dirLink.className = 'stop-dir-btn';
+    dirLink.href = directionsUrl(stop);
+    dirLink.target = '_blank';
+    dirLink.rel = 'noopener';
+    dirLink.innerHTML = '&#128205; Directions';
+    actions.appendChild(dirLink);
+  }
+
   body.appendChild(timeEl);
   body.appendChild(nameEl);
   body.appendChild(descEl);
@@ -255,7 +251,6 @@ STOPS.forEach((stop, i) => {
   el.appendChild(numCol);
   el.appendChild(body);
 
-  // Click on card body focuses the map stop; directions link opens normally
   el.addEventListener('click', function(e) {
     if (e.target.closest('.stop-dir-btn')) return;
     focusStop(i);
@@ -264,7 +259,6 @@ STOPS.forEach((stop, i) => {
   stopsList.appendChild(el);
 });
 
-// Map setup
 const map = L.map('map', { center: [41.385, 2.175], zoom: 14 });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19
@@ -285,12 +279,15 @@ function makeIcon(stop, active) {
 }
 
 STOPS.forEach(function(stop, i) {
-  const url = directionsUrl(stop);
+  // Popup directions link only on vintage stops
+  const dirHtml = stop.showDir
+    ? '<a class="popup-dir" href="' + directionsUrl(stop) + '" target="_blank" rel="noopener">&#128205; Directions</a>'
+    : '';
   const popupContent =
     '<div class="popup-time">' + stop.time + '</div>' +
     '<div class="popup-name">' + stop.name + '</div>' +
     '<div class="popup-note">' + stop.note + '</div>' +
-    '<a class="popup-dir" href="' + url + '" target="_blank" rel="noopener">📍 Directions from here</a>';
+    dirHtml;
 
   const marker = L.marker([stop.lat, stop.lng], { icon: makeIcon(stop, i === 0) })
     .addTo(map)
