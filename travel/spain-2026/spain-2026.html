@@ -1,11 +1,11 @@
-<!-- v44: Photos section swapped to Google Photos embed -->
+<!-- v45: Photos section — clean button-only card, no iframe -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v44: Google Photos embed replaces Flickr -->
+<!-- v45: Photos section clean card -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -106,16 +106,15 @@
 .map-actions{display:flex;gap:1rem;margin-top:1.25rem;flex-wrap:wrap;align-items:center}
 .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--white);font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.85rem 1.75rem;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none}
 .btn-primary:hover{background:#a06000}
-/* PHOTOS — Google Photos embed */
+/* PHOTOS */
 #photos{background:var(--cream)}
-.gp-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
-.gp-header{background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow)}
-.gp-title{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)}
-.gp-meta{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)}
-.gp-embed{width:100%;height:520px;border:none;display:block}
-.gp-footer{padding:1.25rem 1.5rem;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.gp-footer-text{font-size:0.82rem;color:var(--stone)}
-.gp-footer-text strong{color:var(--ink)}
+.photos-card{border:1px solid var(--rule);background:var(--white);overflow:hidden}
+.photos-card-header{background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow)}
+.photos-card-title{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)}
+.photos-card-meta{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)}
+.photos-card-body{padding:2.5rem 2rem;display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem}
+.photos-card-desc{font-size:0.88rem;color:var(--stone);line-height:1.65;max-width:600px}
+.photos-card-desc strong{color:var(--ink)}
 #notes{background:var(--white)}
 .checklist-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 .checklist-panel{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
@@ -236,8 +235,8 @@
 .exp-cancel-btn:hover{background:var(--cream)}
 .expense-quick-link{display:inline-flex;align-items:center;gap:6px;background:var(--yellow);color:var(--dark);font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:8px 16px;position:fixed;bottom:24px;right:24px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,0.25);transition:background 0.2s;text-decoration:none}
 .expense-quick-link:hover{background:#e6b01f}
-@media(min-width:769px) and (max-width:1024px){.nav{padding:0 1.5rem}.nav-links a{padding:0 0.6rem;font-size:0.6rem}.hero{padding:4rem 2rem 3.5rem}.section{padding:3.5rem 2rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}.booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}.booking-detail{font-size:0.68rem}.expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.checklist-wrap{gap:1rem}.cl-add-select{max-width:100px;font-size:0.65rem}.map-iframe-wrap iframe{height:580px}.shop-grid{grid-template-columns:repeat(2,1fr)}.gp-embed{height:420px}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}}
-@media(max-width:768px){.expense-summary{grid-template-columns:1fr}.expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}.expense-form-body{grid-template-columns:1fr 1fr}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.expense-quick-link{bottom:16px;right:16px}.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-iframe-wrap iframe{height:400px}.page-footer{padding:2rem 1.25rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2),.booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}.booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}.shop-grid{grid-template-columns:1fr}.checklist-wrap{grid-template-columns:1fr}.cl-add-select{max-width:100px;font-size:0.65rem}.gp-embed{height:360px}.gp-footer{flex-direction:column;align-items:flex-start}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}.exp-edit-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:769px) and (max-width:1024px){.nav{padding:0 1.5rem}.nav-links a{padding:0 0.6rem;font-size:0.6rem}.hero{padding:4rem 2rem 3.5rem}.section{padding:3.5rem 2rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}.booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}.booking-detail{font-size:0.68rem}.expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.checklist-wrap{gap:1rem}.cl-add-select{max-width:100px;font-size:0.65rem}.map-iframe-wrap iframe{height:580px}.shop-grid{grid-template-columns:repeat(2,1fr)}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}}
+@media(max-width:768px){.expense-summary{grid-template-columns:1fr}.expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}.expense-form-body{grid-template-columns:1fr 1fr}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.expense-quick-link{bottom:16px;right:16px}.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-iframe-wrap iframe{height:400px}.page-footer{padding:2rem 1.25rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2),.booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}.booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}.shop-grid{grid-template-columns:1fr}.checklist-wrap{grid-template-columns:1fr}.cl-add-select{max-width:100px;font-size:0.65rem}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}.exp-edit-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -301,26 +300,16 @@
   </div>
 </section>
 
-<!-- PHOTOS — Google Photos shared album embed -->
 <section class="section" id="photos" style="background:var(--cream)">
   <header class="section-header"><div class="section-eyebrow">04 &mdash; Memories</div><h2 class="section-title">Photo Album</h2></header>
-  <div class="gp-wrap">
-    <div class="gp-header">
-      <div class="gp-title">MaRu / Spain &amp; Basque Country 2026</div>
-      <div class="gp-meta">Google Photos &mdash; Live Album</div>
+  <div class="photos-card">
+    <div class="photos-card-header">
+      <div class="photos-card-title">MaRu / Spain &amp; Basque Country 2026</div>
+      <div class="photos-card-meta">Google Photos</div>
     </div>
-    <iframe
-      class="gp-embed"
-      src="https://photos.google.com/share/AF1QipN_placeholder/embed"
-      id="gp-iframe"
-      allowfullscreen
-      loading="lazy"
-      title="Spain 2026 Photos"
-      referrerpolicy="no-referrer-when-downgrade">
-    </iframe>
-    <div class="gp-footer">
-      <div class="gp-footer-text"><strong>Your Spain 2026 album.</strong> Photos back up automatically from your phone. New photos appear here on next page load.</div>
-      <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="btn-primary">&#128247; Open Full Album</a>
+    <div class="photos-card-body">
+      <p class="photos-card-desc"><strong>Photos back up automatically</strong> from your phone to Google Photos. Tap the button to open the full shared album &mdash; all photos from the trip in one place.</p>
+      <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="btn-primary">&#128247; Open Spain 2026 Album</a>
     </div>
   </div>
 </section>
@@ -423,15 +412,6 @@ const RADISSON_DOC='https://drive.google.com/file/d/1EW28lNUnLfVD9pMACVVzSeSQZmg
 const GUGGENHEIM_DOC='https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FCKZH6jsb/view?usp=drive_link';
 const AC_HOTEL_DOC='https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link';
 const APR23_MAP='/travel/2026/barcelona-apr23.html';
-const GP_ALBUM='https://photos.app.goo.gl/7KJMVdykUsxSsS7t6';
-
-// Fix Google Photos iframe src — the share URL needs /embed appended
-// photos.app.goo.gl links don't embed directly; redirect to photos.google.com/share embed
-(function(){
-  const iframe=document.getElementById('gp-iframe');
-  // Use the photos.google.com share link with /embed — Google Photos shared albums support this
-  iframe.src='https://photos.google.com/share/AF1QipMaVxGKnEl5L6_HMnFGmz1X2dkCvqzZ0z3IQkWJaC9znH8Hb7KJMVdykUsxSsS7t6/embed';
-})();
 
 function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
 function mapsRoute(o,w,d){return'https://www.google.com/maps/dir/'+encodeURIComponent(o)+'/'+encodeURIComponent(w)+'/'+encodeURIComponent(d);}
@@ -439,21 +419,7 @@ function addr(label,url){if(!url)url=mapsSearch(label);return'<span class="activ
 function docLink(url,label){return' <a href="'+url+'" target="_blank" style="color:var(--accent);border-bottom:1px solid rgba(192,112,0,0.35);font-size:0.8em;">&#128196; '+label+'</a>';}
 function dayMapLink(url){return'<a href="'+url+'" target="_blank" class="day-map-link">&#128205; Day Map</a>';}
 
-function parseCSV(text){
-  const rows=[];
-  text.split(/\r?\n/).forEach(line=>{
-    if(!line.trim())return;
-    const row=[];let inQ=false,cur='';
-    for(let i=0;i<line.length;i++){
-      const ch=line[i];
-      if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
-      else if(ch===','&&!inQ){row.push(cur.trim());cur='';}
-      else cur+=ch;
-    }
-    row.push(cur.trim());rows.push(row);
-  });
-  return rows;
-}
+function parseCSV(text){const rows=[];text.split(/\r?\n/).forEach(line=>{if(!line.trim())return;const row=[];let inQ=false,cur='';for(let i=0;i<line.length;i++){const ch=line[i];if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}else if(ch===','&&!inQ){row.push(cur.trim());cur='';}else cur+=ch;}row.push(cur.trim());rows.push(row);});return rows;}
 
 const navMenu=document.getElementById('nav-menu');
 document.getElementById('hamburger').addEventListener('click',e=>{e.stopPropagation();navMenu.classList.toggle('open');});
