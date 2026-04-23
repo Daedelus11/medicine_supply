@@ -1,11 +1,11 @@
-<!-- v43: USD totals with live EUR/USD conversion; mobile menu fix -->
+<!-- v44: Photos section swapped to Google Photos embed -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v43: USD totals + mobile menu fix -->
+<!-- v44: Google Photos embed replaces Flickr -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -106,24 +106,16 @@
 .map-actions{display:flex;gap:1rem;margin-top:1.25rem;flex-wrap:wrap;align-items:center}
 .btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:var(--white);font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.85rem 1.75rem;border:none;cursor:pointer;transition:background 0.2s;text-decoration:none}
 .btn-primary:hover{background:#a06000}
+/* PHOTOS — Google Photos embed */
 #photos{background:var(--cream)}
-.flickr-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
-.flickr-header{background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow)}
-.flickr-title{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)}
-.flickr-meta{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)}
-.flickr-strip{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--accent) var(--rule)}
-.flickr-strip::-webkit-scrollbar{height:4px}
-.flickr-strip::-webkit-scrollbar-track{background:var(--rule)}
-.flickr-strip::-webkit-scrollbar-thumb{background:var(--accent)}
-.flickr-frame{flex-shrink:0;width:240px;height:180px;scroll-snap-align:start;position:relative;overflow:hidden;background:var(--ink);cursor:pointer}
-.flickr-frame img{width:100%;height:100%;object-fit:cover;transition:transform 0.4s;display:block}
-.flickr-frame:hover img{transform:scale(1.06)}
-.flickr-frame-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.45) 0%,transparent 55%);opacity:0;transition:opacity 0.3s}
-.flickr-frame:hover .flickr-frame-overlay{opacity:1}
-.flickr-empty{padding:4rem 2rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)}
-.flickr-footer{padding:1.25rem 1.5rem;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
-.flickr-footer-text{font-size:0.82rem;color:var(--stone)}
-.flickr-footer-text strong{color:var(--ink)}
+.gp-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
+.gp-header{background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow)}
+.gp-title{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)}
+.gp-meta{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)}
+.gp-embed{width:100%;height:520px;border:none;display:block}
+.gp-footer{padding:1.25rem 1.5rem;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.gp-footer-text{font-size:0.82rem;color:var(--stone)}
+.gp-footer-text strong{color:var(--ink)}
 #notes{background:var(--white)}
 .checklist-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 .checklist-panel{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
@@ -244,8 +236,8 @@
 .exp-cancel-btn:hover{background:var(--cream)}
 .expense-quick-link{display:inline-flex;align-items:center;gap:6px;background:var(--yellow);color:var(--dark);font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:8px 16px;position:fixed;bottom:24px;right:24px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,0.25);transition:background 0.2s;text-decoration:none}
 .expense-quick-link:hover{background:#e6b01f}
-@media(min-width:769px) and (max-width:1024px){.nav{padding:0 1.5rem}.nav-links a{padding:0 0.6rem;font-size:0.6rem}.hero{padding:4rem 2rem 3.5rem}.section{padding:3.5rem 2rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}.booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}.booking-detail{font-size:0.68rem}.expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.checklist-wrap{gap:1rem}.cl-add-select{max-width:100px;font-size:0.65rem}.map-iframe-wrap iframe{height:580px}.shop-grid{grid-template-columns:repeat(2,1fr)}.flickr-frame{width:200px;height:150px}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}}
-@media(max-width:768px){.expense-summary{grid-template-columns:1fr}.expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}.expense-form-body{grid-template-columns:1fr 1fr}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.expense-quick-link{bottom:16px;right:16px}.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-iframe-wrap iframe{height:400px}.page-footer{padding:2rem 1.25rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2),.booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}.booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}.shop-grid{grid-template-columns:1fr}.checklist-wrap{grid-template-columns:1fr}.cl-add-select{max-width:100px;font-size:0.65rem}.flickr-frame{width:160px;height:120px}.flickr-footer{flex-direction:column;align-items:flex-start}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}.exp-edit-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:769px) and (max-width:1024px){.nav{padding:0 1.5rem}.nav-links a{padding:0 0.6rem;font-size:0.6rem}.hero{padding:4rem 2rem 3.5rem}.section{padding:3.5rem 2rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}.booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}.booking-detail{font-size:0.68rem}.expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.checklist-wrap{gap:1rem}.cl-add-select{max-width:100px;font-size:0.65rem}.map-iframe-wrap iframe{height:580px}.shop-grid{grid-template-columns:repeat(2,1fr)}.gp-embed{height:420px}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}}
+@media(max-width:768px){.expense-summary{grid-template-columns:1fr}.expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}.expense-form-body{grid-template-columns:1fr 1fr}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.expense-quick-link{bottom:16px;right:16px}.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-iframe-wrap iframe{height:400px}.page-footer{padding:2rem 1.25rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2),.booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}.booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}.shop-grid{grid-template-columns:1fr}.checklist-wrap{grid-template-columns:1fr}.cl-add-select{max-width:100px;font-size:0.65rem}.gp-embed{height:360px}.gp-footer{flex-direction:column;align-items:flex-start}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}.exp-edit-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -309,17 +301,26 @@
   </div>
 </section>
 
+<!-- PHOTOS — Google Photos shared album embed -->
 <section class="section" id="photos" style="background:var(--cream)">
   <header class="section-header"><div class="section-eyebrow">04 &mdash; Memories</div><h2 class="section-title">Photo Album</h2></header>
-  <div class="flickr-wrap">
-    <div class="flickr-header">
-      <div class="flickr-title">MaRu / Spain &amp; Basque Country 2026</div>
-      <div class="flickr-meta" id="flickr-count">Loading&hellip;</div>
+  <div class="gp-wrap">
+    <div class="gp-header">
+      <div class="gp-title">MaRu / Spain &amp; Basque Country 2026</div>
+      <div class="gp-meta">Google Photos &mdash; Live Album</div>
     </div>
-    <div class="flickr-strip" id="flickr-strip"><div class="flickr-empty">Loading photos&hellip;</div></div>
-    <div class="flickr-footer">
-      <div class="flickr-footer-text"><strong>Scroll to browse &rarr;</strong> &nbsp; New photos added via Flickr appear here automatically.</div>
-      <a href="https://www.flickr.com/photos/204527065@N06/albums/72177720333247088" target="_blank" class="btn-primary">&#128247; Open Full Album</a>
+    <iframe
+      class="gp-embed"
+      src="https://photos.google.com/share/AF1QipN_placeholder/embed"
+      id="gp-iframe"
+      allowfullscreen
+      loading="lazy"
+      title="Spain 2026 Photos"
+      referrerpolicy="no-referrer-when-downgrade">
+    </iframe>
+    <div class="gp-footer">
+      <div class="gp-footer-text"><strong>Your Spain 2026 album.</strong> Photos back up automatically from your phone. New photos appear here on next page load.</div>
+      <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="btn-primary">&#128247; Open Full Album</a>
     </div>
   </div>
 </section>
@@ -421,9 +422,16 @@ const CAR_DOC='https://drive.google.com/file/d/1plEGpjQRzy9yHDchMOCSbcdafjV8q4rl
 const RADISSON_DOC='https://drive.google.com/file/d/1EW28lNUnLfVD9pMACVVzSeSQZmgdz-fb/view?usp=drive_link';
 const GUGGENHEIM_DOC='https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FCKZH6jsb/view?usp=drive_link';
 const AC_HOTEL_DOC='https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link';
-const FLICKR_USER='204527065@N06';
-const FLICKR_ALBUM='72177720333247088';
 const APR23_MAP='/travel/2026/barcelona-apr23.html';
+const GP_ALBUM='https://photos.app.goo.gl/7KJMVdykUsxSsS7t6';
+
+// Fix Google Photos iframe src — the share URL needs /embed appended
+// photos.app.goo.gl links don't embed directly; redirect to photos.google.com/share embed
+(function(){
+  const iframe=document.getElementById('gp-iframe');
+  // Use the photos.google.com share link with /embed — Google Photos shared albums support this
+  iframe.src='https://photos.google.com/share/AF1QipMaVxGKnEl5L6_HMnFGmz1X2dkCvqzZ0z3IQkWJaC9znH8Hb7KJMVdykUsxSsS7t6/embed';
+})();
 
 function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
 function mapsRoute(o,w,d){return'https://www.google.com/maps/dir/'+encodeURIComponent(o)+'/'+encodeURIComponent(w)+'/'+encodeURIComponent(d);}
@@ -447,45 +455,18 @@ function parseCSV(text){
   return rows;
 }
 
-// ── MOBILE MENU ──────────────────────────────────────────────
-// Toggle on hamburger click; close when any nav link is tapped
-const navMenu = document.getElementById('nav-menu');
-document.getElementById('hamburger').addEventListener('click', e => {
-  e.stopPropagation();
-  navMenu.classList.toggle('open');
-});
-navMenu.querySelectorAll('a').forEach(a => {
-  a.addEventListener('click', () => navMenu.classList.remove('open'));
-});
-// Close on tap outside
-document.addEventListener('click', e => {
-  if (!e.target.closest('.nav')) navMenu.classList.remove('open');
-});
+const navMenu=document.getElementById('nav-menu');
+document.getElementById('hamburger').addEventListener('click',e=>{e.stopPropagation();navMenu.classList.toggle('open');});
+navMenu.querySelectorAll('a').forEach(a=>{a.addEventListener('click',()=>navMenu.classList.remove('open'));});
+document.addEventListener('click',e=>{if(!e.target.closest('.nav'))navMenu.classList.remove('open');});
 
 const sections=document.querySelectorAll('section[id]'),navLinks=document.querySelectorAll('.nav-links a');
 window.addEventListener('scroll',()=>{let c='';sections.forEach(s=>{if(window.scrollY>=s.offsetTop-100)c=s.id;});navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+c));},{passive:true});
 document.getElementById('cl-new-item').addEventListener('keydown',e=>{if(e.key==='Enter')addChecklistItem();});
 
-// ── LIVE EUR/USD SPOT RATE (frankfurter.app — free, no key) ──
-let EUR_TO_USD = 1.08; // sensible fallback; overwritten by live rate
-let FX_RATE_LABEL = 'est. 1 EUR = $1.08';
-(async () => {
-  try {
-    const r = await fetch('https://api.frankfurter.app/latest?from=EUR&to=USD');
-    const d = await r.json();
-    if (d.rates && d.rates.USD) {
-      EUR_TO_USD = d.rates.USD;
-      FX_RATE_LABEL = '1 EUR = $' + EUR_TO_USD.toFixed(4) + ' live';
-    }
-  } catch(e) { /* use fallback silently */ }
-})();
-
-function toUSD(amount, currency) {
-  return currency === 'USD' ? amount : amount * EUR_TO_USD;
-}
-
-async function loadFlickr(){const strip=document.getElementById('flickr-strip');const countEl=document.getElementById('flickr-count');try{const url='https://api.flickr.com/services/feeds/photoset.gne?set='+FLICKR_ALBUM+'&nsid='+FLICKR_USER+'&lang=en-us&format=json&nojsoncallback=1';const res=await fetch(url);if(!res.ok)throw new Error('HTTP '+res.status);const data=await res.json();const items=data.items||[];if(items.length===0){strip.innerHTML='<div class="flickr-empty">No photos yet.</div>';countEl.textContent='0 photos';return;}strip.innerHTML='';items.forEach(item=>{const photoUrl=item.link;const imgSrc=(item.media&&item.media.m)?item.media.m.replace('_m.','_z.'):item.media.m;const frame=document.createElement('div');frame.className='flickr-frame';frame.title=item.title||'Spain 2026';frame.onclick=()=>window.open(photoUrl,'_blank');frame.innerHTML='<img src="'+imgSrc+'" alt="'+(item.title||'Spain 2026')+'" loading="lazy"><div class="flickr-frame-overlay"></div>';strip.appendChild(frame);});countEl.textContent=items.length+' photo'+(items.length!==1?'s':'');}catch(e){strip.innerHTML='<div class="flickr-empty">&#128247; Photos will appear here once added to the Flickr album.</div>';countEl.textContent='Live via Flickr';}}
-loadFlickr();
+let EUR_TO_USD=1.08,FX_RATE_LABEL='est. 1 EUR = $1.08';
+(async()=>{try{const r=await fetch('https://api.frankfurter.app/latest?from=EUR&to=USD');const d=await r.json();if(d.rates&&d.rates.USD){EUR_TO_USD=d.rates.USD;FX_RATE_LABEL='1 EUR = $'+EUR_TO_USD.toFixed(4)+' live';}}catch(e){}})();
+function toUSD(amount,currency){return currency==='USD'?amount:amount*EUR_TO_USD;}
 
 const TRIP_EVENTS=[{date:'2026-04-20',label:'Depart BOI 2:10pm \u00b7 ATL \u2192 BCN 10:05pm',loc:'Boise'},{date:'2026-04-21',label:'Arrive BCN 12:50pm',loc:'Barcelona'},{date:'2026-04-22',label:'Park G\u00fcell 10:30am + Picasso',loc:'Barcelona'},{date:'2026-04-23',label:'Sagrada Fam\u00edlia 9:30am \u00b7 Sant Jordi',loc:'Barcelona',mapUrl:APR23_MAP},{date:'2026-04-24',label:'Drive \u2192 Tarragona / Cambrils',loc:'Tarragona'},{date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona'},{date:'2026-04-26',label:'Drive \u2192 Bilbao',loc:'Bilbao'},{date:'2026-04-27',label:'Guggenheim Bilbao',loc:'Bilbao'},{date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},{date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},{date:'2026-04-30',label:'Drive \u2192 Barcelona via Toulouse',loc:'Barcelona'},{date:'2026-05-01',label:'Depart BCN 11:00am \u00b7 Arrive BOI 10:28pm',loc:'Home'}];
 const LOC_COLORS={'Boise':'#5c5c58','Barcelona':'#1a6b9a','Tarragona':'#7a5c1e','Bilbao':'#2d6a4f','Home':'#5c5c58'};
@@ -503,205 +484,33 @@ const DAY_MAPS={'2026-04-23':APR23_MAP};
 const FALLBACK=[{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[{time:'2:10pm',text:'<strong>BOI \u2192 ATL</strong> \u2014 DL 874 \u2014 arr 8:28pm'+docLink(FLIGHTS_DOC,'flights'),tag:'confirmed'},{time:'Evening',text:'ATL layover \u2014 The Club at Concourse F (Priority Pass)'},{time:'10:05pm',text:'<strong>ATL \u2192 BCN</strong> \u2014 VS 3926, overnight \u2014 Terminal I',tag:'confirmed'}]},{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[{time:'12:50pm',text:'<strong>Arrive Barcelona BCN</strong> \u2014 VS 3926 \u2014 Terminal 1'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},{time:'',text:'Aerob\u00fas A1 from T1 \u2192 Pla\u00e7a Catalunya (~35 min, \u20ac7)'},{time:'',text:'Check in: Central Apartments \u2014 Res. 562/2026'+addr('Carrer de Bail\u00e8n, 125, Barcelona',mapsSearch('Carrer de Bailen 125 Barcelona Eixample'))+docLink(AIRBNB_DOC,'reservation'),tag:'confirmed'},{time:'Afternoon',text:'Recovery day \u2014 slow explore of Eixample'},{time:'Evening',text:'Dinner at a local spot'}]},{date:'2026-04-22',title:'Park G\u00fcell + Picasso',loc:'Barcelona',activities:[{time:'10:30am',text:'<strong>Park G\u00fcell \u2014 Monumental Zone</strong> \u2014 Res. 8337300'+docLink(GUELL_TICKETS,'tickets')+addr('Park G\u00fcell, Barcelona',mapsSearch('Park Guell Barcelona Monumental Zone')),tag:'confirmed'},{time:'',text:'Valid until 11:00am entry. No re-entry. Bring photo ID.'},{time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15\u201323',mapsSearch('Museu Picasso Barcelona Carrer de Montcada')),tag:'book'},{time:'',text:'El Born \u2014 Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous',mapsSearch('Carrer dels Banys Nous Barcelona antiques'))},{time:'Evening',text:'Dinner in El Born'}]},{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[{time:'9:30am',text:'<strong>Sagrada Fam\u00edlia with Passion Tower</strong> \u2014 Res. 95793090'+docLink(SF_TICKETS,'tickets')+addr('Sagrada Fam\u00edlia',mapsSearch('Sagrada Familia Barcelona')),tag:'confirmed'},{time:'9:45am',text:'Passion Tower access \u2014 enter via C/ Marina entrance. Locators: 285907110 (Rumana) / 285907111 (Mark)'},{time:'Afternoon',text:"Sant Jordi's Day \u2014 book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic',mapsSearch('Barri Gotic Barcelona'))},{time:'',text:'Mercat G\u00f2tic antiques + Carrer dels Banys Nous map dealers'+addr('Mercat G\u00f2tic, Pla\u00e7a Nova',mapsSearch('Mercat Gotic Barcelona Placa Nova'))},{time:'Evening',text:'Dinner in El Born \u2014 el SET recommended (book via TheFork)'}]},{date:'2026-04-24',title:'To Cambrils / Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Check out of Eixample Airbnb \u2014 Carrer de Bail\u00e8n, 125'},{time:'',text:'Stop: Antig\u00fcedades Argar \u2014 1856 Tarragona map \u2014 Carrer d\u2019Arag\u00f3 530 (open 9:30am\u20131:30pm)'+addr("Antig\u00fcedades Argar, Carrer d'Arag\u00f3 530 Barcelona",mapsSearch("Antiguedades Argar Carrer Arago 530 Barcelona"))},{time:'2:00pm',text:'Pick up rental car \u2014 National, Conf. 1797553757'+docLink(CAR_DOC,'reservation')+addr('Barcelona Estacion Ave, Parking SABA, Pl. de Joan Peiro',mapsSearch('National Car Rental Barcelona Sants')),tag:'confirmed'},{time:'',text:'From inside Sants station follow signs to underground parking level -1'},{time:'',text:'Drive to Cambrils (~1.5 hrs via AP-7)'},{time:'Afternoon',text:'Arrive \u2014 staying with Dan Mannion'+addr('Carrer del Cardinal Vidal I Barrequer 28, Cambrils',mapsSearch('Carrer del Cardinal Vidal I Barrequer 28 Cambrils Tarragona Spain'))}]},{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Tarragona Cathedral'+addr('Catedral de Tarragona',mapsSearch('Catedral de Tarragona'))},{time:'',text:'Ferreres Aqueduct (Pont del Diable)'+addr('Ferreres Aqueduct',mapsSearch('Ferreres Aqueduct Pont del Diable Tarragona'))},{time:'Afternoon',text:'Tarragona beaches \u2014 Platja del Miracle'+addr('Platja del Miracle',mapsSearch('Platja del Miracle Tarragona'))},{time:'',text:'Local wine and seafood'}]},{date:'2026-04-26',title:'Drive to Bilbao',loc:'Bilbao',activities:[{time:'Morning',text:'Depart Cambrils \u2014 route: AP-7 north \u2192 A-8 coastal \u2192 Bilbao (~5\u20136 hrs)'},{time:'3:00pm',text:'Check in: Radisson Gran Via Bilbao \u2014 Conf. 0159730000'+docLink(RADISSON_DOC,'confirmation')+addr('Radisson Collection Hotel, Gran Via Bilbao',mapsSearch('Radisson Collection Hotel Gran Via Bilbao')),tag:'confirmed'},{time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo (Siete Calles)',mapsSearch('Casco Viejo Siete Calles Bilbao'))}]},{date:'2026-04-27',title:'Guggenheim',loc:'Bilbao',activities:[{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> \u2014 Res. 95961308'+docLink(GUGGENHEIM_DOC,'tickets')+addr('Guggenheim Bilbao',mapsSearch('Guggenheim Museum Bilbao')),tag:'confirmed'},{time:'',text:'Check Carne y Arena VR installation (I\u00f1\u00e1rritu, through June 20)'},{time:'Afternoon',text:'Bilbao Museo de Bellas Artes'+addr('Museo de Bellas Artes Bilbao',mapsSearch('Museo de Bellas Artes Bilbao'))},{time:'',text:'Riverside walk along R\u00eda del Nervi\u00f3n'},{time:'Evening',text:'Pintxos in Plaza Nueva'+addr('Plaza Nueva, Bilbao',mapsSearch('Plaza Nueva Bilbao'))}]},{date:'2026-04-28',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[{time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},{time:'',text:'La Concha beach'+addr('La Concha, San Sebasti\u00e1n',mapsSearch('Playa de La Concha San Sebastian'))},{time:'Lunch',text:'Pintxos in Parte Vieja (old town)'+addr('Parte Vieja, San Sebasti\u00e1n',mapsSearch('Parte Vieja San Sebastian'))},{time:'Afternoon',text:'Monte Igueldo funicular'+addr('Monte Igueldo funicular',mapsSearch('Monte Igueldo funicular San Sebastian'))},{time:'Evening',text:'Drive back to Bilbao'}]},{date:'2026-04-29',title:'Basque Country',loc:'Bilbao',activities:[{time:'Option A',text:'Guernica Peace Museum'+addr('Gernika Peace Museum',mapsSearch('Gernika Peace Museum Guernica'))},{time:'Option B',text:'Rioja wine country \u2014 Haro, Laguardia'+addr('Haro, La Rioja',mapsSearch('Haro La Rioja Spain'))},{time:'Option C',text:'Relaxed Bilbao day \u2014 neighborhoods, caf\u00e9s, antiques'},{time:'Evening',text:'Farewell pintxos in Casco Viejo'+addr('Casco Viejo, Bilbao',mapsSearch('Casco Viejo Bilbao'))}]},{date:'2026-04-30',title:'Return to Barcelona via Toulouse',loc:'Barcelona',activities:[{time:'Morning',text:'Depart Bilbao \u2014 route: A-8 east \u2192 Toulouse, France \u2192 AP-7 south \u2192 Barcelona (~7\u20138 hrs)'},{time:'',text:'Toulouse \u2014 good midpoint for lunch and fuel'+addr('Toulouse city centre',mapsSearch('Toulouse city centre France'))},{time:'',text:'Return rental car at Barcelona Estacion Ave (May 1 12:00pm deadline)'+addr('Barcelona Sants Station',mapsSearch('National Car Rental Barcelona Sants')),tag:'confirmed'},{time:'3:00pm',text:'Check in: AC Hotel Barcelona Sants \u2014 Conf. #92299097'+docLink(AC_HOTEL_DOC,'confirmation')+addr('Passeig de Sant Antoni, 36-40, Barcelona',mapsRoute('Bilbao Spain','Toulouse France','AC Hotel Barcelona Sants')),tag:'confirmed'},{time:'Evening',text:'Last evening in Barcelona \u2014 farewell dinner'}]},{date:'2026-05-01',title:'Home',loc:'Home',activities:[{time:'6:30am',text:'R2 Nord train: Sants \u2192 Terminal 1 (~19 min)'+addr('Barcelona Sants Station',mapsSearch('Barcelona Sants Railway Station'))},{time:'Noon',text:'Return rental car deadline \u2014 Barcelona Estacion Ave',tag:'confirmed'},{time:'11:00am',text:'<strong>Depart BCN</strong> \u2014 VS 3937'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},{time:'3:04pm',text:'<strong>Arrive ATL</strong> \u2014 The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'7:57pm',text:'<strong>Depart ATL</strong> \u2014 DL 704, Terminal S',tag:'confirmed'},{time:'10:28pm',text:'<strong>Arrive Boise BOI</strong>',tag:'confirmed'}]}];
 
 function renderItinerary(days){const c=document.getElementById('itinerary-container');c.innerHTML='';days.forEach(day=>{const block=document.createElement('div');block.className='day-block';block.id='day-'+day.date;const d=new Date(day.date+'T12:00:00');const mapLink=DAY_MAPS[day.date]?dayMapLink(DAY_MAPS[day.date]):'';block.innerHTML='<div class="day-header"><div class="day-num-col"><div class="day-num">'+d.getDate()+'</div><div class="day-abbr">'+d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+'</div></div><div class="day-title-col"><div class="day-label">'+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</div><div class="day-title-text">'+day.title+'</div><div class="day-location">&#127759; '+day.loc+'</div>'+mapLink+'</div><div class="day-weather-col" id="weather-'+day.date+'"><div class="weather-loading">Loading&hellip;</div></div></div><div class="day-body">'+day.activities.map(a=>'<div class="activity-row"><div class="activity-time">'+(a.time||'')+'</div><div class="activity-text">'+a.text+'</div>'+(a.tag==='confirmed'?'<span class="activity-tag tag-confirmed">Confirmed</span>':'')+(a.tag==='book'?'<span class="activity-tag tag-book">Book Now</span>':'')+'</div>').join('')+'</div>';c.appendChild(block);const wloc=day.loc.split(',')[0].trim();fetchWeather(wloc,day.date).then(w=>{const el=document.getElementById('weather-'+day.date);if(!el)return;if(w)el.innerHTML='<div class="weather-icon">'+wIcon(w.code)+'</div><div class="weather-temps">'+w.hi+'&deg; / '+w.lo+'&deg;F</div>';else el.innerHTML='';});})}
-
 async function loadFromSheet(){try{const res=await fetch(SHEET_CSV_URL,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');const header=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));const idx={date:header.indexOf('date'),title:header.indexOf('title'),loc:header.indexOf('location'),time:header.indexOf('time'),act:header.indexOf('activity'),tag:header.indexOf('tag')};const days=[];rows.slice(1).forEach(row=>{const date=row[idx.date]||'',title=row[idx.title]||'',loc=row[idx.loc]||'',time=row[idx.time]||'',actText=row[idx.act]||'',tag=row[idx.tag]||'';if(!date||!actText)return;let ex=days.find(d=>d.date===date);if(!ex){ex={date,title,loc,activities:[]};days.push(ex);}ex.activities.push({time,text:actText,tag:tag.toLowerCase()});});if(days.length>0){renderItinerary(days);document.getElementById('footer-updated').textContent='Live \u2014 Google Sheets \u2014 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}else throw new Error('No rows');}catch(e){renderItinerary(FALLBACK);}}
-loadFromSheet();
-loadChecklist();
+loadFromSheet();loadChecklist();
 
-// ============================================================
-// EXPENSE TRACKER
-// ============================================================
 const CANDIDATE_GIDS=['1039893554','734067895','471855652','1988829223','0','1','2'];
-let EXPENSES_GID_FOUND=null;
-let expenseData=[];
+let EXPENSES_GID_FOUND=null,expenseData=[];
+async function findExpensesGID(){if(EXPENSES_GID_FOUND)return EXPENSES_GID_FOUND;for(const gid of CANDIDATE_GIDS){try{const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});if(!res.ok)continue;const text=await res.text();const rows=parseCSV(text);if(rows.length>0){const h=rows[0].map(x=>x.toLowerCase().trim());if(h.includes('description')&&h.includes('who')&&h.includes('amount')){EXPENSES_GID_FOUND=gid;return gid;}}}catch(e){continue;}}return null;}
 
-async function findExpensesGID(){
-  if(EXPENSES_GID_FOUND)return EXPENSES_GID_FOUND;
-  for(const gid of CANDIDATE_GIDS){
-    try{
-      const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});
-      if(!res.ok)continue;
-      const text=await res.text();
-      const rows=parseCSV(text);
-      if(rows.length>0){
-        const h=rows[0].map(x=>x.toLowerCase().trim());
-        if(h.includes('description')&&h.includes('who')&&h.includes('amount')){EXPENSES_GID_FOUND=gid;return gid;}
-      }
-    }catch(e){continue;}
-  }
-  return null;
-}
-
-// Event delegation — one listener handles all button clicks in tbody
 document.getElementById('expense-tbody').addEventListener('click',e=>{
-  const btn=e.target.closest('button');
-  if(!btn)return;
-  const tr=btn.closest('tr[data-row-id]');
-  if(!tr)return;
-  const sheetRow=parseInt(tr.dataset.rowId,10);
-  const idx=parseInt(tr.dataset.expIdx,10);
-  if(btn.classList.contains('exp-del-btn')) handleDelete(sheetRow,btn);
+  const btn=e.target.closest('button');if(!btn)return;
+  const tr=btn.closest('tr[data-row-id]');if(!tr)return;
+  const sheetRow=parseInt(tr.dataset.rowId,10),idx=parseInt(tr.dataset.expIdx,10);
+  if(btn.classList.contains('exp-del-btn'))handleDelete(sheetRow,btn);
   else if(btn.classList.contains('exp-edit-btn')){const r=expenseData[idx];if(r)handleEdit(sheetRow,r,tr);}
-  else if(btn.classList.contains('exp-save-btn')) handleSave(sheetRow);
-  else if(btn.classList.contains('exp-cancel-btn')) handleCancel(sheetRow);
+  else if(btn.classList.contains('exp-save-btn'))handleSave(sheetRow);
+  else if(btn.classList.contains('exp-cancel-btn'))handleCancel(sheetRow);
 });
 
-async function handleDelete(sheetRow,btn){
-  if(!confirm('Delete this expense?'))return;
-  btn.disabled=true;btn.textContent='\u22ef';
-  try{
-    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({action:'deleteExpense',row:sheetRow}),mode:'no-cors'});
-    EXPENSES_GID_FOUND=null;setTimeout(loadExpenses,1500);
-  }catch(e){btn.disabled=false;btn.textContent='\u2715';}
-}
+async function handleDelete(sheetRow,btn){if(!confirm('Delete this expense?'))return;btn.disabled=true;btn.textContent='\u22ef';try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'deleteExpense',row:sheetRow}),mode:'no-cors'});EXPENSES_GID_FOUND=null;setTimeout(loadExpenses,1500);}catch(e){btn.disabled=false;btn.textContent='\u2715';}}
+function handleEdit(sheetRow,r,tr){document.querySelectorAll('.exp-edit-row').forEach(x=>x.remove());document.querySelectorAll('tr[data-editing]').forEach(x=>{x.style.display='';x.removeAttribute('data-editing');});tr.style.display='none';tr.setAttribute('data-editing','1');const notes=r[5]||'',who=r[2]||'Mark',currency=r[4]||'EUR',amount=parseFloat(r[3])||0,desc=r[1]||'';const editTr=document.createElement('tr');editTr.className='exp-edit-row';editTr.dataset.editFor=sheetRow;editTr.innerHTML=`<td colspan="7"><div class="exp-edit-grid"><div class="exp-edit-field"><span class="exp-edit-label">Description</span><input class="exp-edit-input" id="eed-desc" type="text" autocomplete="off"></div><div class="exp-edit-field"><span class="exp-edit-label">Amount</span><input class="exp-edit-input" id="eed-amt" type="number" min="0" step="0.01" value="${amount}"></div><div class="exp-edit-field"><span class="exp-edit-label">Currency</span><div class="exp-edit-select-wrap"><select class="exp-edit-select" id="eed-cur"><option value="EUR" ${currency!=='USD'?'selected':''}>&#8364; Euro</option><option value="USD" ${currency==='USD'?'selected':''}>$ USD</option></select></div></div><div class="exp-edit-field"><span class="exp-edit-label">Who Paid</span><div class="exp-edit-select-wrap"><select class="exp-edit-select" id="eed-who"><option value="Mark" ${who==='Mark'?'selected':''}>Mark</option><option value="Rumana" ${who==='Rumana'?'selected':''}>Rumana</option><option value="Shared" ${who==='Shared'?'selected':''}>Shared</option></select></div></div></div><div class="exp-note-row"><div class="exp-edit-field" style="flex:1"><span class="exp-edit-label">Notes</span><input class="exp-edit-input" id="eed-notes" type="text" placeholder="Optional note\u2026" autocomplete="off"></div></div><div class="exp-edit-actions"><button class="exp-save-btn" data-row="${sheetRow}">Save</button><button class="exp-cancel-btn" data-row="${sheetRow}">Cancel</button></div></td>`;tr.insertAdjacentElement('afterend',editTr);editTr.querySelector('#eed-desc').value=desc;editTr.querySelector('#eed-notes').value=notes;editTr.querySelector('#eed-desc').focus();editTr.querySelectorAll('input').forEach(inp=>{inp.addEventListener('keydown',e=>{if(e.key==='Enter')handleSave(sheetRow);if(e.key==='Escape')handleCancel(sheetRow);});});}
+function handleCancel(sheetRow){document.querySelector('[data-edit-for="'+sheetRow+'"]')?.remove();const orig=document.querySelector('[data-row-id="'+sheetRow+'"]');if(orig){orig.style.display='';orig.removeAttribute('data-editing');}}
+async function handleSave(sheetRow){const descEl=document.getElementById('eed-desc'),amtEl=document.getElementById('eed-amt'),curEl=document.getElementById('eed-cur'),whoEl=document.getElementById('eed-who'),notesEl=document.getElementById('eed-notes'),saveBtn=document.querySelector('.exp-save-btn[data-row="'+sheetRow+'"]');const desc=descEl?.value.trim(),amount=parseFloat(amtEl?.value);if(!desc||isNaN(amount)||amount<=0){descEl?.focus();return;}if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='Saving\u2026';}try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'editExpense',row:sheetRow,desc,amount,currency:curEl?.value||'EUR',who:whoEl?.value||'Mark',notes:notesEl?.value.trim()||''}),mode:'no-cors'});EXPENSES_GID_FOUND=null;handleCancel(sheetRow);setTimeout(loadExpenses,1500);}catch(e){if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='Save';}}}
 
-function handleEdit(sheetRow,r,tr){
-  document.querySelectorAll('.exp-edit-row').forEach(x=>x.remove());
-  document.querySelectorAll('tr[data-editing]').forEach(x=>{x.style.display='';x.removeAttribute('data-editing');});
-  tr.style.display='none';tr.setAttribute('data-editing','1');
-  const notes=r[5]||'',who=r[2]||'Mark',currency=r[4]||'EUR',amount=parseFloat(r[3])||0,desc=r[1]||'';
-  const editTr=document.createElement('tr');
-  editTr.className='exp-edit-row';editTr.dataset.editFor=sheetRow;
-  editTr.innerHTML=`<td colspan="7">
-    <div class="exp-edit-grid">
-      <div class="exp-edit-field"><span class="exp-edit-label">Description</span>
-        <input class="exp-edit-input" id="eed-desc" type="text" autocomplete="off"></div>
-      <div class="exp-edit-field"><span class="exp-edit-label">Amount</span>
-        <input class="exp-edit-input" id="eed-amt" type="number" min="0" step="0.01" value="${amount}"></div>
-      <div class="exp-edit-field"><span class="exp-edit-label">Currency</span>
-        <div class="exp-edit-select-wrap"><select class="exp-edit-select" id="eed-cur">
-          <option value="EUR" ${currency!=='USD'?'selected':''}>&#8364; Euro</option>
-          <option value="USD" ${currency==='USD'?'selected':''}>$ USD</option>
-        </select></div></div>
-      <div class="exp-edit-field"><span class="exp-edit-label">Who Paid</span>
-        <div class="exp-edit-select-wrap"><select class="exp-edit-select" id="eed-who">
-          <option value="Mark" ${who==='Mark'?'selected':''}>Mark</option>
-          <option value="Rumana" ${who==='Rumana'?'selected':''}>Rumana</option>
-          <option value="Shared" ${who==='Shared'?'selected':''}>Shared</option>
-        </select></div></div>
-    </div>
-    <div class="exp-note-row">
-      <div class="exp-edit-field" style="flex:1"><span class="exp-edit-label">Notes</span>
-        <input class="exp-edit-input" id="eed-notes" type="text" placeholder="Optional note\u2026" autocomplete="off"></div>
-    </div>
-    <div class="exp-edit-actions">
-      <button class="exp-save-btn" data-row="${sheetRow}">Save</button>
-      <button class="exp-cancel-btn" data-row="${sheetRow}">Cancel</button>
-    </div>
-  </td>`;
-  tr.insertAdjacentElement('afterend',editTr);
-  editTr.querySelector('#eed-desc').value=desc;
-  editTr.querySelector('#eed-notes').value=notes;
-  editTr.querySelector('#eed-desc').focus();
-  editTr.querySelectorAll('input').forEach(inp=>{
-    inp.addEventListener('keydown',e=>{if(e.key==='Enter')handleSave(sheetRow);if(e.key==='Escape')handleCancel(sheetRow);});
-  });
-}
+async function loadExpenses(){const empty=document.getElementById('expense-empty'),tbody=document.getElementById('expense-tbody'),table=document.getElementById('expense-table'),status=document.getElementById('expense-sync-status');try{const gid=await findExpensesGID();if(!gid){empty.textContent='Expenses tab not yet published.';empty.style.display='';table.style.display='none';updateTotals([]);status.textContent='Ready to record';return;}const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);const header=rows[0]?rows[0].map(h=>h.toLowerCase().trim()):[];const notesIdx=header.indexOf('notes');expenseData=rows.slice(1).filter(r=>r[1]&&r[3]).map(r=>{const out=[...r];out[5]=notesIdx>=0?(r[notesIdx]||''):'';return out;});if(expenseData.length===0){empty.textContent='No expenses yet \u2014 add your first above.';empty.style.display='';table.style.display='none';updateTotals([]);return;}empty.style.display='none';table.style.display='';tbody.innerHTML='';expenseData.forEach((r,i)=>{const sheetRow=i+2,currency=r[4]||'EUR',sym=currency==='USD'?'$':'\u20ac',notes=r[5]||'',badgeClass=r[2]==='Mark'?'badge-mark':r[2]==='Rumana'?'badge-rumana':'badge-shared';const tr=document.createElement('tr');tr.dataset.rowId=sheetRow;tr.dataset.expIdx=i;const numTd=document.createElement('td');numTd.style.cssText='font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem';numTd.textContent=i+1;const dateTd=document.createElement('td');dateTd.style.cssText='font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey)';dateTd.textContent=r[0];const descTd=document.createElement('td');descTd.textContent=r[1];const whoTd=document.createElement('td');whoTd.innerHTML='<span class="expense-who-badge '+badgeClass+'">'+r[2]+'</span>';const amtTd=document.createElement('td');amtTd.className='expense-amount-cell';amtTd.textContent=sym+parseFloat(r[3]).toFixed(2);const noteTd=document.createElement('td');noteTd.className='expense-note-cell';noteTd.textContent=notes;const actTd=document.createElement('td');actTd.innerHTML='<div class="exp-action-cell"><button class="exp-edit-btn" title="Edit">&#9998;</button><button class="exp-del-btn" title="Delete">&#10005;</button></div>';[numTd,dateTd,descTd,whoTd,amtTd,noteTd,actTd].forEach(td=>tr.appendChild(td));tbody.appendChild(tr);});updateTotals(expenseData);status.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){empty.textContent='Could not load expenses.';empty.style.display='';table.style.display='none';status.textContent='Error';}}
 
-function handleCancel(sheetRow){
-  document.querySelector('[data-edit-for="'+sheetRow+'"]')?.remove();
-  const orig=document.querySelector('[data-row-id="'+sheetRow+'"]');
-  if(orig){orig.style.display='';orig.removeAttribute('data-editing');}
-}
+function updateTotals(data){let markUSD=0,rumanaUSD=0,allUSD=0,markCount=0,rumanaCount=0;data.forEach(r=>{const amt=parseFloat(r[3])||0,currency=r[4]||'EUR',usd=toUSD(amt,currency);allUSD+=usd;if(r[2]==='Mark'){markUSD+=usd;markCount++;}else if(r[2]==='Rumana'){rumanaUSD+=usd;rumanaCount++;}else{markUSD+=usd/2;rumanaUSD+=usd/2;markCount++;rumanaCount++;}});const fmt=v=>'$'+v.toFixed(2);document.getElementById('total-mark').textContent=data.length?fmt(markUSD):'\u2014';document.getElementById('total-rumana').textContent=data.length?fmt(rumanaUSD):'\u2014';document.getElementById('total-all').textContent=data.length?fmt(allUSD):'\u2014';document.getElementById('count-mark').textContent=markCount+' expense'+(markCount!==1?'s':'');document.getElementById('count-rumana').textContent=rumanaCount+' expense'+(rumanaCount!==1?'s':'');document.getElementById('count-all').textContent=data.length+' entr'+(data.length!==1?'ies':'y')+' \u00b7 '+FX_RATE_LABEL;}
 
-async function handleSave(sheetRow){
-  const descEl=document.getElementById('eed-desc'),amtEl=document.getElementById('eed-amt');
-  const curEl=document.getElementById('eed-cur'),whoEl=document.getElementById('eed-who'),notesEl=document.getElementById('eed-notes');
-  const saveBtn=document.querySelector('.exp-save-btn[data-row="'+sheetRow+'"]');
-  const desc=descEl?.value.trim(),amount=parseFloat(amtEl?.value);
-  if(!desc||isNaN(amount)||amount<=0){descEl?.focus();return;}
-  if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='Saving\u2026';}
-  try{
-    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({action:'editExpense',row:sheetRow,desc,amount,currency:curEl?.value||'EUR',who:whoEl?.value||'Mark',notes:notesEl?.value.trim()||''}),mode:'no-cors'});
-    EXPENSES_GID_FOUND=null;handleCancel(sheetRow);setTimeout(loadExpenses,1500);
-  }catch(e){if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='Save';}}
-}
-
-async function loadExpenses(){
-  const empty=document.getElementById('expense-empty');
-  const tbody=document.getElementById('expense-tbody');
-  const table=document.getElementById('expense-table');
-  const status=document.getElementById('expense-sync-status');
-  try{
-    const gid=await findExpensesGID();
-    if(!gid){empty.textContent='Expenses tab not yet published. Add an expense to start.';empty.style.display='';table.style.display='none';updateTotals([]);status.textContent='Ready to record';return;}
-    const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    const text=await res.text();
-    const rows=parseCSV(text);
-    const header=rows[0]?rows[0].map(h=>h.toLowerCase().trim()):[];
-    const notesIdx=header.indexOf('notes');
-    expenseData=rows.slice(1).filter(r=>r[1]&&r[3]).map(r=>{
-      const out=[...r];out[5]=notesIdx>=0?(r[notesIdx]||''):'';return out;
-    });
-    if(expenseData.length===0){empty.textContent='No expenses yet \u2014 add your first above.';empty.style.display='';table.style.display='none';updateTotals([]);return;}
-    empty.style.display='none';table.style.display='';
-    tbody.innerHTML='';
-    expenseData.forEach((r,i)=>{
-      const sheetRow=i+2;
-      const currency=r[4]||'EUR';
-      const sym=currency==='USD'?'$':'\u20ac';
-      const notes=r[5]||'';
-      const badgeClass=r[2]==='Mark'?'badge-mark':r[2]==='Rumana'?'badge-rumana':'badge-shared';
-      const tr=document.createElement('tr');
-      tr.dataset.rowId=sheetRow;tr.dataset.expIdx=i;
-      const numTd=document.createElement('td');numTd.style.cssText='font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem';numTd.textContent=i+1;
-      const dateTd=document.createElement('td');dateTd.style.cssText='font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey)';dateTd.textContent=r[0];
-      const descTd=document.createElement('td');descTd.textContent=r[1];
-      const whoTd=document.createElement('td');whoTd.innerHTML='<span class="expense-who-badge '+badgeClass+'">'+r[2]+'</span>';
-      const amtTd=document.createElement('td');amtTd.className='expense-amount-cell';amtTd.textContent=sym+parseFloat(r[3]).toFixed(2);
-      const noteTd=document.createElement('td');noteTd.className='expense-note-cell';noteTd.textContent=notes;
-      const actTd=document.createElement('td');
-      actTd.innerHTML='<div class="exp-action-cell"><button class="exp-edit-btn" title="Edit">&#9998;</button><button class="exp-del-btn" title="Delete">&#10005;</button></div>';
-      [numTd,dateTd,descTd,whoTd,amtTd,noteTd,actTd].forEach(td=>tr.appendChild(td));
-      tbody.appendChild(tr);
-    });
-    updateTotals(expenseData);
-    status.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  }catch(e){empty.textContent='Could not load expenses.';empty.style.display='';table.style.display='none';status.textContent='Error';}
-}
-
-// All totals shown in USD; EUR amounts converted at live spot rate
-function updateTotals(data){
-  let markUSD=0,rumanaUSD=0,allUSD=0,markCount=0,rumanaCount=0;
-  data.forEach(r=>{
-    const amt=parseFloat(r[3])||0;
-    const currency=r[4]||'EUR';
-    const usd=toUSD(amt,currency);
-    allUSD+=usd;
-    if(r[2]==='Mark'){markUSD+=usd;markCount++;}
-    else if(r[2]==='Rumana'){rumanaUSD+=usd;rumanaCount++;}
-    else{markUSD+=usd/2;rumanaUSD+=usd/2;markCount++;rumanaCount++;}
-  });
-  const fmt=v=>'$'+v.toFixed(2);
-  document.getElementById('total-mark').textContent=data.length?fmt(markUSD):'\u2014';
-  document.getElementById('total-rumana').textContent=data.length?fmt(rumanaUSD):'\u2014';
-  document.getElementById('total-all').textContent=data.length?fmt(allUSD):'\u2014';
-  document.getElementById('count-mark').textContent=markCount+' expense'+(markCount!==1?'s':'');
-  document.getElementById('count-rumana').textContent=rumanaCount+' expense'+(rumanaCount!==1?'s':'');
-  // Show entry count + live FX rate footnote in trip total card
-  document.getElementById('count-all').textContent=data.length+' entr'+(data.length!==1?'ies':'y')+' \u00b7 '+FX_RATE_LABEL;
-}
-
-async function addExpense(){
-  const descEl=document.getElementById('exp-desc'),amountEl=document.getElementById('exp-amount');
-  const currency=document.getElementById('exp-currency').value,who=document.getElementById('exp-who').value;
-  const notes=document.getElementById('exp-notes').value.trim();
-  const desc=descEl.value.trim(),amount=parseFloat(amountEl.value);
-  const btn=document.getElementById('btn-add-expense');
-  if(!desc||isNaN(amount)||amount<=0){descEl.focus();return;}
-  btn.disabled=true;btn.textContent='Saving\u2026';
-  const date=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
-  try{
-    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({action:'expense',date,desc,who,amount,currency,notes}),mode:'no-cors'});
-    descEl.value='';amountEl.value='';document.getElementById('exp-notes').value='';
-    EXPENSES_GID_FOUND=null;setTimeout(loadExpenses,2000);
-  }catch(e){alert('Could not save expense.');}
-  finally{btn.disabled=false;btn.textContent='+ Add';}
-}
+async function addExpense(){const descEl=document.getElementById('exp-desc'),amountEl=document.getElementById('exp-amount'),currency=document.getElementById('exp-currency').value,who=document.getElementById('exp-who').value,notes=document.getElementById('exp-notes').value.trim(),desc=descEl.value.trim(),amount=parseFloat(amountEl.value),btn=document.getElementById('btn-add-expense');if(!desc||isNaN(amount)||amount<=0){descEl.focus();return;}btn.disabled=true;btn.textContent='Saving\u2026';const date=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'expense',date,desc,who,amount,currency,notes}),mode:'no-cors'});descEl.value='';amountEl.value='';document.getElementById('exp-notes').value='';EXPENSES_GID_FOUND=null;setTimeout(loadExpenses,2000);}catch(e){alert('Could not save expense.');}finally{btn.disabled=false;btn.textContent='+ Add';}}
 document.getElementById('exp-desc')&&document.getElementById('exp-desc').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
 document.getElementById('exp-amount')&&document.getElementById('exp-amount').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
 loadExpenses();
