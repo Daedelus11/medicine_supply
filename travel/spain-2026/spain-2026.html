@@ -1,11 +1,11 @@
-<!-- v45: Photos section — clean button-only card, no iframe -->
+<!-- v46: Photos — Google Photos scraper via CORS proxy, filmstrip display, Refresh button -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v45: Photos section clean card -->
+<!-- v46: Google Photos filmstrip via proxy scrape -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -108,13 +108,24 @@
 .btn-primary:hover{background:#a06000}
 /* PHOTOS */
 #photos{background:var(--cream)}
-.photos-card{border:1px solid var(--rule);background:var(--white);overflow:hidden}
-.photos-card-header{background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow)}
-.photos-card-title{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)}
-.photos-card-meta{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)}
-.photos-card-body{padding:2.5rem 2rem;display:flex;flex-direction:column;align-items:flex-start;gap:1.25rem}
-.photos-card-desc{font-size:0.88rem;color:var(--stone);line-height:1.65;max-width:600px}
-.photos-card-desc strong{color:var(--ink)}
+.gp-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
+.gp-header{background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow);flex-wrap:wrap;gap:0.75rem}
+.gp-title{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)}
+.gp-meta{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)}
+.gp-strip{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:var(--accent) var(--rule);min-height:180px;align-items:stretch}
+.gp-strip::-webkit-scrollbar{height:4px}
+.gp-strip::-webkit-scrollbar-track{background:var(--rule)}
+.gp-strip::-webkit-scrollbar-thumb{background:var(--accent)}
+.gp-frame{flex-shrink:0;width:240px;height:180px;scroll-snap-align:start;overflow:hidden;position:relative;background:var(--stone);cursor:pointer}
+.gp-frame img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s}
+.gp-frame:hover img{transform:scale(1.05)}
+.gp-status{padding:3rem 2rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey);width:100%}
+.gp-footer{padding:1.25rem 1.5rem;border-top:1px solid var(--rule);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.gp-footer-text{font-size:0.82rem;color:var(--stone)}
+.gp-footer-text strong{color:var(--ink)}
+.btn-refresh{display:inline-flex;align-items:center;gap:6px;background:transparent;color:var(--accent);font-family:var(--sans);font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;padding:0.5rem 1rem;border:1px solid rgba(192,112,0,0.4);cursor:pointer;transition:background 0.15s}
+.btn-refresh:hover{background:rgba(192,112,0,0.07)}
+.btn-refresh:disabled{opacity:0.4;cursor:not-allowed}
 #notes{background:var(--white)}
 .checklist-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
 .checklist-panel{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
@@ -235,8 +246,8 @@
 .exp-cancel-btn:hover{background:var(--cream)}
 .expense-quick-link{display:inline-flex;align-items:center;gap:6px;background:var(--yellow);color:var(--dark);font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:8px 16px;position:fixed;bottom:24px;right:24px;z-index:300;box-shadow:0 4px 20px rgba(0,0,0,0.25);transition:background 0.2s;text-decoration:none}
 .expense-quick-link:hover{background:#e6b01f}
-@media(min-width:769px) and (max-width:1024px){.nav{padding:0 1.5rem}.nav-links a{padding:0 0.6rem;font-size:0.6rem}.hero{padding:4rem 2rem 3.5rem}.section{padding:3.5rem 2rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}.booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}.booking-detail{font-size:0.68rem}.expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.checklist-wrap{gap:1rem}.cl-add-select{max-width:100px;font-size:0.65rem}.map-iframe-wrap iframe{height:580px}.shop-grid{grid-template-columns:repeat(2,1fr)}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}}
-@media(max-width:768px){.expense-summary{grid-template-columns:1fr}.expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}.expense-form-body{grid-template-columns:1fr 1fr}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.expense-quick-link{bottom:16px;right:16px}.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-iframe-wrap iframe{height:400px}.page-footer{padding:2rem 1.25rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2),.booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}.booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}.shop-grid{grid-template-columns:1fr}.checklist-wrap{grid-template-columns:1fr}.cl-add-select{max-width:100px;font-size:0.65rem}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}.exp-edit-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:769px) and (max-width:1024px){.nav{padding:0 1.5rem}.nav-links a{padding:0 0.6rem;font-size:0.6rem}.hero{padding:4rem 2rem 3.5rem}.section{padding:3.5rem 2rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}.booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}.booking-detail{font-size:0.68rem}.expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.checklist-wrap{gap:1rem}.cl-add-select{max-width:100px;font-size:0.65rem}.map-iframe-wrap iframe{height:580px}.shop-grid{grid-template-columns:repeat(2,1fr)}.gp-frame{width:200px;height:150px}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}}
+@media(max-width:768px){.expense-summary{grid-template-columns:1fr}.expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}.expense-form-body{grid-template-columns:1fr 1fr}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.expense-quick-link{bottom:16px;right:16px}.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-iframe-wrap iframe{height:400px}.page-footer{padding:2rem 1.25rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2),.booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}.booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}.shop-grid{grid-template-columns:1fr}.checklist-wrap{grid-template-columns:1fr}.cl-add-select{max-width:100px;font-size:0.65rem}.gp-frame{width:160px;height:120px}.gp-footer{flex-direction:column;align-items:flex-start}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}.exp-edit-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -302,14 +313,20 @@
 
 <section class="section" id="photos" style="background:var(--cream)">
   <header class="section-header"><div class="section-eyebrow">04 &mdash; Memories</div><h2 class="section-title">Photo Album</h2></header>
-  <div class="photos-card">
-    <div class="photos-card-header">
-      <div class="photos-card-title">MaRu / Spain &amp; Basque Country 2026</div>
-      <div class="photos-card-meta">Google Photos</div>
+  <div class="gp-wrap">
+    <div class="gp-header">
+      <div class="gp-title">MaRu / Spain &amp; Basque Country 2026</div>
+      <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+        <div class="gp-meta" id="gp-count">Loading&hellip;</div>
+        <button class="btn-refresh" id="gp-refresh-btn" onclick="loadGooglePhotos(true)">&#8635; Refresh</button>
+      </div>
     </div>
-    <div class="photos-card-body">
-      <p class="photos-card-desc"><strong>Photos back up automatically</strong> from your phone to Google Photos. Tap the button to open the full shared album &mdash; all photos from the trip in one place.</p>
-      <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="btn-primary">&#128247; Open Spain 2026 Album</a>
+    <div class="gp-strip" id="gp-strip">
+      <div class="gp-status">Loading photos&hellip;</div>
+    </div>
+    <div class="gp-footer">
+      <div class="gp-footer-text"><strong>Scroll to browse &rarr;</strong> &nbsp; Photos back up automatically from your phone. Hit Refresh to pull latest.</div>
+      <a href="https://photos.app.goo.gl/7KJMVdykUsxSsS7t6" target="_blank" class="btn-primary">&#128247; Open Full Album</a>
     </div>
   </div>
 </section>
@@ -412,6 +429,7 @@ const RADISSON_DOC='https://drive.google.com/file/d/1EW28lNUnLfVD9pMACVVzSeSQZmg
 const GUGGENHEIM_DOC='https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FCKZH6jsb/view?usp=drive_link';
 const AC_HOTEL_DOC='https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link';
 const APR23_MAP='/travel/2026/barcelona-apr23.html';
+const GP_ALBUM_URL='https://photos.app.goo.gl/7KJMVdykUsxSsS7t6';
 
 function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
 function mapsRoute(o,w,d){return'https://www.google.com/maps/dir/'+encodeURIComponent(o)+'/'+encodeURIComponent(w)+'/'+encodeURIComponent(d);}
@@ -433,6 +451,68 @@ document.getElementById('cl-new-item').addEventListener('keydown',e=>{if(e.key==
 let EUR_TO_USD=1.08,FX_RATE_LABEL='est. 1 EUR = $1.08';
 (async()=>{try{const r=await fetch('https://api.frankfurter.app/latest?from=EUR&to=USD');const d=await r.json();if(d.rates&&d.rates.USD){EUR_TO_USD=d.rates.USD;FX_RATE_LABEL='1 EUR = $'+EUR_TO_USD.toFixed(4)+' live';}}catch(e){}})();
 function toUSD(amount,currency){return currency==='USD'?amount:amount*EUR_TO_USD;}
+
+// ── GOOGLE PHOTOS filmstrip ───────────────────────────────────
+// Fetches the album page via allorigins CORS proxy, extracts
+// image URLs baked into the page JSON, renders as filmstrip.
+// User action: tap "Refresh" to pull latest photos.
+async function loadGooglePhotos(manual=false){
+  const strip=document.getElementById('gp-strip');
+  const countEl=document.getElementById('gp-count');
+  const btn=document.getElementById('gp-refresh-btn');
+  if(btn)btn.disabled=true;
+  strip.innerHTML='<div class="gp-status">Loading photos&hellip;</div>';
+  countEl.textContent='Loading&hellip;';
+  try{
+    const proxy='https://api.allorigins.win/get?url='+encodeURIComponent(GP_ALBUM_URL);
+    const res=await fetch(proxy);
+    if(!res.ok)throw new Error('proxy '+res.status);
+    const json=await res.json();
+    const html=json.contents||'';
+    // Google Photos embeds photo data as JSON arrays inside the page HTML.
+    // Pattern: ["https://lh3.googleusercontent.com/...",digits,digits
+    const re=/\["(https:\/\/lh3\.googleusercontent\.com\/[^"]+)",\d+,\d+\]/g;
+    const seen=new Set();
+    const urls=[];
+    let m;
+    while((m=re.exec(html))!==null){
+      const u=m[1];
+      // Skip tiny thumbnails — require URLs without small size suffix
+      if(!seen.has(u)){seen.add(u);urls.push(u);}
+    }
+    // Deduplicate by base URL (strip size params) and prefer larger versions
+    const baseMap=new Map();
+    urls.forEach(u=>{
+      const base=u.replace(/=w\d+-h\d+.*$/,'').replace(/=s\d+.*$/,'');
+      if(!baseMap.has(base))baseMap.set(base,u);
+    });
+    const photos=[...baseMap.values()].slice(0,60);
+    if(photos.length===0)throw new Error('no photos found');
+    strip.innerHTML='';
+    photos.forEach(u=>{
+      // Request a 480px wide version
+      const src=u.replace(/=w\d+-h\d+[^"']*$/,'')+'=w480-h360-c';
+      const frame=document.createElement('div');
+      frame.className='gp-frame';
+      frame.title='Open album';
+      frame.onclick=()=>window.open(GP_ALBUM_URL,'_blank');
+      const img=document.createElement('img');
+      img.src=src;
+      img.alt='Spain 2026';
+      img.loading='lazy';
+      img.onerror=()=>frame.style.display='none';
+      frame.appendChild(img);
+      strip.appendChild(frame);
+    });
+    countEl.textContent=photos.length+' photo'+(photos.length!==1?'s':'');
+  }catch(e){
+    strip.innerHTML='<div class="gp-status">&#128247; Could not load photos &mdash; tap <strong>Open Full Album</strong> to view on Google Photos.</div>';
+    countEl.textContent='Google Photos';
+  }finally{
+    if(btn){btn.disabled=false;}
+  }
+}
+loadGooglePhotos();
 
 const TRIP_EVENTS=[{date:'2026-04-20',label:'Depart BOI 2:10pm \u00b7 ATL \u2192 BCN 10:05pm',loc:'Boise'},{date:'2026-04-21',label:'Arrive BCN 12:50pm',loc:'Barcelona'},{date:'2026-04-22',label:'Park G\u00fcell 10:30am + Picasso',loc:'Barcelona'},{date:'2026-04-23',label:'Sagrada Fam\u00edlia 9:30am \u00b7 Sant Jordi',loc:'Barcelona',mapUrl:APR23_MAP},{date:'2026-04-24',label:'Drive \u2192 Tarragona / Cambrils',loc:'Tarragona'},{date:'2026-04-25',label:'Roman Ruins + Coast',loc:'Tarragona'},{date:'2026-04-26',label:'Drive \u2192 Bilbao',loc:'Bilbao'},{date:'2026-04-27',label:'Guggenheim Bilbao',loc:'Bilbao'},{date:'2026-04-28',label:'San Sebasti\u00e1n day trip',loc:'Bilbao'},{date:'2026-04-29',label:'Basque Country',loc:'Bilbao'},{date:'2026-04-30',label:'Drive \u2192 Barcelona via Toulouse',loc:'Barcelona'},{date:'2026-05-01',label:'Depart BCN 11:00am \u00b7 Arrive BOI 10:28pm',loc:'Home'}];
 const LOC_COLORS={'Boise':'#5c5c58','Barcelona':'#1a6b9a','Tarragona':'#7a5c1e','Bilbao':'#2d6a4f','Home':'#5c5c58'};
