@@ -57,7 +57,7 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
 .stop-time { font-family: var(--mono); font-size: 0.62rem; color: var(--yellow); letter-spacing: 0.1em; margin-bottom: 3px; }
 .stop-name { font-size: 0.85rem; font-weight: 600; color: var(--white); margin-bottom: 3px; }
 .stop-desc { font-size: 0.72rem; color: rgba(255,255,255,0.4); line-height: 1.5; }
-.stop-actions { display: flex; gap: 6px; margin-top: 7px; align-items: center; }
+.stop-actions { display: flex; gap: 6px; margin-top: 7px; align-items: center; flex-wrap: wrap; }
 .stop-tag { display: inline-block; font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 2px 7px; border: 1px solid; }
 .tag-anchor { border-color: var(--yellow); color: var(--yellow); background: rgba(254,196,34,0.08); }
 .tag-vintage { border-color: #a78bfa; color: #a78bfa; background: rgba(167,139,250,0.08); }
@@ -69,7 +69,6 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
   font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em;
   padding: 2px 8px; border: 1px solid rgba(254,196,34,0.3); color: var(--yellow);
   background: rgba(254,196,34,0.06); text-decoration: none; transition: background 0.15s;
-  cursor: pointer;
 }
 .stop-dir-btn:hover { background: rgba(254,196,34,0.15); }
 .transit { display: flex; align-items: center; gap: 6px; padding: 0.4rem 1.5rem 0.4rem 52px; font-family: var(--mono); font-size: 0.58rem; color: rgba(255,255,255,0.2); letter-spacing: 0.08em; border-bottom: 1px solid rgba(255,255,255,0.03); }
@@ -115,7 +114,7 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
     <div class="stops" id="stops-list"></div>
     <div style="padding:1.25rem 1.75rem; border-top:1px solid rgba(255,255,255,0.06); background: rgba(254,196,34,0.04);">
       <div style="font-family:var(--mono);font-size:0.58rem;color:var(--yellow);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.4rem;">Tomorrow — Apr 24</div>
-      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.6;"><strong style="color:rgba(255,255,255,0.7);">Antiguedades Argar</strong> (1856 Tarragona map · €160) — Carrer d’Aragó 530, Eixample — open 9:30am–1:30pm. Stop en route to Sants car pickup before driving to Tarragona.</div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.6;"><strong style="color:rgba(255,255,255,0.7);">Antiguedades Argar</strong> (1856 Tarragona map · €160) — Carrer d'Aragó 530, Eixample — open 9:30am–1:30pm. Stop en route to Sants car pickup before driving to Tarragona.</div>
     </div>
   </aside>
   <div class="map-panel">
@@ -160,11 +159,11 @@ const STOPS = [
   { id:6, time:'1:00 PM', name:'Ziryab Fusió — Lunch', lat:41.3840, lng:2.1803, color:'#34d399', tagClass:'tag-food', tagText:'Lunch · Book Now',
     desc:'C/ Grunyi 5 · Moorish-Med fusion · 4.7 stars · Book via TheFork or +34 931 87 42 10',
     note:'C/ Grunyi 5 · Moorish-Med fusion · 4.7 stars<br>+34 931 87 42 10',
-    query:'Ziryab Barcelona Carrer Grunyi' },
+    query:'Ziryab Fusio Carrer Grunyi 5 Barcelona' },
   { id:7, time:'2:30 PM', name:'Scooter House Colón 24', lat:41.3774, lng:2.1788, color:'#60a5fa', tagClass:'tag-activity', tagText:'E-Bikes',
     desc:'Pg. de Colom 24 · E-bikes ~€30/day · Open 10am–7pm · Ride Passeig Marítim east to Barceloneta',
     note:'Pg. de Colom 24 · E-bikes ~€30/day<br>Ride east along Passeig Marítim',
-    query:'Scooter House Passeig Colom 24 Barcelona' },
+    query:'Scooter House Passeig Colon 24 Barcelona' },
   { id:8, time:'3:00 PM', name:'Barceloneta Beach', lat:41.3793, lng:2.1930, color:'#60a5fa', tagClass:'tag-activity', tagText:'Coastal Ride',
     desc:'Ride the coastal path · Barceloneta beach · Parc de la Ciutadella · Return bikes by 4pm',
     note:'Coastal ride · Barceloneta beach<br>Parc de la Ciutadella · Return bikes by 4pm',
@@ -176,20 +175,20 @@ const STOPS = [
   { id:10, time:'7:00 PM', name:'el SET — Dinner', lat:41.3843, lng:2.1831, color:'#f87171', tagClass:'tag-dinner', tagText:'Dinner · Reserve Now',
     desc:'C/ Esparteria 7, El Born · 4.9 stars · Open 7pm–11:45pm · Book via TheFork or +34 930 11 40 86 · Stuffed aubergine essential',
     note:'C/ Esparteria 7 · 4.9 stars · 7pm–11:45pm<br>+34 930 11 40 86 · Book via TheFork',
-    query:'el SET restaurant Carrer Esparteria 7 Barcelona' },
+    query:'el SET restaurant Carrer Esparteria 7 Born Barcelona' },
 ];
 
-// Build directions URL using Google Maps with current location as origin
-function directionsUrl(query) {
-  // comgooglemaps:// opens the native app on iOS/Android; falls back gracefully to browser
-  const dest = encodeURIComponent(query);
-  // Universal URL that opens Google Maps app on mobile or browser on desktop
-  return `https://www.google.com/maps/dir/?api=1&destination=${dest}&travelmode=walking`;
+// Build a Google Maps directions URL.
+// On mobile, Google Maps app intercepts the URL automatically.
+// We use lat/lng as destination so it's precise regardless of query language.
+function directionsUrl(stop) {
+  const dest = stop.lat + ',' + stop.lng;
+  // This URL opens native Google Maps on iOS/Android and browser Maps on desktop.
+  // Google Maps will use device GPS as origin when no origin is specified.
+  return 'https://www.google.com/maps/dir/?api=1&destination=' + dest + '&travelmode=walking';
 }
 
-// Build sidebar stops
-const stopsList = document.getElementById('stops-list');
-
+// Transit labels that appear BEFORE the stop at the given index
 const TRANSITS = {
   1: { icon: '🚶', text: '15 min walk south to El Born' },
   6: { icon: '🚶', text: '3 min walk to Ziryab' },
@@ -199,12 +198,13 @@ const TRANSITS = {
   10: { icon: '🚇', text: 'Cable car down · Metro or taxi to El Born' },
 };
 
+const stopsList = document.getElementById('stops-list');
+
 STOPS.forEach((stop, i) => {
-  // Transit label before certain stops
   if (TRANSITS[i]) {
     const t = document.createElement('div');
     t.className = 'transit';
-    t.innerHTML = `<span class="transit-icon">${TRANSITS[i].icon}</span> ${TRANSITS[i].text}`;
+    t.innerHTML = '<span class="transit-icon">' + TRANSITS[i].icon + '</span> ' + TRANSITS[i].text;
     stopsList.appendChild(t);
   }
 
@@ -212,79 +212,117 @@ STOPS.forEach((stop, i) => {
   el.className = 'stop' + (i === 0 ? ' active' : '');
   el.dataset.stop = i;
 
-  el.innerHTML = `
-    <div class="stop-num-col">
-      <div class="stop-num">${stop.id + 1}</div>
-      <div class="stop-line"></div>
-    </div>
-    <div class="stop-body">
-      <div class="stop-time">${stop.time}</div>
-      <div class="stop-name">${stop.name}</div>
-      <div class="stop-desc">${stop.desc}</div>
-      <div class="stop-actions">
-        <span class="stop-tag ${stop.tagClass}">${stop.tagText}</span>
-        <a class="stop-dir-btn" href="${directionsUrl(stop.query)}" target="_blank" rel="noopener">
-          &#128205; Directions
-        </a>
-      </div>
-    </div>`;
+  const numCol = document.createElement('div');
+  numCol.className = 'stop-num-col';
+  numCol.innerHTML = '<div class="stop-num">' + (stop.id + 1) + '</div><div class="stop-line"></div>';
 
-  // Click on the card body (not the directions button) focuses on map
-  el.addEventListener('click', e => {
-    if (e.target.closest('.stop-dir-btn')) return; // let link open normally
+  const body = document.createElement('div');
+  body.className = 'stop-body';
+
+  const timeEl = document.createElement('div');
+  timeEl.className = 'stop-time';
+  timeEl.textContent = stop.time;
+
+  const nameEl = document.createElement('div');
+  nameEl.className = 'stop-name';
+  nameEl.textContent = stop.name;
+
+  const descEl = document.createElement('div');
+  descEl.className = 'stop-desc';
+  descEl.innerHTML = stop.desc;
+
+  const actions = document.createElement('div');
+  actions.className = 'stop-actions';
+
+  const tag = document.createElement('span');
+  tag.className = 'stop-tag ' + stop.tagClass;
+  tag.innerHTML = stop.tagText;
+
+  // Directions link — opens Google Maps with device GPS as origin
+  const dirLink = document.createElement('a');
+  dirLink.className = 'stop-dir-btn';
+  dirLink.href = directionsUrl(stop);
+  dirLink.target = '_blank';
+  dirLink.rel = 'noopener';
+  dirLink.innerHTML = '&#128205; Directions';
+
+  actions.appendChild(tag);
+  actions.appendChild(dirLink);
+  body.appendChild(timeEl);
+  body.appendChild(nameEl);
+  body.appendChild(descEl);
+  body.appendChild(actions);
+  el.appendChild(numCol);
+  el.appendChild(body);
+
+  // Click on card body focuses the map stop; directions link opens normally
+  el.addEventListener('click', function(e) {
+    if (e.target.closest('.stop-dir-btn')) return;
     focusStop(i);
   });
 
   stopsList.appendChild(el);
 });
 
-// Map
+// Map setup
 const map = L.map('map', { center: [41.385, 2.175], zoom: 14 });
-L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19 }).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19
+}).addTo(map);
 
 const markers = [];
 
 function makeIcon(stop, active) {
   const size = active ? 36 : 28, border = active ? 3 : 2;
+  const bg = stop.color;
+  const textColor = bg === '#fec422' ? '#1a1a18' : '#fff';
+  const borderColor = active ? '#fff' : 'rgba(255,255,255,0.3)';
   return L.divIcon({
     className: '',
-    html: `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${stop.color};border:${border}px solid ${active?'#fff':'rgba(255,255,255,0.3)'};display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:${active?'0.72':'0.62'}rem;font-weight:600;color:${stop.color==='#fec422'?'#1a1a18':'#fff'};box-shadow:0 2px 12px rgba(0,0,0,0.5);">${stop.id+1}</div>`,
+    html: '<div style="width:' + size + 'px;height:' + size + 'px;border-radius:50%;background:' + bg + ';border:' + border + 'px solid ' + borderColor + ';display:flex;align-items:center;justify-content:center;font-family:\'IBM Plex Mono\',monospace;font-size:' + (active ? '0.72' : '0.62') + 'rem;font-weight:600;color:' + textColor + ';box-shadow:0 2px 12px rgba(0,0,0,0.5);">' + (stop.id + 1) + '</div>',
     iconSize: [size, size], iconAnchor: [size/2, size/2],
   });
 }
 
-STOPS.forEach((stop, i) => {
-  const dirUrl = directionsUrl(stop.query);
-  const marker = L.marker([stop.lat, stop.lng], { icon: makeIcon(stop, i===0) })
+STOPS.forEach(function(stop, i) {
+  const url = directionsUrl(stop);
+  const popupContent =
+    '<div class="popup-time">' + stop.time + '</div>' +
+    '<div class="popup-name">' + stop.name + '</div>' +
+    '<div class="popup-note">' + stop.note + '</div>' +
+    '<a class="popup-dir" href="' + url + '" target="_blank" rel="noopener">📍 Directions from here</a>';
+
+  const marker = L.marker([stop.lat, stop.lng], { icon: makeIcon(stop, i === 0) })
     .addTo(map)
-    .bindPopup(`
-      <div class="popup-time">${stop.time}</div>
-      <div class="popup-name">${stop.name}</div>
-      <div class="popup-note">${stop.note}</div>
-      <a class="popup-dir" href="${dirUrl}" target="_blank" rel="noopener">📍 Directions from here</a>
-    `, { className: 'custom-popup', maxWidth: 260 })
-    .on('click', () => focusStop(i));
+    .bindPopup(popupContent, { className: 'custom-popup', maxWidth: 260 })
+    .on('click', function() { focusStop(i); });
+
   markers.push(marker);
 });
 
-L.polyline(STOPS.map(s => [s.lat, s.lng]), { color: 'rgba(254,196,34,0.4)', weight: 2, dashArray: '6, 8' }).addTo(map);
+L.polyline(STOPS.map(function(s) { return [s.lat, s.lng]; }), {
+  color: 'rgba(254,196,34,0.4)', weight: 2, dashArray: '6, 8'
+}).addTo(map);
 
-let activeStop = 0;
+var activeStop = 0;
 
 function focusStop(idx) {
-  markers.forEach((m, i) => m.setIcon(makeIcon(STOPS[i], i===idx)));
-  document.querySelectorAll('.stop').forEach((el, i) => el.classList.toggle('active', i===idx));
+  markers.forEach(function(m, i) { m.setIcon(makeIcon(STOPS[i], i === idx)); });
+  document.querySelectorAll('.stop').forEach(function(el, i) {
+    el.classList.toggle('active', i === idx);
+  });
   map.setView([STOPS[idx].lat, STOPS[idx].lng], 16, { animate: true, duration: 0.5 });
   markers[idx].openPopup();
-  const stopEls = document.querySelectorAll('.stop');
+  var stopEls = document.querySelectorAll('.stop');
   if (stopEls[idx]) stopEls[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
   activeStop = idx;
 }
 
-setTimeout(() => markers[0].openPopup(), 500);
-document.addEventListener('keydown', e => {
-  if (e.key==='ArrowDown'||e.key==='ArrowRight') focusStop(Math.min(activeStop+1, STOPS.length-1));
-  if (e.key==='ArrowUp'||e.key==='ArrowLeft') focusStop(Math.max(activeStop-1, 0));
+setTimeout(function() { markers[0].openPopup(); }, 500);
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') focusStop(Math.min(activeStop + 1, STOPS.length - 1));
+  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') focusStop(Math.max(activeStop - 1, 0));
 });
 </script>
 </body>
