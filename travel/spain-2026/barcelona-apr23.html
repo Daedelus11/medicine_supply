@@ -44,7 +44,29 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
 .sidebar-title { font-family: var(--serif); font-size: 1.8rem; font-weight: 300; color: var(--white); line-height: 1.1; }
 .sidebar-title em { font-style: italic; color: var(--yellow); }
 .sidebar-sub { font-size: 0.72rem; color: rgba(255,255,255,0.35); margin-top: 0.5rem; font-weight: 300; }
-.stops { padding: 1rem 0; }
+
+/* ===== COLLAPSIBLE SECTIONS ===== */
+.section-group { border-bottom: 1px solid rgba(255,255,255,0.06); }
+.section-toggle {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  padding: 0.75rem 1.75rem; background: none; border: none; cursor: pointer;
+  text-align: left; transition: background 0.15s;
+}
+.section-toggle:hover { background: rgba(255,255,255,0.03); }
+.section-toggle-label {
+  font-family: var(--mono); font-size: 0.6rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.18em; color: var(--warm-grey);
+}
+.section-toggle.open .section-toggle-label { color: var(--yellow); }
+.section-chevron {
+  font-size: 0.6rem; color: rgba(255,255,255,0.25);
+  transition: transform 0.2s; display: inline-block;
+}
+.section-toggle.open .section-chevron { transform: rotate(180deg); color: var(--yellow); }
+.section-body { display: none; }
+.section-body.open { display: block; }
+
+.stops { padding: 0.25rem 0; }
 .stop { display: flex; gap: 0; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); transition: background 0.15s; position: relative; }
 .stop:hover { background: rgba(255,255,255,0.03); }
 .stop.active { background: rgba(254,196,34,0.06); }
@@ -101,20 +123,20 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
 <nav class="nav">
   <div class="nav-brand">FINE LINE <span>|</span> Spain 2026</div>
   <div class="nav-date">Thursday, April 23 — Barcelona</div>
-  <a href="https://fine-linestudio.com/travel/2026/spain-2026.html#itinerary" class="nav-back">← Itinerary</a>
+  <a href="../spain-2026.html#itinerary" class="nav-back">← Itinerary</a>
 </nav>
 
 <div class="layout">
   <aside class="sidebar">
     <div class="sidebar-header">
-      <div class="sidebar-eyebrow">Day 3 &mdash; Barcelona</div>
-      <div class="sidebar-title">Sant Jordi's<br><em>Day</em></div>
-      <div class="sidebar-sub">Sagrada Família · Vintage · Waterfront · Montjuic · Dinner</div>
+      <div class="sidebar-eyebrow">Day 3 — Barcelona</div>
+      <div class="sidebar-title">Sant Jordi’s<br><em>Day</em></div>
+      <div class="sidebar-sub">Tap any section to expand · Click stops on map or list</div>
     </div>
-    <div class="stops" id="stops-list"></div>
+    <div id="sections-container"></div>
     <div style="padding:1.25rem 1.75rem; border-top:1px solid rgba(255,255,255,0.06); background: rgba(254,196,34,0.04);">
       <div style="font-family:var(--mono);font-size:0.58rem;color:var(--yellow);letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.4rem;">Tomorrow — Apr 24</div>
-      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.6;"><strong style="color:rgba(255,255,255,0.7);">Antiguedades Argar</strong> (1856 Tarragona map · €160) — Carrer d'Aragó 530, Eixample — open 9:30am–1:30pm. Stop en route to Sants car pickup before driving to Tarragona.</div>
+      <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);line-height:1.6;"><strong style="color:rgba(255,255,255,0.7);">Antiguedades Argar</strong> (1856 Tarragona map · €160) — Carrer d’Aragó 530, Eixample — open 9:30am–1:30pm. Stop en route to Sants car pickup before driving to Tarragona.</div>
     </div>
   </aside>
   <div class="map-panel">
@@ -122,7 +144,7 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
     <div class="map-legend">
       <div class="legend-title">Stop Types</div>
       <div class="legend-item"><div class="legend-dot" style="background:#fec422"></div>Confirmed booking</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Vintage shops</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#a78bfa"></div>Vintage &amp; antiques</div>
       <div class="legend-item"><div class="legend-dot" style="background:#34d399"></div>Food &amp; drink</div>
       <div class="legend-item"><div class="legend-dot" style="background:#60a5fa"></div>Activities</div>
       <div class="legend-item"><div class="legend-dot" style="background:#f87171"></div>Dinner</div>
@@ -131,135 +153,163 @@ body { font-family: var(--sans); background: var(--dark); color: var(--white); m
 </div>
 
 <script>
-// showDir: true = show Directions button (vintage/antique stops only)
-const STOPS = [
-  { id:0, time:'9:30 AM', name:'Sagrada Família', lat:41.4036, lng:2.1744, color:'#fec422', tagClass:'tag-anchor', tagText:'Confirmed · Res. 95793090', showDir:false,
-    desc:'Enter via C/ Marina. Basilica 9:30am · Passion Tower 9:45am. Allow 2 hours.',
-    note:'Enter via C/ Marina · Res. 95793090<br>Passion Tower 9:45am · Allow 2 hours',
-    query:'Sagrada Familia Barcelona' },
-  { id:1, time:'11:45 AM', name:'Bon Vent', lat:41.3837, lng:2.1802, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Antiques &amp; Objects', showDir:true,
-    desc:'C/ Argenteria 41 · Vintage tableware &amp; objects · Open 10am–8:30pm',
-    note:'C/ Argenteria 41 · Vintage tableware &amp; objects',
-    query:'Bon Vent Carrer Argenteria 41 Barcelona' },
-  { id:2, time:'12:00 PM', name:'Taller Antic', lat:41.3848, lng:2.1800, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Jewelry &amp; Objects', showDir:true,
-    desc:'C/ Princesa 14 · Early 20th-c jewelry &amp; objects · Open 11am–8:30pm',
-    note:'C/ Princesa 14 · Early 20th-c jewelry &amp; objects',
-    query:'Taller Antic Carrer Princesa 14 Barcelona' },
-  { id:3, time:'12:15 PM', name:'Antiguitats les Liles', lat:41.3861, lng:2.1815, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Antiques · Cash Only', showDir:true,
-    desc:'C/ Princesa 40 · Cash only, negotiates · Open 10am–2pm &amp; 6–9pm',
-    note:'C/ Princesa 40 · Cash only · Open 10am–2pm &amp; 6–9pm',
-    query:'Antiguitats les Liles Carrer Princesa 40 Barcelona' },
-  { id:4, time:'12:30 PM', name:'Carlos Segura Vintage', lat:41.3838, lng:2.1826, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Vintage Objects', showDir:true,
-    desc:'Pl. Fossar de les Moreres 10 · Opens noon · 5.0 stars',
-    note:'Pl. Fossar de les Moreres 10 · Opens noon · 5.0 stars',
-    query:'Carlos Segura Vintage Barcelona' },
-  { id:5, time:'12:45 PM', name:'Los Féliz Vintage', lat:41.3813, lng:2.1774, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Vintage Clothing', showDir:true,
-    desc:'C/ Cervantes 5 · Designer vintage clothing · 4.9 stars · Opens noon–7pm',
-    note:'C/ Cervantes 5 · Designer vintage clothing · 4.9 stars',
-    query:'Los Feliz Vintage Carrer Cervantes 5 Barcelona' },
-  { id:6, time:'1:00 PM', name:'Ziryab Fusió — Lunch', lat:41.3840, lng:2.1803, color:'#34d399', tagClass:'tag-food', tagText:'Lunch · Book Now', showDir:false,
-    desc:'C/ Grunyi 5 · Moorish-Med fusion · 4.7 stars · Book via TheFork or +34 931 87 42 10',
-    note:'C/ Grunyi 5 · Moorish-Med fusion · 4.7 stars<br>+34 931 87 42 10',
-    query:'Ziryab Fusio Carrer Grunyi 5 Barcelona' },
-  { id:7, time:'2:30 PM', name:'Scooter House Colón 24', lat:41.3774, lng:2.1788, color:'#60a5fa', tagClass:'tag-activity', tagText:'E-Bikes', showDir:false,
-    desc:'Pg. de Colom 24 · E-bikes ~€30/day · Open 10am–7pm · Ride Passeig Marítim east to Barceloneta',
-    note:'Pg. de Colom 24 · E-bikes ~€30/day<br>Ride east along Passeig Marítim',
-    query:'Scooter House Passeig Colon 24 Barcelona' },
-  { id:8, time:'3:00 PM', name:'Barceloneta Beach', lat:41.3793, lng:2.1930, color:'#60a5fa', tagClass:'tag-activity', tagText:'Coastal Ride', showDir:false,
-    desc:'Ride the coastal path · Barceloneta beach · Parc de la Ciutadella · Return bikes by 4pm',
-    note:'Coastal ride · Barceloneta beach<br>Parc de la Ciutadella · Return bikes by 4pm',
-    query:'Barceloneta Beach Barcelona' },
-  { id:9, time:'4:30 PM', name:'Montjuïc Castle', lat:41.3630, lng:2.1651, color:'#60a5fa', tagClass:'tag-activity', tagText:'Closes 6pm', showDir:false,
-    desc:'Ctra. de Montjuïc 66 · Open 10am–6pm · ~€9 · 360° views of port and city',
-    note:'Closes 6pm · ~€9 · 360° views<br>Cable car from Paral·lel metro',
-    query:'Montjuic Castle Barcelona' },
-  { id:10, time:'7:00 PM', name:'el SET — Dinner', lat:41.3843, lng:2.1831, color:'#f87171', tagClass:'tag-dinner', tagText:'Dinner · Reserve Now', showDir:false,
-    desc:'C/ Esparteria 7, El Born · 4.9 stars · Open 7pm–11:45pm · Book via TheFork or +34 930 11 40 86 · Stuffed aubergine essential',
-    note:'C/ Esparteria 7 · 4.9 stars · 7pm–11:45pm<br>+34 930 11 40 86 · Book via TheFork',
-    query:'el SET restaurant Carrer Esparteria 7 Born Barcelona' },
+const SECTIONS = [
+  {
+    label: 'Sagrada Familia · 9:30am',
+    open: true,
+    stops: [
+      { id:0, time:'9:30 AM', name:'Sagrada Família', lat:41.4036, lng:2.1744, color:'#fec422', tagClass:'tag-anchor', tagText:'Confirmed · Res. 95793090', showDir:false,
+        desc:'Enter via C/ Marina. Basilica 9:30am · Passion Tower 9:45am. Allow 2 hours.',
+        note:'Enter via C/ Marina · Res. 95793090<br>Passion Tower 9:45am · Allow 2 hours',
+        transit: null },
+    ]
+  },
+  {
+    label: 'Vintage Shops · El Born',
+    open: false,
+    stops: [
+      { id:1, time:'11:45 AM', name:'Bon Vent', lat:41.3837, lng:2.1802, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Antiques &amp; Objects', showDir:true,
+        desc:'C/ Argenteria 41 · Vintage tableware &amp; objects · Open 10am–8:30pm',
+        note:'C/ Argenteria 41 · Vintage tableware &amp; objects',
+        transit: { icon:'🚶', text:'15 min walk south from Sagrada Fàmilia' } },
+      { id:2, time:'12:00 PM', name:'Taller Antic', lat:41.3848, lng:2.1800, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Jewelry &amp; Objects', showDir:true,
+        desc:'C/ Princesa 14 · Early 20th-c jewelry &amp; objects · Open 11am–8:30pm',
+        note:'C/ Princesa 14 · Early 20th-c jewelry &amp; objects',
+        transit: null },
+      { id:3, time:'12:15 PM', name:'Antiguitats les Liles', lat:41.3861, lng:2.1815, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Antiques · Cash Only', showDir:true,
+        desc:'C/ Princesa 40 · Cash only, negotiates · Open 10am–2pm &amp; 6–9pm',
+        note:'C/ Princesa 40 · Cash only · Open 10am–2pm &amp; 6–9pm',
+        transit: null },
+      { id:4, time:'12:30 PM', name:'Carlos Segura Vintage', lat:41.3838, lng:2.1826, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Vintage Objects', showDir:true,
+        desc:'Pl. Fossar de les Moreres 10 · Opens noon · 5.0 stars',
+        note:'Pl. Fossar de les Moreres 10 · Opens noon · 5.0 stars',
+        transit: null },
+      { id:5, time:'12:45 PM', name:'Los Féliz Vintage', lat:41.3813, lng:2.1774, color:'#a78bfa', tagClass:'tag-vintage', tagText:'Vintage Clothing', showDir:true,
+        desc:'C/ Cervantes 5 · Designer vintage clothing · 4.9 stars · Opens noon–7pm',
+        note:'C/ Cervantes 5 · Designer vintage clothing · 4.9 stars',
+        transit: null },
+    ]
+  },
+  {
+    label: 'Lunch · 1:00pm',
+    open: false,
+    stops: [
+      { id:6, time:'1:00 PM', name:'Ziryab Fusió — Lunch', lat:41.3840, lng:2.1803, color:'#34d399', tagClass:'tag-food', tagText:'Lunch · Book Now', showDir:false,
+        desc:'C/ Grunyi 5 · Moorish-Med fusion · 4.7 stars · Book via TheFork or +34 931 87 42 10',
+        note:'C/ Grunyi 5 · Moorish-Med fusion · 4.7 stars<br>+34 931 87 42 10',
+        transit: { icon:'🚶', text:'3 min walk to Ziryab' } },
+    ]
+  },
+  {
+    label: 'Waterfront · Barceloneta',
+    open: false,
+    stops: [
+      { id:7, time:'2:30 PM', name:'Scooter House Colón 24', lat:41.3774, lng:2.1788, color:'#60a5fa', tagClass:'tag-activity', tagText:'E-Bikes', showDir:false,
+        desc:'Pg. de Colom 24 · E-bikes ~€30/day · Open 10am–7pm · Ride Passeig Marítim east to Barceloneta',
+        note:'Pg. de Colom 24 · E-bikes ~€30/day<br>Ride east along Passeig Marítim',
+        transit: { icon:'🚶', text:'15 min walk to waterfront' } },
+      { id:8, time:'3:00 PM', name:'Barceloneta Beach', lat:41.3793, lng:2.1930, color:'#60a5fa', tagClass:'tag-activity', tagText:'Coastal Ride', showDir:false,
+        desc:'Ride the coastal path · Barceloneta beach · Parc de la Ciutadella · Return bikes by 4pm',
+        note:'Coastal ride · Barceloneta beach<br>Parc de la Ciutadella · Return bikes by 4pm',
+        transit: { icon:'🚲', text:'3km coastal ride along Passeig Marítim' } },
+    ]
+  },
+  {
+    label: 'Montjuïc · 4:30pm',
+    open: false,
+    stops: [
+      { id:9, time:'4:30 PM', name:'Montjuïc Castle', lat:41.3630, lng:2.1651, color:'#60a5fa', tagClass:'tag-activity', tagText:'Closes 6pm', showDir:false,
+        desc:'Ctra. de Montjuïc 66 · Open 10am–6pm · ~€9 · 360° views of port and city',
+        note:'Closes 6pm · ~€9 · 360° views<br>Cable car from Paral·lel metro',
+        transit: { icon:'🚇', text:'Metro to Paral·lel → Cable car to Montjuïc' } },
+    ]
+  },
+  {
+    label: 'Dinner · 7:00pm',
+    open: false,
+    stops: [
+      { id:10, time:'7:00 PM', name:'el SET — Dinner', lat:41.3843, lng:2.1831, color:'#f87171', tagClass:'tag-dinner', tagText:'Dinner · Reserve Now', showDir:false,
+        desc:'C/ Esparteria 7, El Born · 4.9 stars · Open 7pm–11:45pm · Book via TheFork or +34 930 11 40 86 · Stuffed aubergine essential',
+        note:'C/ Esparteria 7 · 4.9 stars · 7pm–11:45pm<br>+34 930 11 40 86 · Book via TheFork',
+        transit: { icon:'🚇', text:'Cable car down · Metro or taxi to El Born' } },
+    ]
+  },
 ];
 
 function directionsUrl(stop) {
   return 'https://www.google.com/maps/dir/?api=1&destination=' + stop.lat + ',' + stop.lng + '&travelmode=walking';
 }
 
-const TRANSITS = {
-  1: { icon: '🚶', text: '15 min walk south to El Born' },
-  6: { icon: '🚶', text: '3 min walk to Ziryab' },
-  7: { icon: '🚶', text: '15 min walk to waterfront' },
-  8: { icon: '🚲', text: '3km coastal ride along Passeig Marítim' },
-  9: { icon: '🚇', text: 'Metro to Paral·lel → Cable car to Montjuïc' },
-  10: { icon: '🚇', text: 'Cable car down · Metro or taxi to El Born' },
-};
+const container = document.getElementById('sections-container');
+const ALL_STOPS = [];
+SECTIONS.forEach(sec => sec.stops.forEach(s => ALL_STOPS.push(s)));
 
-const stopsList = document.getElementById('stops-list');
+SECTIONS.forEach((sec, si) => {
+  const group = document.createElement('div');
+  group.className = 'section-group';
 
-STOPS.forEach((stop, i) => {
-  if (TRANSITS[i]) {
-    const t = document.createElement('div');
-    t.className = 'transit';
-    t.innerHTML = '<span class="transit-icon">' + TRANSITS[i].icon + '</span> ' + TRANSITS[i].text;
-    stopsList.appendChild(t);
-  }
-
-  const el = document.createElement('div');
-  el.className = 'stop' + (i === 0 ? ' active' : '');
-  el.dataset.stop = i;
-
-  const numCol = document.createElement('div');
-  numCol.className = 'stop-num-col';
-  numCol.innerHTML = '<div class="stop-num">' + (stop.id + 1) + '</div><div class="stop-line"></div>';
+  const toggle = document.createElement('button');
+  toggle.className = 'section-toggle' + (sec.open ? ' open' : '');
+  toggle.innerHTML = '<span class="section-toggle-label">' + sec.label + '</span><span class="section-chevron">▾</span>';
 
   const body = document.createElement('div');
-  body.className = 'stop-body';
+  body.className = 'section-body' + (sec.open ? ' open' : '');
 
-  const timeEl = document.createElement('div');
-  timeEl.className = 'stop-time';
-  timeEl.textContent = stop.time;
-
-  const nameEl = document.createElement('div');
-  nameEl.className = 'stop-name';
-  nameEl.textContent = stop.name;
-
-  const descEl = document.createElement('div');
-  descEl.className = 'stop-desc';
-  descEl.innerHTML = stop.desc;
-
-  const actions = document.createElement('div');
-  actions.className = 'stop-actions';
-
-  const tag = document.createElement('span');
-  tag.className = 'stop-tag ' + stop.tagClass;
-  tag.innerHTML = stop.tagText;
-  actions.appendChild(tag);
-
-  // Directions button — vintage/shopping stops only
-  if (stop.showDir) {
-    const dirLink = document.createElement('a');
-    dirLink.className = 'stop-dir-btn';
-    dirLink.href = directionsUrl(stop);
-    dirLink.target = '_blank';
-    dirLink.rel = 'noopener';
-    dirLink.innerHTML = '&#128205; Directions';
-    actions.appendChild(dirLink);
-  }
-
-  body.appendChild(timeEl);
-  body.appendChild(nameEl);
-  body.appendChild(descEl);
-  body.appendChild(actions);
-  el.appendChild(numCol);
-  el.appendChild(body);
-
-  el.addEventListener('click', function(e) {
-    if (e.target.closest('.stop-dir-btn')) return;
-    focusStop(i);
+  toggle.addEventListener('click', () => {
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    toggle.classList.toggle('open', !isOpen);
   });
 
-  stopsList.appendChild(el);
+  const stopsList = document.createElement('div');
+  stopsList.className = 'stops';
+
+  sec.stops.forEach((stop) => {
+    if (stop.transit) {
+      const t = document.createElement('div');
+      t.className = 'transit';
+      t.innerHTML = '<span class="transit-icon">' + stop.transit.icon + '</span> ' + stop.transit.text;
+      stopsList.appendChild(t);
+    }
+
+    const el = document.createElement('div');
+    el.className = 'stop';
+    el.dataset.stopId = stop.id;
+
+    const numCol = document.createElement('div');
+    numCol.className = 'stop-num-col';
+    numCol.innerHTML = '<div class="stop-num" id="snum-' + stop.id + '">' + (stop.id + 1) + '</div><div class="stop-line"></div>';
+
+    const bodyEl = document.createElement('div');
+    bodyEl.className = 'stop-body';
+    bodyEl.innerHTML =
+      '<div class="stop-time">' + stop.time + '</div>' +
+      '<div class="stop-name">' + stop.name + '</div>' +
+      '<div class="stop-desc">' + stop.desc + '</div>' +
+      '<div class="stop-actions">' +
+        '<span class="stop-tag ' + stop.tagClass + '">' + stop.tagText + '</span>' +
+        (stop.showDir ? '<a class="stop-dir-btn" href="' + directionsUrl(stop) + '" target="_blank" rel="noopener">📍 Directions</a>' : '') +
+      '</div>';
+
+    el.appendChild(numCol);
+    el.appendChild(bodyEl);
+    el.addEventListener('click', function(e) {
+      if (e.target.closest('.stop-dir-btn')) return;
+      focusStop(stop.id);
+      // Auto-open section if collapsed
+      body.classList.add('open');
+      toggle.classList.add('open');
+    });
+    stopsList.appendChild(el);
+  });
+
+  body.appendChild(stopsList);
+  group.appendChild(toggle);
+  group.appendChild(body);
+  container.appendChild(group);
 });
 
-const map = L.map('map', { center: [41.385, 2.175], zoom: 14 });
+const map = L.map('map', { center: [41.390, 2.176], zoom: 13 });
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
   attribution: '&copy; OpenStreetMap &copy; CARTO', maxZoom: 19
 }).addTo(map);
@@ -278,10 +328,9 @@ function makeIcon(stop, active) {
   });
 }
 
-STOPS.forEach(function(stop, i) {
-  // Popup directions link only on vintage stops
+ALL_STOPS.forEach(function(stop, i) {
   const dirHtml = stop.showDir
-    ? '<a class="popup-dir" href="' + directionsUrl(stop) + '" target="_blank" rel="noopener">&#128205; Directions</a>'
+    ? '<a class="popup-dir" href="' + directionsUrl(stop) + '" target="_blank" rel="noopener">📍 Directions</a>'
     : '';
   const popupContent =
     '<div class="popup-time">' + stop.time + '</div>' +
@@ -292,34 +341,42 @@ STOPS.forEach(function(stop, i) {
   const marker = L.marker([stop.lat, stop.lng], { icon: makeIcon(stop, i === 0) })
     .addTo(map)
     .bindPopup(popupContent, { className: 'custom-popup', maxWidth: 260 })
-    .on('click', function() { focusStop(i); });
+    .on('click', function() { focusStop(stop.id); });
 
-  markers.push(marker);
+  markers.push({ id: stop.id, marker });
 });
 
-L.polyline(STOPS.map(function(s) { return [s.lat, s.lng]; }), {
+L.polyline(ALL_STOPS.map(function(s) { return [s.lat, s.lng]; }), {
   color: 'rgba(254,196,34,0.4)', weight: 2, dashArray: '6, 8'
 }).addTo(map);
 
-var activeStop = 0;
+var activeStopId = 0;
 
-function focusStop(idx) {
-  markers.forEach(function(m, i) { m.setIcon(makeIcon(STOPS[i], i === idx)); });
-  document.querySelectorAll('.stop').forEach(function(el, i) {
-    el.classList.toggle('active', i === idx);
+function focusStop(id) {
+  const stop = ALL_STOPS.find(s => s.id === id);
+  if (!stop) return;
+  markers.forEach(function(m) { m.marker.setIcon(makeIcon(ALL_STOPS.find(s => s.id === m.id), m.id === id)); });
+  document.querySelectorAll('.stop').forEach(function(el) {
+    el.classList.toggle('active', parseInt(el.dataset.stopId) === id);
+    if (parseInt(el.dataset.stopId) === id) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
-  map.setView([STOPS[idx].lat, STOPS[idx].lng], 16, { animate: true, duration: 0.5 });
-  markers[idx].openPopup();
-  var stopEls = document.querySelectorAll('.stop');
-  if (stopEls[idx]) stopEls[idx].scrollIntoView({ behavior: 'smooth', block: 'center' });
-  activeStop = idx;
+  const numEl = document.getElementById('snum-' + id);
+  if (numEl) { numEl.style.background = 'var(--yellow)'; numEl.style.color = 'var(--dark)'; }
+  document.querySelectorAll('[id^="snum-"]').forEach(el => {
+    if (el.id !== 'snum-' + id) { el.style.background = ''; el.style.color = ''; }
+  });
+  map.setView([stop.lat, stop.lng], 16, { animate: true, duration: 0.5 });
+  markers.find(m => m.id === id).marker.openPopup();
+  activeStopId = id;
 }
 
-setTimeout(function() { markers[0].openPopup(); }, 500);
+setTimeout(function() { markers.find(m => m.id === 0).marker.openPopup(); }, 500);
 
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') focusStop(Math.min(activeStop + 1, STOPS.length - 1));
-  if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') focusStop(Math.max(activeStop - 1, 0));
+  const ids = ALL_STOPS.map(s => s.id);
+  const idx = ids.indexOf(activeStopId);
+  if ((e.key === 'ArrowDown' || e.key === 'ArrowRight') && idx < ids.length - 1) focusStop(ids[idx + 1]);
+  if ((e.key === 'ArrowUp' || e.key === 'ArrowLeft') && idx > 0) focusStop(ids[idx - 1]);
 });
 </script>
 </body>
