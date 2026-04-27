@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v49: Tarragona full day + Poblet sunrise -->
+<!-- v51: parking spot save button -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -237,14 +237,21 @@
 .exp-save-btn:disabled{opacity:0.5;cursor:not-allowed}
 .exp-cancel-btn{background:none;border:1px solid var(--rule);cursor:pointer;padding:5px 10px;font-family:var(--sans);font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--stone);transition:background 0.15s}
 .exp-cancel-btn:hover{background:var(--cream)}
-.fab-row{display:flex;gap:8px;position:fixed;bottom:24px;right:24px;z-index:300}
-.fab-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:10px 16px;box-shadow:0 4px 20px rgba(0,0,0,0.28);transition:background 0.2s;border:none;cursor:pointer;text-decoration:none}
+/* ===== FLOATING ACTION BUTTONS ===== */
+.fab-row{display:flex;gap:8px;position:fixed;bottom:24px;right:24px;z-index:300;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 48px)}
+.fab-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:10px 16px;box-shadow:0 4px 20px rgba(0,0,0,0.28);transition:background 0.2s,border-color 0.2s;border:none;cursor:pointer;text-decoration:none;white-space:nowrap}
 .fab-expenses{background:var(--yellow);color:var(--dark)}
 .fab-expenses:hover{background:#e6b01f}
 .fab-today{background:var(--ink);color:var(--white);border-left:3px solid var(--yellow)}
 .fab-today:hover{background:#2a2a28}
 .fab-hotel{background:var(--ink);color:var(--white);border-left:3px solid #4caf50}
 .fab-hotel:hover{background:#2a2a28}
+/* Parking FAB — blue when saved, dark when not */
+.fab-parking{background:var(--ink);color:var(--white);border-left:3px solid #60a5fa}
+.fab-parking:hover{background:#2a2a28}
+.fab-parking.has-spot{background:#1a3a5c;border-left-color:#60a5fa}
+.fab-parking.has-spot:hover{background:#1e4a7a}
+.fab-parking.saving{opacity:0.6;cursor:wait}
 @media(max-width:768px){.fab-row{bottom:16px;right:16px;gap:6px}.fab-btn{padding:8px 12px;font-size:0.62rem}}
 @media(min-width:769px) and (max-width:1024px){.nav{padding:0 1.5rem}.nav-links a{padding:0 0.6rem;font-size:0.6rem}.hero{padding:4rem 2rem 3.5rem}.section{padding:3.5rem 2rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2){display:none}.booking-table th,.booking-table td{padding:0.75rem 0.75rem;font-size:0.78rem}.booking-detail{font-size:0.68rem}.expense-form-body{grid-template-columns:1fr 1fr;gap:0.65rem}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.checklist-wrap{gap:1rem}.cl-add-select{max-width:100px;font-size:0.65rem}.map-iframe-wrap iframe{height:580px}.shop-grid{grid-template-columns:repeat(2,1fr)}.gp-frame{width:200px;height:150px}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}}
 @media(max-width:768px){.expense-summary{grid-template-columns:1fr}.expense-summary-card{border-right:none;border-bottom:1px solid var(--rule)}.expense-form-body{grid-template-columns:1fr 1fr}.expense-form-body .expense-field:first-child,.expense-form-body .expense-field:nth-child(5){grid-column:1 / -1}.btn-add-expense{grid-column:1 / -1;height:auto;padding:0.75rem}.nav{padding:0 1.25rem}.nav-links{display:none}.nav-links.open{display:flex;flex-direction:column;position:absolute;top:64px;left:0;right:0;background:var(--ink);border-bottom:2px solid var(--yellow);z-index:199}.nav-links.open a{height:auto;line-height:1;padding:1.1rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.06);color:var(--accent);font-size:0.75rem;font-weight:600;letter-spacing:0.16em}.nav-links.open a:hover,.nav-links.open a.active{color:var(--yellow)}.hamburger{display:block}.hero{padding:3.5rem 1.5rem 3rem}.hero-headline{font-size:clamp(40px,10vw,60px)}.hero-status-bar{flex-direction:column}.status-item{border-right:none;border-bottom:1px solid rgba(255,255,255,0.08)}.section{padding:3rem 1.25rem}.cal-cell{min-height:60px;padding:0.3rem}.day-header{flex-wrap:wrap}.day-weather-col{border-left:none;border-top:1px solid rgba(255,255,255,0.08);width:100%;flex-direction:row;gap:1rem}.map-iframe-wrap iframe{height:400px}.page-footer{padding:2rem 1.25rem}.booking-table th:nth-child(2),.booking-table td:nth-child(2),.booking-table th:nth-child(3),.booking-table td:nth-child(3){display:none}.booking-table th,.booking-table td{padding:0.65rem 0.5rem;font-size:0.78rem}.shop-grid{grid-template-columns:1fr}.checklist-wrap{grid-template-columns:1fr}.cl-add-select{max-width:100px;font-size:0.65rem}.gp-frame{width:160px;height:120px}.gp-footer{flex-direction:column;align-items:flex-start}.expense-note-cell{display:none}.expense-table th:nth-child(6),.expense-table td:nth-child(6){display:none}.exp-edit-grid{grid-template-columns:1fr 1fr}}
@@ -405,7 +412,9 @@
   </div>
 </section>
 
+<!-- Floating action buttons -->
 <div class="fab-row">
+  <button class="fab-btn fab-parking" id="fab-parking" onclick="parkingBtnTap()">&#x1F17F;&#xFE0F;&nbsp;<span id="parking-label">Save Spot</span></button>
   <button class="fab-btn fab-hotel" id="fab-hotel" onclick="goToHotel()">&#127968;&nbsp;<span id="hotel-nav-label">Tonight</span></button>
   <button class="fab-btn fab-today" onclick="goToToday()">&#128197;&nbsp;Today</button>
   <a class="fab-btn fab-expenses" href="#expenses">&#36;&nbsp;Expenses</a>
@@ -427,6 +436,75 @@ const RADISSON_DOC='https://drive.google.com/file/d/1EW28lNUnLfVD9pMACVVzSeSQZmg
 const GUGGENHEIM_DOC='https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FCKZH6jsb/view?usp=drive_link';
 const AC_HOTEL_DOC='https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link';
 const GP_ALBUM_URL='https://photos.app.goo.gl/7KJMVdykUsxSsS7t6';
+const PARKING_KEY='maru_parking_spot';
+
+/* ===== PARKING SPOT ===== */
+function initParkingBtn(){
+  const btn=document.getElementById('fab-parking');
+  const lbl=document.getElementById('parking-label');
+  const saved=getSavedSpot();
+  if(saved){
+    btn.classList.add('has-spot');
+    lbl.textContent='Find Car';
+  }
+}
+
+function getSavedSpot(){
+  try{const v=localStorage.getItem(PARKING_KEY);return v?JSON.parse(v):null;}catch(e){return null;}
+}
+
+function parkingBtnTap(){
+  const saved=getSavedSpot();
+  if(saved){
+    // Has a spot — offer navigate or re-save
+    const choice=confirm('Navigate to saved parking spot?\n\nSaved: '+saved.note+'\n\nOK = Navigate   Cancel = Save new spot');
+    if(choice){
+      window.open('https://www.google.com/maps/dir/?api=1&destination='+saved.lat+','+saved.lng+'&travelmode=walking','_blank');
+    } else {
+      saveNewSpot();
+    }
+  } else {
+    saveNewSpot();
+  }
+}
+
+function saveNewSpot(){
+  const btn=document.getElementById('fab-parking');
+  const lbl=document.getElementById('parking-label');
+  if(!navigator.geolocation){alert('Geolocation not available on this device.');return;}
+  btn.classList.add('saving');
+  lbl.textContent='Locating\u2026';
+  navigator.geolocation.getCurrentPosition(
+    function(pos){
+      const lat=pos.coords.latitude.toFixed(6);
+      const lng=pos.coords.longitude.toFixed(6);
+      const accuracy=Math.round(pos.coords.accuracy);
+      const now=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+      const spot={lat,lng,accuracy,note:'Saved '+now+' (\u00b1'+accuracy+'m)',saved:Date.now()};
+      try{localStorage.setItem(PARKING_KEY,JSON.stringify(spot));}catch(e){}
+      btn.classList.remove('saving');
+      btn.classList.add('has-spot');
+      lbl.textContent='Find Car';
+      // Brief confirmation flash
+      const orig=btn.style.background;
+      btn.style.background='#1e7a3a';
+      setTimeout(()=>{btn.style.background='';},1200);
+      // Subtle alert
+      const toast=document.createElement('div');
+      toast.style.cssText='position:fixed;bottom:80px;right:24px;z-index:400;background:#1a3a5c;color:#fff;font-family:var(--mono);font-size:0.7rem;padding:8px 14px;box-shadow:0 4px 16px rgba(0,0,0,0.4);border-left:3px solid #60a5fa;pointer-events:none;';
+      toast.textContent='\u1F17F\uFE0F Parking saved \u00b7 \u00b1'+accuracy+'m accuracy';
+      document.body.appendChild(toast);
+      setTimeout(()=>toast.remove(),3000);
+    },
+    function(err){
+      btn.classList.remove('saving');
+      lbl.textContent=getSavedSpot()?'Find Car':'Save Spot';
+      const msgs={1:'Location access denied \u2014 allow in browser settings.',2:'Location unavailable.',3:'Location timed out.'};
+      alert(msgs[err.code]||'Could not get location.');
+    },
+    {enableHighAccuracy:true,timeout:12000,maximumAge:0}
+  );
+}
 
 const HOTEL_SCHEDULE=[
   {dates:['2026-04-21','2026-04-22','2026-04-23'],addr:'Carrer de Bailen 125, Barcelona, Spain',label:'Airbnb'},
@@ -440,6 +518,7 @@ function getHotelForDate(d){for(const h of HOTEL_SCHEDULE){if(h.dates.includes(d
 function goToHotel(){const t=getTodaySpain();const h=getHotelForDate(t);if(!h){alert('No accommodation on file for today.');return;}window.open('https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(h.addr)+'&travelmode=walking','_blank');}
 function goToToday(){const t=getTodaySpain();const el=document.getElementById('day-'+t);if(el){el.scrollIntoView({behavior:'smooth',block:'start'});}else{const first=document.querySelector('.day-block');if(first)first.scrollIntoView({behavior:'smooth',block:'start'});}}
 (function(){const t=getTodaySpain();const h=getHotelForDate(t);const lbl=document.getElementById('hotel-nav-label');const btn=document.getElementById('fab-hotel');if(h&&lbl){lbl.textContent=h.label;}else if(btn){btn.style.display='none';}})();
+initParkingBtn();
 
 function mapsSearch(q){return'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);}
 function mapsRoute(o,w,d){return'https://www.google.com/maps/dir/'+encodeURIComponent(o)+'/'+encodeURIComponent(w)+'/'+encodeURIComponent(d);}
