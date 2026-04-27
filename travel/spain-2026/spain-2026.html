@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v51: parking spot save button -->
+<!-- v52: parking spot saved to Google Sheets, shared between both phones -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -239,14 +239,13 @@
 .exp-cancel-btn:hover{background:var(--cream)}
 /* ===== FLOATING ACTION BUTTONS ===== */
 .fab-row{display:flex;gap:8px;position:fixed;bottom:24px;right:24px;z-index:300;flex-wrap:wrap;justify-content:flex-end;max-width:calc(100vw - 48px)}
-.fab-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:10px 16px;box-shadow:0 4px 20px rgba(0,0,0,0.28);transition:background 0.2s,border-color 0.2s;border:none;cursor:pointer;text-decoration:none;white-space:nowrap}
+.fab-btn{display:inline-flex;align-items:center;gap:6px;font-family:var(--sans);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;padding:10px 16px;box-shadow:0 4px 20px rgba(0,0,0,0.28);transition:background 0.2s;border:none;cursor:pointer;text-decoration:none;white-space:nowrap}
 .fab-expenses{background:var(--yellow);color:var(--dark)}
 .fab-expenses:hover{background:#e6b01f}
 .fab-today{background:var(--ink);color:var(--white);border-left:3px solid var(--yellow)}
 .fab-today:hover{background:#2a2a28}
 .fab-hotel{background:var(--ink);color:var(--white);border-left:3px solid #4caf50}
 .fab-hotel:hover{background:#2a2a28}
-/* Parking FAB — blue when saved, dark when not */
 .fab-parking{background:var(--ink);color:var(--white);border-left:3px solid #60a5fa}
 .fab-parking:hover{background:#2a2a28}
 .fab-parking.has-spot{background:#1a3a5c;border-left-color:#60a5fa}
@@ -436,30 +435,45 @@ const RADISSON_DOC='https://drive.google.com/file/d/1EW28lNUnLfVD9pMACVVzSeSQZmg
 const GUGGENHEIM_DOC='https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FCKZH6jsb/view?usp=drive_link';
 const AC_HOTEL_DOC='https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link';
 const GP_ALBUM_URL='https://photos.app.goo.gl/7KJMVdykUsxSsS7t6';
-const PARKING_KEY='maru_parking_spot';
 
-/* ===== PARKING SPOT ===== */
-function initParkingBtn(){
-  const btn=document.getElementById('fab-parking');
-  const lbl=document.getElementById('parking-label');
-  const saved=getSavedSpot();
-  if(saved){
+/* ===== PARKING SPOT — stored in Google Sheets, shared between both phones ===== */
+// In-memory cache only — no localStorage
+let parkingSpotCache = null;
+
+async function initParkingBtn() {
+  const spot = await fetchParkingSpot();
+  const btn = document.getElementById('fab-parking');
+  const lbl = document.getElementById('parking-label');
+  if (spot) {
+    parkingSpotCache = spot;
     btn.classList.add('has-spot');
-    lbl.textContent='Find Car';
+    lbl.textContent = 'Find Car';
   }
 }
 
-function getSavedSpot(){
-  try{const v=localStorage.getItem(PARKING_KEY);return v?JSON.parse(v):null;}catch(e){return null;}
+async function fetchParkingSpot() {
+  // Read from the Sheets script — action:getParking
+  try {
+    const res = await fetch(CHECKLIST_SCRIPT_URL + '?action=getParking', { cache: 'no-cache' });
+    if (!res.ok) return null;
+    const text = await res.text();
+    const data = JSON.parse(text);
+    if (data && data.lat && data.lng) return data;
+    return null;
+  } catch (e) {
+    return null;
+  }
 }
 
-function parkingBtnTap(){
-  const saved=getSavedSpot();
-  if(saved){
-    // Has a spot — offer navigate or re-save
-    const choice=confirm('Navigate to saved parking spot?\n\nSaved: '+saved.note+'\n\nOK = Navigate   Cancel = Save new spot');
-    if(choice){
-      window.open('https://www.google.com/maps/dir/?api=1&destination='+saved.lat+','+saved.lng+'&travelmode=walking','_blank');
+async function parkingBtnTap() {
+  const btn = document.getElementById('fab-parking');
+  if (btn.classList.contains('saving')) return;
+
+  if (parkingSpotCache) {
+    const spot = parkingSpotCache;
+    const choice = confirm('Navigate to saved parking spot?\n\n' + spot.note + '\n\nOK = Navigate to car\nCancel = Save new spot here');
+    if (choice) {
+      window.open('https://www.google.com/maps/dir/?api=1&destination=' + spot.lat + ',' + spot.lng + '&travelmode=walking', '_blank');
     } else {
       saveNewSpot();
     }
@@ -468,42 +482,55 @@ function parkingBtnTap(){
   }
 }
 
-function saveNewSpot(){
-  const btn=document.getElementById('fab-parking');
-  const lbl=document.getElementById('parking-label');
-  if(!navigator.geolocation){alert('Geolocation not available on this device.');return;}
+function saveNewSpot() {
+  const btn = document.getElementById('fab-parking');
+  const lbl = document.getElementById('parking-label');
+  if (!navigator.geolocation) { alert('Geolocation not available on this device.'); return; }
   btn.classList.add('saving');
-  lbl.textContent='Locating\u2026';
+  lbl.textContent = 'Locating\u2026';
   navigator.geolocation.getCurrentPosition(
-    function(pos){
-      const lat=pos.coords.latitude.toFixed(6);
-      const lng=pos.coords.longitude.toFixed(6);
-      const accuracy=Math.round(pos.coords.accuracy);
-      const now=new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-      const spot={lat,lng,accuracy,note:'Saved '+now+' (\u00b1'+accuracy+'m)',saved:Date.now()};
-      try{localStorage.setItem(PARKING_KEY,JSON.stringify(spot));}catch(e){}
+    async function(pos) {
+      const lat = pos.coords.latitude.toFixed(6);
+      const lng = pos.coords.longitude.toFixed(6);
+      const accuracy = Math.round(pos.coords.accuracy);
+      const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      const note = 'Saved ' + now + ' (\u00b1' + accuracy + 'm)';
+      // Save to Google Sheets via Apps Script
+      try {
+        await fetch(CHECKLIST_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ action: 'saveParking', lat, lng, accuracy, note }),
+          mode: 'no-cors'
+        });
+      } catch(e) {}
+      // Update in-memory cache
+      parkingSpotCache = { lat, lng, accuracy, note };
       btn.classList.remove('saving');
       btn.classList.add('has-spot');
-      lbl.textContent='Find Car';
-      // Brief confirmation flash
-      const orig=btn.style.background;
-      btn.style.background='#1e7a3a';
-      setTimeout(()=>{btn.style.background='';},1200);
-      // Subtle alert
-      const toast=document.createElement('div');
-      toast.style.cssText='position:fixed;bottom:80px;right:24px;z-index:400;background:#1a3a5c;color:#fff;font-family:var(--mono);font-size:0.7rem;padding:8px 14px;box-shadow:0 4px 16px rgba(0,0,0,0.4);border-left:3px solid #60a5fa;pointer-events:none;';
-      toast.textContent='\u1F17F\uFE0F Parking saved \u00b7 \u00b1'+accuracy+'m accuracy';
-      document.body.appendChild(toast);
-      setTimeout(()=>toast.remove(),3000);
+      lbl.textContent = 'Find Car';
+      // Flash green briefly
+      btn.style.background = '#1e7a3a';
+      setTimeout(() => { btn.style.background = ''; }, 1200);
+      // Toast
+      showToast('\u1F17F\uFE0F Parking saved \u00b7 \u00b1' + accuracy + 'm \u00b7 Shared with Rumana');
     },
-    function(err){
+    function(err) {
       btn.classList.remove('saving');
-      lbl.textContent=getSavedSpot()?'Find Car':'Save Spot';
-      const msgs={1:'Location access denied \u2014 allow in browser settings.',2:'Location unavailable.',3:'Location timed out.'};
-      alert(msgs[err.code]||'Could not get location.');
+      lbl.textContent = parkingSpotCache ? 'Find Car' : 'Save Spot';
+      const msgs = { 1: 'Location access denied \u2014 allow in browser settings.', 2: 'Location unavailable.', 3: 'Location timed out.' };
+      alert(msgs[err.code] || 'Could not get location.');
     },
-    {enableHighAccuracy:true,timeout:12000,maximumAge:0}
+    { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
   );
+}
+
+function showToast(msg) {
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:80px;right:24px;z-index:400;background:#1a3a5c;color:#fff;font-family:var(--mono);font-size:0.7rem;padding:8px 14px;box-shadow:0 4px 16px rgba(0,0,0,0.4);border-left:3px solid #60a5fa;pointer-events:none;';
+  toast.textContent = msg;
+  document.body.appendChild(toast);
+  setTimeout(() => toast.remove(), 3000);
 }
 
 const HOTEL_SCHEDULE=[
