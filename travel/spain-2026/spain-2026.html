@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v55: Sankey expense flow chart added as section 08a -->
+<!-- v56: fix citySankey date matching — Bilbao dates now checked before Barcelona prefix -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -571,14 +571,20 @@ function categorizeSankey(desc,notes,who){
   if(/shop|gifts?|book|laie|vinalium|botiga|l'arca/.test(d+n))return'Shopping';
   return'Dining';
 }
+// FIX: check Bilbao dates (apr 26-29) BEFORE any 'apr 2' prefix check,
+// which would otherwise match apr 26/27/28/29 as Barcelona.
 function citySankey(date,desc,notes){
   const d=(date||'').toLowerCase();
   const tx=(desc||'').toLowerCase()+(notes||'').toLowerCase();
   if(/tarragona|cambrils|girona|365/.test(tx))return'Tarragona';
   if(/rioja|haro|laguardia|baigorri|riscal|ysios|winer/.test(tx))return'Rioja';
-  if(/airport|arby|arby's|atl|boi|gifts|ava|chloe/.test(tx))return'Transit';
-  if(d.includes('apr 2')||d.includes('4/2')||d.includes('apr 20')||d.includes('apr 21')||d.includes('apr 22')||d.includes('apr 23')||d.includes('apr 24')||d.includes('apr 25')||d.includes('apr 30')||d.includes('may 1'))return'Barcelona';
+  if(/airport|arby|atl|boi|gifts|ava|chloe/.test(tx))return'Transit';
+  // Bilbao: Apr 26-29 — checked BEFORE the broad 'apr 2' pattern below
   if(d.includes('apr 26')||d.includes('apr 27')||d.includes('apr 28')||d.includes('apr 29'))return'Bilbao';
+  // Tarragona dates
+  if(d.includes('apr 24')||d.includes('apr 25'))return'Tarragona';
+  // Barcelona dates: Apr 20-23, Apr 30, May 1
+  if(d.includes('apr 20')||d.includes('apr 21')||d.includes('apr 22')||d.includes('apr 23')||d.includes('apr 30')||d.includes('may 1')||d.includes('4/20')||d.includes('4/21')||d.includes('4/22')||d.includes('4/23')||d.includes('4/30'))return'Barcelona';
   return'Barcelona';
 }
 
