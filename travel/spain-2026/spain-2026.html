@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v56: fix citySankey date matching — Bilbao dates now checked before Barcelona prefix -->
+<!-- v57: Sankey moved inline inside expenses section, between totals and Add form -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -176,18 +176,18 @@
 .shop-card:hover .shop-card-name{color:var(--accent)}
 .shop-section-head{font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--ink);margin-bottom:0.25rem}
 .shop-section-sub{font-size:0.82rem;color:var(--warm-grey);margin-bottom:1.5rem}
-#expense-chart{background:var(--white)}
-.sankey-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white)}
-.sankey-header{background:var(--ink);padding:1rem 1.5rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow);flex-wrap:wrap;gap:0.75rem}
-.sankey-title{font-family:var(--serif);font-size:1.2rem;font-weight:300;color:var(--white)}
-.sankey-meta{font-family:var(--mono);font-size:0.65rem;color:rgba(255,255,255,0.35)}
-.sankey-body{padding:1.5rem;overflow-x:auto}
+/* Sankey — now inline inside expenses section, no separate section wrapper */
+.sankey-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white);margin-bottom:2rem}
+.sankey-header{background:var(--ink);padding:0.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow);flex-wrap:wrap;gap:0.5rem}
+.sankey-title{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--white)}
+.sankey-meta{font-family:var(--mono);font-size:0.62rem;color:rgba(255,255,255,0.35)}
+.sankey-body{padding:1rem;overflow-x:auto}
 .sankey-body svg{display:block;max-width:100%}
-.sankey-legend{display:flex;flex-wrap:wrap;gap:12px;padding:1rem 1.5rem;border-top:1px solid var(--rule)}
-.sankey-legend-item{display:flex;align-items:center;gap:5px;font-size:0.7rem;color:var(--stone)}
-.sankey-legend-swatch{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.sankey-legend{display:flex;flex-wrap:wrap;gap:10px;padding:0.75rem 1.25rem;border-top:1px solid var(--rule)}
+.sankey-legend-item{display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--stone)}
+.sankey-legend-swatch{width:9px;height:9px;border-radius:2px;flex-shrink:0}
 #expenses{background:var(--cream)}
-.expense-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule);margin-bottom:2.5rem;overflow:hidden}
+.expense-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule);margin-bottom:2rem;overflow:hidden}
 .expense-summary-card{padding:1.5rem 1.75rem;border-right:1px solid var(--rule);background:var(--white)}
 .expense-summary-card:last-child{border-right:none;background:var(--ink)}
 .expense-summary-label{font-size:0.58rem;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;color:var(--brown);margin-bottom:0.5rem}
@@ -275,7 +275,6 @@
     <li><a href="#notes">Notes</a></li>
     <li><a href="#bookings">Bookings</a></li>
     <li><a href="#shopping">Shopping</a></li>
-    <li><a href="#expense-chart">Flow</a></li>
     <li><a href="#expenses">Expenses</a></li>
   </ul>
   <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -390,26 +389,28 @@
   <div style="margin-bottom:3rem"><div class="shop-section-head">Maps, Atlases &amp; Antiquarian Books</div><div class="shop-section-sub">The April 23 alignment is exceptional: Sagrada Fam&iacute;lia 9:30am, then Sant Jordi&rsquo;s Day book markets + Carrer dels Banys Nous all afternoon.</div><div class="shop-grid"><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+dels+Banys+Nous+antiques+maps+Barcelona" target="_blank"><div class="shop-card-name">Carrer dels Banys Nous</div><div class="shop-card-addr">Gothic Quarter &mdash; the whole street &#x2197;</div><div class="shop-card-desc">Lined with antique dealers specializing in maps, prints, and books. Best single street for old atlases in Barcelona.</div><span class="shop-tag">Maps &amp; prints</span><span class="shop-tag">Top pick</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Els+Encants+Vells+flea+market+Barcelona+Glories" target="_blank"><div class="shop-card-name">Els Encants Vells</div><div class="shop-card-addr">Pla&ccedil;a de les Gl&ograve;ries &mdash; Gl&ograve;ries metro &#x2197;</div><div class="shop-card-desc">Old maps, atlases, and prints among 301 stalls. Mon/Wed/Fri/Sat 9am&ndash;8pm.</div><span class="shop-tag">Flea market</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Bulevard+dels+Antiquaris+Passeig+de+Gracia+Barcelona" target="_blank"><div class="shop-card-name">Bulevard dels Antiquaris</div><div class="shop-card-addr">Passeig de Gr&agrave;cia, 55 &mdash; Eixample &#x2197;</div><div class="shop-card-desc">60+ antique dealers under one roof. Tue&ndash;Sat.</div><span class="shop-tag">60+ dealers</span></a></div></div>
 </section>
 
-<!-- SANKEY EXPENSE FLOW -->
-<section class="section" id="expense-chart">
-  <header class="section-header"><div class="section-eyebrow">08a &mdash; Money Flow</div><h2 class="section-title">Expense Flow</h2></header>
-  <div class="sankey-wrap">
-    <div class="sankey-header">
-      <div class="sankey-title">Who paid &rarr; Category &rarr; City</div>
-      <div class="sankey-meta" id="sankey-meta">Loading&hellip;</div>
-    </div>
-    <div class="sankey-body" id="sankey-body"><div style="padding:3rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)">Building chart&hellip;</div></div>
-    <div class="sankey-legend" id="sankey-legend"></div>
-  </div>
-</section>
-
+<!-- EXPENSES — totals + inline Sankey + Add form + log -->
 <section class="section" id="expenses">
   <header class="section-header"><div class="section-eyebrow">08 &mdash; Money</div><h2 class="section-title">Shared Expenses</h2></header>
+
+  <!-- Totals -->
   <div class="expense-summary">
     <div class="expense-summary-card"><div class="expense-summary-label">Mark</div><div class="expense-summary-amount" id="total-mark">&mdash;</div><div class="expense-summary-sub" id="count-mark">Loading&hellip;</div></div>
     <div class="expense-summary-card"><div class="expense-summary-label">Rumana</div><div class="expense-summary-amount" id="total-rumana">&mdash;</div><div class="expense-summary-sub" id="count-rumana">Loading&hellip;</div></div>
     <div class="expense-summary-card"><div class="expense-summary-label">Trip Total (USD)</div><div class="expense-summary-amount" id="total-all">&mdash;</div><div class="expense-summary-sub" id="count-all">Loading&hellip;</div></div>
   </div>
+
+  <!-- Sankey — inline, same width as summary above -->
+  <div class="sankey-wrap" id="expense-chart">
+    <div class="sankey-header">
+      <div class="sankey-title">Expense Flow &mdash; Who paid &rarr; Category &rarr; City</div>
+      <div class="sankey-meta" id="sankey-meta">Loading&hellip;</div>
+    </div>
+    <div class="sankey-body" id="sankey-body"><div style="padding:2rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)">Building chart&hellip;</div></div>
+    <div class="sankey-legend" id="sankey-legend"></div>
+  </div>
+
+  <!-- Add form -->
   <div class="expense-form">
     <div class="expense-form-header">Add an Expense</div>
     <div class="expense-form-body">
@@ -421,6 +422,8 @@
       <button class="btn-add-expense" id="btn-add-expense" onclick="addExpense()">+ Add</button>
     </div>
   </div>
+
+  <!-- Log -->
   <div class="expense-table-wrap">
     <div class="expense-table-header"><div class="expense-table-title">Expense Log</div><div class="expense-table-meta" id="expense-sync-status">Live &mdash; Google Sheets</div></div>
     <div id="expense-list-wrap">
@@ -571,19 +574,14 @@ function categorizeSankey(desc,notes,who){
   if(/shop|gifts?|book|laie|vinalium|botiga|l'arca/.test(d+n))return'Shopping';
   return'Dining';
 }
-// FIX: check Bilbao dates (apr 26-29) BEFORE any 'apr 2' prefix check,
-// which would otherwise match apr 26/27/28/29 as Barcelona.
 function citySankey(date,desc,notes){
   const d=(date||'').toLowerCase();
   const tx=(desc||'').toLowerCase()+(notes||'').toLowerCase();
   if(/tarragona|cambrils|girona|365/.test(tx))return'Tarragona';
   if(/rioja|haro|laguardia|baigorri|riscal|ysios|winer/.test(tx))return'Rioja';
   if(/airport|arby|atl|boi|gifts|ava|chloe/.test(tx))return'Transit';
-  // Bilbao: Apr 26-29 — checked BEFORE the broad 'apr 2' pattern below
   if(d.includes('apr 26')||d.includes('apr 27')||d.includes('apr 28')||d.includes('apr 29'))return'Bilbao';
-  // Tarragona dates
   if(d.includes('apr 24')||d.includes('apr 25'))return'Tarragona';
-  // Barcelona dates: Apr 20-23, Apr 30, May 1
   if(d.includes('apr 20')||d.includes('apr 21')||d.includes('apr 22')||d.includes('apr 23')||d.includes('apr 30')||d.includes('may 1')||d.includes('4/20')||d.includes('4/21')||d.includes('4/22')||d.includes('4/23')||d.includes('4/30'))return'Barcelona';
   return'Barcelona';
 }
@@ -609,11 +607,11 @@ function buildSankey(data){
   const links=Object.entries(linkMap).map(([k,v])=>{const[s,t]=k.split('||');return{source:getNode(s),target:getNode(t),value:Math.round(v*100)/100};});
   const nodes=nodeNames.map((n,i)=>({name:n,index:i}));
 
-  const W=Math.min(body.clientWidth||900,1100),H=480;
+  const W=Math.min(body.clientWidth||900,1100),H=420;
   body.innerHTML='';
   const svg=d3.select(body).append('svg').attr('viewBox','0 0 '+W+' '+H).attr('width','100%').style('display','block');
 
-  const sankey=d3.sankey().nodeId(d=>d.index).nodeWidth(14).nodePadding(10).extent([[20,20],[W-20,H-20]]);
+  const sankey=d3.sankey().nodeId(d=>d.index).nodeWidth(14).nodePadding(10).extent([[20,16],[W-20,H-16]]);
   const{nodes:sNodes,links:sLinks}=sankey({nodes:nodes.map(d=>({...d})),links});
 
   const getColor=name=>SANKEY_CAT_COLORS[name]||SANKEY_CITY_COLORS[name]||SANKEY_PAYER_COLORS[name]||'#7d6b57';
@@ -641,7 +639,7 @@ function buildSankey(data){
     .attr('x',d=>d.x0<W/2?d.x1+6:d.x0-6)
     .attr('y',d=>(d.y0+d.y1)/2).attr('dy','0.35em')
     .attr('text-anchor',d=>d.x0<W/2?'start':'end')
-    .attr('font-size',12).attr('font-family',"'IBM Plex Sans',system-ui,sans-serif").attr('fill','#1a1a18')
+    .attr('font-size',11).attr('font-family',"'IBM Plex Sans',system-ui,sans-serif").attr('fill','#1a1a18')
     .text(d=>{const v=d.sourceLinks.reduce((s,l)=>s+l.value,0)||d.targetLinks.reduce((s,l)=>s+l.value,0);return d.name+'  $'+Math.round(v).toLocaleString();});
 
   const total=data.reduce((s,r)=>s+toUSD(parseFloat(r[3])||0,r[4]||'EUR'),0);
