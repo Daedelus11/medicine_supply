@@ -199,16 +199,29 @@ footer{padding:2rem 1.25rem}.status-banner{padding:0.9rem 1.25rem}
 const PASS='Cacopardo2026',SESS_KEY='ca_auth_v2';
 const CONFIG_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQyzrIuojRuh6HCDFixkYmhAMTKqtEp29W_bVq6UZyFzFI4I4wCMOcKziTgeUKGmoqvZ9q6kFqJW37t/pub?gid=1393621225&single=true&output=csv';
 const PHOTOS_CSV='https://docs.google.com/spreadsheets/d/e/2PACX-1vQyzrIuojRuh6HCDFixkYmhAMTKqtEp29W_bVq6UZyFzFI4I4wCMOcKziTgeUKGmoqvZ9q6kFqJW37t/pub?gid=1275117244&single=true&output=csv';
-
-// CA phase order -- construction phases only, no design phases
-const DEFAULT_PHASE_ORDER = 'Pre-Construction,Bidding,Site Preparation,Foundation,Framing,Envelope,MEP Rough,Insulation,Drywall,Finishes,Punch List,Substantial Completion';
+const DEFAULT_PHASE_ORDER='Pre-Construction,Bidding,Site Preparation,Foundation,Framing,Envelope,MEP Rough,Insulation,Drywall,Finishes,Punch List,Substantial Completion';
 
 const gate=document.getElementById('gate'),main=document.getElementById('main'),gateInput=document.getElementById('gateInput'),gateBtn=document.getElementById('gateBtn'),gateErr=document.getElementById('gateErr');
 function unlock(){if(gateInput.value.trim()===PASS){sessionStorage.setItem(SESS_KEY,'1');gate.style.display='none';main.style.display='block';loadData();}else{gateErr.style.display='block';gateInput.value='';gateInput.focus();}}
 gateBtn.addEventListener('click',unlock);gateInput.addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
 if(sessionStorage.getItem(SESS_KEY)==='1'){gate.style.display='none';main.style.display='block';loadData();}
 
+// CONFIG CSV has no header row -- parse as raw key/value pairs (col0=key, col1=value)
+function parseConfig(text){
+  const map={};
+  text.trim().split('\n').forEach(line=>{
+    if(!line.trim())return;
+    const parts=splitLine(line);
+    const k=(parts[0]||'').trim().replace(/\r/,'');
+    const v=(parts[1]||'').trim().replace(/\r/,'');
+    if(k)map[k]=v;
+  });
+  return map;
+}
+
+// PHOTOS CSV has a header row -- parse as keyed objects
 function parseCSV(text){const rows=[],lines=text.trim().split('\n'),headers=splitLine(lines[0]);for(let i=1;i<lines.length;i++){if(!lines[i].trim())continue;const vals=splitLine(lines[i]),obj={};headers.forEach((h,idx)=>{obj[h.trim()]=(vals[idx]||'').trim().replace(/\r/,'');});rows.push(obj);}return rows;}
+
 function splitLine(line){const parts=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){if(line[i]=='"'){inQ=!inQ;}else if(line[i]==','&&!inQ){parts.push(cur);cur='';}else{cur+=line[i];}}parts.push(cur);return parts;}
 
 function buildPhases(phaseOrder,currentPhase){const phases=phaseOrder.split(',').map(p=>p.trim()).filter(Boolean),rail=document.getElementById('phaseRail');rail.innerHTML='';const activeIdx=phases.indexOf(currentPhase);phases.forEach((ph,i)=>{const node=document.createElement('div');node.className='phase-node'+(i<activeIdx?' complete':i===activeIdx?' active':'');node.innerHTML='<div class="phase-circle"></div><div class="phase-label">'+ph+'</div>';rail.appendChild(node);});}
@@ -229,7 +242,39 @@ document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return
 
 function buildVisitCard(row){const dt=fmtDate(row['visit_date']||''),photos=[];for(let i=1;i<=12;i++){const url=row['photo_'+i+'_url'],caption=row['photo_'+i+'_caption']||'',flag=row['photo_'+i+'_flag']||'';if(url&&url.trim())photos.push({url:url.trim(),caption,flag});}const card=document.createElement('div');card.className='visit-card';card.innerHTML='<div class="visit-head"><div class="visit-date-block"><div class="visit-day">'+dt.day+'</div><div class="visit-month">'+dt.month+'</div><div class="visit-year">'+dt.year+'</div></div><div class="visit-info"><div class="visit-phase-tag">'+(row['phase']||'')+'</div><div class="visit-note">'+(row['visit_note']||'')+'</div></div></div>';if(photos.length){const grid=document.createElement('div');grid.className='photo-grid';photos.forEach((p,i)=>{const cell=document.createElement('div');cell.className='photo-cell';cell.innerHTML='<img src="'+p.url+'" alt="'+(p.caption||'Site observation photo')+'" loading="lazy"><div class="photo-overlay">'+flagHTML(p.flag)+'<div class="photo-caption">'+(p.caption||'')+'</div></div>';cell.addEventListener('click',()=>openLB(photos,i));grid.appendChild(cell);});card.appendChild(grid);}else{const empty=document.createElement('div');empty.style.cssText='padding:2rem;text-align:center;color:rgba(26,26,24,0.3);font-size:0.78rem;letter-spacing:0.08em';empty.textContent='No photos logged for this visit.';card.appendChild(empty);}return card;}
 
-async function loadData(){try{const[cfgRes,photoRes]=await Promise.all([fetch(CONFIG_CSV+'&t='+Date.now()),fetch(PHOTOS_CSV+'&t='+Date.now())]);const cfg=parseCSV(await cfgRes.text()),photos=parseCSV(await photoRes.text()),cfgMap={};cfg.forEach(r=>{if(r['key'])cfgMap[r['key'].trim()]=(r['value']||'').trim();});if(cfgMap['contractor'])document.getElementById('metaContractor').textContent=cfgMap['contractor'];if(cfgMap['last_updated'])document.getElementById('metaUpdated').textContent=cfgMap['last_updated'];if(cfgMap['status_note']){document.getElementById('statusText').textContent=cfgMap['status_note'];document.getElementById('statusUpdated').textContent=cfgMap['last_updated']?'Updated '+cfgMap['last_updated']:'';}const phaseOrder=cfgMap['phase_order']||DEFAULT_PHASE_ORDER;const currentPhase=cfgMap['current_phase']||'Site Preparation';buildPhases(phaseOrder,currentPhase);photos.sort((a,b)=>new Date(b['visit_date']||0)-new Date(a['visit_date']||0));const container=document.getElementById('visitsContainer');container.innerHTML='';const countEl=document.getElementById('visitCount');if(!photos.length||!photos[0]['visit_date']){container.innerHTML='<div class="empty-state"><div class="empty-icon">&#128247;</div><div class="empty-text">No site visits recorded yet.</div></div>';countEl.textContent='';}else{countEl.textContent=photos.length+' visit'+(photos.length!==1?'s':'')+' documented';photos.forEach(row=>container.appendChild(buildVisitCard(row)));}}catch(err){console.error(err);document.getElementById('visitsContainer').innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;</div><div class="empty-text">Unable to load data. Please refresh.</div></div>';}}
+async function loadData(){
+  try{
+    const[cfgRes,photoRes]=await Promise.all([fetch(CONFIG_CSV+'&t='+Date.now()),fetch(PHOTOS_CSV+'&t='+Date.now())]);
+    const cfg=parseConfig(await cfgRes.text());
+    const photos=parseCSV(await photoRes.text());
+
+    if(cfg['contractor'])document.getElementById('metaContractor').textContent=cfg['contractor'];
+    if(cfg['last_updated'])document.getElementById('metaUpdated').textContent=cfg['last_updated'];
+    if(cfg['status_note']){
+      document.getElementById('statusText').textContent=cfg['status_note'];
+      document.getElementById('statusUpdated').textContent=cfg['last_updated']?'Updated '+cfg['last_updated']:'';
+    }
+
+    // Always use CA construction phases -- ignore CONFIG phase_order (which has design phases)
+    const currentPhase=cfg['current_phase']||'Site Preparation';
+    buildPhases(DEFAULT_PHASE_ORDER,currentPhase);
+
+    photos.sort((a,b)=>new Date(b['visit_date']||0)-new Date(a['visit_date']||0));
+    const container=document.getElementById('visitsContainer');
+    container.innerHTML='';
+    const countEl=document.getElementById('visitCount');
+    if(!photos.length||!photos[0]['visit_date']){
+      container.innerHTML='<div class="empty-state"><div class="empty-icon">&#128247;</div><div class="empty-text">No site visits recorded yet.</div></div>';
+      countEl.textContent='';
+    }else{
+      countEl.textContent=photos.length+' visit'+(photos.length!==1?'s':'')+' documented';
+      photos.forEach(row=>container.appendChild(buildVisitCard(row)));
+    }
+  }catch(err){
+    console.error(err);
+    document.getElementById('visitsContainer').innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;</div><div class="empty-text">Unable to load data. Please refresh.</div></div>';
+  }
+}
 </script>
 </body>
 </html>
