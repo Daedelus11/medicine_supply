@@ -193,17 +193,12 @@ const ADMIN_PASS  = 'FLS-Admin-2026';
 const ADMIN_TOKEN = 'FLS-CA-Admin-2026';
 const UPLOAD_URL  = '/client/admin/upload.php';
 const SESS_KEY    = 'ca_admin_auth';
-const SHEET_URL   = 'https://docs.google.com/spreadsheets/d/1wkg-aaJv9bkVg3dm_hogs9sVDo63Kkj9W/';
+const SHEET_URL   = 'https://docs.google.com/spreadsheets/d/1XhgH-Fu1r0uPq8hfFvFI8jYjwqmKZs8BtvZ8_Aarq7w/';
 
-// Portal list CSV (Table1) - published, confirmed working
-// Shows: Fine Line Client | Portal Page | Password
-// One row per client. Used to derive project slug from portal URL.
-// When Table1_2 (projects) is published, swap CSV_PROJECTS to that gid.
-const CSV_PORTALS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
-
-// UPDATE THIS when Table1_2 is published:
-// const CSV_PROJECTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?gid=XXXX&single=true&output=csv';
-const CSV_PROJECTS = null; // set to null = use portal list as fallback
+// Table1 (portals) - slug lookup: Fine Line Client | Portal Page | Password
+const CSV_PORTALS  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
+// Table1_2 (projects) - gid=1095085231: Fine Line Client | Project | Balance
+const CSV_PROJECTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?gid=1095085231&single=true&output=csv';
 
 const gateEl    = document.getElementById('gate');
 const mainEl    = document.getElementById('main');
@@ -262,51 +257,52 @@ function slugFromUrl(url) {
 async function loadProjects() {
   const sel = document.getElementById('projectSelect');
   try {
-    const portalRes = await fetch(CSV_PORTALS + '&t=' + Date.now());
-    const portals   = parseCSV(await portalRes.text());
+    const [portalRes, projRes] = await Promise.all([
+      fetch(CSV_PORTALS + '&t=' + Date.now()),
+      fetch(CSV_PROJECTS + '&t=' + Date.now())
+    ]);
+    const portals  = parseCSV(await portalRes.text());
+    const projects = parseCSV(await projRes.text());
+
+    // Build client -> slug map from portals tab
+    const slugMap = {};
+    portals.forEach(row => {
+      const client = (row['Fine Line Client'] || '').trim().toLowerCase();
+      const slug   = slugFromUrl(row['Portal Page'] || '');
+      if (client && slug) slugMap[client] = slug;
+    });
 
     sel.innerHTML = '<option value="">-- Select project --</option>';
 
-    if (CSV_PROJECTS) {
-      // Future: fetch project list when Table1_2 is published
-      const projRes  = await fetch(CSV_PROJECTS + '&t=' + Date.now());
-      const projects = parseCSV(await projRes.text());
-      const slugMap  = {};
-      portals.forEach(row => {
-        const client = (row['Fine Line Client'] || '').trim().toLowerCase();
-        const slug   = slugFromUrl(row['Portal Page'] || '');
-        if (client && slug) slugMap[client] = slug;
-      });
-      projects.forEach(row => {
-        const client  = (row['Fine Line Client'] || '').trim();
-        const project = (row['Project'] || '').trim();
-        if (!project) return;
-        const slug = slugMap[client.toLowerCase()] || client.toLowerCase().replace(/[^a-z0-9]+/g,'-');
-        const opt = document.createElement('option');
-        opt.value = slug;
-        opt.textContent = project;
-        sel.appendChild(opt);
-      });
-    } else {
-      // Fallback: use portal list directly (one entry per client/portal)
-      portals.forEach(row => {
-        const client = (row['Fine Line Client'] || '').trim();
-        const url    = row['Portal Page'] || '';
-        const slug   = slugFromUrl(url);
-        if (!client || !slug) return;
-        const opt = document.createElement('option');
-        opt.value = slug;
-        opt.textContent = client;
-        sel.appendChild(opt);
-      });
-    }
+    // Table1_2 has merged cells: client name only on first row per client
+    // CSV exports blanks for merged rows -- carry forward last seen client name
+    let lastClient = '';
+    projects.forEach(row => {
+      const clientRaw = (row['Fine Line Client'] || '').trim();
+      const project   = (row['Project'] || '').trim();
+      if (!project) return;
+
+      // Carry forward client name when cell is blank (merged cell in Sheets)
+      const client = clientRaw || lastClient;
+      if (clientRaw) lastClient = clientRaw;
+
+      // Resolve slug from portal map, fall back to slugifying client name
+      const slug = slugMap[client.toLowerCase()] ||
+                   client.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/, '');
+
+      const opt = document.createElement('option');
+      opt.value = slug;
+      opt.textContent = project;
+      opt.dataset.client = client;
+      sel.appendChild(opt);
+    });
 
     if (sel.options.length <= 1) {
-      sel.innerHTML = '<option value="">No projects found - check Sheet is published</option>';
+      sel.innerHTML = '<option value="">No projects found</option>';
     }
   } catch (e) {
     console.error('loadProjects failed:', e);
-    sel.innerHTML = '<option value="">Error loading: ' + e.message.substring(0,40) + '</option>';
+    sel.innerHTML = '<option value="">Error: ' + e.message.substring(0, 50) + '</option>';
   }
 }
 
@@ -424,7 +420,7 @@ function updateUploadBtn() {
   const ready = project && date && active.length > 0 && allCaptioned;
   uploadBtn.disabled = !ready;
   if (!active.length) uploadHint.textContent = '';
-  else if (!allCaptioned) uploadHint.textContent = active.filter(p=>!p.caption.trim()).length + ' photo(s) still need a caption.';
+  else if (!allCaptioned) uploadHint.textContent = active.filter(p => !p.caption.trim()).length + ' photo(s) still need a caption.';
   else if (!project) uploadHint.textContent = 'Select a project above to enable upload.';
   else uploadHint.textContent = active.length + ' photo(s) ready to upload.';
 }
@@ -465,7 +461,7 @@ uploadBtn.addEventListener('click', async () => {
     catch(e) { throw new Error('Server error: ' + rawText.substring(0, 300)); }
 
     if (!data.success || !data.urls || !data.urls.length) {
-      const detail = [data.error, ...(data.errors||[]), data.debug_dir ? 'dir:'+data.debug_dir : ''].filter(Boolean).join(' | ');
+      const detail = [data.error, ...(data.errors || []), data.debug_dir ? 'dir: ' + data.debug_dir : ''].filter(Boolean).join(' | ');
       throw new Error(detail || 'No files saved');
     }
 
@@ -484,9 +480,9 @@ uploadBtn.addEventListener('click', async () => {
 function buildSheetRow(date, phase, note, urls, active) {
   let r = 'visit_date: ' + date + '\nphase:      ' + phase + '\nvisit_note: ' + (note || '(no note)') + '\n';
   urls.forEach((url, i) => {
-    r += 'photo_' + (i+1) + '_url:     ' + url + '\n';
-    r += 'photo_' + (i+1) + '_caption: ' + (active[i] ? active[i].caption : '') + '\n';
-    if (active[i] && active[i].flag) r += 'photo_' + (i+1) + '_flag:    ' + active[i].flag + '\n';
+    r += 'photo_' + (i + 1) + '_url:     ' + url + '\n';
+    r += 'photo_' + (i + 1) + '_caption: ' + (active[i] ? active[i].caption : '') + '\n';
+    if (active[i] && active[i].flag) r += 'photo_' + (i + 1) + '_flag:    ' + active[i].flag + '\n';
   });
   return r;
 }
@@ -496,7 +492,7 @@ function showResult(success, sheetData, urls, slug, date, dataOrErr) {
   resultBox.style.display = 'block';
   const caUrl = 'https://fine-linestudio.com/client/' + slug + '/' + slug + '-construction-admin.html';
   if (success) {
-    const warnings = (dataOrErr.errors||[]).length ? '<div style="font-size:0.7rem;color:rgba(254,196,34,0.7);margin-top:0.5rem">Notes: ' + escHtml(dataOrErr.errors.join('; ')) + '</div>' : '';
+    const warnings = (dataOrErr.errors || []).length ? '<div style="font-size:0.7rem;color:rgba(254,196,34,0.7);margin-top:0.5rem">Notes: ' + escHtml(dataOrErr.errors.join('; ')) + '</div>' : '';
     resultBox.innerHTML =
       '<div class="result-success">' +
         '<div class="result-title">Upload complete - ' + urls.length + ' photo(s) saved</div>' +
@@ -515,11 +511,11 @@ function showResult(success, sheetData, urls, slug, date, dataOrErr) {
       });
     });
   } else {
-    resultBox.innerHTML = '<div class="result-error"><div class="result-title">Upload failed</div><div style="font-size:0.8rem;color:rgba(200,80,80,0.8)">' + escHtml(typeof dataOrErr==='string'?dataOrErr:(dataOrErr||'')) + '</div></div>';
+    resultBox.innerHTML = '<div class="result-error"><div class="result-title">Upload failed</div><div style="font-size:0.8rem;color:rgba(200,80,80,0.8)">' + escHtml(typeof dataOrErr === 'string' ? dataOrErr : (dataOrErr || '')) + '</div></div>';
   }
 }
 
-function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
 function init() {
   document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
