@@ -7,20 +7,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<!-- heic2any for client-side HEIC conversion -->
-<script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px}
 body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;font-weight:300;min-height:100vh}
-
-/* NAV */
 .fl-nav{height:56px;background:rgba(26,26,24,0.98);border-bottom:1px solid rgba(247,245,241,0.08);display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;position:sticky;top:0;z-index:100}
 .fl-logo{font-size:0.82rem;letter-spacing:0.18em;text-transform:uppercase;color:#f7f5f1;font-weight:300}
 .fl-logo .pipe{color:rgba(247,245,241,0.25);margin:0 0.1em}
 .nav-badge{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:#fec422;background:rgba(254,196,34,0.12);padding:0.2rem 0.6rem;border:1px solid rgba(254,196,34,0.25)}
-
-/* GATE */
 #gate{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 56px);padding:2rem}
 .gate-box{background:rgba(247,245,241,0.04);border:1px solid rgba(247,245,241,0.1);padding:3rem 2.5rem;max-width:400px;width:100%;text-align:center}
 .gate-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:#f7f5f1;margin-bottom:0.4rem}
@@ -31,13 +25,9 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .btn-primary:hover{background:#e8b31e}
 .btn-primary:disabled{background:rgba(254,196,34,0.3);cursor:not-allowed;color:rgba(26,26,24,0.5)}
 .gate-err{color:#e05c5c;font-size:0.72rem;margin-top:0.5rem;display:none}
-
-/* MAIN */
 #main{display:none;max-width:760px;margin:0 auto;padding:2rem 1.5rem 5rem}
 .page-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:#f7f5f1;margin-bottom:0.25rem;margin-top:1.5rem}
 .page-sub{font-size:0.75rem;color:rgba(247,245,241,0.35);letter-spacing:0.08em;margin-bottom:2rem}
-
-/* FORM SECTIONS */
 .form-section{background:rgba(247,245,241,0.04);border:1px solid rgba(247,245,241,0.1);padding:1.5rem;margin-bottom:1.25rem}
 .form-section-title{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(247,245,241,0.4);margin-bottom:1.25rem}
 .field{margin-bottom:1rem}
@@ -49,8 +39,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .field textarea{resize:vertical;min-height:72px;line-height:1.5}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media(max-width:500px){.field-row{grid-template-columns:1fr}}
-
-/* DROP ZONE */
 .drop-zone{border:2px dashed rgba(247,245,241,0.2);padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;position:relative}
 .drop-zone.drag-over{border-color:#fec422;background:rgba(254,196,34,0.05)}
 .drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -58,15 +46,15 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .drop-primary{font-size:0.85rem;color:rgba(247,245,241,0.7);margin-bottom:0.25rem}
 .drop-secondary{font-size:0.72rem;color:rgba(247,245,241,0.35);letter-spacing:0.04em}
 .drop-hint{font-size:0.68rem;color:rgba(254,196,34,0.6);margin-top:0.5rem;letter-spacing:0.04em}
-
-/* PREVIEW GRID */
 #previewGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.75rem;margin-top:1.25rem}
 .preview-item{position:relative;background:rgba(247,245,241,0.04);border:1px solid rgba(247,245,241,0.1)}
-.preview-img-wrap{position:relative;aspect-ratio:4/3;overflow:hidden;background:#111110}
+.preview-img-wrap{position:relative;aspect-ratio:4/3;overflow:hidden;background:#111110;display:flex;align-items:center;justify-content:center}
 .preview-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;opacity:0.85}
+.preview-placeholder{font-size:1.5rem;opacity:0.3}
 .preview-tag{position:absolute;top:0.3rem;left:0.3rem;font-size:0.55rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.15rem 0.4rem;font-weight:600}
 .tag-converting{background:rgba(254,196,34,0.85);color:#1a1a18}
 .tag-ready{background:rgba(60,180,100,0.85);color:#fff}
+.tag-heic{background:rgba(100,160,255,0.85);color:#fff}
 .tag-error{background:rgba(200,50,50,0.85);color:#fff}
 .preview-remove{position:absolute;top:0.3rem;right:0.3rem;width:20px;height:20px;background:rgba(26,26,24,0.8);border:none;color:rgba(247,245,241,0.7);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;line-height:1}
 .preview-remove:hover{background:rgba(200,50,50,0.8);color:#fff}
@@ -76,14 +64,13 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .preview-caption input:focus{border-color:rgba(254,196,34,0.4)}
 .preview-flag{width:100%;margin-top:0.3rem;background:rgba(247,245,241,0.05);border:1px solid rgba(247,245,241,0.1);color:rgba(247,245,241,0.6);font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;padding:0.25rem 0.35rem;outline:none;-webkit-appearance:none;border-radius:0}
 .preview-flag option{background:#2a2a28}
-
-/* PROGRESS */
+.status-note{font-size:0.72rem;letter-spacing:0.06em;margin-top:0.75rem;padding:0.5rem 0.75rem;display:none}
+.status-note.converting{background:rgba(254,196,34,0.08);border-left:2px solid #fec422;color:rgba(254,196,34,0.8)}
+.status-note.heic-fallback{background:rgba(100,160,255,0.08);border-left:2px solid rgba(100,160,255,0.5);color:rgba(180,210,255,0.8)}
 .upload-progress{margin-top:1.25rem;display:none}
 .progress-bar-wrap{background:rgba(247,245,241,0.08);height:4px;margin-bottom:0.5rem}
 .progress-bar{height:4px;background:#fec422;width:0%;transition:width 0.3s}
 .progress-text{font-size:0.72rem;color:rgba(247,245,241,0.45);letter-spacing:0.06em}
-
-/* RESULT */
 #resultBox{margin-top:1.25rem;display:none}
 .result-success{background:rgba(60,180,100,0.08);border:1px solid rgba(60,180,100,0.25);padding:1.25rem}
 .result-error{background:rgba(200,50,50,0.08);border:1px solid rgba(200,50,50,0.25);padding:1.25rem}
@@ -93,13 +80,7 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .copy-btn{margin-top:0.6rem;background:rgba(247,245,241,0.08);border:1px solid rgba(247,245,241,0.15);color:rgba(247,245,241,0.6);font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;cursor:pointer;transition:background 0.2s}
 .copy-btn:hover{background:rgba(247,245,241,0.14);color:#f7f5f1}
 .open-sheet-btn{display:inline-block;margin-top:0.5rem;margin-left:0.5rem;background:#fec422;color:#1a1a18;font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;text-decoration:none;cursor:pointer;border:none}
-
-/* LOADING SPINNER */
-.spinner{width:14px;height:14px;border:2px solid rgba(26,26,24,0.2);border-top-color:#1a1a18;border-radius:50%;animation:spin 0.7s linear infinite;display:inline-block;vertical-align:middle;margin-right:0.4rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* CONVERTING OVERLAY */
-.converting-note{font-size:0.72rem;color:rgba(254,196,34,0.7);letter-spacing:0.06em;margin-top:0.75rem;display:none}
 </style>
 </head>
 <body>
@@ -109,7 +90,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
   <span class="nav-badge">CA Admin</span>
 </nav>
 
-<!-- GATE -->
 <div id="gate">
   <div class="gate-box">
     <div class="gate-title">CA Upload Admin</div>
@@ -120,19 +100,15 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
   </div>
 </div>
 
-<!-- MAIN -->
 <div id="main">
   <div class="page-title">Construction Administration</div>
   <div class="page-sub">Upload site observation photos for any active project</div>
 
-  <!-- STEP 1: PROJECT + VISIT INFO -->
   <div class="form-section">
     <div class="form-section-title">Step 1 - Project &amp; Visit Details</div>
     <div class="field">
       <label>Project</label>
-      <select id="projectSelect">
-        <option value="">Loading projects...</option>
-      </select>
+      <select id="projectSelect"><option value="">Loading projects...</option></select>
     </div>
     <div class="field-row">
       <div class="field">
@@ -151,6 +127,7 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
           <option value="Substantial Completion">Substantial Completion</option>
           <option value="Permit Review">Permit Review</option>
           <option value="Pre-Construction">Pre-Construction</option>
+          <option value="Bidding">Bidding</option>
         </select>
       </div>
     </div>
@@ -160,7 +137,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
     </div>
   </div>
 
-  <!-- STEP 2: PHOTOS -->
   <div class="form-section">
     <div class="form-section-title">Step 2 - Photos</div>
     <div class="drop-zone" id="dropZone">
@@ -168,41 +144,48 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
       <div class="drop-icon">&#128247;</div>
       <div class="drop-primary">Tap to select photos or drag &amp; drop here</div>
       <div class="drop-secondary">JPG, PNG, HEIC supported &bull; Multiple files OK</div>
-      <div class="drop-hint">HEIC photos convert automatically in browser</div>
+      <div class="drop-hint">HEIC files are converted server-side automatically</div>
     </div>
-    <div class="converting-note" id="convertingNote">Converting HEIC files...</div>
+    <div class="status-note converting" id="convertingNote">Converting HEIC files in browser...</div>
+    <div class="status-note heic-fallback" id="heicFallbackNote">HEIC files detected - will be converted on the server during upload.</div>
     <div id="previewGrid"></div>
   </div>
 
-  <!-- UPLOAD BUTTON -->
   <button class="btn-primary" id="uploadBtn" disabled>Upload Photos &amp; Generate Sheet Row</button>
 
-  <!-- PROGRESS -->
   <div class="upload-progress" id="uploadProgress">
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
     <div class="progress-text" id="progressText">Uploading...</div>
   </div>
 
-  <!-- RESULT -->
   <div id="resultBox"></div>
-
 </div>
 
+<!-- Load heic2any asynchronously - non-blocking -->
 <script>
-// ---- CONFIG ----
-const ADMIN_PASS   = 'FLS-Admin-2026';
-const ADMIN_TOKEN  = 'FLS-CA-Admin-2026';
-const UPLOAD_URL   = '/client/admin/upload.php';
-const CLIENT_CSV   = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
-const SESS_KEY     = 'ca_admin_auth';
-const SHEET_URL    = 'https://docs.google.com/spreadsheets/d/1wkg-aaJv9bkVg3dm_hogs9sVDo63Kkj9W/';
+(function(){
+  var s = document.createElement('script');
+  s.src = 'https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
+  s.onload = function(){ window._heic2anyLoaded = true; };
+  s.onerror = function(){ window._heic2anyLoaded = false; };
+  document.head.appendChild(s);
+})();
+</script>
 
-// ---- AUTH ----
-const gateEl   = document.getElementById('gate');
-const mainEl   = document.getElementById('main');
+<script>
+const ADMIN_PASS  = 'FLS-Admin-2026';
+const ADMIN_TOKEN = 'FLS-CA-Admin-2026';
+const UPLOAD_URL  = '/client/admin/upload.php';
+const CLIENT_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
+const SESS_KEY    = 'ca_admin_auth';
+const SHEET_URL   = 'https://docs.google.com/spreadsheets/d/1wkg-aaJv9bkVg3dm_hogs9sVDo63Kkj9W/';
+
+// AUTH
+const gateEl = document.getElementById('gate');
+const mainEl = document.getElementById('main');
 const gateInput = document.getElementById('gateInput');
-const gateBtn  = document.getElementById('gateBtn');
-const gateErr  = document.getElementById('gateErr');
+const gateBtn = document.getElementById('gateBtn');
+const gateErr = document.getElementById('gateErr');
 
 function tryLogin() {
   if (gateInput.value.trim() === ADMIN_PASS) {
@@ -224,7 +207,7 @@ if (sessionStorage.getItem(SESS_KEY) === '1') {
   init();
 }
 
-// ---- CSV PARSE ----
+// CSV
 function parseCSV(text) {
   const lines = text.trim().split('\n');
   const headers = splitCSVLine(lines[0]);
@@ -249,14 +232,11 @@ function splitCSVLine(line) {
   return parts;
 }
 
-// ---- EXTRACT SLUG FROM URL ----
 function slugFromUrl(url) {
-  // e.g. https://fine-linestudio.com/client/cacopardo/cacopardo-portal.html -> cacopardo
-  const m = url.match(/\/client\/([^/]+)\//); 
+  const m = url.match(/\/client\/([^/]+)\//);
   return m ? m[1] : '';
 }
 
-// ---- LOAD PROJECTS ----
 async function loadProjects() {
   const sel = document.getElementById('projectSelect');
   try {
@@ -272,92 +252,104 @@ async function loadProjects() {
       const opt = document.createElement('option');
       opt.value = slug;
       opt.textContent = client;
-      opt.dataset.portal = portalUrl;
       sel.appendChild(opt);
     });
   } catch (e) {
     sel.innerHTML = '<option value="">Error loading projects</option>';
-    console.error('Failed to load client list:', e);
   }
 }
 
-// ---- FILE HANDLING ----
-let photoFiles = []; // Array of { file: File, blob: Blob, name: string, caption: string, flag: string, previewEl: Element }
-
-const dropZone    = document.getElementById('dropZone');
-const fileInput   = document.getElementById('fileInput');
+// FILE HANDLING
+let photoFiles = [];
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
 const previewGrid = document.getElementById('previewGrid');
-const uploadBtn   = document.getElementById('uploadBtn');
-const convertNote = document.getElementById('convertingNote');
+const uploadBtn = document.getElementById('uploadBtn');
 
-// Drag events
+function isHEICFile(file) {
+  return file.type === 'image/heic' || file.type === 'image/heif' ||
+         file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif');
+}
+
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', e => {
-  e.preventDefault();
-  dropZone.classList.remove('drag-over');
-  processFiles(Array.from(e.dataTransfer.files));
-});
-fileInput.addEventListener('change', () => {
-  processFiles(Array.from(fileInput.files));
-  fileInput.value = ''; // reset so same file can be re-added
-});
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); processFiles(Array.from(e.dataTransfer.files)); });
+fileInput.addEventListener('change', () => { processFiles(Array.from(fileInput.files)); fileInput.value = ''; });
 
 async function processFiles(files) {
   if (!files.length) return;
-  convertNote.style.display = 'block';
+
+  const hasHEIC = files.some(isHEICFile);
+  let heicFallback = false;
+
+  if (hasHEIC) {
+    document.getElementById('convertingNote').style.display = 'block';
+  }
 
   for (const file of files) {
-    const isHEIC = file.type === 'image/heic' || file.type === 'image/heif' ||
-                   file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif');
-
+    const heic = isHEICFile(file);
     const idx = photoFiles.length;
     const baseName = file.name.replace(/\.[^.]+$/, '');
-    const entry = { file, blob: null, name: baseName + '.jpg', caption: '', flag: '', previewEl: null, converting: isHEIC };
+    const entry = { file, blob: null, name: baseName + (heic ? '.jpg' : ''), caption: '', flag: '', previewEl: null, heicFallback: false };
     photoFiles.push(entry);
 
-    // Create preview card immediately
-    const card = buildPreviewCard(entry, idx);
+    const card = buildPreviewCard(entry, idx, heic);
     entry.previewEl = card;
     previewGrid.appendChild(card);
 
-    if (isHEIC) {
-      // Convert HEIC -> JPEG blob
-      try {
-        const jpegBlob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.9 });
-        entry.blob = Array.isArray(jpegBlob) ? jpegBlob[0] : jpegBlob;
-        entry.converting = false;
-        // Update preview image
-        const img = card.querySelector('img');
-        img.src = URL.createObjectURL(entry.blob);
-        setTag(card, 'ready', 'Ready');
-      } catch (err) {
-        entry.converting = false;
-        entry.error = true;
-        setTag(card, 'error', 'Error');
-        console.error('HEIC convert failed:', err);
+    if (heic) {
+      // Try client-side conversion first
+      let converted = false;
+      if (window._heic2anyLoaded && typeof heic2any !== 'undefined') {
+        try {
+          const jpegBlob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.9 });
+          entry.blob = Array.isArray(jpegBlob) ? jpegBlob[0] : jpegBlob;
+          const img = card.querySelector('img');
+          img.src = URL.createObjectURL(entry.blob);
+          img.style.display = 'block';
+          card.querySelector('.preview-placeholder').style.display = 'none';
+          setTag(card, 'ready', 'Ready');
+          converted = true;
+        } catch (err) {
+          console.warn('Client HEIC convert failed, using server fallback:', err);
+        }
+      }
+      if (!converted) {
+        // Server-side fallback: send raw HEIC, PHP converts it
+        entry.blob = file;
+        entry.name = baseName + '.jpg'; // PHP will save as .jpg after converting
+        entry.heicFallback = true;
+        heicFallback = true;
+        setTag(card, 'heic', 'HEIC - Server Convert');
+        // Show file icon placeholder since we can't preview HEIC natively
+        card.querySelector('.preview-placeholder').textContent = '📷';
       }
     } else {
       entry.blob = file;
-      entry.converting = false;
       const img = card.querySelector('img');
       img.src = URL.createObjectURL(file);
+      img.style.display = 'block';
+      card.querySelector('.preview-placeholder').style.display = 'none';
       setTag(card, 'ready', 'Ready');
     }
   }
 
-  convertNote.style.display = 'none';
+  document.getElementById('convertingNote').style.display = 'none';
+  if (heicFallback) {
+    document.getElementById('heicFallbackNote').style.display = 'block';
+  }
   updateUploadBtn();
 }
 
-function buildPreviewCard(entry, idx) {
+function buildPreviewCard(entry, idx, isHEIC) {
   const card = document.createElement('div');
   card.className = 'preview-item';
   card.dataset.idx = idx;
   card.innerHTML =
     '<div class="preview-img-wrap">' +
-      '<img src="" alt="" style="opacity:0.3">' +
-      '<span class="preview-tag tag-converting">Converting...</span>' +
+      '<img src="" alt="" style="display:none">' +
+      '<span class="preview-placeholder" style="font-size:1.5rem;opacity:0.3">' + (isHEIC ? '&#128247;' : '') + '</span>' +
+      '<span class="preview-tag tag-converting">' + (isHEIC ? 'Converting...' : 'Loading...') + '</span>' +
       '<button class="preview-remove" title="Remove">&times;</button>' +
     '</div>' +
     '<div class="preview-caption">' +
@@ -369,17 +361,9 @@ function buildPreviewCard(entry, idx) {
         '<option value="NON-CONFORMING">Non-Conforming</option>' +
       '</select>' +
     '</div>';
-  // Remove button
   card.querySelector('.preview-remove').addEventListener('click', () => removePhoto(idx));
-  // Caption input
-  card.querySelector('.caption-input').addEventListener('input', e => {
-    photoFiles[idx].caption = e.target.value;
-    updateUploadBtn();
-  });
-  // Flag select
-  card.querySelector('.preview-flag').addEventListener('change', e => {
-    photoFiles[idx].flag = e.target.value;
-  });
+  card.querySelector('.caption-input').addEventListener('input', e => { photoFiles[idx].caption = e.target.value; updateUploadBtn(); });
+  card.querySelector('.preview-flag').addEventListener('change', e => { photoFiles[idx].flag = e.target.value; });
   return card;
 }
 
@@ -387,8 +371,6 @@ function setTag(card, type, label) {
   const tag = card.querySelector('.preview-tag');
   tag.className = 'preview-tag tag-' + type;
   tag.textContent = label;
-  const img = card.querySelector('img');
-  img.style.opacity = type === 'ready' ? '0.85' : '0.3';
 }
 
 function removePhoto(idx) {
@@ -400,7 +382,7 @@ function removePhoto(idx) {
 function updateUploadBtn() {
   const project = document.getElementById('projectSelect').value;
   const date = document.getElementById('visitDate').value;
-  const active = photoFiles.filter(p => !p.removed && !p.converting && !p.error);
+  const active = photoFiles.filter(p => !p.removed && p.blob);
   const allCaptioned = active.every(p => p.caption.trim().length > 0);
   uploadBtn.disabled = !(project && date && active.length > 0 && allCaptioned);
 }
@@ -408,14 +390,13 @@ function updateUploadBtn() {
 document.getElementById('projectSelect').addEventListener('change', updateUploadBtn);
 document.getElementById('visitDate').addEventListener('change', updateUploadBtn);
 
-// ---- UPLOAD ----
+// UPLOAD
 uploadBtn.addEventListener('click', async () => {
   const projectSlug = document.getElementById('projectSelect').value;
   const visitDate   = document.getElementById('visitDate').value;
   const visitPhase  = document.getElementById('visitPhase').value;
   const visitNote   = document.getElementById('visitNote').value.trim();
-  const active      = photoFiles.filter(p => !p.removed && !p.converting && !p.error && p.blob);
-
+  const active      = photoFiles.filter(p => !p.removed && p.blob);
   if (!projectSlug || !visitDate || !active.length) return;
 
   uploadBtn.disabled = true;
@@ -423,7 +404,6 @@ uploadBtn.addEventListener('click', async () => {
   const progressBar  = document.getElementById('progressBar');
   const progressText = document.getElementById('progressText');
   const resultBox    = document.getElementById('resultBox');
-
   progressWrap.style.display = 'block';
   resultBox.style.display = 'none';
   progressBar.style.width = '10%';
@@ -432,11 +412,8 @@ uploadBtn.addEventListener('click', async () => {
   const formData = new FormData();
   formData.append('project_slug', projectSlug);
   formData.append('visit_date', visitDate);
-  active.forEach((p, i) => {
-    formData.append('photos[]', p.blob, p.name);
-  });
+  active.forEach(p => { formData.append('photos[]', p.blob, p.name); });
 
-  let uploadedUrls = [];
   try {
     progressBar.style.width = '40%';
     const res = await fetch(UPLOAD_URL, {
@@ -446,28 +423,20 @@ uploadBtn.addEventListener('click', async () => {
     });
     progressBar.style.width = '80%';
     const data = await res.json();
-
     if (!data.success || !data.urls.length) throw new Error(data.errors ? data.errors.join('; ') : 'Upload failed');
-
-    uploadedUrls = data.urls;
     progressBar.style.width = '100%';
     progressText.textContent = data.count + ' photo' + (data.count !== 1 ? 's' : '') + ' uploaded successfully';
-
-    // Match URLs back to captions/flags by order
-    const sheetData = buildSheetRow(visitDate, visitPhase, visitNote, uploadedUrls, active);
-    showResult(true, sheetData, uploadedUrls, projectSlug, visitDate);
-
+    const sheetData = buildSheetRow(visitDate, visitPhase, visitNote, data.urls, active);
+    showResult(true, sheetData, data.urls, projectSlug, visitDate);
   } catch (err) {
-    progressBar.style.width = '100%';
     progressBar.style.background = '#e05c5c';
+    progressBar.style.width = '100%';
     progressText.textContent = 'Upload failed: ' + err.message;
     showResult(false, null, [], projectSlug, visitDate, err.message);
   }
-
   uploadBtn.disabled = false;
 });
 
-// ---- SHEET ROW BUILDER ----
 function buildSheetRow(date, phase, note, urls, active) {
   let row = 'visit_date: ' + date + '\n';
   row    += 'phase:      ' + phase + '\n';
@@ -482,23 +451,20 @@ function buildSheetRow(date, phase, note, urls, active) {
   return row;
 }
 
-// ---- SHOW RESULT ----
 function showResult(success, sheetData, urls, slug, date, errorMsg) {
   const resultBox = document.getElementById('resultBox');
   resultBox.style.display = 'block';
-  const projectName = document.getElementById('projectSelect').selectedOptions[0]?.text || slug;
-  const caUrl = 'https://fine-linestudio.com/client/' + slug + '/cacopardo-construction-admin.html';
-
+  const caUrl = 'https://fine-linestudio.com/client/' + slug + '/' + slug + '-construction-admin.html';
   if (success) {
     resultBox.innerHTML =
       '<div class="result-success">' +
         '<div class="result-title">Upload complete - ' + urls.length + ' photo' + (urls.length !== 1 ? 's' : '') + ' saved</div>' +
-        '<div style="font-size:0.8rem;color:rgba(247,245,241,0.55);margin-bottom:0.5rem">Photos are live at: <code style="color:#fec422">' + 'fine-linestudio.com/client/' + slug + '/photos/' + date + '/</code></div>' +
-        '<div class="result-title" style="margin-top:1rem">Paste this row into the CA_PHOTOS Sheet tab:</div>' +
+        '<div style="font-size:0.8rem;color:rgba(247,245,241,0.55);margin-bottom:0.5rem">Live at: <code style="color:#fec422">fine-linestudio.com/client/' + slug + '/photos/' + date + '/</code></div>' +
+        '<div class="result-title" style="margin-top:1rem">Paste into CA_PHOTOS Sheet tab:</div>' +
         '<div class="sheet-block"><pre id="sheetRowPre">' + escHtml(sheetData) + '</pre></div>' +
         '<button class="copy-btn" id="copyBtn">Copy Sheet Row</button>' +
         '<a class="open-sheet-btn" href="' + SHEET_URL + '" target="_blank">Open Google Sheet</a>' +
-        '<a class="open-sheet-btn" href="' + caUrl + '" target="_blank" style="margin-left:0.5rem;background:rgba(247,245,241,0.1);color:#f7f5f1">View CA Page</a>' +
+        '<a class="open-sheet-btn" href="' + caUrl + '" target="_blank" style="background:rgba(247,245,241,0.1);color:#f7f5f1">View CA Page</a>' +
       '</div>';
     document.getElementById('copyBtn').addEventListener('click', () => {
       navigator.clipboard.writeText(sheetData).then(() => {
@@ -519,11 +485,8 @@ function escHtml(str) {
   return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// ---- INIT ----
 function init() {
-  // Set today's date as default
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('visitDate').value = today;
+  document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
   loadProjects();
 }
 </script>
