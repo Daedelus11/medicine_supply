@@ -62,7 +62,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .tag-converting{background:rgba(254,196,34,0.85);color:#1a1a18}
 .tag-ready{background:rgba(60,180,100,0.85);color:#fff}
 .tag-heic{background:rgba(100,160,255,0.85);color:#fff}
-.tag-error{background:rgba(200,50,50,0.85);color:#fff}
 .preview-remove{position:absolute;top:0.3rem;right:0.3rem;width:20px;height:20px;background:rgba(26,26,24,0.8);border:none;color:rgba(247,245,241,0.7);cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;line-height:1}
 .preview-remove:hover{background:rgba(200,50,50,0.8);color:#fff}
 .preview-caption{padding:0.4rem}
@@ -87,7 +86,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .copy-btn{margin-top:0.6rem;background:rgba(247,245,241,0.08);border:1px solid rgba(247,245,241,0.15);color:rgba(247,245,241,0.6);font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;cursor:pointer;transition:background 0.2s}
 .copy-btn:hover{background:rgba(247,245,241,0.14);color:#f7f5f1}
 .open-sheet-btn{display:inline-block;margin-top:0.5rem;margin-left:0.5rem;background:#fec422;color:#1a1a18;font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;text-decoration:none;cursor:pointer;border:none}
-.debug-block{background:rgba(247,245,241,0.03);border:1px solid rgba(247,245,241,0.08);padding:0.6rem 0.85rem;margin-top:0.5rem;font-size:0.65rem;color:rgba(247,245,241,0.35);font-family:monospace}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -197,19 +195,15 @@ const UPLOAD_URL  = '/client/admin/upload.php';
 const SESS_KEY    = 'ca_admin_auth';
 const SHEET_URL   = 'https://docs.google.com/spreadsheets/d/1wkg-aaJv9bkVg3dm_hogs9sVDo63Kkj9W/';
 
-// Table1 = portal URLs by client name (for slug lookup)
-// Table1_2 = project list (Fine Line Client, Project, Balance)
-// Sheet is published as a single CSV per gid -- we need both tabs
-// Table1 gid not confirmed; using the full sheet export approach:
-// The pub URL without gid returns the first sheet; Table1_2 needs its own gid.
-// From the URL pattern, Table1 is the default (first tab = gid=0), Table1_2 = unknown gid.
-// Strategy: fetch both CSVs, build a map of client -> slug, then list projects from Table1_2.
+// Portal list CSV (Table1) - published, confirmed working
+// Shows: Fine Line Client | Portal Page | Password
+// One row per client. Used to derive project slug from portal URL.
+// When Table1_2 (projects) is published, swap CSV_PROJECTS to that gid.
+const CSV_PORTALS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
 
-// These two GIDs come from the published sheet tabs
-// Table1 (portals) = first tab = gid not needed (use default)
-// Table1_2 (projects) = second tab -- gid discovered from Sheet URL structure
-const CSV_PORTALS  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
-const CSV_PROJECTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?gid=1697906907&single=true&output=csv';
+// UPDATE THIS when Table1_2 is published:
+// const CSV_PROJECTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-.../pub?gid=XXXX&single=true&output=csv';
+const CSV_PROJECTS = null; // set to null = use portal list as fallback
 
 const gateEl    = document.getElementById('gate');
 const mainEl    = document.getElementById('main');
@@ -268,48 +262,51 @@ function slugFromUrl(url) {
 async function loadProjects() {
   const sel = document.getElementById('projectSelect');
   try {
-    // Fetch both tabs in parallel
-    const [portalRes, projRes] = await Promise.all([
-      fetch(CSV_PORTALS + '&t=' + Date.now()),
-      fetch(CSV_PROJECTS + '&t=' + Date.now())
-    ]);
-    const portals  = parseCSV(await portalRes.text());
-    const projects = parseCSV(await projRes.text());
-
-    // Build client -> slug map from portals tab
-    const slugMap = {};
-    portals.forEach(row => {
-      const client = (row['Fine Line Client'] || '').trim();
-      const url    = row['Portal Page'] || '';
-      const slug   = slugFromUrl(url);
-      if (client && slug) slugMap[client.toLowerCase()] = slug;
-    });
+    const portalRes = await fetch(CSV_PORTALS + '&t=' + Date.now());
+    const portals   = parseCSV(await portalRes.text());
 
     sel.innerHTML = '<option value="">-- Select project --</option>';
-    projects.forEach(row => {
-      const client  = (row['Fine Line Client'] || '').trim();
-      const project = (row['Project'] || '').trim();
-      if (!project) return;
 
-      // Derive slug: try client map first, then slugify client name
-      let slug = slugMap[client.toLowerCase()];
-      if (!slug) {
-        // fallback: slugify the client name
-        slug = client.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
-      }
-
-      const opt = document.createElement('option');
-      opt.value = slug;
-      opt.textContent = project + (client && client !== project ? ' (' + client + ')' : '');
-      sel.appendChild(opt);
-    });
+    if (CSV_PROJECTS) {
+      // Future: fetch project list when Table1_2 is published
+      const projRes  = await fetch(CSV_PROJECTS + '&t=' + Date.now());
+      const projects = parseCSV(await projRes.text());
+      const slugMap  = {};
+      portals.forEach(row => {
+        const client = (row['Fine Line Client'] || '').trim().toLowerCase();
+        const slug   = slugFromUrl(row['Portal Page'] || '');
+        if (client && slug) slugMap[client] = slug;
+      });
+      projects.forEach(row => {
+        const client  = (row['Fine Line Client'] || '').trim();
+        const project = (row['Project'] || '').trim();
+        if (!project) return;
+        const slug = slugMap[client.toLowerCase()] || client.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+        const opt = document.createElement('option');
+        opt.value = slug;
+        opt.textContent = project;
+        sel.appendChild(opt);
+      });
+    } else {
+      // Fallback: use portal list directly (one entry per client/portal)
+      portals.forEach(row => {
+        const client = (row['Fine Line Client'] || '').trim();
+        const url    = row['Portal Page'] || '';
+        const slug   = slugFromUrl(url);
+        if (!client || !slug) return;
+        const opt = document.createElement('option');
+        opt.value = slug;
+        opt.textContent = client;
+        sel.appendChild(opt);
+      });
+    }
 
     if (sel.options.length <= 1) {
-      sel.innerHTML = '<option value="">No projects found</option>';
+      sel.innerHTML = '<option value="">No projects found - check Sheet is published</option>';
     }
   } catch (e) {
-    console.error('Failed to load projects:', e);
-    sel.innerHTML = '<option value="">Error loading projects</option>';
+    console.error('loadProjects failed:', e);
+    sel.innerHTML = '<option value="">Error loading: ' + e.message.substring(0,40) + '</option>';
   }
 }
 
@@ -462,23 +459,14 @@ uploadBtn.addEventListener('click', async () => {
     progressBar.style.width = '40%';
     const res = await fetch(UPLOAD_URL, { method: 'POST', headers: { 'X-Admin-Token': ADMIN_TOKEN }, body: formData });
     progressBar.style.width = '80%';
-
-    // Get raw text first for debugging
     const rawText = await res.text();
     let data;
-    try {
-      data = JSON.parse(rawText);
-    } catch(e) {
-      throw new Error('Server response not JSON: ' + rawText.substring(0, 200));
-    }
+    try { data = JSON.parse(rawText); }
+    catch(e) { throw new Error('Server error: ' + rawText.substring(0, 300)); }
 
     if (!data.success || !data.urls || !data.urls.length) {
-      const errDetail = [
-        data.error || '',
-        (data.errors || []).join('; '),
-        data.debug_dir ? 'Dir: ' + data.debug_dir : ''
-      ].filter(Boolean).join(' | ');
-      throw new Error(errDetail || 'Upload failed - no files saved');
+      const detail = [data.error, ...(data.errors||[]), data.debug_dir ? 'dir:'+data.debug_dir : ''].filter(Boolean).join(' | ');
+      throw new Error(detail || 'No files saved');
     }
 
     progressBar.style.width = '100%';
@@ -508,7 +496,7 @@ function showResult(success, sheetData, urls, slug, date, dataOrErr) {
   resultBox.style.display = 'block';
   const caUrl = 'https://fine-linestudio.com/client/' + slug + '/' + slug + '-construction-admin.html';
   if (success) {
-    const warnings = (dataOrErr.errors || []).length ? '<div style="font-size:0.7rem;color:rgba(254,196,34,0.7);margin-top:0.5rem">Notes: ' + escHtml(dataOrErr.errors.join('; ')) + '</div>' : '';
+    const warnings = (dataOrErr.errors||[]).length ? '<div style="font-size:0.7rem;color:rgba(254,196,34,0.7);margin-top:0.5rem">Notes: ' + escHtml(dataOrErr.errors.join('; ')) + '</div>' : '';
     resultBox.innerHTML =
       '<div class="result-success">' +
         '<div class="result-title">Upload complete - ' + urls.length + ' photo(s) saved</div>' +
@@ -527,11 +515,7 @@ function showResult(success, sheetData, urls, slug, date, dataOrErr) {
       });
     });
   } else {
-    resultBox.innerHTML =
-      '<div class="result-error">' +
-        '<div class="result-title">Upload failed</div>' +
-        '<div style="font-size:0.8rem;color:rgba(200,80,80,0.8)">' + escHtml(typeof dataOrErr === 'string' ? dataOrErr : (dataOrErr||'')) + '</div>' +
-      '</div>';
+    resultBox.innerHTML = '<div class="result-error"><div class="result-title">Upload failed</div><div style="font-size:0.8rem;color:rgba(200,80,80,0.8)">' + escHtml(typeof dataOrErr==='string'?dataOrErr:(dataOrErr||'')) + '</div></div>';
   }
 }
 
