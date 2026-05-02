@@ -83,14 +83,11 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .result-title{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,245,241,0.5);margin-bottom:0.75rem}
 .sheet-block{background:rgba(247,245,241,0.04);border:1px solid rgba(247,245,241,0.1);padding:0.85rem;margin-top:0.75rem}
 .sheet-block pre{font-family:'IBM Plex Sans',monospace;font-size:0.7rem;color:rgba(247,245,241,0.65);white-space:pre-wrap;word-break:break-all;line-height:1.6}
-.copy-btn{margin-top:0.6rem;background:rgba(247,245,241,0.08);border:1px solid rgba(247,245,241,0.15);color:rgba(247,245,241,0.6);font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;cursor:pointer;transition:background 0.2s}
-.copy-btn:hover{background:rgba(247,245,241,0.14);color:#f7f5f1}
-.open-sheet-btn{display:inline-block;margin-top:0.5rem;margin-left:0.5rem;background:#fec422;color:#1a1a18;font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;text-decoration:none;cursor:pointer;border:none}
+.view-ca-btn{display:inline-block;margin-top:0.75rem;background:#fec422;color:#1a1a18;font-family:'IBM Plex Sans',sans-serif;font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;padding:0.6rem 1.5rem;text-decoration:none;cursor:pointer;border:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
-
 <nav class="fl-nav">
   <a class="fl-nav-logo" href="https://fine-linestudio.com/">
     <span>FINE LINE <span class="pipe">|</span> STUDIO</span>
@@ -103,7 +100,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
     <li><span class="nav-admin-badge">CA Admin</span></li>
   </ul>
 </nav>
-
 <div id="gate">
   <div class="gate-box">
     <div class="gate-title">Construction Administration</div>
@@ -113,12 +109,10 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
     <div class="gate-err" id="gateErr">Incorrect password.</div>
   </div>
 </div>
-
 <div id="main">
   <div class="page-eyebrow">Fine Line Studio</div>
   <div class="page-title">Construction Administration</div>
   <div class="page-sub">Upload site observation photos for any active project</div>
-
   <div class="form-section">
     <div class="form-section-title">Step 1 - Project &amp; Visit Details</div>
     <div class="field">
@@ -133,16 +127,18 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
       <div class="field">
         <label>Construction Phase</label>
         <select id="visitPhase">
-          <option value="Site Preparation">Site Preparation</option>
+          <option value="Pre-Construction">Pre-Construction</option>
+          <option value="Bidding">Bidding</option>
+          <option value="Site Preparation" selected>Site Preparation</option>
           <option value="Foundation">Foundation</option>
           <option value="Framing">Framing</option>
           <option value="Envelope">Envelope</option>
           <option value="MEP Rough">MEP Rough</option>
+          <option value="Insulation">Insulation</option>
+          <option value="Drywall">Drywall</option>
           <option value="Finishes">Finishes</option>
+          <option value="Punch List">Punch List</option>
           <option value="Substantial Completion">Substantial Completion</option>
-          <option value="Permit Review">Permit Review</option>
-          <option value="Pre-Construction">Pre-Construction</option>
-          <option value="Bidding">Bidding</option>
         </select>
       </div>
     </div>
@@ -151,7 +147,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
       <textarea id="visitNote" placeholder="e.g. Foundation formwork complete. Rebar inspection passed. Ready for concrete pour."></textarea>
     </div>
   </div>
-
   <div class="form-section">
     <div class="form-section-title">Step 2 - Photos &amp; Captions</div>
     <div class="drop-zone" id="dropZone">
@@ -166,361 +161,59 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
     <div class="caption-notice" id="captionNotice">Add a caption to each photo below, then click Upload.</div>
     <div id="previewGrid"></div>
   </div>
-
-  <button class="btn-primary" id="uploadBtn" disabled>Upload Photos &amp; Generate Sheet Row</button>
+  <button class="btn-primary" id="uploadBtn" disabled>Upload Photos &amp; Log to Sheet</button>
   <div style="font-size:0.68rem;color:rgba(247,245,241,0.3);margin-top:0.5rem;letter-spacing:0.04em" id="uploadHint"></div>
-
   <div class="upload-progress" id="uploadProgress">
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
     <div class="progress-text" id="progressText">Uploading...</div>
   </div>
-
   <div id="resultBox"></div>
 </div>
-
 <script>
-(function(){
-  var s=document.createElement('script');
-  s.src='https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';
-  s.onload=function(){window._heic2anyLoaded=true;};
-  s.onerror=function(){window._heic2anyLoaded=false;};
-  document.head.appendChild(s);
-})();
+(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js';s.onload=function(){window._heic2anyLoaded=true;};s.onerror=function(){window._heic2anyLoaded=false;};document.head.appendChild(s);})();
 </script>
-
 <script>
-const ADMIN_PASS  = 'FLS-Admin-2026';
-const ADMIN_TOKEN = 'FLS-CA-Admin-2026';
-const UPLOAD_URL  = '/client/admin/upload.php';
-const SESS_KEY    = 'ca_admin_auth';
-const SHEET_URL   = 'https://docs.google.com/spreadsheets/d/1XhgH-Fu1r0uPq8hfFvFI8jYjwqmKZs8BtvZ8_Aarq7w/';
+const ADMIN_PASS='FLS-Admin-2026',ADMIN_TOKEN='FLS-CA-Admin-2026';
+const UPLOAD_URL='/client/admin/upload.php';
+const SESS_KEY='ca_admin_auth';
+// UPDATE THIS once Apps Script is deployed:
+const SHEET_WRITE_URL=null; // e.g. 'https://script.google.com/macros/s/XXXX/exec'
+const CSV_PORTALS='https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
+const CSV_PROJECTS='https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?gid=1095085231&single=true&output=csv';
 
-// Table1 (portals) - slug lookup: Fine Line Client | Portal Page | Password
-const CSV_PORTALS  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
-// Table1_2 (projects) - gid=1095085231: Fine Line Client | Project | Balance
-const CSV_PROJECTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?gid=1095085231&single=true&output=csv';
+const gateEl=document.getElementById('gate'),mainEl=document.getElementById('main'),gateInput=document.getElementById('gateInput'),gateBtn=document.getElementById('gateBtn'),gateErr=document.getElementById('gateErr');
+function tryLogin(){if(gateInput.value.trim()===ADMIN_PASS){sessionStorage.setItem(SESS_KEY,'1');gateEl.style.display='none';mainEl.style.display='block';init();}else{gateErr.style.display='block';gateInput.value='';gateInput.focus();}}
+gateBtn.addEventListener('click',tryLogin);gateInput.addEventListener('keydown',e=>{if(e.key==='Enter')tryLogin();});
+if(sessionStorage.getItem(SESS_KEY)==='1'){gateEl.style.display='none';mainEl.style.display='block';init();}
 
-const gateEl    = document.getElementById('gate');
-const mainEl    = document.getElementById('main');
-const gateInput = document.getElementById('gateInput');
-const gateBtn   = document.getElementById('gateBtn');
-const gateErr   = document.getElementById('gateErr');
+function parseCSV(text){const lines=text.trim().split('\n'),headers=splitCSVLine(lines[0]),rows=[];for(let i=1;i<lines.length;i++){if(!lines[i].trim())continue;const vals=splitCSVLine(lines[i]),obj={};headers.forEach((h,idx)=>{obj[h.trim()]=(vals[idx]||'').trim().replace(/\r$/,'');});rows.push(obj);}return rows;}
+function splitCSVLine(line){const parts=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){if(line[i]=='"'){inQ=!inQ;}else if(line[i]==','&&!inQ){parts.push(cur);cur='';}else{cur+=line[i];}}parts.push(cur);return parts;}
+function slugFromUrl(url){const m=url.match(/\/client\/([^/]+)\//);return m?m[1]:'';}
 
-function tryLogin() {
-  if (gateInput.value.trim() === ADMIN_PASS) {
-    sessionStorage.setItem(SESS_KEY, '1');
-    gateEl.style.display = 'none';
-    mainEl.style.display = 'block';
-    init();
-  } else {
-    gateErr.style.display = 'block';
-    gateInput.value = '';
-    gateInput.focus();
-  }
-}
-gateBtn.addEventListener('click', tryLogin);
-gateInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryLogin(); });
-if (sessionStorage.getItem(SESS_KEY) === '1') {
-  gateEl.style.display = 'none';
-  mainEl.style.display = 'block';
-  init();
-}
+async function loadProjects(){const sel=document.getElementById('projectSelect');try{const[portalRes,projRes]=await Promise.all([fetch(CSV_PORTALS+'&t='+Date.now()),fetch(CSV_PROJECTS+'&t='+Date.now())]);const portals=parseCSV(await portalRes.text()),projects=parseCSV(await projRes.text()),slugMap={};portals.forEach(row=>{const client=(row['Fine Line Client']||'').trim().toLowerCase(),slug=slugFromUrl(row['Portal Page']||'');if(client&&slug)slugMap[client]=slug;});sel.innerHTML='<option value="">-- Select project --</option>';let lastClient='';projects.forEach(row=>{const clientRaw=(row['Fine Line Client']||'').trim(),project=(row['Project']||'').trim();if(!project)return;const client=clientRaw||lastClient;if(clientRaw)lastClient=clientRaw;const slug=slugMap[client.toLowerCase()]||client.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/,'');const opt=document.createElement('option');opt.value=slug;opt.textContent=project;opt.dataset.client=client;sel.appendChild(opt);});if(sel.options.length<=1)sel.innerHTML='<option value="">No projects found</option>';}catch(e){sel.innerHTML='<option value="">Error: '+e.message.substring(0,50)+'</option>';}}
 
-function parseCSV(text) {
-  const lines = text.trim().split('\n');
-  const headers = splitCSVLine(lines[0]);
-  const rows = [];
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    const vals = splitCSVLine(lines[i]);
-    const obj = {};
-    headers.forEach((h, idx) => { obj[h.trim()] = (vals[idx] || '').trim().replace(/\r$/, ''); });
-    rows.push(obj);
-  }
-  return rows;
-}
-function splitCSVLine(line) {
-  const parts = []; let cur = '', inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    if (line[i] === '"') { inQ = !inQ; }
-    else if (line[i] === ',' && !inQ) { parts.push(cur); cur = ''; }
-    else { cur += line[i]; }
-  }
-  parts.push(cur);
-  return parts;
-}
-function slugFromUrl(url) {
-  const m = url.match(/\/client\/([^/]+)\//);
-  return m ? m[1] : '';
-}
+let photoFiles=[];
+const dropZone=document.getElementById('dropZone'),fileInput=document.getElementById('fileInput'),previewGrid=document.getElementById('previewGrid'),uploadBtn=document.getElementById('uploadBtn'),uploadHint=document.getElementById('uploadHint');
+function isHEIC(file){return file.type==='image/heic'||file.type==='image/heif'||file.name.toLowerCase().endsWith('.heic')||file.name.toLowerCase().endsWith('.heif');}
+dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag-over');});dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag-over'));dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag-over');processFiles(Array.from(e.dataTransfer.files));});fileInput.addEventListener('change',()=>{processFiles(Array.from(fileInput.files));fileInput.value='';});
 
-async function loadProjects() {
-  const sel = document.getElementById('projectSelect');
-  try {
-    const [portalRes, projRes] = await Promise.all([
-      fetch(CSV_PORTALS + '&t=' + Date.now()),
-      fetch(CSV_PROJECTS + '&t=' + Date.now())
-    ]);
-    const portals  = parseCSV(await portalRes.text());
-    const projects = parseCSV(await projRes.text());
+async function processFiles(files){if(!files.length)return;const hasHEIC=files.some(isHEIC);let heicFallback=false;if(hasHEIC)document.getElementById('convertingNote').style.display='block';for(const file of files){const heic=isHEIC(file),idx=photoFiles.length,baseName=file.name.replace(/\.[^.]+$/,''),entry={file,blob:null,name:baseName+'.jpg',caption:'',flag:'',previewEl:null};photoFiles.push(entry);const card=buildPreviewCard(entry,idx,heic);entry.previewEl=card;previewGrid.appendChild(card);if(heic){let converted=false;if(window._heic2anyLoaded&&typeof heic2any!=='undefined'){try{const jpegBlob=await heic2any({blob:file,toType:'image/jpeg',quality:0.9});entry.blob=Array.isArray(jpegBlob)?jpegBlob[0]:jpegBlob;const img=card.querySelector('img');img.src=URL.createObjectURL(entry.blob);img.style.display='block';card.querySelector('.preview-placeholder').style.display='none';setTag(card,'ready','Ready');converted=true;}catch(err){console.warn('HEIC client convert failed:',err);}}if(!converted){entry.blob=file;heicFallback=true;setTag(card,'heic','HEIC');card.querySelector('.preview-placeholder').textContent='📷';}}else{entry.blob=file;const img=card.querySelector('img');img.src=URL.createObjectURL(file);img.style.display='block';card.querySelector('.preview-placeholder').style.display='none';setTag(card,'ready','Ready');}}document.getElementById('convertingNote').style.display='none';if(heicFallback)document.getElementById('heicFallbackNote').style.display='block';document.getElementById('captionNotice').style.display='block';updateUploadBtn();}
 
-    // Build client -> slug map from portals tab
-    const slugMap = {};
-    portals.forEach(row => {
-      const client = (row['Fine Line Client'] || '').trim().toLowerCase();
-      const slug   = slugFromUrl(row['Portal Page'] || '');
-      if (client && slug) slugMap[client] = slug;
-    });
+function buildPreviewCard(entry,idx,heic){const card=document.createElement('div');card.className='preview-item';card.innerHTML='<div class="preview-img-wrap"><img src="" alt="" style="display:none"><span class="preview-placeholder" style="font-size:1.5rem;opacity:0.3">'+(heic?'&#128247;':'')+'</span><span class="preview-tag tag-converting">'+(heic?'HEIC...':'Loading...')+'</span><button class="preview-remove" title="Remove">&times;</button></div><div class="preview-caption"><input type="text" placeholder="Caption (required)" class="caption-input"><select class="preview-flag"><option value="">No flag</option><option value="INFO">Info</option><option value="ACTION REQUIRED">Action Required</option><option value="NON-CONFORMING">Non-Conforming</option></select></div>';card.querySelector('.preview-remove').addEventListener('click',()=>removePhoto(idx));card.querySelector('.caption-input').addEventListener('input',e=>{photoFiles[idx].caption=e.target.value;updateUploadBtn();});card.querySelector('.preview-flag').addEventListener('change',e=>{photoFiles[idx].flag=e.target.value;});return card;}
+function setTag(card,type,label){const tag=card.querySelector('.preview-tag');tag.className='preview-tag tag-'+type;tag.textContent=label;}
+function removePhoto(idx){photoFiles[idx].removed=true;if(photoFiles[idx].previewEl)photoFiles[idx].previewEl.remove();updateUploadBtn();}
+function updateUploadBtn(){const project=document.getElementById('projectSelect').value,date=document.getElementById('visitDate').value,active=photoFiles.filter(p=>!p.removed&&p.blob),allCaptioned=active.every(p=>p.caption.trim().length>0),ready=project&&date&&active.length>0&&allCaptioned;uploadBtn.disabled=!ready;if(!active.length)uploadHint.textContent='';else if(!allCaptioned)uploadHint.textContent=active.filter(p=>!p.caption.trim()).length+' photo(s) still need a caption.';else if(!project)uploadHint.textContent='Select a project above.';else uploadHint.textContent=active.length+' photo(s) ready.';}
+document.getElementById('projectSelect').addEventListener('change',updateUploadBtn);document.getElementById('visitDate').addEventListener('change',updateUploadBtn);
 
-    sel.innerHTML = '<option value="">-- Select project --</option>';
+uploadBtn.addEventListener('click',async()=>{const projectSlug=document.getElementById('projectSelect').value,visitDate=document.getElementById('visitDate').value,visitPhase=document.getElementById('visitPhase').value,visitNote=document.getElementById('visitNote').value.trim(),active=photoFiles.filter(p=>!p.removed&&p.blob);if(!projectSlug||!visitDate||!active.length)return;uploadBtn.disabled=true;const progressWrap=document.getElementById('uploadProgress'),progressBar=document.getElementById('progressBar'),progressText=document.getElementById('progressText'),resultBox=document.getElementById('resultBox');progressWrap.style.display='block';resultBox.style.display='none';progressBar.style.width='10%';progressText.textContent='Uploading '+active.length+' photo(s)...';const formData=new FormData();formData.append('project_slug',projectSlug);formData.append('visit_date',visitDate);active.forEach(p=>formData.append('photos[]',p.blob,p.name));try{progressBar.style.width='40%';const res=await fetch(UPLOAD_URL,{method:'POST',headers:{'X-Admin-Token':ADMIN_TOKEN},body:formData});progressBar.style.width='70%';const rawText=await res.text();let data;try{data=JSON.parse(rawText);}catch(e){throw new Error('Server error: '+rawText.substring(0,300));}if(!data.success||!data.urls||!data.urls.length){const detail=[data.error,...(data.errors||[]),data.debug_dir?'dir:'+data.debug_dir:''].filter(Boolean).join(' | ');throw new Error(detail||'No files saved');}progressBar.style.width='80%';progressText.textContent='Photos saved. Logging to Sheet...';// Write to Sheet if Apps Script URL is configured
+if(SHEET_WRITE_URL){const payload={token:'FLS-CA-Sheet-2026',visit_date:visitDate,phase:visitPhase,visit_note:visitNote};data.urls.forEach((url,i)=>{payload['photo_'+(i+1)+'_url']=url;payload['photo_'+(i+1)+'_caption']=active[i]?active[i].caption:'';if(active[i]&&active[i].flag)payload['photo_'+(i+1)+'_flag']=active[i].flag;});try{const sr=await fetch(SHEET_WRITE_URL,{method:'POST',body:JSON.stringify(payload)});const sd=await sr.json();if(!sd.success)console.warn('Sheet write warning:',sd.error);}catch(se){console.warn('Sheet write failed:',se);}}
+progressBar.style.width='100%';const sheetNote=SHEET_WRITE_URL?'Sheet updated automatically.':'Sheet row generated -- paste into CA_PHOTOS tab.';progressText.textContent=data.count+' photo(s) uploaded. '+sheetNote;showResult(true,buildSheetRow(visitDate,visitPhase,visitNote,data.urls,active),data.urls,projectSlug,visitDate,data);}catch(err){progressBar.style.background='#e05c5c';progressBar.style.width='100%';progressText.textContent='Upload failed';showResult(false,null,[],projectSlug,visitDate,err.message);}uploadBtn.disabled=false;});
 
-    // Table1_2 has merged cells: client name only on first row per client
-    // CSV exports blanks for merged rows -- carry forward last seen client name
-    let lastClient = '';
-    projects.forEach(row => {
-      const clientRaw = (row['Fine Line Client'] || '').trim();
-      const project   = (row['Project'] || '').trim();
-      if (!project) return;
+function buildSheetRow(date,phase,note,urls,active){let r='visit_date: '+date+'\nphase:      '+phase+'\nvisit_note: '+(note||'(no note)')+'\n';urls.forEach((url,i)=>{r+='photo_'+(i+1)+'_url:     '+url+'\n';r+='photo_'+(i+1)+'_caption: '+(active[i]?active[i].caption:'')+'\n';if(active[i]&&active[i].flag)r+='photo_'+(i+1)+'_flag:    '+active[i].flag+'\n';});return r;}
 
-      // Carry forward client name when cell is blank (merged cell in Sheets)
-      const client = clientRaw || lastClient;
-      if (clientRaw) lastClient = clientRaw;
-
-      // Resolve slug from portal map, fall back to slugifying client name
-      const slug = slugMap[client.toLowerCase()] ||
-                   client.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/, '');
-
-      const opt = document.createElement('option');
-      opt.value = slug;
-      opt.textContent = project;
-      opt.dataset.client = client;
-      sel.appendChild(opt);
-    });
-
-    if (sel.options.length <= 1) {
-      sel.innerHTML = '<option value="">No projects found</option>';
-    }
-  } catch (e) {
-    console.error('loadProjects failed:', e);
-    sel.innerHTML = '<option value="">Error: ' + e.message.substring(0, 50) + '</option>';
-  }
-}
-
-let photoFiles = [];
-const dropZone    = document.getElementById('dropZone');
-const fileInput   = document.getElementById('fileInput');
-const previewGrid = document.getElementById('previewGrid');
-const uploadBtn   = document.getElementById('uploadBtn');
-const uploadHint  = document.getElementById('uploadHint');
-
-function isHEIC(file) {
-  return file.type === 'image/heic' || file.type === 'image/heif' ||
-         file.name.toLowerCase().endsWith('.heic') || file.name.toLowerCase().endsWith('.heif');
-}
-
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); processFiles(Array.from(e.dataTransfer.files)); });
-fileInput.addEventListener('change', () => { processFiles(Array.from(fileInput.files)); fileInput.value = ''; });
-
-async function processFiles(files) {
-  if (!files.length) return;
-  const hasHEIC = files.some(isHEIC);
-  let heicFallback = false;
-  if (hasHEIC) document.getElementById('convertingNote').style.display = 'block';
-
-  for (const file of files) {
-    const heic = isHEIC(file);
-    const idx = photoFiles.length;
-    const baseName = file.name.replace(/\.[^.]+$/, '');
-    const entry = { file, blob: null, name: baseName + '.jpg', caption: '', flag: '', previewEl: null };
-    photoFiles.push(entry);
-    const card = buildPreviewCard(entry, idx, heic);
-    entry.previewEl = card;
-    previewGrid.appendChild(card);
-
-    if (heic) {
-      let converted = false;
-      if (window._heic2anyLoaded && typeof heic2any !== 'undefined') {
-        try {
-          const jpegBlob = await heic2any({ blob: file, toType: 'image/jpeg', quality: 0.9 });
-          entry.blob = Array.isArray(jpegBlob) ? jpegBlob[0] : jpegBlob;
-          const img = card.querySelector('img');
-          img.src = URL.createObjectURL(entry.blob);
-          img.style.display = 'block';
-          card.querySelector('.preview-placeholder').style.display = 'none';
-          setTag(card, 'ready', 'Ready');
-          converted = true;
-        } catch(err) { console.warn('HEIC client convert failed:', err); }
-      }
-      if (!converted) {
-        entry.blob = file;
-        heicFallback = true;
-        setTag(card, 'heic', 'HEIC');
-        card.querySelector('.preview-placeholder').textContent = '📷';
-      }
-    } else {
-      entry.blob = file;
-      const img = card.querySelector('img');
-      img.src = URL.createObjectURL(file);
-      img.style.display = 'block';
-      card.querySelector('.preview-placeholder').style.display = 'none';
-      setTag(card, 'ready', 'Ready');
-    }
-  }
-
-  document.getElementById('convertingNote').style.display = 'none';
-  if (heicFallback) document.getElementById('heicFallbackNote').style.display = 'block';
-  document.getElementById('captionNotice').style.display = 'block';
-  updateUploadBtn();
-}
-
-function buildPreviewCard(entry, idx, heic) {
-  const card = document.createElement('div');
-  card.className = 'preview-item';
-  card.innerHTML =
-    '<div class="preview-img-wrap">' +
-      '<img src="" alt="" style="display:none">' +
-      '<span class="preview-placeholder" style="font-size:1.5rem;opacity:0.3">' + (heic ? '&#128247;' : '') + '</span>' +
-      '<span class="preview-tag tag-converting">' + (heic ? 'HEIC...' : 'Loading...') + '</span>' +
-      '<button class="preview-remove" title="Remove">&times;</button>' +
-    '</div>' +
-    '<div class="preview-caption">' +
-      '<input type="text" placeholder="Caption (required)" class="caption-input">' +
-      '<select class="preview-flag">' +
-        '<option value="">No flag</option>' +
-        '<option value="INFO">Info</option>' +
-        '<option value="ACTION REQUIRED">Action Required</option>' +
-        '<option value="NON-CONFORMING">Non-Conforming</option>' +
-      '</select>' +
-    '</div>';
-  card.querySelector('.preview-remove').addEventListener('click', () => removePhoto(idx));
-  card.querySelector('.caption-input').addEventListener('input', e => { photoFiles[idx].caption = e.target.value; updateUploadBtn(); });
-  card.querySelector('.preview-flag').addEventListener('change', e => { photoFiles[idx].flag = e.target.value; });
-  return card;
-}
-
-function setTag(card, type, label) {
-  const tag = card.querySelector('.preview-tag');
-  tag.className = 'preview-tag tag-' + type;
-  tag.textContent = label;
-}
-
-function removePhoto(idx) {
-  photoFiles[idx].removed = true;
-  if (photoFiles[idx].previewEl) photoFiles[idx].previewEl.remove();
-  updateUploadBtn();
-}
-
-function updateUploadBtn() {
-  const project = document.getElementById('projectSelect').value;
-  const date    = document.getElementById('visitDate').value;
-  const active  = photoFiles.filter(p => !p.removed && p.blob);
-  const allCaptioned = active.every(p => p.caption.trim().length > 0);
-  const ready = project && date && active.length > 0 && allCaptioned;
-  uploadBtn.disabled = !ready;
-  if (!active.length) uploadHint.textContent = '';
-  else if (!allCaptioned) uploadHint.textContent = active.filter(p => !p.caption.trim()).length + ' photo(s) still need a caption.';
-  else if (!project) uploadHint.textContent = 'Select a project above to enable upload.';
-  else uploadHint.textContent = active.length + ' photo(s) ready to upload.';
-}
-
-document.getElementById('projectSelect').addEventListener('change', updateUploadBtn);
-document.getElementById('visitDate').addEventListener('change', updateUploadBtn);
-
-uploadBtn.addEventListener('click', async () => {
-  const projectSlug = document.getElementById('projectSelect').value;
-  const visitDate   = document.getElementById('visitDate').value;
-  const visitPhase  = document.getElementById('visitPhase').value;
-  const visitNote   = document.getElementById('visitNote').value.trim();
-  const active      = photoFiles.filter(p => !p.removed && p.blob);
-  if (!projectSlug || !visitDate || !active.length) return;
-
-  uploadBtn.disabled = true;
-  const progressWrap = document.getElementById('uploadProgress');
-  const progressBar  = document.getElementById('progressBar');
-  const progressText = document.getElementById('progressText');
-  const resultBox    = document.getElementById('resultBox');
-  progressWrap.style.display = 'block';
-  resultBox.style.display = 'none';
-  progressBar.style.width = '10%';
-  progressText.textContent = 'Uploading ' + active.length + ' photo(s)...';
-
-  const formData = new FormData();
-  formData.append('project_slug', projectSlug);
-  formData.append('visit_date', visitDate);
-  active.forEach(p => formData.append('photos[]', p.blob, p.name));
-
-  try {
-    progressBar.style.width = '40%';
-    const res = await fetch(UPLOAD_URL, { method: 'POST', headers: { 'X-Admin-Token': ADMIN_TOKEN }, body: formData });
-    progressBar.style.width = '80%';
-    const rawText = await res.text();
-    let data;
-    try { data = JSON.parse(rawText); }
-    catch(e) { throw new Error('Server error: ' + rawText.substring(0, 300)); }
-
-    if (!data.success || !data.urls || !data.urls.length) {
-      const detail = [data.error, ...(data.errors || []), data.debug_dir ? 'dir: ' + data.debug_dir : ''].filter(Boolean).join(' | ');
-      throw new Error(detail || 'No files saved');
-    }
-
-    progressBar.style.width = '100%';
-    progressText.textContent = data.count + ' photo(s) uploaded.';
-    showResult(true, buildSheetRow(visitDate, visitPhase, visitNote, data.urls, active), data.urls, projectSlug, visitDate, data);
-  } catch (err) {
-    progressBar.style.background = '#e05c5c';
-    progressBar.style.width = '100%';
-    progressText.textContent = 'Upload failed';
-    showResult(false, null, [], projectSlug, visitDate, err.message);
-  }
-  uploadBtn.disabled = false;
-});
-
-function buildSheetRow(date, phase, note, urls, active) {
-  let r = 'visit_date: ' + date + '\nphase:      ' + phase + '\nvisit_note: ' + (note || '(no note)') + '\n';
-  urls.forEach((url, i) => {
-    r += 'photo_' + (i + 1) + '_url:     ' + url + '\n';
-    r += 'photo_' + (i + 1) + '_caption: ' + (active[i] ? active[i].caption : '') + '\n';
-    if (active[i] && active[i].flag) r += 'photo_' + (i + 1) + '_flag:    ' + active[i].flag + '\n';
-  });
-  return r;
-}
-
-function showResult(success, sheetData, urls, slug, date, dataOrErr) {
-  const resultBox = document.getElementById('resultBox');
-  resultBox.style.display = 'block';
-  const caUrl = 'https://fine-linestudio.com/client/' + slug + '/' + slug + '-construction-admin.html';
-  if (success) {
-    const warnings = (dataOrErr.errors || []).length ? '<div style="font-size:0.7rem;color:rgba(254,196,34,0.7);margin-top:0.5rem">Notes: ' + escHtml(dataOrErr.errors.join('; ')) + '</div>' : '';
-    resultBox.innerHTML =
-      '<div class="result-success">' +
-        '<div class="result-title">Upload complete - ' + urls.length + ' photo(s) saved</div>' +
-        '<div style="font-size:0.8rem;color:rgba(247,245,241,0.55);margin-bottom:0.4rem">Live at: <code style="color:#fec422">fine-linestudio.com/client/' + slug + '/photos/' + date + '/</code></div>' +
-        warnings +
-        '<div class="result-title" style="margin-top:1rem">Paste into CA_PHOTOS Sheet tab:</div>' +
-        '<div class="sheet-block"><pre id="sheetRowPre">' + escHtml(sheetData) + '</pre></div>' +
-        '<button class="copy-btn" id="copyBtn">Copy Sheet Row</button>' +
-        '<a class="open-sheet-btn" href="' + SHEET_URL + '" target="_blank">Open Google Sheet</a>' +
-        '<a class="open-sheet-btn" href="' + caUrl + '" target="_blank" style="background:rgba(247,245,241,0.1);color:#f7f5f1">View CA Page</a>' +
-      '</div>';
-    document.getElementById('copyBtn').addEventListener('click', () => {
-      navigator.clipboard.writeText(sheetData).then(() => {
-        document.getElementById('copyBtn').textContent = 'Copied!';
-        setTimeout(() => { document.getElementById('copyBtn').textContent = 'Copy Sheet Row'; }, 2000);
-      });
-    });
-  } else {
-    resultBox.innerHTML = '<div class="result-error"><div class="result-title">Upload failed</div><div style="font-size:0.8rem;color:rgba(200,80,80,0.8)">' + escHtml(typeof dataOrErr === 'string' ? dataOrErr : (dataOrErr || '')) + '</div></div>';
-  }
-}
-
-function escHtml(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-
-function init() {
-  document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
-  loadProjects();
-}
+function showResult(success,sheetData,urls,slug,date,dataOrErr){const resultBox=document.getElementById('resultBox');resultBox.style.display='block';const caUrl='https://fine-linestudio.com/client/'+slug+'/'+slug+'-construction-admin.html';if(success){const warnings=(dataOrErr.errors||[]).length?'<div style="font-size:0.7rem;color:rgba(254,196,34,0.7);margin-top:0.5rem">Notes: '+escHtml(dataOrErr.errors.join('; '))+'</div>':'';const sheetSection=SHEET_WRITE_URL?'<div style="font-size:0.8rem;color:rgba(60,180,100,0.8);margin-top:0.5rem">Sheet updated automatically.</div>':'<div style="font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,245,241,0.5);margin-top:1rem">Paste into CA_PHOTOS Sheet tab:</div><div class="sheet-block"><pre>'+escHtml(sheetData)+'</pre></div>';resultBox.innerHTML='<div class="result-success"><div class="result-title">Upload complete — '+urls.length+' photo(s) saved</div><div style="font-size:0.8rem;color:rgba(247,245,241,0.55);margin-bottom:0.4rem">Live at: <code style="color:#fec422">fine-linestudio.com/client/'+slug+'/photos/'+date+'/</code></div>'+warnings+sheetSection+'<a class="view-ca-btn" href="'+caUrl+'" target="_blank">View Construction Admin Page</a></div>';;}else{resultBox.innerHTML='<div class="result-error"><div class="result-title">Upload failed</div><div style="font-size:0.8rem;color:rgba(200,80,80,0.8)">'+escHtml(typeof dataOrErr==='string'?dataOrErr:(dataOrErr||''))+'</div></div>';}}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function init(){document.getElementById('visitDate').value=new Date().toISOString().split('T')[0];loadProjects();}
 </script>
 </body>
 </html>
