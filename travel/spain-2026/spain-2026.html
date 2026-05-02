@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v57: Sankey moved inline inside expenses section, between totals and Add form -->
+<!-- v58: citySankey description-based Bilbao override — fixes Radisson mis-routed to Tarragona -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -176,7 +176,6 @@
 .shop-card:hover .shop-card-name{color:var(--accent)}
 .shop-section-head{font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--ink);margin-bottom:0.25rem}
 .shop-section-sub{font-size:0.82rem;color:var(--warm-grey);margin-bottom:1.5rem}
-/* Sankey — now inline inside expenses section, no separate section wrapper */
 .sankey-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white);margin-bottom:2rem}
 .sankey-header{background:var(--ink);padding:0.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow);flex-wrap:wrap;gap:0.5rem}
 .sankey-title{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--white)}
@@ -389,18 +388,13 @@
   <div style="margin-bottom:3rem"><div class="shop-section-head">Maps, Atlases &amp; Antiquarian Books</div><div class="shop-section-sub">The April 23 alignment is exceptional: Sagrada Fam&iacute;lia 9:30am, then Sant Jordi&rsquo;s Day book markets + Carrer dels Banys Nous all afternoon.</div><div class="shop-grid"><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Carrer+dels+Banys+Nous+antiques+maps+Barcelona" target="_blank"><div class="shop-card-name">Carrer dels Banys Nous</div><div class="shop-card-addr">Gothic Quarter &mdash; the whole street &#x2197;</div><div class="shop-card-desc">Lined with antique dealers specializing in maps, prints, and books. Best single street for old atlases in Barcelona.</div><span class="shop-tag">Maps &amp; prints</span><span class="shop-tag">Top pick</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Els+Encants+Vells+flea+market+Barcelona+Glories" target="_blank"><div class="shop-card-name">Els Encants Vells</div><div class="shop-card-addr">Pla&ccedil;a de les Gl&ograve;ries &mdash; Gl&ograve;ries metro &#x2197;</div><div class="shop-card-desc">Old maps, atlases, and prints among 301 stalls. Mon/Wed/Fri/Sat 9am&ndash;8pm.</div><span class="shop-tag">Flea market</span></a><a class="shop-card" href="https://www.google.com/maps/search/?api=1&query=Bulevard+dels+Antiquaris+Passeig+de+Gracia+Barcelona" target="_blank"><div class="shop-card-name">Bulevard dels Antiquaris</div><div class="shop-card-addr">Passeig de Gr&agrave;cia, 55 &mdash; Eixample &#x2197;</div><div class="shop-card-desc">60+ antique dealers under one roof. Tue&ndash;Sat.</div><span class="shop-tag">60+ dealers</span></a></div></div>
 </section>
 
-<!-- EXPENSES — totals + inline Sankey + Add form + log -->
 <section class="section" id="expenses">
   <header class="section-header"><div class="section-eyebrow">08 &mdash; Money</div><h2 class="section-title">Shared Expenses</h2></header>
-
-  <!-- Totals -->
   <div class="expense-summary">
     <div class="expense-summary-card"><div class="expense-summary-label">Mark</div><div class="expense-summary-amount" id="total-mark">&mdash;</div><div class="expense-summary-sub" id="count-mark">Loading&hellip;</div></div>
     <div class="expense-summary-card"><div class="expense-summary-label">Rumana</div><div class="expense-summary-amount" id="total-rumana">&mdash;</div><div class="expense-summary-sub" id="count-rumana">Loading&hellip;</div></div>
     <div class="expense-summary-card"><div class="expense-summary-label">Trip Total (USD)</div><div class="expense-summary-amount" id="total-all">&mdash;</div><div class="expense-summary-sub" id="count-all">Loading&hellip;</div></div>
   </div>
-
-  <!-- Sankey — inline, same width as summary above -->
   <div class="sankey-wrap" id="expense-chart">
     <div class="sankey-header">
       <div class="sankey-title">Expense Flow &mdash; Who paid &rarr; Category &rarr; City</div>
@@ -409,8 +403,6 @@
     <div class="sankey-body" id="sankey-body"><div style="padding:2rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)">Building chart&hellip;</div></div>
     <div class="sankey-legend" id="sankey-legend"></div>
   </div>
-
-  <!-- Add form -->
   <div class="expense-form">
     <div class="expense-form-header">Add an Expense</div>
     <div class="expense-form-body">
@@ -422,8 +414,6 @@
       <button class="btn-add-expense" id="btn-add-expense" onclick="addExpense()">+ Add</button>
     </div>
   </div>
-
-  <!-- Log -->
   <div class="expense-table-wrap">
     <div class="expense-table-header"><div class="expense-table-title">Expense Log</div><div class="expense-table-meta" id="expense-sync-status">Live &mdash; Google Sheets</div></div>
     <div id="expense-list-wrap">
@@ -574,12 +564,17 @@ function categorizeSankey(desc,notes,who){
   if(/shop|gifts?|book|laie|vinalium|botiga|l'arca/.test(d+n))return'Shopping';
   return'Dining';
 }
+// City routing: description keywords take priority over date,
+// so Radisson/Guggenheim logged on Tarragona dates still land in Bilbao.
 function citySankey(date,desc,notes){
   const d=(date||'').toLowerCase();
   const tx=(desc||'').toLowerCase()+(notes||'').toLowerCase();
+  // Explicit city keywords in description — highest priority
+  if(/radisson|guggenheim|bilbao|casco viejo|gran via bilbao|getxo|portugalete|gernika/.test(tx))return'Bilbao';
   if(/tarragona|cambrils|girona|365/.test(tx))return'Tarragona';
   if(/rioja|haro|laguardia|baigorri|riscal|ysios|winer/.test(tx))return'Rioja';
   if(/airport|arby|atl|boi|gifts|ava|chloe/.test(tx))return'Transit';
+  // Date-based fallback
   if(d.includes('apr 26')||d.includes('apr 27')||d.includes('apr 28')||d.includes('apr 29'))return'Bilbao';
   if(d.includes('apr 24')||d.includes('apr 25'))return'Tarragona';
   if(d.includes('apr 20')||d.includes('apr 21')||d.includes('apr 22')||d.includes('apr 23')||d.includes('apr 30')||d.includes('may 1')||d.includes('4/20')||d.includes('4/21')||d.includes('4/22')||d.includes('4/23')||d.includes('4/30'))return'Barcelona';
