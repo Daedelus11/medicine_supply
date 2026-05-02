@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construction Administration — Cacopardo Residence | Fine Line Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;scroll-behavior:smooth}
+body{background:#f7f5f1;color:#1a1a18;font-family:'IBM Plex Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
+
+/* NAV */
+.fl-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,26,24,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(247,245,241,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px}
+.fl-logo{font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.88rem;letter-spacing:0.18em;text-transform:uppercase;color:#f7f5f1;text-decoration:none;white-space:nowrap}
+.fl-logo .pipe{color:rgba(247,245,241,0.3);margin:0 0.15em}
+.fl-nav-links{display:flex;gap:2rem;list-style:none}
+.fl-nav-links a{font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,245,241,0.55);text-decoration:none;transition:color 0.2s}
+.fl-nav-links a:hover{color:#f7f5f1}
+
+/* PASSWORD GATE */
+#gate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem;background:#1a1a18}
+.gate-box{background:rgba(247,245,241,0.04);border:1px solid rgba(247,245,241,0.1);padding:3rem 2.5rem;max-width:420px;width:100%;text-align:center}
+.gate-label{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.6rem;letter-spacing:0.04em;color:#f7f5f1;margin-bottom:0.5rem}
+.gate-sub{font-size:0.78rem;color:rgba(247,245,241,0.45);letter-spacing:0.08em;margin-bottom:2rem}
+.gate-input{width:100%;background:rgba(247,245,241,0.06);border:1px solid rgba(247,245,241,0.15);color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.9rem;padding:0.75rem 1rem;letter-spacing:0.08em;outline:none;margin-bottom:1rem;transition:border-color 0.2s}
+.gate-input:focus{border-color:rgba(254,196,34,0.5)}
+.gate-btn{width:100%;background:#fec422;color:#1a1a18;font-family:'IBM Plex Sans',sans-serif;font-weight:500;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;padding:0.75rem 1.5rem;border:none;cursor:pointer;transition:background 0.2s}
+.gate-btn:hover{background:#e8b31e}
+.gate-error{color:#e05c5c;font-size:0.75rem;letter-spacing:0.06em;margin-top:0.5rem;display:none}
+
+/* MAIN */
+#main{display:none;padding-top:64px}
+
+/* PAGE HEADER */
+.page-header{background:#1a1a18;padding:3rem 2.5rem 2.5rem;border-bottom:3px solid #fec422}
+.breadcrumb{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,245,241,0.35);margin-bottom:1rem}
+.breadcrumb a{color:rgba(247,245,241,0.35);text-decoration:none}
+.breadcrumb a:hover{color:rgba(247,245,241,0.6)}
+.page-eyebrow{font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#fec422;margin-bottom:0.5rem}
+.page-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:2.8rem;letter-spacing:0.04em;color:#f7f5f1;margin-bottom:0.75rem}
+.page-meta-row{display:flex;gap:2.5rem;flex-wrap:wrap}
+.meta-item{display:flex;flex-direction:column;gap:0.15rem}
+.meta-label{font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(247,245,241,0.35)}
+.meta-value{font-size:0.82rem;color:rgba(247,245,241,0.75);letter-spacing:0.04em}
+
+/* STATUS BANNER */
+.status-banner{background:#111110;padding:0.9rem 2.5rem;display:flex;align-items:center;gap:0.75rem;border-bottom:1px solid rgba(247,245,241,0.06)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:#fec422;flex-shrink:0;animation:pulse 2.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.status-text{font-size:0.8rem;color:rgba(247,245,241,0.6);letter-spacing:0.04em}
+.status-updated{margin-left:auto;font-size:0.7rem;color:rgba(247,245,241,0.25);letter-spacing:0.08em}
+
+/* PHASE TIMELINE */
+.phase-section{background:#1a1a18;padding:2rem 2.5rem;border-bottom:1px solid rgba(247,245,241,0.08)}
+.section-eyebrow{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(247,245,241,0.3);margin-bottom:1.25rem}
+.phase-rail{display:flex;align-items:center;gap:0;overflow-x:auto;padding-bottom:0.5rem}
+.phase-node{display:flex;flex-direction:column;align-items:center;flex:1;min-width:100px;position:relative}
+.phase-node:not(:last-child)::after{content:'';position:absolute;top:10px;left:60%;width:80%;height:2px;background:rgba(247,245,241,0.12)}
+.phase-node.complete::after{background:rgba(247,245,241,0.35)}
+.phase-node.active::after{background:linear-gradient(90deg,rgba(254,196,34,0.6),rgba(247,245,241,0.12))}
+.phase-circle{width:20px;height:20px;border-radius:50%;border:2px solid rgba(247,245,241,0.2);background:#1a1a18;margin-bottom:0.5rem;position:relative;z-index:1;transition:all 0.3s}
+.phase-node.complete .phase-circle{background:#f7f5f1;border-color:#f7f5f1}
+.phase-node.complete .phase-circle::after{content:'';position:absolute;inset:4px;background:#1a1a18;border-radius:50%}
+.phase-node.active .phase-circle{background:#fec422;border-color:#fec422;box-shadow:0 0 0 4px rgba(254,196,34,0.2)}
+.phase-label{font-size:0.62rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,245,241,0.35);text-align:center;line-height:1.3}
+.phase-node.complete .phase-label{color:rgba(247,245,241,0.55)}
+.phase-node.active .phase-label{color:#fec422;font-weight:500}
+
+/* CONTENT AREA */
+.content-area{background:#f7f5f1;min-height:60vh}
+
+/* VISITS */
+.visits-wrap{padding:2.5rem;max-width:1100px;margin:0 auto}
+.visits-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid rgba(26,26,24,0.1)}
+.visits-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.6rem;letter-spacing:0.04em;color:#1a1a18}
+.visit-count{font-size:0.72rem;color:rgba(26,26,24,0.4);letter-spacing:0.08em}
+
+/* VISIT CARD */
+.visit-card{border:1px solid rgba(26,26,24,0.12);margin-bottom:2.5rem;overflow:hidden;background:#fff}
+.visit-head{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(26,26,24,0.1)}
+.visit-date-block{background:#1a1a18;padding:1.25rem 1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:90px}
+.visit-day{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:1.8rem;color:#fec422;line-height:1}
+.visit-month{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,245,241,0.5);margin-top:0.2rem}
+.visit-year{font-size:0.65rem;letter-spacing:0.1em;color:rgba(247,245,241,0.3)}
+.visit-info{padding:1rem 1.5rem;display:flex;flex-direction:column;justify-content:center}
+.visit-phase-tag{font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:#7d6b57;margin-bottom:0.3rem}
+.visit-note{font-size:0.88rem;color:rgba(26,26,24,0.75);line-height:1.55}
+
+/* PHOTO GRID */
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(26,26,24,0.08)}
+.photo-cell{position:relative;aspect-ratio:4/3;overflow:hidden;cursor:pointer;background:#e8e6e2}
+.photo-cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s,opacity 0.3s;opacity:0.9}
+.photo-cell:hover img{transform:scale(1.04);opacity:1}
+.photo-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(26,26,24,0.82));padding:0.75rem 0.75rem 0.6rem;opacity:0;transition:opacity 0.25s}
+.photo-cell:hover .photo-overlay{opacity:1}
+.photo-caption{font-size:0.7rem;color:rgba(247,245,241,0.9);line-height:1.4}
+.flag{display:inline-block;font-size:0.6rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.15rem 0.4rem;margin-bottom:0.3rem;font-weight:500}
+.flag-info{background:rgba(100,160,255,0.2);color:#2a6abf}
+.flag-action{background:rgba(254,196,34,0.2);color:#a07800}
+.flag-nc{background:rgba(200,50,50,0.15);color:#b03030}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:5rem 2rem;color:rgba(26,26,24,0.3)}
+.empty-icon{font-size:2.5rem;margin-bottom:1rem;opacity:0.35}
+.empty-text{font-size:0.85rem;letter-spacing:0.06em}
+
+/* LIGHTBOX */
+#lb{display:none;position:fixed;inset:0;background:rgba(17,17,16,0.97);z-index:999;align-items:center;justify-content:center;padding:2rem}
+#lb.open{display:flex}
+.lb-inner{position:relative;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center}
+#lb-img{max-width:100%;max-height:80vh;object-fit:contain;display:block}
+#lb-cap{margin-top:1rem;font-size:0.8rem;color:rgba(247,245,241,0.55);max-width:600px;text-align:center;line-height:1.5}
+.lb-close{position:fixed;top:1.5rem;right:1.5rem;background:none;border:none;color:rgba(247,245,241,0.6);font-size:1.5rem;cursor:pointer;padding:0.5rem;line-height:1}
+.lb-close:hover{color:#f7f5f1}
+.lb-prev,.lb-next{position:fixed;top:50%;transform:translateY(-50%);background:rgba(247,245,241,0.08);border:none;color:rgba(247,245,241,0.7);font-size:1.2rem;padding:1rem 0.75rem;cursor:pointer;transition:background 0.2s}
+.lb-prev{left:1rem}.lb-next{right:1rem}
+.lb-prev:hover,.lb-next:hover{background:rgba(247,245,241,0.15)}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:4rem;color:rgba(26,26,24,0.35);font-size:0.8rem;letter-spacing:0.1em;gap:0.75rem}
+.spin{width:16px;height:16px;border:2px solid rgba(26,26,24,0.15);border-top-color:rgba(26,26,24,0.5);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* PORTAL NAV FOOTER */
+.portal-footer-nav{background:#1a1a18;border-top:1px solid rgba(247,245,241,0.08);padding:1.25rem 2.5rem;display:flex;justify-content:center;gap:0;flex-wrap:wrap}
+.portal-footer-nav a{font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,245,241,0.35);text-decoration:none;padding:0.5rem 1.25rem;border-right:1px solid rgba(247,245,241,0.08);transition:color 0.2s;white-space:nowrap}
+.portal-footer-nav a:last-child{border-right:none}
+.portal-footer-nav a:hover{color:rgba(247,245,241,0.7)}
+.portal-footer-nav a.active{color:#fec422}
+
+/* MAIN FOOTER */
+footer{background:#111110;border-top:1px solid rgba(247,245,241,0.06);padding:2.5rem;margin-top:0}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;flex-wrap:wrap}
+.footer-brand{font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.82rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(247,245,241,0.35)}
+.footer-brand .pipe{color:rgba(247,245,241,0.15);margin:0 0.1em}
+.footer-copy{font-size:0.7rem;color:rgba(247,245,241,0.2);margin-top:0.4rem}
+.footer-copy a{color:rgba(247,245,241,0.3);text-decoration:none}
+.footer-copy a:hover{color:rgba(247,245,241,0.55)}
+.footer-conf{font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,245,241,0.18)}
+
+@media(max-width:768px){
+.fl-nav{padding:0 1.25rem}
+.fl-nav-links{display:none}
+.page-header{padding:2rem 1.25rem 2rem}
+.page-meta-row{gap:1.5rem}
+.phase-section{padding:1.5rem 1.25rem}
+.visits-wrap{padding:1.5rem 1.25rem}
+.photo-grid{grid-template-columns:repeat(2,1fr)}
+.portal-footer-nav{padding:1rem 1.25rem}
+footer{padding:2rem 1.25rem}
+.status-banner{padding:0.9rem 1.25rem}
+.visit-date-block{min-width:72px;padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="fl-nav">
+  <a href="/" class="fl-logo">FINE LINE <span class="pipe">|</span> STUDIO</a>
+  <ul class="fl-nav-links">
+    <li><a href="/portfolio">Portfolio</a></li>
+    <li><a href="/services">Services</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- PASSWORD GATE -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-label">Construction Administration</div>
+    <div class="gate-sub">Cacopardo Residence &nbsp;&bull;&nbsp; Project No. 25-0301</div>
+    <input type="password" class="gate-input" id="gateInput" placeholder="Enter access code" autocomplete="off">
+    <button class="gate-btn" id="gateBtn">Enter Portal</button>
+    <div class="gate-error" id="gateErr">Incorrect access code. Please try again.</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="main">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="breadcrumb"><a href="cacopardo-portal.html">Project Portal</a> &rsaquo; Construction Administration</div>
+    <div class="page-eyebrow">Construction Administration</div>
+    <div class="page-title">Cacopardo Residence</div>
+    <div class="page-meta-row">
+      <div class="meta-item"><span class="meta-label">Project No.</span><span class="meta-value" id="metaProjNum">25-0301</span></div>
+      <div class="meta-item"><span class="meta-label">Architect</span><span class="meta-value" id="metaArchitect">Mark Wagner, AIA, NCARB</span></div>
+      <div class="meta-item"><span class="meta-label">Contractor</span><span class="meta-value" id="metaContractor">-</span></div>
+      <div class="meta-item"><span class="meta-label">Updated</span><span class="meta-value" id="metaUpdated">-</span></div>
+    </div>
+  </div>
+
+  <!-- STATUS BANNER -->
+  <div class="status-banner">
+    <div class="status-dot"></div>
+    <div class="status-text" id="statusText">Loading project status...</div>
+    <div class="status-updated" id="statusUpdated"></div>
+  </div>
+
+  <!-- PHASE TIMELINE -->
+  <div class="phase-section">
+    <div class="section-eyebrow">Project Phase</div>
+    <div class="phase-rail" id="phaseRail"></div>
+  </div>
+
+  <!-- SITE OBSERVATIONS / PHOTOS -->
+  <div class="content-area">
+    <div class="visits-wrap">
+      <div class="visits-header">
+        <div class="visits-title">Site Observations</div>
+        <div class="visit-count" id="visitCount"></div>
+      </div>
+      <div id="visitsContainer">
+        <div class="loading"><div class="spin"></div>&nbsp; Loading observation log...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PORTAL FOOTER NAV -->
+  <div class="portal-footer-nav">
+    <a href="cacopardo-portal.html">Overview</a>
+    <a href="cacopardo-phase-timeline.html">Phase Timeline</a>
+    <a href="cacopardo-contacts.html">Project Contacts</a>
+    <a href="cacopardo-documents.html">Drawings &amp; Documents</a>
+    <a href="cacopardo-contracts.html">Contract Documents</a>
+    <a href="cacopardo-construction-admin.html" class="active">Construction Administration</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">FINE LINE <span class="pipe">|</span> STUDIO</div>
+        <div class="footer-copy">Mark Wagner, AIA, NCARB &mdash; Principal Architect<br>Questions: <a href="mailto:info@fine-linestudio.com">info@fine-linestudio.com</a></div>
+      </div>
+      <div class="footer-conf">Confidential &mdash; Authorized Users Only</div>
+    </div>
+  </footer>
+
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lb">
+  <button class="lb-close" id="lbClose">&times;</button>
+  <button class="lb-prev" id="lbPrev">&#8592;</button>
+  <div class="lb-inner">
+    <img id="lb-img" src="" alt="">
+    <div id="lb-cap"></div>
+  </div>
+  <button class="lb-next" id="lbNext">&#8594;</button>
+</div>
+
+<script>
+// CONFIG
+const PASS = 'Cacopardo2026';
+const SESS_KEY = 'ca_auth_v2';
+const CONFIG_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyzrIuojRuh6HCDFixkYmhAMTKqtEp29W_bVq6UZyFzFI4I4wCMOcKziTgeUKGmoqvZ9q6kFqJW37t/pub?gid=1393621225&single=true&output=csv';
+const PHOTOS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyzrIuojRuh6HCDFixkYmhAMTKqtEp29W_bVq6UZyFzFI4I4wCMOcKziTgeUKGmoqvZ9q6kFqJW37t/pub?gid=1275117244&single=true&output=csv';
+
+// AUTH
+const gate = document.getElementById('gate');
+const main = document.getElementById('main');
+const gateInput = document.getElementById('gateInput');
+const gateBtn = document.getElementById('gateBtn');
+const gateErr = document.getElementById('gateErr');
+
+function unlock() {
+  if (gateInput.value.trim() === PASS) {
+    sessionStorage.setItem(SESS_KEY, '1');
+    gate.style.display = 'none';
+    main.style.display = 'block';
+    loadData();
+  } else {
+    gateErr.style.display = 'block';
+    gateInput.value = '';
+    gateInput.focus();
+  }
+}
+gateBtn.addEventListener('click', unlock);
+gateInput.addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+if (sessionStorage.getItem(SESS_KEY) === '1') {
+  gate.style.display = 'none';
+  main.style.display = 'block';
+  loadData();
+}
+
+// CSV PARSE
+function parseCSV(text) {
+  const rows = [];
+  const lines = text.trim().split('\n');
+  const headers = splitLine(lines[0]);
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const vals = splitLine(lines[i]);
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h.trim()] = (vals[idx] || '').trim().replace(/\r/, ''); });
+    rows.push(obj);
+  }
+  return rows;
+}
+function splitLine(line) {
+  const parts = []; let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] === '"') { inQ = !inQ; }
+    else if (line[i] === ',' && !inQ) { parts.push(cur); cur = ''; }
+    else { cur += line[i]; }
+  }
+  parts.push(cur);
+  return parts;
+}
+
+// PHASE BUILDER
+function buildPhases(phaseOrder, currentPhase) {
+  const phases = phaseOrder.split(',').map(p => p.trim()).filter(Boolean);
+  const rail = document.getElementById('phaseRail');
+  rail.innerHTML = '';
+  const activeIdx = phases.indexOf(currentPhase);
+  phases.forEach((ph, i) => {
+    const node = document.createElement('div');
+    node.className = 'phase-node' + (i < activeIdx ? ' complete' : i === activeIdx ? ' active' : '');
+    node.innerHTML = '<div class="phase-circle"></div><div class="phase-label">' + ph + '</div>';
+    rail.appendChild(node);
+  });
+}
+
+// FLAGS
+function flagHTML(val) {
+  if (!val) return '';
+  const v = val.toUpperCase().trim();
+  if (v === 'ACTION REQUIRED') return '<span class="flag flag-action">Action Required</span>';
+  if (v === 'NON-CONFORMING') return '<span class="flag flag-nc">Non-Conforming</span>';
+  if (v === 'INFO') return '<span class="flag flag-info">Info</span>';
+  return '';
+}
+
+// DATE FORMAT
+function fmtDate(str) {
+  const parts = str.split('-');
+  if (parts.length === 3) {
+    const months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    return { day: parseInt(parts[2]), month: months[parseInt(parts[1])-1] || '--', year: parts[0] };
+  }
+  const d = new Date(str);
+  if (isNaN(d)) return { day: '--', month: '--', year: '' };
+  return {
+    day: d.getDate(),
+    month: d.toLocaleDateString('en-US',{month:'short'}).toUpperCase(),
+    year: d.getFullYear()
+  };
+}
+
+// LIGHTBOX
+let lbPhotos = [], lbIdx = 0;
+const lb = document.getElementById('lb');
+const lbImg = document.getElementById('lb-img');
+const lbCap = document.getElementById('lb-cap');
+function openLB(photos, idx) { lbPhotos = photos; lbIdx = idx; showLB(); lb.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeLB() { lb.classList.remove('open'); document.body.style.overflow = ''; }
+function showLB() { lbImg.src = lbPhotos[lbIdx].url; lbCap.textContent = lbPhotos[lbIdx].caption || ''; }
+document.getElementById('lbClose').addEventListener('click', closeLB);
+document.getElementById('lbPrev').addEventListener('click', () => { lbIdx = (lbIdx - 1 + lbPhotos.length) % lbPhotos.length; showLB(); });
+document.getElementById('lbNext').addEventListener('click', () => { lbIdx = (lbIdx + 1) % lbPhotos.length; showLB(); });
+lb.addEventListener('click', e => { if (e.target === lb) closeLB(); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') { lbIdx = (lbIdx-1+lbPhotos.length)%lbPhotos.length; showLB(); }
+  if (e.key === 'ArrowRight') { lbIdx = (lbIdx+1)%lbPhotos.length; showLB(); }
+  if (e.key === 'Escape') closeLB();
+});
+
+// BUILD VISIT CARD
+function buildVisitCard(row) {
+  const dt = fmtDate(row['visit_date'] || '');
+  const photos = [];
+  for (let i = 1; i <= 12; i++) {
+    const url = row['photo_' + i + '_url'];
+    const caption = row['photo_' + i + '_caption'] || '';
+    const flag = row['photo_' + i + '_flag'] || '';
+    if (url && url.trim()) photos.push({ url: url.trim(), caption, flag });
+  }
+  const card = document.createElement('div');
+  card.className = 'visit-card';
+  card.innerHTML =
+    '<div class="visit-head">' +
+      '<div class="visit-date-block">' +
+        '<div class="visit-day">' + dt.day + '</div>' +
+        '<div class="visit-month">' + dt.month + '</div>' +
+        '<div class="visit-year">' + dt.year + '</div>' +
+      '</div>' +
+      '<div class="visit-info">' +
+        '<div class="visit-phase-tag">' + (row['phase'] || '') + '</div>' +
+        '<div class="visit-note">' + (row['visit_note'] || '') + '</div>' +
+      '</div>' +
+    '</div>';
+  if (photos.length) {
+    const grid = document.createElement('div');
+    grid.className = 'photo-grid';
+    photos.forEach((p, i) => {
+      const cell = document.createElement('div');
+      cell.className = 'photo-cell';
+      cell.innerHTML =
+        '<img src="' + p.url + '" alt="' + (p.caption || 'Site observation photo') + '" loading="lazy">' +
+        '<div class="photo-overlay">' + flagHTML(p.flag) + '<div class="photo-caption">' + (p.caption || '') + '</div></div>';
+      cell.addEventListener('click', () => openLB(photos, i));
+      grid.appendChild(cell);
+    });
+    card.appendChild(grid);
+  } else {
+    const empty = document.createElement('div');
+    empty.style.cssText = 'padding:2rem;text-align:center;color:rgba(26,26,24,0.3);font-size:0.78rem;letter-spacing:0.08em';
+    empty.textContent = 'No photos logged for this visit.';
+    card.appendChild(empty);
+  }
+  return card;
+}
+
+// LOAD
+async function loadData() {
+  try {
+    const [cfgRes, photoRes] = await Promise.all([
+      fetch(CONFIG_CSV + '&t=' + Date.now()),
+      fetch(PHOTOS_CSV + '&t=' + Date.now())
+    ]);
+    const cfg = parseCSV(await cfgRes.text());
+    const photos = parseCSV(await photoRes.text());
+
+    const cfgMap = {};
+    cfg.forEach(r => { if (r['key']) cfgMap[r['key'].trim()] = (r['value'] || '').trim(); });
+
+    // Populate header meta from Sheet
+    if (cfgMap['contractor']) document.getElementById('metaContractor').textContent = cfgMap['contractor'];
+    if (cfgMap['last_updated']) document.getElementById('metaUpdated').textContent = cfgMap['last_updated'];
+    if (cfgMap['status_note']) {
+      document.getElementById('statusText').textContent = cfgMap['status_note'];
+      document.getElementById('statusUpdated').textContent = cfgMap['last_updated'] ? 'Updated ' + cfgMap['last_updated'] : '';
+    }
+
+    // Phase rail
+    const phaseOrder = cfgMap['phase_order'] || 'Schematic Design,Design Development,Construction Documents,Permit Review,Construction,Substantial Completion';
+    const currentPhase = cfgMap['current_phase'] || 'Permit Review';
+    buildPhases(phaseOrder, currentPhase);
+
+    // Sort visits newest first
+    photos.sort((a, b) => {
+      const da = new Date(a['visit_date'] || 0);
+      const db = new Date(b['visit_date'] || 0);
+      return db - da;
+    });
+
+    const container = document.getElementById('visitsContainer');
+    container.innerHTML = '';
+    const countEl = document.getElementById('visitCount');
+    if (!photos.length || !photos[0]['visit_date']) {
+      container.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128247;</div><div class="empty-text">No site visits recorded yet.</div></div>';
+      countEl.textContent = '';
+    } else {
+      countEl.textContent = photos.length + ' visit' + (photos.length !== 1 ? 's' : '') + ' documented';
+      photos.forEach(row => container.appendChild(buildVisitCard(row)));
+    }
+  } catch (err) {
+    console.error(err);
+    document.getElementById('visitsContainer').innerHTML = '<div class="empty-state"><div class="empty-icon">&#9888;</div><div class="empty-text">Unable to load data. Please refresh.</div></div>';
+  }
+}
+</script>
+</body>
+</html>
