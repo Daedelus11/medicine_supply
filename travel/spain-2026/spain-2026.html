@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MaRu / Spain 2026</title>
-<!-- v59: checklist accordion roll-up + filter corrupted TRUE rows -->
+<!-- v60: Sankey expense flow converted to flyout drawer -->
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
@@ -128,7 +128,6 @@
 .checklist-head-meta{font-size:0.6rem;font-weight:600;text-transform:uppercase;letter-spacing:0.14em;color:var(--yellow)}
 .checklist-head-done .checklist-head-meta{color:rgba(255,255,255,0.4)}
 .checklist-body{padding:0}
-/* Accordion section header */
 .cl-section-head{display:flex;align-items:center;justify-content:space-between;padding:0.55rem 1.25rem;background:var(--cream);border-bottom:1px solid var(--rule);cursor:pointer;user-select:none;transition:background 0.15s}
 .cl-section-head:hover{background:rgba(192,112,0,0.06)}
 .cl-section-title{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:var(--brown)}
@@ -137,7 +136,6 @@
 .cl-section-chevron{font-size:0.6rem;color:var(--warm-grey);transition:transform 0.2s;display:inline-block}
 .cl-section-head.open .cl-section-chevron{transform:rotate(90deg)}
 .cl-section-body{overflow:hidden;transition:max-height 0.25s ease}
-/* Individual items */
 .cl-item{display:flex;align-items:flex-start;gap:0.75rem;padding:0.45rem 1.25rem;border-bottom:1px solid var(--rule);cursor:pointer;transition:background 0.15s;user-select:none}
 .cl-item:last-child{border-bottom:none}
 .cl-item:hover{background:rgba(192,112,0,0.04)}
@@ -158,7 +156,6 @@
 .cl-add-btn{flex-shrink:0;background:var(--accent);color:var(--white);border:none;padding:0.6rem 1rem;font-family:var(--sans);font-size:0.7rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;transition:background 0.15s}
 .cl-add-btn:hover{background:#a06000}
 .cl-add-btn:disabled{opacity:0.4;cursor:not-allowed}
-/* Completed list (right panel) — simple flat list, no sections needed */
 .cl-done-item{display:flex;align-items:flex-start;gap:0.75rem;padding:0.4rem 1.25rem;border-bottom:1px solid var(--rule);cursor:pointer;transition:background 0.15s;user-select:none}
 .cl-done-item:last-child{border-bottom:none}
 .cl-done-item:hover{background:rgba(192,112,0,0.03)}
@@ -190,15 +187,32 @@
 .shop-card:hover .shop-card-name{color:var(--accent)}
 .shop-section-head{font-family:var(--serif);font-size:1.4rem;font-weight:300;color:var(--ink);margin-bottom:0.25rem}
 .shop-section-sub{font-size:0.82rem;color:var(--warm-grey);margin-bottom:1.5rem}
-.sankey-wrap{border:1px solid var(--rule);overflow:hidden;background:var(--white);margin-bottom:2rem}
-.sankey-header{background:var(--ink);padding:0.75rem 1.25rem;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--yellow);flex-wrap:wrap;gap:0.5rem}
-.sankey-title{font-family:var(--serif);font-size:1rem;font-weight:300;color:var(--white)}
-.sankey-meta{font-family:var(--mono);font-size:0.62rem;color:rgba(255,255,255,0.35)}
-.sankey-body{padding:1rem;overflow-x:auto}
+/* ===== SANKEY FLYOUT DRAWER ===== */
+.sankey-trigger{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--white);border:1px solid rgba(255,255,255,0.1);font-family:var(--sans);font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;padding:0.85rem 1.6rem;cursor:pointer;transition:background 0.2s,border-color 0.2s;margin-bottom:2rem}
+.sankey-trigger:hover{background:#2a2a28;border-color:var(--yellow)}
+.sankey-trigger svg{opacity:0.6;flex-shrink:0}
+.sankey-trigger-meta{font-family:var(--mono);font-size:0.62rem;color:var(--warm-grey);font-weight:300;text-transform:none;letter-spacing:0;border-left:1px solid rgba(255,255,255,0.12);padding-left:10px;margin-left:2px}
+.sankey-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.sankey-backdrop.open{opacity:1;pointer-events:auto}
+.sankey-drawer{position:fixed;top:0;right:0;bottom:0;width:min(94vw,1080px);background:var(--dark);z-index:501;transform:translateX(102%);transition:transform 0.38s cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;overflow:hidden;box-shadow:-8px 0 40px rgba(0,0,0,0.5)}
+.sankey-drawer.open{transform:translateX(0)}
+.sankey-drawer-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.75rem;border-bottom:2px solid var(--yellow);flex-shrink:0;gap:1rem;flex-wrap:wrap}
+.sankey-drawer-left{display:flex;flex-direction:column;gap:3px}
+.sankey-drawer-title{font-family:var(--serif);font-size:1.35rem;font-weight:300;color:var(--white)}
+.sankey-drawer-sub{font-family:var(--mono);font-size:0.62rem;color:rgba(255,255,255,0.3)}
+.sankey-drawer-close{background:none;border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.5);font-family:var(--sans);font-size:0.65rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;cursor:pointer;padding:0.45rem 1rem;transition:color 0.15s,border-color 0.15s;white-space:nowrap}
+.sankey-drawer-close:hover{color:var(--yellow);border-color:var(--yellow)}
+.sankey-drawer-body{flex:1;overflow-y:auto;padding:1.5rem 1.75rem;scrollbar-width:thin;scrollbar-color:var(--brown) rgba(255,255,255,0.05)}
+.sankey-drawer-body::-webkit-scrollbar{width:4px}
+.sankey-drawer-body::-webkit-scrollbar-track{background:rgba(255,255,255,0.04)}
+.sankey-drawer-body::-webkit-scrollbar-thumb{background:var(--brown)}
+.sankey-body{overflow-x:auto}
 .sankey-body svg{display:block;max-width:100%}
-.sankey-legend{display:flex;flex-wrap:wrap;gap:10px;padding:0.75rem 1.25rem;border-top:1px solid var(--rule)}
-.sankey-legend-item{display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--stone)}
+.sankey-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid rgba(255,255,255,0.07)}
+.sankey-legend-item{display:flex;align-items:center;gap:5px;font-size:0.67rem;color:rgba(255,255,255,0.45)}
 .sankey-legend-swatch{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+@media(max-width:768px){.sankey-drawer{width:100vw}.sankey-drawer-body{padding:1rem 1.1rem}}
+/* ===== EXPENSES ===== */
 #expenses{background:var(--cream)}
 .expense-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule);margin-bottom:2rem;overflow:hidden}
 .expense-summary-card{padding:1.5rem 1.75rem;border-right:1px solid var(--rule);background:var(--white)}
@@ -278,6 +292,23 @@
 </style>
 </head>
 <body>
+
+<!-- SANKEY FLYOUT DRAWER -->
+<div class="sankey-backdrop" id="sankey-backdrop" onclick="closeSankeyDrawer()"></div>
+<div class="sankey-drawer" id="sankey-drawer">
+  <div class="sankey-drawer-header">
+    <div class="sankey-drawer-left">
+      <div class="sankey-drawer-title">Expense Flow</div>
+      <div class="sankey-drawer-sub" id="sankey-meta">Who paid &rarr; Category &rarr; City</div>
+    </div>
+    <button class="sankey-drawer-close" onclick="closeSankeyDrawer()">&#10005; Close</button>
+  </div>
+  <div class="sankey-drawer-body">
+    <div class="sankey-body" id="sankey-body"><div style="padding:3rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:rgba(255,255,255,0.25)">Loading chart&hellip;</div></div>
+    <div class="sankey-legend" id="sankey-legend"></div>
+  </div>
+</div>
+
 <nav class="nav" id="top-nav">
   <div class="nav-brand">MaRu <span>|</span> Spain 2026</div>
   <ul class="nav-links" id="nav-menu">
@@ -409,14 +440,14 @@
     <div class="expense-summary-card"><div class="expense-summary-label">Rumana</div><div class="expense-summary-amount" id="total-rumana">&mdash;</div><div class="expense-summary-sub" id="count-rumana">Loading&hellip;</div></div>
     <div class="expense-summary-card"><div class="expense-summary-label">Trip Total (USD)</div><div class="expense-summary-amount" id="total-all">&mdash;</div><div class="expense-summary-sub" id="count-all">Loading&hellip;</div></div>
   </div>
-  <div class="sankey-wrap" id="expense-chart">
-    <div class="sankey-header">
-      <div class="sankey-title">Expense Flow &mdash; Who paid &rarr; Category &rarr; City</div>
-      <div class="sankey-meta" id="sankey-meta">Loading&hellip;</div>
-    </div>
-    <div class="sankey-body" id="sankey-body"><div style="padding:2rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)">Building chart&hellip;</div></div>
-    <div class="sankey-legend" id="sankey-legend"></div>
-  </div>
+
+  <!-- Sankey trigger button -->
+  <button class="sankey-trigger" id="sankey-trigger-btn" onclick="openSankeyDrawer()">
+    <svg width="16" height="14" viewBox="0 0 16 14" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="0" y="1" width="3" height="12" rx="1" fill="white"/><rect x="6.5" y="3" width="3" height="8" rx="1" fill="white"/><rect x="13" y="0" width="3" height="5" rx="1" fill="#fec422"/><rect x="13" y="7" width="3" height="7" rx="1" fill="#4caf50"/></svg>
+    Expense Flow
+    <span class="sankey-trigger-meta" id="sankey-trigger-meta">Loading&hellip;</span>
+  </button>
+
   <div class="expense-form">
     <div class="expense-form-header">Add an Expense</div>
     <div class="expense-form-body">
@@ -466,6 +497,26 @@ const GUGGENHEIM_DOC='https://drive.google.com/file/d/1DTa0CizAqfNKsdZZDAFOIL7FC
 const AC_HOTEL_DOC='https://drive.google.com/file/d/1SlDGiM72qsVgGBwP36hMF3Wmy_Uq3sbl/view?usp=drive_link';
 const GP_ALBUM_URL='https://photos.app.goo.gl/7KJMVdykUsxSsS7t6';
 
+// ============================================================
+// SANKEY DRAWER
+// ============================================================
+let sankeyDrawerOpen=false;
+function openSankeyDrawer(){
+  sankeyDrawerOpen=true;
+  document.getElementById('sankey-backdrop').classList.add('open');
+  document.getElementById('sankey-drawer').classList.add('open');
+  document.body.style.overflow='hidden';
+  // Rebuild chart now that drawer is visible and has correct width
+  if(expenseData.length>0)setTimeout(()=>buildSankey(expenseData),50);
+}
+function closeSankeyDrawer(){
+  sankeyDrawerOpen=false;
+  document.getElementById('sankey-backdrop').classList.remove('open');
+  document.getElementById('sankey-drawer').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sankeyDrawerOpen)closeSankeyDrawer();});
+
 let parkingSpotCache=null;
 async function initParkingBtn(){const spot=await fetchParkingSpot();const btn=document.getElementById('fab-parking');const lbl=document.getElementById('parking-label');if(spot){parkingSpotCache=spot;btn.classList.add('has-spot');lbl.textContent='Find Car';}}
 async function fetchParkingSpot(){try{const res=await fetch(CHECKLIST_SCRIPT_URL+'?action=getParking',{cache:'no-cache'});if(!res.ok)return null;const text=await res.text();const data=JSON.parse(text);if(data&&data.lat&&data.lng)return data;return null;}catch(e){return null;}}
@@ -513,142 +564,22 @@ const WCACHE={};
 async function fetchWeather(loc,date){const key=loc+':'+date;if(WCACHE[key])return WCACHE[key];const coords=CITY_COORDS[loc];if(!coords)return null;try{const r=await fetch('https://api.open-meteo.com/v1/forecast?latitude='+coords.lat+'&longitude='+coords.lon+'&daily=temperature_2m_max,temperature_2m_min,weathercode&temperature_unit=fahrenheit&timezone='+coords.tz+'&start_date='+date+'&end_date='+date);const d=await r.json();if(!d.daily||!d.daily.temperature_2m_max[0])return null;const res={hi:Math.round(d.daily.temperature_2m_max[0]),lo:Math.round(d.daily.temperature_2m_min[0]),code:d.daily.weathercode[0]};WCACHE[key]=res;return res;}catch{return null;}}
 function wIcon(c){if(c===0)return'&#9728;';if(c<=3)return'&#9925;';if(c<=67)return'&#127783;';if(c<=77)return'&#10052;';return'&#9928;';}
 
-// ============================================================
-// CHECKLIST — accordion grouped by section (isParent rows)
-// Skips corrupted rows where item text is literally TRUE/FALSE
-// ============================================================
 const CORRUPTED_VALUES=new Set(['true','false','TRUE','FALSE']);
-
-async function loadChecklist(){
-  const todoEl=document.getElementById('todo-list'),doneEl=document.getElementById('done-list');
-  const todoCount=document.getElementById('todo-count'),doneCount=document.getElementById('done-count'),statusEl=document.getElementById('checklist-status');
-  try{
-    const res=await fetch(SHEET_PUB_BASE+CHECKLIST_GID,{cache:'no-cache'});
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    const text=await res.text();
-    const rows=parseCSV(text);
-    if(rows.length<2)throw new Error('No data');
-    const header=rows[0].map(h=>h.toLowerCase().trim());
-    const iItem=header.indexOf('item'),iDone=header.indexOf('done'),iParent=header.indexOf('isparent');
-
-    // Parse all valid rows
-    const allRows=[];
-    rows.slice(1).forEach((row,idx)=>{
-      const sheetRow=idx+2;
-      const rawItem=row[iItem]||'';
-      const item=rawItem.trim();
-      const done=(row[iDone]||'').toUpperCase()==='TRUE';
-      const isParent=(row[iParent]||'').toUpperCase()==='TRUE';
-      // Skip rows where item text is a raw boolean (corrupted by Apps Script bug)
-      if(!item||CORRUPTED_VALUES.has(item))return;
-      allRows.push({sheetRow,item,done,isParent});
-    });
-
-    const checkSvg='<svg class="cl-check-svg" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>';
-
-    // --- BUILD TODO (left panel, accordion by section) ---
-    // Group into sections
-    const sections=[];
-    let currentSection=null;
-    allRows.forEach(r=>{
-      if(r.isParent){
-        currentSection={title:r.item,items:[]};
-        sections.push(currentSection);
-      } else if(!r.done){
-        if(!currentSection){currentSection={title:'General',items:[]};sections.push(currentSection);}
-        currentSection.items.push(r);
-      }
-    });
-
-    let todoN=0;
-    const todoFrags=sections.map(sec=>{
-      const pendingItems=sec.items.filter(r=>!r.done);
-      todoN+=pendingItems.length;
-      if(pendingItems.length===0)return''; // hide empty sections
-      const bodyId='cl-sec-'+sec.title.replace(/\s+/g,'-').toLowerCase();
-      const itemsHtml=pendingItems.map(r=>`
-        <div class="cl-item" data-row="${r.sheetRow}" data-done="false" onclick="toggleItem(${r.sheetRow},false)">
-          <div class="cl-box">${checkSvg}</div>
-          <span class="cl-label">${escapeHtml(r.item)}</span>
-        </div>`).join('');
-      return`<div>
-        <div class="cl-section-head open" onclick="toggleSection(this,'${bodyId}')">
-          <span class="cl-section-title">${escapeHtml(sec.title)}</span>
-          <span class="cl-section-meta">
-            <span class="cl-section-count">${pendingItems.length}</span>
-            <span class="cl-section-chevron">&#9654;</span>
-          </span>
-        </div>
-        <div class="cl-section-body" id="${bodyId}" style="max-height:2000px">${itemsHtml}</div>
-      </div>`;
-    }).join('');
-
-    todoEl.innerHTML=todoFrags||'<div class="checklist-error">All done! &#127881;</div>';
-
-    // --- BUILD DONE (right panel, flat list) ---
-    const doneRows=allRows.filter(r=>r.done&&!r.isParent);
-    const doneHtml=doneRows.map(r=>`
-      <div class="cl-done-item" data-row="${r.sheetRow}" data-done="true" onclick="toggleItem(${r.sheetRow},true)">
-        <div class="cl-box">${checkSvg}</div>
-        <span class="cl-label">${escapeHtml(r.item)}</span>
-      </div>`).join('');
-    doneEl.innerHTML=doneHtml||'<div class="checklist-error" style="padding:1.5rem">Nothing completed yet.</div>';
-
-    todoCount.textContent=todoN+' remaining';
-    doneCount.textContent=doneRows.length+' item'+(doneRows.length!==1?'s':'');
-    statusEl.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  }catch(e){
-    todoEl.innerHTML='<div class="checklist-error">Could not load checklist.</div>';
-    todoCount.textContent='Error';
-  }
-}
-
+async function loadChecklist(){const todoEl=document.getElementById('todo-list'),doneEl=document.getElementById('done-list');const todoCount=document.getElementById('todo-count'),doneCount=document.getElementById('done-count'),statusEl=document.getElementById('checklist-status');try{const res=await fetch(SHEET_PUB_BASE+CHECKLIST_GID,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');const header=rows[0].map(h=>h.toLowerCase().trim());const iItem=header.indexOf('item'),iDone=header.indexOf('done'),iParent=header.indexOf('isparent');const allRows=[];rows.slice(1).forEach((row,idx)=>{const sheetRow=idx+2,rawItem=row[iItem]||'',item=rawItem.trim(),done=(row[iDone]||'').toUpperCase()==='TRUE',isParent=(row[iParent]||'').toUpperCase()==='TRUE';if(!item||CORRUPTED_VALUES.has(item))return;allRows.push({sheetRow,item,done,isParent});});const checkSvg='<svg class="cl-check-svg" viewBox="0 0 10 10" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5,5 4,7.5 8.5,2.5"/></svg>';const clSections=[];let currentSection=null;allRows.forEach(r=>{if(r.isParent){currentSection={title:r.item,items:[]};clSections.push(currentSection);}else if(!r.done){if(!currentSection){currentSection={title:'General',items:[]};clSections.push(currentSection);}currentSection.items.push(r);}});let todoN=0;const todoFrags=clSections.map(sec=>{const pendingItems=sec.items.filter(r=>!r.done);todoN+=pendingItems.length;if(pendingItems.length===0)return'';const bodyId='cl-sec-'+sec.title.replace(/\s+/g,'-').toLowerCase();const itemsHtml=pendingItems.map(r=>`<div class="cl-item" data-row="${r.sheetRow}" data-done="false" onclick="toggleItem(${r.sheetRow},false)"><div class="cl-box">${checkSvg}</div><span class="cl-label">${escapeHtml(r.item)}</span></div>`).join('');return`<div><div class="cl-section-head open" onclick="toggleSection(this,'${bodyId}')"><span class="cl-section-title">${escapeHtml(sec.title)}</span><span class="cl-section-meta"><span class="cl-section-count">${pendingItems.length}</span><span class="cl-section-chevron">&#9654;</span></span></div><div class="cl-section-body" id="${bodyId}" style="max-height:2000px">${itemsHtml}</div></div>`;}).join('');todoEl.innerHTML=todoFrags||'<div class="checklist-error">All done! &#127881;</div>';const doneRows=allRows.filter(r=>r.done&&!r.isParent);const doneHtml=doneRows.map(r=>`<div class="cl-done-item" data-row="${r.sheetRow}" data-done="true" onclick="toggleItem(${r.sheetRow},true)"><div class="cl-box">${checkSvg}</div><span class="cl-label">${escapeHtml(r.item)}</span></div>`).join('');doneEl.innerHTML=doneHtml||'<div class="checklist-error" style="padding:1.5rem">Nothing completed yet.</div>';todoCount.textContent=todoN+' remaining';doneCount.textContent=doneRows.length+' item'+(doneRows.length!==1?'s':'');statusEl.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}catch(e){todoEl.innerHTML='<div class="checklist-error">Could not load checklist.</div>';todoCount.textContent='Error';}}
 function escapeHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toggleSection(headEl,bodyId){const body=document.getElementById(bodyId);if(!body)return;const isOpen=headEl.classList.contains('open');if(isOpen){body.style.maxHeight='0';headEl.classList.remove('open');}else{body.style.maxHeight='2000px';headEl.classList.add('open');}}
+async function toggleItem(sheetRow,currentDone){const el=document.querySelector('[data-row="'+sheetRow+'"]');if(!el)return;el.classList.add('saving');try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({row:sheetRow,done:!currentDone}),mode:'no-cors'});setTimeout(loadChecklist,900);}catch(e){el.classList.remove('saving');}}
+async function addChecklistItem(){const sectionEl=document.getElementById('cl-section'),inputEl=document.getElementById('cl-new-item'),btn=document.getElementById('cl-add-btn');const item=inputEl.value.trim(),section=sectionEl.value;if(!item)return;btn.disabled=true;btn.textContent='Adding\u2026';try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'add',section:section,item:item,done:'FALSE',isParent:'FALSE'}),mode:'no-cors'});inputEl.value='';setTimeout(loadChecklist,1000);}catch(e){}finally{btn.disabled=false;btn.textContent='Add';}}
 
-function toggleSection(headEl,bodyId){
-  const body=document.getElementById(bodyId);
-  if(!body)return;
-  const isOpen=headEl.classList.contains('open');
-  if(isOpen){body.style.maxHeight='0';headEl.classList.remove('open');}
-  else{body.style.maxHeight='2000px';headEl.classList.add('open');}
-}
-
-async function toggleItem(sheetRow,currentDone){
-  // Find the clicked element by data-row
-  const el=document.querySelector('[data-row="'+sheetRow+'"]');
-  if(!el)return;
-  el.classList.add('saving');
-  try{
-    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({row:sheetRow,done:!currentDone}),mode:'no-cors'});
-    setTimeout(loadChecklist,900);
-  }catch(e){el.classList.remove('saving');}
-}
-
-async function addChecklistItem(){
-  const sectionEl=document.getElementById('cl-section'),inputEl=document.getElementById('cl-new-item'),btn=document.getElementById('cl-add-btn');
-  const item=inputEl.value.trim(),section=sectionEl.value;
-  if(!item)return;
-  btn.disabled=true;btn.textContent='Adding\u2026';
-  try{
-    await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'add',section:section,item:item,done:'FALSE',isParent:'FALSE'}),mode:'no-cors'});
-    inputEl.value='';
-    setTimeout(loadChecklist,1000);
-  }catch(e){}finally{btn.disabled=false;btn.textContent='Add';}
-}
-
-const FALLBACK=[{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[{time:'2:10pm',text:'<strong>BOI \u2192 ATL</strong> \u2014 DL 874 \u2014 arr 8:28pm'+docLink(FLIGHTS_DOC,'flights'),tag:'confirmed'},{time:'Evening',text:'ATL layover \u2014 The Club at Concourse F (Priority Pass)'},{time:'10:05pm',text:'<strong>ATL \u2192 BCN</strong> \u2014 VS 3926, overnight',tag:'confirmed'}]},{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[{time:'12:50pm',text:'<strong>Arrive Barcelona BCN</strong> \u2014 Terminal 1'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},{time:'',text:'Aerob\u00fas A1 from T1 \u2192 Pla\u00e7a Catalunya (~35 min, \u20ac7)'},{time:'',text:'Check in: Central Apartments \u2014 Res. 562/2026'+addr('Carrer de Bail\u00e8n, 125, Barcelona',mapsSearch('Carrer de Bailen 125 Barcelona Eixample'))+docLink(AIRBNB_DOC,'reservation'),tag:'confirmed'},{time:'Afternoon',text:'Recovery day \u2014 slow explore of Eixample'},{time:'Evening',text:'Dinner at a local spot'}]},{date:'2026-04-22',title:'Park G\u00fcell + Picasso',loc:'Barcelona',activities:[{time:'10:30am',text:'<strong>Park G\u00fcell \u2014 Monumental Zone</strong> \u2014 Res. 8337300'+docLink(GUELL_TICKETS,'tickets')+addr('Park G\u00fcell, Barcelona',mapsSearch('Park Guell Barcelona Monumental Zone')),tag:'confirmed'},{time:'',text:'Valid until 11:00am. No re-entry. Bring photo ID.'},{time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15\u201323',mapsSearch('Museu Picasso Barcelona')),tag:'book'},{time:'',text:'El Born \u2014 Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous',mapsSearch('Carrer dels Banys Nous Barcelona antiques'))},{time:'Evening',text:'Dinner in El Born'}]},{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[{time:'9:30am',text:'<strong>Sagrada Fam\u00edlia with Passion Tower</strong> \u2014 Res. 95793090'+docLink(SF_TICKETS,'tickets')+addr('Sagrada Fam\u00edlia',mapsSearch('Sagrada Familia Barcelona')),tag:'confirmed'},{time:'9:45am',text:'Passion Tower \u2014 enter via C/ Marina. Locators: 285907110 (Rumana) / 285907111 (Mark)'},{time:'Afternoon',text:"Sant Jordi's Day \u2014 book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic',mapsSearch('Barri Gotic Barcelona'))},{time:'',text:'Mercat G\u00f2tic antiques + Carrer dels Banys Nous map dealers'+addr('Mercat G\u00f2tic, Pla\u00e7a Nova',mapsSearch('Mercat Gotic Barcelona Placa Nova'))},{time:'Evening',text:'Dinner in El Born \u2014 el SET recommended (book via TheFork)'}]},{date:'2026-04-24',title:'To Cambrils / Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Check out of Eixample Airbnb'},{time:'',text:'Stop: Antig\u00fcedades Argar \u2014 1856 Tarragona map \u2014 Carrer d\u2019Arag\u00f3 530 (open 9:30am\u20131:30pm)'+addr("Antig\u00fcedades Argar, Carrer d'Arag\u00f3 530",mapsSearch("Antiguedades Argar Carrer Arago 530 Barcelona"))},{time:'2:00pm',text:'Pick up rental car \u2014 National, Conf. 1797553757'+docLink(CAR_DOC,'reservation')+addr('Barcelona Estacion Ave, Parking SABA',mapsSearch('National Car Rental Barcelona Sants')),tag:'confirmed'},{time:'',text:'From inside Sants station, follow signs to underground parking level -1'},{time:'',text:'Drive to Cambrils (~1.5 hrs via AP-7)'},{time:'Afternoon',text:'Arrive \u2014 staying with Dan Mannion'+addr('Carrer del Cardinal Vidal I Barrequer 28, Cambrils',mapsSearch('Carrer del Cardinal Vidal I Barrequer 28 Cambrils Tarragona Spain'))}]},{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'<strong>Roman Amphitheatre</strong> \u2014 2nd-century arena overlooking the Mediterranean'+addr('Amfiteatre Rom\u00e0 de Tarragona',mapsSearch('Roman Amphitheatre Tarragona'))},{time:'',text:'<strong>Tarragona Cathedral</strong> (Catedral de Santa Tecla) \u2014 12th-century Romanesque-Gothic masterpiece'+addr('Catedral de Tarragona',mapsSearch('Catedral de Tarragona'))},{time:'1:30pm',text:"Lunch \u2014 Dan's recommendation (TBD \u2014 ask Dan in the morning)"},{time:'~3:45pm',text:'Depart for Montblanc (~40 min drive)'},{time:'4:30pm',text:'<strong>Setmana Medieval de Montblanc</strong> (Apr 17\u201326). Medieval market, jousting, troubadours, wine &amp; cava fair inside the walled town.'+addr('Montblanc medieval walled town',mapsSearch('Montblanc medieval walled town Tarragona'))}]},{date:'2026-04-26',title:'Poblet Sunrise + Drive to Bilbao',loc:'Bilbao',activities:[{time:'Pre-dawn',text:'<strong>Poblet Monastery</strong> \u2014 ~45 min from Cambrils. UNESCO World Heritage Cistercian abbey (founded 1150). Sunrise over the cloisters.'+addr('Monestir de Poblet',mapsSearch('Monastir de Poblet Tarragona Spain'))},{time:'Morning',text:'Depart Poblet \u2014 route: AP-7 north \u2192 A-8 coastal \u2192 Bilbao (~6\u20137 hrs)'},{time:'3:00pm',text:'Check in: Radisson Gran Via Bilbao \u2014 Conf. 0159730000'+docLink(RADISSON_DOC,'confirmation')+addr('Radisson Collection Hotel, Gran Via Bilbao',mapsSearch('Radisson Collection Hotel Gran Via Bilbao')),tag:'confirmed'},{time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo (Siete Calles)',mapsSearch('Casco Viejo Siete Calles Bilbao'))}]},{date:'2026-04-27',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[{time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},{time:'',text:'La Concha beach'+addr('La Concha, San Sebasti\u00e1n',mapsSearch('Playa de La Concha San Sebastian'))},{time:'Midday',text:'Pintxos crawl in Parte Vieja \u2014 Bar Txepetxa (anchovies), La Cuchara de San Telmo, Borda Berri'+addr('Parte Vieja, San Sebasti\u00e1n',mapsSearch('Parte Vieja San Sebastian'))},{time:'Afternoon',text:'Monte Urgull walk or Monte Igueldo funicular for panoramic views'+addr('Monte Igueldo funicular',mapsSearch('Monte Igueldo funicular San Sebastian'))},{time:'Evening',text:'Drive back to Bilbao'}]},{date:'2026-04-28',title:'Guggenheim + Rioja Alavesa Wineries',loc:'Bilbao',activities:[{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> \u2014 Res. 95961308'+docLink(GUGGENHEIM_DOC,'tickets')+addr('Guggenheim Bilbao',mapsSearch('Guggenheim Museum Bilbao')),tag:'confirmed'},{time:'',text:'Check Carne y Arena VR installation (I\u00f1\u00e1rritu, through June 20)'},{time:'Afternoon',text:'<strong>Rioja Alavesa wineries</strong> \u2014 ~1 hr south. Marqu\u00e9s de Riscal (Elciego) is the anchor \u2014 #1 Best Vineyard in the World 2024, Frank Gehry building. Book: marquesderiscal.com'+addr('Marqu\u00e9s de Riscal, Elciego',mapsSearch('Marques de Riscal Elciego Rioja Alavesa'))},{time:'Winery 2',text:'<strong>Ysios</strong> \u2014 Laguardia, 8 min \u2014 Santiago Calatrava wave-form building. ~\u20ac10/person. ysios.com'},{time:'Winery 3',text:'<strong>Bodegas Baigorri</strong> \u2014 Samaniego, 10 min \u2014 Gravity-fed hillside winery, panoramic views. baigorri.com'},{time:'Winery 4',text:'<strong>Bodegas Murua</strong> \u2014 Elciego, walking distance from Riscal \u2014 17th-c manor house, vineyard walks, art collection.'},{time:'Winery 5',text:'<strong>Remelluri</strong> \u2014 Labastida, 20 min \u2014 Elevated estate, celebrated single-estate Tempranillo. remelluri.com'},{time:'Winery 6',text:'<strong>Vi\u00f1edos del Contino</strong> \u2014 Near Laguardia, 15 min \u2014 Pioneer single-estate Rioja, Gran Reservas worth seeking.'},{time:'Village',text:'Laguardia medieval walled village \u2014 underground wine caves, 360\u00b0 views, pintxos before drive back'},{time:'Evening',text:'Return to Bilbao \u2014 farewell pintxos in Casco Viejo'}]},
+const FALLBACK=[{date:'2026-04-20',title:'Departure Day',loc:'Boise, Idaho',activities:[{time:'2:10pm',text:'<strong>BOI \u2192 ATL</strong> \u2014 DL 874 \u2014 arr 8:28pm'+docLink(FLIGHTS_DOC,'flights'),tag:'confirmed'},{time:'Evening',text:'ATL layover \u2014 The Club at Concourse F (Priority Pass)'},{time:'10:05pm',text:'<strong>ATL \u2192 BCN</strong> \u2014 VS 3926, overnight',tag:'confirmed'}]},{date:'2026-04-21',title:'Arrival in Barcelona',loc:'Barcelona, Eixample',activities:[{time:'12:50pm',text:'<strong>Arrive Barcelona BCN</strong> \u2014 Terminal 1'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},{time:'',text:'Aerob\u00fas A1 from T1 \u2192 Pla\u00e7a Catalunya (~35 min, \u20ac7)'},{time:'',text:'Check in: Central Apartments \u2014 Res. 562/2026'+addr('Carrer de Bail\u00e8n, 125, Barcelona',mapsSearch('Carrer de Bailen 125 Barcelona Eixample'))+docLink(AIRBNB_DOC,'reservation'),tag:'confirmed'},{time:'Afternoon',text:'Recovery day \u2014 slow explore of Eixample'},{time:'Evening',text:'Dinner at a local spot'}]},{date:'2026-04-22',title:'Park G\u00fcell + Picasso',loc:'Barcelona',activities:[{time:'10:30am',text:'<strong>Park G\u00fcell \u2014 Monumental Zone</strong> \u2014 Res. 8337300'+docLink(GUELL_TICKETS,'tickets')+addr('Park G\u00fcell, Barcelona',mapsSearch('Park Guell Barcelona Monumental Zone')),tag:'confirmed'},{time:'',text:'Valid until 11:00am. No re-entry. Bring photo ID.'},{time:'Afternoon',text:'<strong>Museu Picasso</strong>'+addr('Carrer de Montcada, 15\u201323',mapsSearch('Museu Picasso Barcelona')),tag:'book'},{time:'',text:'El Born \u2014 Carrer dels Banys Nous antiques'+addr('Carrer dels Banys Nous',mapsSearch('Carrer dels Banys Nous Barcelona antiques'))},{time:'Evening',text:'Dinner in El Born'}]},{date:'2026-04-23',title:"Sant Jordi's Day",loc:'Barcelona',activities:[{time:'9:30am',text:'<strong>Sagrada Fam\u00edlia with Passion Tower</strong> \u2014 Res. 95793090'+docLink(SF_TICKETS,'tickets')+addr('Sagrada Fam\u00edlia',mapsSearch('Sagrada Familia Barcelona')),tag:'confirmed'},{time:'9:45am',text:'Passion Tower \u2014 enter via C/ Marina. Locators: 285907110 (Rumana) / 285907111 (Mark)'},{time:'Afternoon',text:"Sant Jordi's Day \u2014 book/rose markets, Gothic Quarter"+addr('Barri G\u00f2tic',mapsSearch('Barri Gotic Barcelona'))},{time:'',text:'Mercat G\u00f2tic antiques + Carrer dels Banys Nous map dealers'+addr('Mercat G\u00f2tic, Pla\u00e7a Nova',mapsSearch('Mercat Gotic Barcelona Placa Nova'))},{time:'Evening',text:'Dinner in El Born \u2014 el SET recommended (book via TheFork)'}]},{date:'2026-04-24',title:'To Cambrils / Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'Check out of Eixample Airbnb'},{time:'',text:'Stop: Antig\u00fcedades Argar \u2014 1856 Tarragona map \u2014 Carrer d\u2019Arag\u00f3 530 (open 9:30am\u20131:30pm)'+addr("Antig\u00fcedades Argar, Carrer d'Arag\u00f3 530",mapsSearch("Antiguedades Argar Carrer Arago 530 Barcelona"))},{time:'2:00pm',text:'Pick up rental car \u2014 National, Conf. 1797553757'+docLink(CAR_DOC,'reservation')+addr('Barcelona Estacion Ave, Parking SABA',mapsSearch('National Car Rental Barcelona Sants')),tag:'confirmed'},{time:'',text:'From inside Sants station, follow signs to underground parking level -1'},{time:'',text:'Drive to Cambrils (~1.5 hrs via AP-7)'},{time:'Afternoon',text:'Arrive \u2014 staying with Dan Mannion'+addr('Carrer del Cardinal Vidal I Barrequer 28, Cambrils',mapsSearch('Carrer del Cardinal Vidal I Barrequer 28 Cambrils Tarragona Spain'))}]},{date:'2026-04-25',title:'Tarragona',loc:'Tarragona',activities:[{time:'Morning',text:'<strong>Roman Amphitheatre</strong> \u2014 2nd-century arena overlooking the Mediterranean'+addr('Amfiteatre Rom\u00e0 de Tarragona',mapsSearch('Roman Amphitheatre Tarragona'))},{time:'',text:'<strong>Tarragona Cathedral</strong> (Catedral de Santa Tecla)'+addr('Catedral de Tarragona',mapsSearch('Catedral de Tarragona'))},{time:'1:30pm',text:"Lunch \u2014 Dan's recommendation"},{time:'~3:45pm',text:'Depart for Montblanc (~40 min drive)'},{time:'4:30pm',text:'<strong>Setmana Medieval de Montblanc</strong>'+addr('Montblanc medieval walled town',mapsSearch('Montblanc medieval walled town Tarragona'))}]},{date:'2026-04-26',title:'Poblet Sunrise + Drive to Bilbao',loc:'Bilbao',activities:[{time:'Pre-dawn',text:'<strong>Poblet Monastery</strong> \u2014 UNESCO World Heritage Cistercian abbey (founded 1150).'+addr('Monestir de Poblet',mapsSearch('Monastir de Poblet Tarragona Spain'))},{time:'Morning',text:'Depart Poblet \u2014 route: AP-7 north \u2192 A-8 coastal \u2192 Bilbao (~6\u20137 hrs)'},{time:'3:00pm',text:'Check in: Radisson Gran Via Bilbao \u2014 Conf. 0159730000'+docLink(RADISSON_DOC,'confirmation')+addr('Radisson Collection Hotel, Gran Via Bilbao',mapsSearch('Radisson Collection Hotel Gran Via Bilbao')),tag:'confirmed'},{time:'Evening',text:'Pintxos crawl in Casco Viejo'+addr('Casco Viejo (Siete Calles)',mapsSearch('Casco Viejo Siete Calles Bilbao'))}]},{date:'2026-04-27',title:'San Sebasti\u00e1n',loc:'Bilbao',activities:[{time:'Morning',text:'Drive to San Sebasti\u00e1n (~1.5 hrs via A-8 coastal road)'},{time:'',text:'La Concha beach'+addr('La Concha, San Sebasti\u00e1n',mapsSearch('Playa de La Concha San Sebastian'))},{time:'Midday',text:'Pintxos crawl in Parte Vieja'+addr('Parte Vieja, San Sebasti\u00e1n',mapsSearch('Parte Vieja San Sebastian'))},{time:'Afternoon',text:'Monte Urgull walk or Monte Igueldo funicular'+addr('Monte Igueldo funicular',mapsSearch('Monte Igueldo funicular San Sebastian'))},{time:'Evening',text:'Drive back to Bilbao'}]},{date:'2026-04-28',title:'Guggenheim + Rioja Alavesa Wineries',loc:'Bilbao',activities:[{time:'Morning',text:'<strong>Guggenheim Bilbao</strong> \u2014 Res. 95961308'+docLink(GUGGENHEIM_DOC,'tickets')+addr('Guggenheim Bilbao',mapsSearch('Guggenheim Museum Bilbao')),tag:'confirmed'},{time:'Afternoon',text:'<strong>Rioja Alavesa wineries</strong> \u2014 Marqu\u00e9s de Riscal, Ysios, Bodegas Baigorri'+addr('Marqu\u00e9s de Riscal, Elciego',mapsSearch('Marques de Riscal Elciego Rioja Alavesa'))},{time:'Evening',text:'Return to Bilbao \u2014 farewell pintxos in Casco Viejo'}]},
 {date:'2026-04-29',title:'Guernica + Basque Art',loc:'Bilbao',activities:[
-  {time:'Morning',text:'<strong>Mark: drive to Guernica / Gernika</strong> (~40 min via BI-635). Work on Fine Line projects first, depart ~10am.'+addr('Gernika, Bizkaia',mapsSearch('Gernika Lumo Bizkaia Spain'))},
-  {time:'',text:'<strong>Gernika Peace Museum</strong> (Museo de la Paz) \u2014 Moving chronicle of the 1937 bombing and the broader story of peace. ~\u20ac5/person. Open Tue\u2013Sat 10am\u20132pm / 4\u20137pm.'+addr('Museo de la Paz, Gernika',mapsSearch('Museo de la Paz Gernika'))},
-  {time:'',text:'<strong>Gernika Tree</strong> (Arbol de Gernika) \u2014 Symbol of Basque democracy. Casa de Juntas parliament house next door, free entry.'+addr('Casa de Juntas, Gernika',mapsSearch('Casa de Juntas Gernika Basque Tree'))},
-  {time:'',text:'Gernika market stalls (Tues/Fri) \u2014 stop for a coffee and pintxos before the drive back'+addr('Mercado de Gernika',mapsSearch('Mercado Gernika'))},
-  {time:'Morning',text:'<strong>Rumana: relaxed morning</strong> in Bilbao \u2014 hotel breakfast, shopping at leisure along Gran V\u00eda and Casco Viejo boutiques.'+addr('Gran V\u00eda, Bilbao',mapsSearch('Gran Via Bilbao shopping'))},
-  {time:'Afternoon',text:'<strong>Together: Basque art cooperatives &amp; galleries</strong> \u2014 meet back in Bilbao ~1:30pm'},
-  {time:'',text:'<strong>Taller Elcano</strong> (Calle Elcano, Bilbao) \u2014 Long-running Bilbao artist cooperative.'+addr('Calle Elcano Bilbao artist cooperative',mapsSearch('Taller Elcano Bilbao'))},
-  {time:'',text:'<strong>Galeria Itsasoa</strong> \u2014 Basque contemporary gallery near Guggenheim.'+addr('Galeria Itsasoa Bilbao',mapsSearch('Galeria Itsasoa Bilbao'))},
+  {time:'Morning',text:'<strong>Mark: drive to Guernica / Gernika</strong>'+addr('Gernika, Bizkaia',mapsSearch('Gernika Lumo Bizkaia Spain'))},
+  {time:'',text:'<strong>Gernika Peace Museum</strong>'+addr('Museo de la Paz, Gernika',mapsSearch('Museo de la Paz Gernika'))},
+  {time:'Morning',text:'<strong>Rumana: relaxed morning</strong> in Bilbao \u2014 hotel breakfast, Gran V\u00eda shopping.'+addr('Gran V\u00eda, Bilbao',mapsSearch('Gran Via Bilbao shopping'))},
+  {time:'Afternoon',text:'<strong>Together: Basque art cooperatives &amp; galleries</strong>'},
   {time:'Evening',text:'Farewell pintxos in Casco Viejo'+addr('Casco Viejo, Bilbao',mapsSearch('Casco Viejo Bilbao'))}
 ]},
-{date:'2026-04-30',title:'Return to Barcelona via Toulouse',loc:'Barcelona',activities:[{time:'Morning',text:'Depart Bilbao \u2014 A-8 east \u2192 Toulouse \u2192 AP-7 south (~7\u20138 hrs)'},{time:'',text:'Return rental car at Barcelona Sants (May 1 noon deadline)',tag:'confirmed'},{time:'3:00pm',text:'Check in: AC Hotel Barcelona Sants \u2014 Conf. #92299097'+docLink(AC_HOTEL_DOC,'confirmation')+addr('Passeig de Sant Antoni, 36-40, Barcelona',mapsRoute('Bilbao Spain','Toulouse France','AC Hotel Barcelona Sants')),tag:'confirmed'},{time:'Evening',text:'Last evening in Barcelona \u2014 farewell dinner'}]},{date:'2026-05-01',title:'Home',loc:'Home',activities:[{time:'6:30am',text:'R2 Nord train: Sants \u2192 Terminal 1 (~19 min)'+addr('Barcelona Sants Station',mapsSearch('Barcelona Sants Railway Station'))},{time:'11:00am',text:'<strong>Depart BCN</strong> \u2014 VS 3937'+addr('Terminal 1, El Prat Airport',mapsSearch('Terminal 1 Aeroport Barcelona El Prat')),tag:'confirmed'},{time:'3:04pm',text:'<strong>Arrive ATL</strong> \u2014 The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'7:57pm',text:'<strong>Depart ATL</strong> \u2014 DL 704, Terminal S',tag:'confirmed'},{time:'10:28pm',text:'<strong>Arrive Boise BOI</strong>',tag:'confirmed'}]}];
+{date:'2026-04-30',title:'Return to Barcelona via Toulouse',loc:'Barcelona',activities:[{time:'Morning',text:'Depart Bilbao \u2014 A-8 east \u2192 Toulouse \u2192 AP-7 south (~7\u20138 hrs)'},{time:'',text:'Return rental car at Barcelona Sants',tag:'confirmed'},{time:'3:00pm',text:'Check in: AC Hotel Barcelona Sants \u2014 Conf. #92299097'+docLink(AC_HOTEL_DOC,'confirmation')+addr('Passeig de Sant Antoni, 36-40, Barcelona',mapsRoute('Bilbao Spain','Toulouse France','AC Hotel Barcelona Sants')),tag:'confirmed'},{time:'Evening',text:'Last evening in Barcelona \u2014 farewell dinner'}]},{date:'2026-05-01',title:'Home',loc:'Home',activities:[{time:'6:30am',text:'R2 Nord train: Sants \u2192 Terminal 1 (~19 min)'+addr('Barcelona Sants Station',mapsSearch('Barcelona Sants Railway Station'))},{time:'11:00am',text:'<strong>Depart BCN</strong> \u2014 VS 3937',tag:'confirmed'},{time:'3:04pm',text:'<strong>Arrive ATL</strong> \u2014 The Club at Concourse F (Priority Pass)',tag:'confirmed'},{time:'7:57pm',text:'<strong>Depart ATL</strong> \u2014 DL 704, Terminal S',tag:'confirmed'},{time:'10:28pm',text:'<strong>Arrive Boise BOI</strong>',tag:'confirmed'}]}];
 
 function renderItinerary(days){const c=document.getElementById('itinerary-container');c.innerHTML='';days.forEach(day=>{const block=document.createElement('div');block.className='day-block';block.id='day-'+day.date;const d=new Date(day.date+'T12:00:00');block.innerHTML='<div class="day-header"><div class="day-num-col"><div class="day-num">'+d.getDate()+'</div><div class="day-abbr">'+d.toLocaleDateString('en-US',{weekday:'short'}).toUpperCase()+'</div></div><div class="day-title-col"><div class="day-label">'+d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})+'</div><div class="day-title-text">'+day.title+'</div><div class="day-location">&#127759; '+day.loc+'</div></div><div class="day-weather-col" id="weather-'+day.date+'"><div class="weather-loading">Loading&hellip;</div></div></div><div class="day-body">'+day.activities.map(a=>'<div class="activity-row"><div class="activity-time">'+(a.time||'')+'</div><div class="activity-text">'+a.text+'</div>'+(a.tag==='confirmed'?'<span class="activity-tag tag-confirmed">Confirmed</span>':'')+(a.tag==='book'?'<span class="activity-tag tag-book">Book Now</span>':'')+'</div>').join('')+'</div>';c.appendChild(block);const wloc=day.loc.split(',')[0].trim();fetchWeather(wloc,day.date).then(w=>{const el=document.getElementById('weather-'+day.date);if(!el)return;if(w)el.innerHTML='<div class="weather-icon">'+wIcon(w.code)+'</div><div class="weather-temps">'+w.hi+'&deg; / '+w.lo+'&deg;F</div>';else el.innerHTML='';});});}
 async function loadFromSheet(){try{const res=await fetch(SHEET_CSV_URL,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);if(rows.length<2)throw new Error('No data');const header=rows[0].map(h=>h.toLowerCase().replace(/\s+/g,''));const idx={date:header.indexOf('date'),title:header.indexOf('title'),loc:header.indexOf('location'),time:header.indexOf('time'),act:header.indexOf('activity'),tag:header.indexOf('tag')};const days=[];rows.slice(1).forEach(row=>{const date=row[idx.date]||'',title=row[idx.title]||'',loc=row[idx.loc]||'',time=row[idx.time]||'',actText=row[idx.act]||'',tag=row[idx.tag]||'';if(!date||!actText)return;let ex=days.find(d=>d.date===date);if(!ex){ex={date,title,loc,activities:[]};days.push(ex);}ex.activities.push({time,text:actText,tag:tag.toLowerCase()});});if(days.length>0){renderItinerary(days);document.getElementById('footer-updated').textContent='Live \u2014 Google Sheets \u2014 '+new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});}else throw new Error('No rows');}catch(e){renderItinerary(FALLBACK);}}
@@ -665,21 +596,93 @@ function handleEdit(sheetRow,r,tr){document.querySelectorAll('.exp-edit-row').fo
 function handleCancel(sheetRow){document.querySelector('[data-edit-for="'+sheetRow+'"]')?.remove();const orig=document.querySelector('[data-row-id="'+sheetRow+'"]');if(orig){orig.style.display='';orig.removeAttribute('data-editing');}}
 async function handleSave(sheetRow){const descEl=document.getElementById('eed-desc'),amtEl=document.getElementById('eed-amt'),curEl=document.getElementById('eed-cur'),whoEl=document.getElementById('eed-who'),notesEl=document.getElementById('eed-notes'),saveBtn=document.querySelector('.exp-save-btn[data-row="'+sheetRow+'"]');const desc=descEl?.value.trim(),amount=parseFloat(amtEl?.value);if(!desc||isNaN(amount)||amount<=0){descEl?.focus();return;}if(saveBtn){saveBtn.disabled=true;saveBtn.textContent='Saving\u2026';}try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'editExpense',row:sheetRow,desc,amount,currency:curEl?.value||'EUR',who:whoEl?.value||'Mark',notes:notesEl?.value.trim()||''}),mode:'no-cors'});EXPENSES_GID_FOUND=null;handleCancel(sheetRow);setTimeout(loadExpenses,1500);}catch(e){if(saveBtn){saveBtn.disabled=false;saveBtn.textContent='Save';}}}
 
-async function loadExpenses(){const empty=document.getElementById('expense-empty'),tbody=document.getElementById('expense-tbody'),table=document.getElementById('expense-table'),status=document.getElementById('expense-sync-status');try{const gid=await findExpensesGID();if(!gid){empty.textContent='Expenses tab not yet published.';empty.style.display='';table.style.display='none';updateTotals([]);status.textContent='Ready to record';return;}const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);const header=rows[0]?rows[0].map(h=>h.toLowerCase().trim()):[];const notesIdx=header.indexOf('notes');expenseData=rows.slice(1).filter(r=>r[1]&&r[3]).map(r=>{const out=[...r];out[5]=notesIdx>=0?(r[notesIdx]||''):'';return out;});if(expenseData.length===0){empty.textContent='No expenses yet \u2014 add your first above.';empty.style.display='';table.style.display='none';updateTotals([]);return;}empty.style.display='none';table.style.display='';tbody.innerHTML='';expenseData.forEach((r,i)=>{const sheetRow=i+2,currency=r[4]||'EUR',sym=currency==='USD'?'$':'\u20ac',notes=r[5]||'',badgeClass=r[2]==='Mark'?'badge-mark':r[2]==='Rumana'?'badge-rumana':'badge-shared';const tr=document.createElement('tr');tr.dataset.rowId=sheetRow;tr.dataset.expIdx=i;const numTd=document.createElement('td');numTd.style.cssText='font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem';numTd.textContent=i+1;const dateTd=document.createElement('td');dateTd.style.cssText='font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey)';dateTd.textContent=r[0];const descTd=document.createElement('td');descTd.textContent=r[1];const whoTd=document.createElement('td');whoTd.innerHTML='<span class="expense-who-badge '+badgeClass+'">'+r[2]+'</span>';const amtTd=document.createElement('td');amtTd.className='expense-amount-cell';amtTd.textContent=sym+parseFloat(r[3]).toFixed(2);const noteTd=document.createElement('td');noteTd.className='expense-note-cell';noteTd.textContent=notes;const actTd=document.createElement('td');actTd.innerHTML='<div class="exp-action-cell"><button class="exp-edit-btn" title="Edit">&#9998;</button><button class="exp-del-btn" title="Delete">&#10005;</button></div>';[numTd,dateTd,descTd,whoTd,amtTd,noteTd,actTd].forEach(td=>tr.appendChild(td));tbody.appendChild(tr);});updateTotals(expenseData);status.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});buildSankey(expenseData);}catch(e){empty.textContent='Could not load expenses.';empty.style.display='';table.style.display='none';status.textContent='Error';}}
+async function loadExpenses(){const empty=document.getElementById('expense-empty'),tbody=document.getElementById('expense-tbody'),table=document.getElementById('expense-table'),status=document.getElementById('expense-sync-status');try{const gid=await findExpensesGID();if(!gid){empty.textContent='Expenses tab not yet published.';empty.style.display='';table.style.display='none';updateTotals([]);status.textContent='Ready to record';return;}const res=await fetch(SHEET_PUB_BASE+gid,{cache:'no-cache'});if(!res.ok)throw new Error('HTTP '+res.status);const text=await res.text();const rows=parseCSV(text);const header=rows[0]?rows[0].map(h=>h.toLowerCase().trim()):[];const notesIdx=header.indexOf('notes');expenseData=rows.slice(1).filter(r=>r[1]&&r[3]).map(r=>{const out=[...r];out[5]=notesIdx>=0?(r[notesIdx]||''):'';return out;});if(expenseData.length===0){empty.textContent='No expenses yet \u2014 add your first above.';empty.style.display='';table.style.display='none';updateTotals([]);return;}empty.style.display='none';table.style.display='';tbody.innerHTML='';expenseData.forEach((r,i)=>{const sheetRow=i+2,currency=r[4]||'EUR',sym=currency==='USD'?'$':'\u20ac',notes=r[5]||'',badgeClass=r[2]==='Mark'?'badge-mark':r[2]==='Rumana'?'badge-rumana':'badge-shared';const tr=document.createElement('tr');tr.dataset.rowId=sheetRow;tr.dataset.expIdx=i;const numTd=document.createElement('td');numTd.style.cssText='font-family:var(--mono);color:var(--warm-grey);font-size:0.7rem';numTd.textContent=i+1;const dateTd=document.createElement('td');dateTd.style.cssText='font-family:var(--mono);font-size:0.72rem;color:var(--warm-grey)';dateTd.textContent=r[0];const descTd=document.createElement('td');descTd.textContent=r[1];const whoTd=document.createElement('td');whoTd.innerHTML='<span class="expense-who-badge '+badgeClass+'">'+r[2]+'</span>';const amtTd=document.createElement('td');amtTd.className='expense-amount-cell';amtTd.textContent=sym+parseFloat(r[3]).toFixed(2);const noteTd=document.createElement('td');noteTd.className='expense-note-cell';noteTd.textContent=notes;const actTd=document.createElement('td');actTd.innerHTML='<div class="exp-action-cell"><button class="exp-edit-btn" title="Edit">&#9998;</button><button class="exp-del-btn" title="Delete">&#10005;</button></div>';[numTd,dateTd,descTd,whoTd,amtTd,noteTd,actTd].forEach(td=>tr.appendChild(td));tbody.appendChild(tr);});updateTotals(expenseData);status.textContent='Synced \u2014 '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});// Update trigger button meta
+const total=expenseData.reduce((s,r)=>s+toUSD(parseFloat(r[3])||0,r[4]||'EUR'),0);const trigMeta=document.getElementById('sankey-trigger-meta');if(trigMeta)trigMeta.textContent=expenseData.length+' txn \u00b7 $'+Math.round(total).toLocaleString();}catch(e){empty.textContent='Could not load expenses.';empty.style.display='';table.style.display='none';status.textContent='Error';}}
 
 function updateTotals(data){let markUSD=0,rumanaUSD=0,allUSD=0,markCount=0,rumanaCount=0;data.forEach(r=>{const amt=parseFloat(r[3])||0,currency=r[4]||'EUR',usd=toUSD(amt,currency);allUSD+=usd;if(r[2]==='Mark'){markUSD+=usd;markCount++;}else if(r[2]==='Rumana'){rumanaUSD+=usd;rumanaCount++;}else{markUSD+=usd/2;rumanaUSD+=usd/2;markCount++;rumanaCount++;}});const fmt=v=>'$'+v.toFixed(2);document.getElementById('total-mark').textContent=data.length?fmt(markUSD):'\u2014';document.getElementById('total-rumana').textContent=data.length?fmt(rumanaUSD):'\u2014';document.getElementById('total-all').textContent=data.length?fmt(allUSD):'\u2014';document.getElementById('count-mark').textContent=markCount+' expense'+(markCount!==1?'s':'');document.getElementById('count-rumana').textContent=rumanaCount+' expense'+(rumanaCount!==1?'s':'');document.getElementById('count-all').textContent=data.length+' entr'+(data.length!==1?'ies':'y')+' \u00b7 '+FX_RATE_LABEL;}
 
 // ============================================================
-// SANKEY CHART
+// SANKEY CHART — renders into the flyout drawer
 // ============================================================
 const SANKEY_CAT_COLORS={'Dining':'#3266ad','Accommodation':'#1D9E75','Transport':'#BA7517','Tolls':'#888780','Fuel':'#c07000','Car Rental':'#534AB7','Activities':'#D4537E','Shopping':'#639922','Groceries':'#0F6E56'};
 const SANKEY_CITY_COLORS={'Barcelona':'#1a6b9a','Bilbao':'#2d6a4f','Tarragona':'#7a5c1e','Rioja':'#c07000','Transit':'#888780'};
 const SANKEY_PAYER_COLORS={'Mark':'#fec422','Rumana':'#4caf50'};
 
-function categorizeSankey(desc,notes,who){const d=(desc||'').toLowerCase(),n=(notes||'').toLowerCase();if(/hotel|airbnb|radisson|ac hotel|sants/.test(d))return'Accommodation';if(/enterprise|national|car rental|rent/.test(d))return'Car Rental';if(/gasoline|gas|fuel|meroil|paseo de la mina/.test(d))return'Fuel';if(/autocat|autoroutes|autopistas|tunels|vasco aragon|bideg|commune de|autovasco|toll/.test(d))return'Tolls';if(/uber|metro|aerobus|taxi|train|transport|r2 nord/.test(d+n))return'Transport';if(/mercadona|grocery|supermarket/.test(d))return'Groceries';if(/guggenheim|museum|park guell|sagrada|picasso|entry|ticket|activities/.test(d+n))return'Activities';if(/shop|gifts?|book|laie|vinalium|botiga|l'arca/.test(d+n))return'Shopping';return'Dining';}
+function categorizeSankey(desc,notes){const d=(desc||'').toLowerCase(),n=(notes||'').toLowerCase();if(/hotel|airbnb|radisson|ac hotel|sants/.test(d))return'Accommodation';if(/enterprise|national|car rental|rent/.test(d))return'Car Rental';if(/gasoline|gas|fuel|meroil|paseo de la mina/.test(d))return'Fuel';if(/autocat|autoroutes|autopistas|tunels|vasco aragon|bideg|commune de|autovasco|toll/.test(d))return'Tolls';if(/uber|metro|aerobus|taxi|train|transport|r2 nord/.test(d+n))return'Transport';if(/mercadona|grocery|supermarket/.test(d))return'Groceries';if(/guggenheim|museum|park guell|sagrada|picasso|entry|ticket|activities/.test(d+n))return'Activities';if(/shop|gifts?|book|laie|vinalium|botiga|l'arca/.test(d+n))return'Shopping';return'Dining';}
 function citySankey(date,desc,notes){const d=(date||'').toLowerCase();const tx=(desc||'').toLowerCase()+(notes||'').toLowerCase();if(/radisson|guggenheim|bilbao|casco viejo|gran via bilbao|getxo|portugalete|gernika/.test(tx))return'Bilbao';if(/tarragona|cambrils|girona|365/.test(tx))return'Tarragona';if(/rioja|haro|laguardia|baigorri|riscal|ysios|winer/.test(tx))return'Rioja';if(/airport|arby|atl|boi|gifts|ava|chloe/.test(tx))return'Transit';if(d.includes('apr 26')||d.includes('apr 27')||d.includes('apr 28')||d.includes('apr 29'))return'Bilbao';if(d.includes('apr 24')||d.includes('apr 25'))return'Tarragona';if(d.includes('apr 20')||d.includes('apr 21')||d.includes('apr 22')||d.includes('apr 23')||d.includes('apr 30')||d.includes('may 1')||d.includes('4/20')||d.includes('4/21')||d.includes('4/22')||d.includes('4/23')||d.includes('4/30'))return'Barcelona';return'Barcelona';}
 
-function buildSankey(data){if(typeof d3==='undefined'||typeof d3.sankey==='undefined')return;const body=document.getElementById('sankey-body');const metaEl=document.getElementById('sankey-meta');const legendEl=document.getElementById('sankey-legend');if(!data||data.length===0){body.innerHTML='<div style="padding:2rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:var(--warm-grey)">No expense data yet.</div>';return;}const linkMap={};data.forEach(r=>{const amt=parseFloat(r[3])||0,cur=r[4]||'EUR',usd=toUSD(amt,cur);const who=r[2]||'Mark',cat=categorizeSankey(r[1],r[5],r[2]),city=citySankey(r[0],r[1],r[5]);const k1=who+'||'+cat,k2=cat+'||'+city;linkMap[k1]=(linkMap[k1]||0)+usd;linkMap[k2]=(linkMap[k2]||0)+usd;});const nodeNames=[],nodeIndex={};const getNode=name=>{if(!(name in nodeIndex)){nodeIndex[name]=nodeNames.length;nodeNames.push(name);}return nodeIndex[name];};const links=Object.entries(linkMap).map(([k,v])=>{const[s,t]=k.split('||');return{source:getNode(s),target:getNode(t),value:Math.round(v*100)/100};});const nodes=nodeNames.map((n,i)=>({name:n,index:i}));const W=Math.min(body.clientWidth||900,1100),H=420;body.innerHTML='';const svg=d3.select(body).append('svg').attr('viewBox','0 0 '+W+' '+H).attr('width','100%').style('display','block');const sankey=d3.sankey().nodeId(d=>d.index).nodeWidth(14).nodePadding(10).extent([[20,16],[W-20,H-16]]);const{nodes:sNodes,links:sLinks}=sankey({nodes:nodes.map(d=>({...d})),links});const getColor=name=>SANKEY_CAT_COLORS[name]||SANKEY_CITY_COLORS[name]||SANKEY_PAYER_COLORS[name]||'#7d6b57';const defs=svg.append('defs');sLinks.forEach((link,i)=>{const id='slg'+i;const lg=defs.append('linearGradient').attr('id',id).attr('gradientUnits','userSpaceOnUse').attr('x1',link.source.x1).attr('x2',link.target.x0);lg.append('stop').attr('offset','0%').attr('stop-color',getColor(link.source.name)).attr('stop-opacity',0.55);lg.append('stop').attr('offset','100%').attr('stop-color',getColor(link.target.name)).attr('stop-opacity',0.55);});svg.append('g').attr('fill','none').selectAll('path').data(sLinks).join('path').attr('d',d3.sankeyLinkHorizontal()).attr('stroke',(d,i)=>'url(#slg'+i+')').attr('stroke-width',d=>Math.max(1,d.width)).attr('opacity',0.72);svg.append('g').selectAll('rect').data(sNodes).join('rect').attr('x',d=>d.x0).attr('y',d=>d.y0).attr('height',d=>Math.max(1,d.y1-d.y0)).attr('width',d=>d.x1-d.x0).attr('fill',d=>getColor(d.name)).attr('rx',2);svg.append('g').selectAll('text').data(sNodes).join('text').attr('x',d=>d.x0<W/2?d.x1+6:d.x0-6).attr('y',d=>(d.y0+d.y1)/2).attr('dy','0.35em').attr('text-anchor',d=>d.x0<W/2?'start':'end').attr('font-size',11).attr('font-family',"'IBM Plex Sans',system-ui,sans-serif").attr('fill','#1a1a18').text(d=>{const v=d.sourceLinks.reduce((s,l)=>s+l.value,0)||d.targetLinks.reduce((s,l)=>s+l.value,0);return d.name+'  $'+Math.round(v).toLocaleString();});const total=data.reduce((s,r)=>s+toUSD(parseFloat(r[3])||0,r[4]||'EUR'),0);metaEl.textContent=data.length+' transactions \u00b7 $'+Math.round(total).toLocaleString()+' total';legendEl.innerHTML='';Object.entries(SANKEY_CAT_COLORS).forEach(([name,color])=>{const item=document.createElement('div');item.className='sankey-legend-item';item.innerHTML='<span class="sankey-legend-swatch" style="background:'+color+'"></span>'+name;legendEl.appendChild(item);});}
+function buildSankey(data){
+  if(typeof d3==='undefined'||typeof d3.sankey==='undefined')return;
+  const body=document.getElementById('sankey-body');
+  const metaEl=document.getElementById('sankey-meta');
+  const legendEl=document.getElementById('sankey-legend');
+  if(!data||data.length===0){body.innerHTML='<div style="padding:3rem;text-align:center;font-family:var(--mono);font-size:0.75rem;color:rgba(255,255,255,0.25)">No expense data yet.</div>';return;}
+
+  const linkMap={};
+  data.forEach(r=>{
+    const amt=parseFloat(r[3])||0,cur=r[4]||'EUR',usd=toUSD(amt,cur);
+    const who=r[2]||'Mark',cat=categorizeSankey(r[1],r[5]),city=citySankey(r[0],r[1],r[5]);
+    const k1=who+'||'+cat,k2=cat+'||'+city;
+    linkMap[k1]=(linkMap[k1]||0)+usd;
+    linkMap[k2]=(linkMap[k2]||0)+usd;
+  });
+
+  const nodeNames=[],nodeIndex={};
+  const getNode=name=>{if(!(name in nodeIndex)){nodeIndex[name]=nodeNames.length;nodeNames.push(name);}return nodeIndex[name];};
+  const links=Object.entries(linkMap).map(([k,v])=>{const[s,t]=k.split('||');return{source:getNode(s),target:getNode(t),value:Math.round(v*100)/100};});
+  const nodes=nodeNames.map((n,i)=>({name:n,index:i}));
+
+  // Use drawer body width for sizing
+  const drawerBody=document.getElementById('sankey-body');
+  const W=Math.max(500,Math.min(drawerBody.clientWidth||900,1020));
+  const H=Math.round(W*0.42);
+  body.innerHTML='';
+  const svg=d3.select(body).append('svg').attr('viewBox','0 0 '+W+' '+H).attr('width','100%').style('display','block');
+
+  const sankey=d3.sankey().nodeId(d=>d.index).nodeWidth(14).nodePadding(10).extent([[20,16],[W-20,H-16]]);
+  const{nodes:sNodes,links:sLinks}=sankey({nodes:nodes.map(d=>({...d})),links});
+
+  const getColor=name=>SANKEY_CAT_COLORS[name]||SANKEY_CITY_COLORS[name]||SANKEY_PAYER_COLORS[name]||'#7d6b57';
+
+  const defs=svg.append('defs');
+  sLinks.forEach((link,i)=>{
+    const id='slg'+i;
+    const lg=defs.append('linearGradient').attr('id',id).attr('gradientUnits','userSpaceOnUse').attr('x1',link.source.x1).attr('x2',link.target.x0);
+    lg.append('stop').attr('offset','0%').attr('stop-color',getColor(link.source.name)).attr('stop-opacity',0.6);
+    lg.append('stop').attr('offset','100%').attr('stop-color',getColor(link.target.name)).attr('stop-opacity',0.6);
+  });
+
+  svg.append('g').attr('fill','none').selectAll('path').data(sLinks).join('path')
+    .attr('d',d3.sankeyLinkHorizontal())
+    .attr('stroke',(d,i)=>'url(#slg'+i+')')
+    .attr('stroke-width',d=>Math.max(1,d.width))
+    .attr('opacity',0.75);
+
+  svg.append('g').selectAll('rect').data(sNodes).join('rect')
+    .attr('x',d=>d.x0).attr('y',d=>d.y0)
+    .attr('height',d=>Math.max(1,d.y1-d.y0)).attr('width',d=>d.x1-d.x0)
+    .attr('fill',d=>getColor(d.name)).attr('rx',2);
+
+  svg.append('g').selectAll('text').data(sNodes).join('text')
+    .attr('x',d=>d.x0<W/2?d.x1+7:d.x0-7)
+    .attr('y',d=>(d.y0+d.y1)/2).attr('dy','0.35em')
+    .attr('text-anchor',d=>d.x0<W/2?'start':'end')
+    .attr('font-size',11).attr('font-family',"'IBM Plex Sans',system-ui,sans-serif")
+    .attr('fill','rgba(255,255,255,0.82)')
+    .text(d=>{const v=d.sourceLinks.reduce((s,l)=>s+l.value,0)||d.targetLinks.reduce((s,l)=>s+l.value,0);return d.name+'  $'+Math.round(v).toLocaleString();});
+
+  const total=data.reduce((s,r)=>s+toUSD(parseFloat(r[3])||0,r[4]||'EUR'),0);
+  if(metaEl)metaEl.textContent=data.length+' transactions \u00b7 $'+Math.round(total).toLocaleString()+' total';
+
+  if(legendEl){
+    legendEl.innerHTML='';
+    Object.entries(SANKEY_CAT_COLORS).forEach(([name,color])=>{
+      const item=document.createElement('div');item.className='sankey-legend-item';
+      item.innerHTML='<span class="sankey-legend-swatch" style="background:'+color+'"></span>'+name;
+      legendEl.appendChild(item);
+    });
+  }
+}
 
 async function addExpense(){const descEl=document.getElementById('exp-desc'),amountEl=document.getElementById('exp-amount'),currency=document.getElementById('exp-currency').value,who=document.getElementById('exp-who').value,notes=document.getElementById('exp-notes').value.trim(),desc=descEl.value.trim(),amount=parseFloat(amountEl.value),btn=document.getElementById('btn-add-expense');if(!desc||isNaN(amount)||amount<=0){descEl.focus();return;}btn.disabled=true;btn.textContent='Saving\u2026';const date=new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});try{await fetch(CHECKLIST_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify({action:'expense',date,desc,who,amount,currency,notes}),mode:'no-cors'});descEl.value='';amountEl.value='';document.getElementById('exp-notes').value='';EXPENSES_GID_FOUND=null;setTimeout(loadExpenses,2000);}catch(e){alert('Could not save expense.');}finally{btn.disabled=false;btn.textContent='+ Add';}}
 document.getElementById('exp-desc')&&document.getElementById('exp-desc').addEventListener('keydown',e=>{if(e.key==='Enter')addExpense();});
