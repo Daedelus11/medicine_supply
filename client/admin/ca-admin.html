@@ -11,8 +11,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{font-size:16px}
 body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;font-weight:300;min-height:100vh}
-
-/* NAV - matches portal pattern exactly */
 .fl-nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:64px;background:rgba(26,26,24,0.96);backdrop-filter:blur(14px);border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;padding:0 3rem}
 .fl-nav-logo{text-decoration:none;display:flex;align-items:center}
 .fl-nav-logo span{font-family:'IBM Plex Sans',sans-serif;font-size:0.88rem;font-weight:300;letter-spacing:0.18em;text-transform:uppercase;color:#f7f5f1;line-height:1}
@@ -22,7 +20,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .fl-nav-links a:hover{color:#fff}
 .nav-admin-badge{font-size:0.62rem;letter-spacing:0.12em;text-transform:uppercase;color:#fec422;background:rgba(254,196,34,0.12);padding:0.2rem 0.7rem;border:1px solid rgba(254,196,34,0.25)}
 @media(max-width:768px){.fl-nav{padding:0 1.5rem}.fl-nav-links{display:none}}
-
 #gate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
 .gate-box{background:rgba(247,245,241,0.04);border:1px solid rgba(247,245,241,0.1);padding:3rem 2.5rem;max-width:400px;width:100%;text-align:center}
 .gate-title{font-family:'Cormorant Garamond',serif;font-size:1.8rem;font-weight:300;color:#f7f5f1;margin-bottom:0.4rem}
@@ -33,12 +30,10 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .btn-primary:hover{background:#e8b31e}
 .btn-primary:disabled{background:rgba(254,196,34,0.3);cursor:not-allowed;color:rgba(26,26,24,0.5)}
 .gate-err{color:#e05c5c;font-size:0.72rem;margin-top:0.5rem;display:none}
-
 #main{display:none;max-width:760px;margin:0 auto;padding:5rem 1.5rem 5rem}
 .page-eyebrow{font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:#fec422;margin-bottom:0.4rem;margin-top:0.5rem}
 .page-title{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:#f7f5f1;margin-bottom:0.25rem}
 .page-sub{font-size:0.75rem;color:rgba(247,245,241,0.35);letter-spacing:0.06em;margin-bottom:2rem}
-
 .form-section{background:rgba(247,245,241,0.04);border:1px solid rgba(247,245,241,0.1);padding:1.5rem;margin-bottom:1.25rem}
 .form-section-title{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(247,245,241,0.4);margin-bottom:1.25rem}
 .field{margin-bottom:1rem}
@@ -50,7 +45,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .field textarea{resize:vertical;min-height:72px;line-height:1.5}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media(max-width:500px){.field-row{grid-template-columns:1fr}}
-
 .drop-zone{border:2px dashed rgba(247,245,241,0.2);padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;position:relative}
 .drop-zone.drag-over{border-color:#fec422;background:rgba(254,196,34,0.05)}
 .drop-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
@@ -58,10 +52,7 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .drop-primary{font-size:0.85rem;color:rgba(247,245,241,0.7);margin-bottom:0.25rem}
 .drop-secondary{font-size:0.72rem;color:rgba(247,245,241,0.35);letter-spacing:0.04em}
 .drop-hint{font-size:0.68rem;color:rgba(254,196,34,0.6);margin-top:0.5rem;letter-spacing:0.04em}
-
-/* Caption required notice */
 .caption-notice{font-size:0.68rem;color:rgba(254,196,34,0.65);letter-spacing:0.06em;margin-top:0.6rem;padding:0.4rem 0.6rem;background:rgba(254,196,34,0.06);border-left:2px solid rgba(254,196,34,0.3);display:none}
-
 #previewGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.75rem;margin-top:1.25rem}
 .preview-item{position:relative;background:rgba(247,245,241,0.04);border:1px solid rgba(247,245,241,0.1)}
 .preview-img-wrap{position:relative;aspect-ratio:4/3;overflow:hidden;background:#111110;display:flex;align-items:center;justify-content:center}
@@ -80,17 +71,13 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .preview-caption input:focus{border-color:rgba(254,196,34,0.4)}
 .preview-flag{width:100%;margin-top:0.3rem;background:rgba(247,245,241,0.05);border:1px solid rgba(247,245,241,0.1);color:rgba(247,245,241,0.6);font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;padding:0.25rem 0.35rem;outline:none;-webkit-appearance:none;border-radius:0}
 .preview-flag option{background:#2a2a28}
-
 .status-note{font-size:0.72rem;letter-spacing:0.06em;margin-top:0.75rem;padding:0.5rem 0.75rem;display:none}
 .status-note.converting{background:rgba(254,196,34,0.08);border-left:2px solid #fec422;color:rgba(254,196,34,0.8)}
 .status-note.heic-fallback{background:rgba(100,160,255,0.08);border-left:2px solid rgba(100,160,255,0.5);color:rgba(180,210,255,0.8)}
-
-.upload-section{margin-top:0}
 .upload-progress{margin-top:1.25rem;display:none}
 .progress-bar-wrap{background:rgba(247,245,241,0.08);height:4px;margin-bottom:0.5rem}
 .progress-bar{height:4px;background:#fec422;width:0%;transition:width 0.3s}
 .progress-text{font-size:0.72rem;color:rgba(247,245,241,0.45);letter-spacing:0.06em}
-
 #resultBox{margin-top:1.25rem;display:none}
 .result-success{background:rgba(60,180,100,0.08);border:1px solid rgba(60,180,100,0.25);padding:1.25rem}
 .result-error{background:rgba(200,50,50,0.08);border:1px solid rgba(200,50,50,0.25);padding:1.25rem}
@@ -100,12 +87,12 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .copy-btn{margin-top:0.6rem;background:rgba(247,245,241,0.08);border:1px solid rgba(247,245,241,0.15);color:rgba(247,245,241,0.6);font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;cursor:pointer;transition:background 0.2s}
 .copy-btn:hover{background:rgba(247,245,241,0.14);color:#f7f5f1}
 .open-sheet-btn{display:inline-block;margin-top:0.5rem;margin-left:0.5rem;background:#fec422;color:#1a1a18;font-family:'IBM Plex Sans',sans-serif;font-size:0.65rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:0.4rem 0.9rem;text-decoration:none;cursor:pointer;border:none}
+.debug-block{background:rgba(247,245,241,0.03);border:1px solid rgba(247,245,241,0.08);padding:0.6rem 0.85rem;margin-top:0.5rem;font-size:0.65rem;color:rgba(247,245,241,0.35);font-family:monospace}
 @keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
-<!-- NAV - matches portal pages exactly -->
 <nav class="fl-nav">
   <a class="fl-nav-logo" href="https://fine-linestudio.com/">
     <span>FINE LINE <span class="pipe">|</span> STUDIO</span>
@@ -119,7 +106,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
   </ul>
 </nav>
 
-<!-- GATE -->
 <div id="gate">
   <div class="gate-box">
     <div class="gate-title">Construction Administration</div>
@@ -130,7 +116,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
   </div>
 </div>
 
-<!-- MAIN -->
 <div id="main">
   <div class="page-eyebrow">Fine Line Studio</div>
   <div class="page-title">Construction Administration</div>
@@ -184,10 +169,8 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
     <div id="previewGrid"></div>
   </div>
 
-  <div class="upload-section">
-    <button class="btn-primary" id="uploadBtn" disabled>Upload Photos &amp; Generate Sheet Row</button>
-    <div style="font-size:0.68rem;color:rgba(247,245,241,0.3);margin-top:0.5rem;letter-spacing:0.04em" id="uploadHint"></div>
-  </div>
+  <button class="btn-primary" id="uploadBtn" disabled>Upload Photos &amp; Generate Sheet Row</button>
+  <div style="font-size:0.68rem;color:rgba(247,245,241,0.3);margin-top:0.5rem;letter-spacing:0.04em" id="uploadHint"></div>
 
   <div class="upload-progress" id="uploadProgress">
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
@@ -211,9 +194,22 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 const ADMIN_PASS  = 'FLS-Admin-2026';
 const ADMIN_TOKEN = 'FLS-CA-Admin-2026';
 const UPLOAD_URL  = '/client/admin/upload.php';
-const CLIENT_CSV  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
 const SESS_KEY    = 'ca_admin_auth';
 const SHEET_URL   = 'https://docs.google.com/spreadsheets/d/1wkg-aaJv9bkVg3dm_hogs9sVDo63Kkj9W/';
+
+// Table1 = portal URLs by client name (for slug lookup)
+// Table1_2 = project list (Fine Line Client, Project, Balance)
+// Sheet is published as a single CSV per gid -- we need both tabs
+// Table1 gid not confirmed; using the full sheet export approach:
+// The pub URL without gid returns the first sheet; Table1_2 needs its own gid.
+// From the URL pattern, Table1 is the default (first tab = gid=0), Table1_2 = unknown gid.
+// Strategy: fetch both CSVs, build a map of client -> slug, then list projects from Table1_2.
+
+// These two GIDs come from the published sheet tabs
+// Table1 (portals) = first tab = gid not needed (use default)
+// Table1_2 (projects) = second tab -- gid discovered from Sheet URL structure
+const CSV_PORTALS  = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?output=csv';
+const CSV_PROJECTS = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vS7cDXZxwreiA0L_6UM0CNTQRr8Zt-k1CwmxMEU8xSRW9dazLVS6Ohd6uTqbMQJi7Efk3DwP6MNyhMH/pub?gid=1697906907&single=true&output=csv';
 
 const gateEl    = document.getElementById('gate');
 const mainEl    = document.getElementById('main');
@@ -268,30 +264,58 @@ function slugFromUrl(url) {
   const m = url.match(/\/client\/([^/]+)\//);
   return m ? m[1] : '';
 }
+
 async function loadProjects() {
   const sel = document.getElementById('projectSelect');
   try {
-    const res = await fetch(CLIENT_CSV + '&t=' + Date.now());
-    const rows = parseCSV(await res.text());
+    // Fetch both tabs in parallel
+    const [portalRes, projRes] = await Promise.all([
+      fetch(CSV_PORTALS + '&t=' + Date.now()),
+      fetch(CSV_PROJECTS + '&t=' + Date.now())
+    ]);
+    const portals  = parseCSV(await portalRes.text());
+    const projects = parseCSV(await projRes.text());
+
+    // Build client -> slug map from portals tab
+    const slugMap = {};
+    portals.forEach(row => {
+      const client = (row['Fine Line Client'] || '').trim();
+      const url    = row['Portal Page'] || '';
+      const slug   = slugFromUrl(url);
+      if (client && slug) slugMap[client.toLowerCase()] = slug;
+    });
+
     sel.innerHTML = '<option value="">-- Select project --</option>';
-    rows.forEach(row => {
-      const client = row['Fine Line Client'] || '';
-      const portalUrl = row['Portal Page'] || '';
-      const slug = slugFromUrl(portalUrl);
-      if (!slug || !client) return;
+    projects.forEach(row => {
+      const client  = (row['Fine Line Client'] || '').trim();
+      const project = (row['Project'] || '').trim();
+      if (!project) return;
+
+      // Derive slug: try client map first, then slugify client name
+      let slug = slugMap[client.toLowerCase()];
+      if (!slug) {
+        // fallback: slugify the client name
+        slug = client.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+      }
+
       const opt = document.createElement('option');
       opt.value = slug;
-      opt.textContent = client;
+      opt.textContent = project + (client && client !== project ? ' (' + client + ')' : '');
       sel.appendChild(opt);
     });
+
+    if (sel.options.length <= 1) {
+      sel.innerHTML = '<option value="">No projects found</option>';
+    }
   } catch (e) {
+    console.error('Failed to load projects:', e);
     sel.innerHTML = '<option value="">Error loading projects</option>';
   }
 }
 
 let photoFiles = [];
-const dropZone  = document.getElementById('dropZone');
-const fileInput = document.getElementById('fileInput');
+const dropZone    = document.getElementById('dropZone');
+const fileInput   = document.getElementById('fileInput');
 const previewGrid = document.getElementById('previewGrid');
 const uploadBtn   = document.getElementById('uploadBtn');
 const uploadHint  = document.getElementById('uploadHint');
@@ -338,7 +362,6 @@ async function processFiles(files) {
       }
       if (!converted) {
         entry.blob = file;
-        entry.heicFallback = true;
         heicFallback = true;
         setTag(card, 'heic', 'HEIC');
         card.querySelector('.preview-placeholder').textContent = '📷';
@@ -403,18 +426,10 @@ function updateUploadBtn() {
   const allCaptioned = active.every(p => p.caption.trim().length > 0);
   const ready = project && date && active.length > 0 && allCaptioned;
   uploadBtn.disabled = !ready;
-
-  // Helpful hint text below button
-  if (!active.length) {
-    uploadHint.textContent = '';
-  } else if (!allCaptioned) {
-    const missing = active.filter(p => !p.caption.trim()).length;
-    uploadHint.textContent = missing + ' photo' + (missing !== 1 ? 's' : '') + ' still need a caption.';
-  } else if (!project) {
-    uploadHint.textContent = 'Select a project above to enable upload.';
-  } else {
-    uploadHint.textContent = active.length + ' photo' + (active.length !== 1 ? 's' : '') + ' ready to upload.';
-  }
+  if (!active.length) uploadHint.textContent = '';
+  else if (!allCaptioned) uploadHint.textContent = active.filter(p=>!p.caption.trim()).length + ' photo(s) still need a caption.';
+  else if (!project) uploadHint.textContent = 'Select a project above to enable upload.';
+  else uploadHint.textContent = active.length + ' photo(s) ready to upload.';
 }
 
 document.getElementById('projectSelect').addEventListener('change', updateUploadBtn);
@@ -436,7 +451,7 @@ uploadBtn.addEventListener('click', async () => {
   progressWrap.style.display = 'block';
   resultBox.style.display = 'none';
   progressBar.style.width = '10%';
-  progressText.textContent = 'Uploading ' + active.length + ' photo' + (active.length !== 1 ? 's' : '') + '...';
+  progressText.textContent = 'Uploading ' + active.length + ' photo(s)...';
 
   const formData = new FormData();
   formData.append('project_slug', projectSlug);
@@ -447,15 +462,32 @@ uploadBtn.addEventListener('click', async () => {
     progressBar.style.width = '40%';
     const res = await fetch(UPLOAD_URL, { method: 'POST', headers: { 'X-Admin-Token': ADMIN_TOKEN }, body: formData });
     progressBar.style.width = '80%';
-    const data = await res.json();
-    if (!data.success || !data.urls.length) throw new Error(data.errors ? data.errors.join('; ') : 'Upload failed');
+
+    // Get raw text first for debugging
+    const rawText = await res.text();
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch(e) {
+      throw new Error('Server response not JSON: ' + rawText.substring(0, 200));
+    }
+
+    if (!data.success || !data.urls || !data.urls.length) {
+      const errDetail = [
+        data.error || '',
+        (data.errors || []).join('; '),
+        data.debug_dir ? 'Dir: ' + data.debug_dir : ''
+      ].filter(Boolean).join(' | ');
+      throw new Error(errDetail || 'Upload failed - no files saved');
+    }
+
     progressBar.style.width = '100%';
-    progressText.textContent = data.count + ' photo' + (data.count !== 1 ? 's' : '') + ' uploaded.';
-    showResult(true, buildSheetRow(visitDate, visitPhase, visitNote, data.urls, active), data.urls, projectSlug, visitDate);
+    progressText.textContent = data.count + ' photo(s) uploaded.';
+    showResult(true, buildSheetRow(visitDate, visitPhase, visitNote, data.urls, active), data.urls, projectSlug, visitDate, data);
   } catch (err) {
     progressBar.style.background = '#e05c5c';
     progressBar.style.width = '100%';
-    progressText.textContent = 'Upload failed: ' + err.message;
+    progressText.textContent = 'Upload failed';
     showResult(false, null, [], projectSlug, visitDate, err.message);
   }
   uploadBtn.disabled = false;
@@ -471,15 +503,17 @@ function buildSheetRow(date, phase, note, urls, active) {
   return r;
 }
 
-function showResult(success, sheetData, urls, slug, date, err) {
+function showResult(success, sheetData, urls, slug, date, dataOrErr) {
   const resultBox = document.getElementById('resultBox');
   resultBox.style.display = 'block';
   const caUrl = 'https://fine-linestudio.com/client/' + slug + '/' + slug + '-construction-admin.html';
   if (success) {
+    const warnings = (dataOrErr.errors || []).length ? '<div style="font-size:0.7rem;color:rgba(254,196,34,0.7);margin-top:0.5rem">Notes: ' + escHtml(dataOrErr.errors.join('; ')) + '</div>' : '';
     resultBox.innerHTML =
       '<div class="result-success">' +
-        '<div class="result-title">Upload complete - ' + urls.length + ' photo' + (urls.length!==1?'s':'') + ' saved</div>' +
-        '<div style="font-size:0.8rem;color:rgba(247,245,241,0.55);margin-bottom:0.5rem">Live at: <code style="color:#fec422">fine-linestudio.com/client/' + slug + '/photos/' + date + '/</code></div>' +
+        '<div class="result-title">Upload complete - ' + urls.length + ' photo(s) saved</div>' +
+        '<div style="font-size:0.8rem;color:rgba(247,245,241,0.55);margin-bottom:0.4rem">Live at: <code style="color:#fec422">fine-linestudio.com/client/' + slug + '/photos/' + date + '/</code></div>' +
+        warnings +
         '<div class="result-title" style="margin-top:1rem">Paste into CA_PHOTOS Sheet tab:</div>' +
         '<div class="sheet-block"><pre id="sheetRowPre">' + escHtml(sheetData) + '</pre></div>' +
         '<button class="copy-btn" id="copyBtn">Copy Sheet Row</button>' +
@@ -493,11 +527,15 @@ function showResult(success, sheetData, urls, slug, date, err) {
       });
     });
   } else {
-    resultBox.innerHTML = '<div class="result-error"><div class="result-title">Upload failed</div><div style="font-size:0.8rem;color:rgba(200,80,80,0.8)">' + escHtml(err||'Unknown error') + '</div></div>';
+    resultBox.innerHTML =
+      '<div class="result-error">' +
+        '<div class="result-title">Upload failed</div>' +
+        '<div style="font-size:0.8rem;color:rgba(200,80,80,0.8)">' + escHtml(typeof dataOrErr === 'string' ? dataOrErr : (dataOrErr||'')) + '</div>' +
+      '</div>';
   }
 }
 
-function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function init() {
   document.getElementById('visitDate').value = new Date().toISOString().split('T')[0];
