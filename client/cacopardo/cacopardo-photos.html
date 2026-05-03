@@ -14,11 +14,23 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 
 /* NAV */
 .fl-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,26,24,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(247,245,241,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px}
-.fl-logo{font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.88rem;letter-spacing:0.18em;text-transform:uppercase;color:#f7f5f1;text-decoration:none;white-space:nowrap}
-.fl-logo .pipe{color:rgba(247,245,241,0.3);margin:0 0.15em}
+.fl-logo{display:flex;align-items:center;text-decoration:none}
+.fl-logo span{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;letter-spacing:0.06em;color:#f7f5f1;line-height:1}
+.fl-logo span em{font-style:normal;color:#fec422}
 .fl-nav-links{display:flex;gap:2rem;list-style:none}
 .fl-nav-links a{font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,245,241,0.55);text-decoration:none;transition:color 0.2s}
-.fl-nav-links a:hover,.fl-nav-links a.fl-nav-active{color:#f7f5f1}
+.fl-nav-links a:hover{color:#f7f5f1}
+
+/* CA SUB-NAV */
+.ca-subnav{background:rgba(255,255,255,0.03);border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;padding:0 2rem;overflow-x:auto;scrollbar-width:none;position:sticky;top:64px;z-index:90}
+.ca-subnav::-webkit-scrollbar{display:none}
+.ca-subnav-back{font-size:0.58rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3);text-decoration:none;padding:0.85rem 1rem 0.85rem 0;border-right:1px solid rgba(255,255,255,0.08);margin-right:0.5rem;white-space:nowrap;display:flex;align-items:center;gap:0.4rem;transition:color 0.2s;flex-shrink:0}
+.ca-subnav-back:hover{color:rgba(255,255,255,0.65)}
+.ca-subnav-back svg{width:10px;height:10px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.ca-subnav-item{font-size:0.6rem;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.35);text-decoration:none;padding:0.85rem 0.9rem;border-bottom:2px solid transparent;white-space:nowrap;transition:color 0.2s;display:flex;align-items:center;gap:0.35rem}
+.ca-subnav-item svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.ca-subnav-item:hover{color:rgba(255,255,255,0.7)}
+.ca-subnav-item.active{color:#fec422;border-bottom-color:#fec422}
 
 /* PASSWORD GATE */
 #gate{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:2rem}
@@ -32,8 +44,8 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .gate-error{color:#e05c5c;font-size:0.75rem;letter-spacing:0.06em;margin-top:0.5rem;display:none}
 
 /* MAIN */
-#main{display:none;padding-top:64px}
-.page-header{padding:4rem 2.5rem 2rem;border-bottom:1px solid rgba(247,245,241,0.08)}
+#main{display:none;padding-top:105px}
+.page-header{padding:3rem 2.5rem 2rem;border-bottom:1px solid rgba(247,245,241,0.08)}
 .breadcrumb{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,245,241,0.35);margin-bottom:1rem}
 .breadcrumb a{color:rgba(247,245,241,0.35);text-decoration:none}
 .breadcrumb a:hover{color:rgba(247,245,241,0.6)}
@@ -58,7 +70,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .visits-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2rem}
 .visits-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.4rem;letter-spacing:0.04em}
 .visit-count{font-size:0.72rem;color:rgba(247,245,241,0.35);letter-spacing:0.08em}
-
 .visit-card{border:1px solid rgba(247,245,241,0.1);margin-bottom:2rem;overflow:hidden}
 .visit-head{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(247,245,241,0.08)}
 .visit-date-block{background:#fec422;padding:1.25rem 1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:90px}
@@ -68,7 +79,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .visit-info{padding:1rem 1.5rem;display:flex;flex-direction:column;justify-content:center}
 .visit-phase-tag{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,245,241,0.4);margin-bottom:0.25rem}
 .visit-note{font-size:0.85rem;color:rgba(247,245,241,0.7);line-height:1.5}
-
 .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(247,245,241,0.06)}
 .photo-cell{position:relative;aspect-ratio:4/3;overflow:hidden;cursor:pointer;background:#111110}
 .photo-cell img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s,opacity 0.3s;opacity:0.85}
@@ -80,13 +90,9 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .flag-info{background:rgba(100,160,255,0.2);color:#8ab4ff}
 .flag-action{background:rgba(255,180,0,0.2);color:#ffc235}
 .flag-nc{background:rgba(220,60,60,0.2);color:#e07070}
-
-/* EMPTY STATE */
 .empty-state{text-align:center;padding:5rem 2rem;color:rgba(247,245,241,0.3)}
 .empty-icon{font-size:2.5rem;margin-bottom:1rem;opacity:0.4}
 .empty-text{font-size:0.85rem;letter-spacing:0.06em}
-
-/* LIGHTBOX */
 #lb{display:none;position:fixed;inset:0;background:rgba(17,17,16,0.96);z-index:999;align-items:center;justify-content:center;padding:2rem}
 #lb.open{display:flex}
 .lb-inner{position:relative;max-width:90vw;max-height:90vh;display:flex;flex-direction:column;align-items:center}
@@ -97,13 +103,9 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .lb-prev,.lb-next{position:fixed;top:50%;transform:translateY(-50%);background:rgba(247,245,241,0.08);border:none;color:rgba(247,245,241,0.7);font-size:1.2rem;padding:1rem 0.75rem;cursor:pointer;transition:background 0.2s}
 .lb-prev{left:1rem}.lb-next{right:1rem}
 .lb-prev:hover,.lb-next:hover{background:rgba(247,245,241,0.15)}
-
-/* LOADING */
 .loading{display:flex;align-items:center;justify-content:center;padding:4rem;color:rgba(247,245,241,0.3);font-size:0.8rem;letter-spacing:0.1em;gap:0.75rem}
 .spin{width:16px;height:16px;border:2px solid rgba(247,245,241,0.15);border-top-color:rgba(247,245,241,0.5);border-radius:50%;animation:spin 0.8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* FOOTER */
 footer{border-top:1px solid rgba(247,245,241,0.08);padding:3rem 2.5rem;margin-top:2rem}
 .footer-inner{display:flex;justify-content:space-between;align-items:flex-start;gap:2rem;flex-wrap:wrap}
 .footer-brand{font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.82rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(247,245,241,0.4)}
@@ -112,34 +114,40 @@ footer{border-top:1px solid rgba(247,245,241,0.08);padding:3rem 2.5rem;margin-to
 .footer-nav{display:flex;gap:1.5rem;flex-wrap:wrap}
 .footer-nav a{font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(247,245,241,0.3);text-decoration:none}
 .footer-nav a:hover{color:rgba(247,245,241,0.6)}
-
 @media(max-width:768px){
 .fl-nav{padding:0 1.25rem}
 .fl-nav-links{display:none}
-.page-header{padding:3rem 1.25rem 1.5rem}
+.page-header{padding:2.5rem 1.25rem 1.5rem}
 .phase-track{padding:1.5rem 1.25rem}
 .visits-wrap{padding:1.5rem 1.25rem}
 .photo-grid{grid-template-columns:repeat(2,1fr)}
 footer{padding:2rem 1.25rem}
 .visit-date-block{min-width:72px;padding:1rem}
+.ca-subnav{padding:0 1.25rem}
 }
-@media(max-width:480px){
-.photo-grid{grid-template-columns:1fr 1fr}
-}
+@media(max-width:480px){.photo-grid{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav class="fl-nav">
-  <a href="/" class="fl-logo">FINE LINE <span class="pipe">|</span> STUDIO</a>
+  <a href="https://fine-linestudio.com/" class="fl-logo"><span>FINE LINE <em>|</em> STUDIO</span></a>
   <ul class="fl-nav-links">
-    <li><a href="/portfolio">Portfolio</a></li>
-    <li><a href="/services">Services</a></li>
-    <li><a href="/about">About</a></li>
-    <li><a href="/contact">Contact</a></li>
+    <li><a href="https://fine-linestudio.com/portfolio/">Portfolio</a></li>
+    <li><a href="https://fine-linestudio.com/services/">Services</a></li>
+    <li><a href="https://fine-linestudio.com/about/">About</a></li>
+    <li><a href="https://fine-linestudio.com/contact/">Contact</a></li>
   </ul>
 </nav>
+
+<!-- CA SUB-NAV -->
+<div class="ca-subnav">
+  <a href="cacopardo-construction-admin.html" class="ca-subnav-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>CA Hub</a>
+  <a href="cacopardo-photos.html" class="ca-subnav-item active"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Site Photos</a>
+  <a href="ca-observation-reports.html" class="ca-subnav-item"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>Observation Reports</a>
+  <a href="cacopardo-submittals.html" class="ca-subnav-item"><svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>Submittal Log</a>
+  <a href="cacopardo-rfi-log.html" class="ca-subnav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>RFI Log</a>
+</div>
 
 <!-- PASSWORD GATE -->
 <div id="gate">
@@ -154,17 +162,12 @@ footer{padding:2rem 1.25rem}
 
 <!-- MAIN CONTENT -->
 <div id="main">
-
   <div class="page-header">
-    <div class="breadcrumb"><a href="cacopardo-portal.html">Project Portal</a> &rsaquo; Construction Photos</div>
+    <div class="breadcrumb"><a href="cacopardo-portal.html">Project Portal</a> &rsaquo; <a href="cacopardo-construction-admin.html">Construction Administration</a> &rsaquo; Site Photos</div>
     <div class="page-title">Construction Photos</div>
     <div class="page-meta">Cacopardo Residence &nbsp;&bull;&nbsp; McCall, Idaho &nbsp;&bull;&nbsp; Project No. 25-0301</div>
   </div>
-
-  <!-- PHASE TRACKER (populated by JS) -->
   <div class="phase-track" id="phaseTrack"></div>
-
-  <!-- VISITS -->
   <div class="visits-wrap">
     <div class="visits-header">
       <div class="visits-title">Site Documentation</div>
@@ -174,7 +177,6 @@ footer{padding:2rem 1.25rem}
       <div class="loading"><div class="spin"></div> Loading photo log...</div>
     </div>
   </div>
-
   <footer>
     <div class="footer-inner">
       <div>
@@ -183,12 +185,11 @@ footer{padding:2rem 1.25rem}
       </div>
       <nav class="footer-nav">
         <a href="cacopardo-portal.html">Project Portal</a>
+        <a href="cacopardo-construction-admin.html">CA Hub</a>
         <a href="cacopardo-documents.html">Documents</a>
-        <a href="cacopardo-contracts.html">Contract Documents</a>
       </nav>
     </div>
   </footer>
-
 </div>
 
 <!-- LIGHTBOX -->
@@ -203,204 +204,32 @@ footer{padding:2rem 1.25rem}
 </div>
 
 <script>
-// ---- CONFIG ----
 const PASS = 'Cacopardo2026';
 const SESS_KEY = 'ca_photos_auth';
 const CONFIG_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyzrIuojRuh6HCDFixkYmhAMTKqtEp29W_bVq6UZyFzFI4I4wCMOcKziTgeUKGmoqvZ9q6kFqJW37t/pub?gid=1393621225&single=true&output=csv';
 const PHOTOS_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyzrIuojRuh6HCDFixkYmhAMTKqtEp29W_bVq6UZyFzFI4I4wCMOcKziTgeUKGmoqvZ9q6kFqJW37t/pub?gid=1275117244&single=true&output=csv';
-
-// ---- AUTH ----
-const gate = document.getElementById('gate');
-const main = document.getElementById('main');
-const gateInput = document.getElementById('gateInput');
-const gateBtn = document.getElementById('gateBtn');
-const gateErr = document.getElementById('gateErr');
-
-function unlock() {
-  if (gateInput.value.trim() === PASS) {
-    sessionStorage.setItem(SESS_KEY, '1');
-    gate.style.display = 'none';
-    main.style.display = 'block';
-    loadData();
-  } else {
-    gateErr.style.display = 'block';
-    gateInput.value = '';
-    gateInput.focus();
-  }
-}
-
-gateBtn.addEventListener('click', unlock);
-gateInput.addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
-
-if (sessionStorage.getItem(SESS_KEY) === '1') {
-  gate.style.display = 'none';
-  main.style.display = 'block';
-  loadData();
-}
-
-// ---- CSV PARSE ----
-function parseCSV(text) {
-  const rows = [];
-  const lines = text.trim().split('\n');
-  const headers = splitLine(lines[0]);
-  for (let i = 1; i < lines.length; i++) {
-    if (!lines[i].trim()) continue;
-    const vals = splitLine(lines[i]);
-    const obj = {};
-    headers.forEach((h, idx) => { obj[h.trim()] = (vals[idx] || '').trim().replace(/\r/, ''); });
-    rows.push(obj);
-  }
-  return rows;
-}
-function splitLine(line) {
-  const parts = []; let cur = '', inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    if (line[i] === '"') { inQ = !inQ; }
-    else if (line[i] === ',' && !inQ) { parts.push(cur); cur = ''; }
-    else { cur += line[i]; }
-  }
-  parts.push(cur);
-  return parts;
-}
-
-// ---- PHASES ----
-const PHASES = [
-  'Pre-Design',
-  'Site Preparation',
-  'Foundation',
-  'Framing',
-  'Envelope',
-  'MEP Rough',
-  'Finishes',
-  'Substantial Completion'
-];
-
-function buildPhaseTracker(currentPhase) {
-  const track = document.getElementById('phaseTrack');
-  track.innerHTML = '';
-  const activeIdx = PHASES.indexOf(currentPhase);
-  PHASES.forEach((ph, i) => {
-    const div = document.createElement('div');
-    div.className = 'phase-step' + (i < activeIdx ? ' complete' : i === activeIdx ? ' active' : '');
-    div.innerHTML = '<div class="phase-dot"></div><div class="phase-num">' + String(i + 1).padStart(2, '0') + '</div><div class="phase-name">' + ph + '</div>';
-    track.appendChild(div);
-  });
-}
-
-// ---- FLAG HELPER ----
-function flagHTML(val) {
-  if (!val) return '';
-  const v = val.toUpperCase().trim();
-  if (v === 'ACTION REQUIRED') return '<span class="flag flag-action">Action Required</span>';
-  if (v === 'NON-CONFORMING') return '<span class="flag flag-nc">Non-Conforming</span>';
-  if (v === 'INFO') return '<span class="flag flag-info">Info</span>';
-  return '';
-}
-
-// ---- DATE FORMATTING ----
-function fmtDate(str) {
-  const d = new Date(str);
-  if (isNaN(d)) return { day: '--', month: '--', year: '' };
-  return {
-    day: d.toLocaleDateString('en-US', { day: 'numeric' }),
-    month: d.toLocaleDateString('en-US', { month: 'short' }).toUpperCase(),
-    year: d.getFullYear()
-  };
-}
-
-// ---- LIGHTBOX ----
-let lbPhotos = [], lbIdx = 0;
-const lb = document.getElementById('lb');
-const lbImg = document.getElementById('lb-img');
-const lbCap = document.getElementById('lb-cap');
-
-function openLB(photos, idx) {
-  lbPhotos = photos; lbIdx = idx;
-  showLB();
-  lb.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeLB() { lb.classList.remove('open'); document.body.style.overflow = ''; }
-function showLB() { lbImg.src = lbPhotos[lbIdx].url; lbCap.textContent = lbPhotos[lbIdx].caption || ''; }
-document.getElementById('lbClose').addEventListener('click', closeLB);
-document.getElementById('lbPrev').addEventListener('click', () => { lbIdx = (lbIdx - 1 + lbPhotos.length) % lbPhotos.length; showLB(); });
-document.getElementById('lbNext').addEventListener('click', () => { lbIdx = (lbIdx + 1) % lbPhotos.length; showLB(); });
-lb.addEventListener('click', e => { if (e.target === lb) closeLB(); });
-document.addEventListener('keydown', e => { if (!lb.classList.contains('open')) return; if (e.key === 'ArrowLeft') { lbIdx = (lbIdx - 1 + lbPhotos.length) % lbPhotos.length; showLB(); } if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % lbPhotos.length; showLB(); } if (e.key === 'Escape') closeLB(); });
-
-// ---- BUILD VISIT CARD ----
-function buildVisitCard(row) {
-  const dt = fmtDate(row['visit_date']);
-  const photos = [];
-  for (let i = 1; i <= 9; i++) {
-    const url = row['photo_' + i + '_url'];
-    const caption = row['photo_' + i + '_caption'] || '';
-    const flag = row['photo_' + i + '_flag'] || '';
-    if (url) photos.push({ url, caption, flag });
-  }
-  const card = document.createElement('div');
-  card.className = 'visit-card';
-  card.innerHTML = '<div class="visit-head"><div class="visit-date-block"><div class="visit-day">' + dt.day + '</div><div class="visit-month">' + dt.month + '</div><div class="visit-year">' + dt.year + '</div></div><div class="visit-info"><div class="visit-phase-tag">' + (row['phase'] || '') + '</div><div class="visit-note">' + (row['visit_note'] || '') + '</div></div></div>';
-  if (photos.length) {
-    const grid = document.createElement('div');
-    grid.className = 'photo-grid';
-    photos.forEach((p, i) => {
-      const cell = document.createElement('div');
-      cell.className = 'photo-cell';
-      cell.innerHTML = '<img src="' + p.url + '" alt="' + (p.caption || 'Site photo') + '" loading="lazy"><div class="photo-overlay">' + flagHTML(p.flag) + '<div class="photo-caption">' + (p.caption || '') + '</div></div>';
-      cell.addEventListener('click', () => openLB(photos, i));
-      grid.appendChild(cell);
-    });
-    card.appendChild(grid);
-  } else {
-    const empty = document.createElement('div');
-    empty.style.cssText = 'padding:2rem;text-align:center;color:rgba(247,245,241,0.25);font-size:0.78rem;letter-spacing:0.08em';
-    empty.textContent = 'No photos logged for this visit yet.';
-    card.appendChild(empty);
-  }
-  return card;
-}
-
-// ---- LOAD DATA ----
-async function loadData() {
-  try {
-    const [cfgRes, photoRes] = await Promise.all([
-      fetch(CONFIG_CSV + '&t=' + Date.now()),
-      fetch(PHOTOS_CSV + '&t=' + Date.now())
-    ]);
-    const cfgText = await cfgRes.text();
-    const photoText = await photoRes.text();
-    const cfg = parseCSV(cfgText);
-    const photos = parseCSV(photoText);
-
-    // Extract current phase from config
-    let currentPhase = 'Site Preparation';
-    cfg.forEach(row => {
-      if ((row['key'] || '').toLowerCase().trim() === 'current_phase') {
-        currentPhase = row['value'] || currentPhase;
-      }
-    });
-    buildPhaseTracker(currentPhase);
-
-    // Sort visits newest first
-    photos.sort((a, b) => new Date(b['visit_date']) - new Date(a['visit_date']));
-
-    const container = document.getElementById('visitsContainer');
-    container.innerHTML = '';
-    const count = document.getElementById('visitCount');
-
-    if (!photos.length) {
-      container.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128247;</div><div class="empty-text">No site visits logged yet</div></div>';
-      count.textContent = '';
-    } else {
-      count.textContent = photos.length + ' visit' + (photos.length !== 1 ? 's' : '') + ' documented';
-      photos.forEach(row => container.appendChild(buildVisitCard(row)));
-    }
-  } catch (err) {
-    console.error(err);
-    document.getElementById('visitsContainer').innerHTML = '<div class="empty-state"><div class="empty-icon">&#9888;</div><div class="empty-text">Unable to load photo log. Please refresh.</div></div>';
-  }
-}
+const gate=document.getElementById('gate'),main=document.getElementById('main'),gateInput=document.getElementById('gateInput'),gateBtn=document.getElementById('gateBtn'),gateErr=document.getElementById('gateErr');
+function unlock(){if(gateInput.value.trim()===PASS){sessionStorage.setItem(SESS_KEY,'1');gate.style.display='none';main.style.display='block';loadData();}else{gateErr.style.display='block';gateInput.value='';gateInput.focus();}}
+gateBtn.addEventListener('click',unlock);gateInput.addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
+if(sessionStorage.getItem(SESS_KEY)==='1'){gate.style.display='none';main.style.display='block';loadData();}
+function parseCSV(text){const rows=[],lines=text.trim().split('\n'),headers=splitLine(lines[0]);for(let i=1;i<lines.length;i++){if(!lines[i].trim())continue;const vals=splitLine(lines[i]),obj={};headers.forEach((h,idx)=>{obj[h.trim()]=(vals[idx]||'').trim().replace(/\r/,'');});rows.push(obj);}return rows;}
+function splitLine(line){const parts=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){if(line[i]==='"'){inQ=!inQ;}else if(line[i]===','&&!inQ){parts.push(cur);cur='';}else{cur+=line[i];}}parts.push(cur);return parts;}
+const PHASES=['Pre-Design','Site Preparation','Foundation','Framing','Envelope','MEP Rough','Finishes','Substantial Completion'];
+function buildPhaseTracker(currentPhase){const track=document.getElementById('phaseTrack');track.innerHTML='';const activeIdx=PHASES.indexOf(currentPhase);PHASES.forEach((ph,i)=>{const div=document.createElement('div');div.className='phase-step'+(i<activeIdx?' complete':i===activeIdx?' active':'');div.innerHTML='<div class="phase-dot"></div><div class="phase-num">'+String(i+1).padStart(2,'0')+'</div><div class="phase-name">'+ph+'</div>';track.appendChild(div);});}
+function flagHTML(val){if(!val)return'';const v=val.toUpperCase().trim();if(v==='ACTION REQUIRED')return'<span class="flag flag-action">Action Required</span>';if(v==='NON-CONFORMING')return'<span class="flag flag-nc">Non-Conforming</span>';if(v==='INFO')return'<span class="flag flag-info">Info</span>';return'';}
+function fmtDate(str){const d=new Date(str);if(isNaN(d))return{day:'--',month:'--',year:''};return{day:d.toLocaleDateString('en-US',{day:'numeric'}),month:d.toLocaleDateString('en-US',{month:'short'}).toUpperCase(),year:d.getFullYear()};}
+let lbPhotos=[],lbIdx=0;
+const lb=document.getElementById('lb'),lbImg=document.getElementById('lb-img'),lbCap=document.getElementById('lb-cap');
+function openLB(photos,idx){lbPhotos=photos;lbIdx=idx;showLB();lb.classList.add('open');document.body.style.overflow='hidden';}
+function closeLB(){lb.classList.remove('open');document.body.style.overflow='';}
+function showLB(){lbImg.src=lbPhotos[lbIdx].url;lbCap.textContent=lbPhotos[lbIdx].caption||'';}
+document.getElementById('lbClose').addEventListener('click',closeLB);
+document.getElementById('lbPrev').addEventListener('click',()=>{lbIdx=(lbIdx-1+lbPhotos.length)%lbPhotos.length;showLB();});
+document.getElementById('lbNext').addEventListener('click',()=>{lbIdx=(lbIdx+1)%lbPhotos.length;showLB();});
+lb.addEventListener('click',e=>{if(e.target===lb)closeLB();});
+document.addEventListener('keydown',e=>{if(!lb.classList.contains('open'))return;if(e.key==='ArrowLeft'){lbIdx=(lbIdx-1+lbPhotos.length)%lbPhotos.length;showLB();}if(e.key==='ArrowRight'){lbIdx=(lbIdx+1)%lbPhotos.length;showLB();}if(e.key==='Escape')closeLB();});
+function buildVisitCard(row){const dt=fmtDate(row['visit_date']),photos=[];for(let i=1;i<=9;i++){const url=row['photo_'+i+'_url'],caption=row['photo_'+i+'_caption']||'',flag=row['photo_'+i+'_flag']||'';if(url)photos.push({url,caption,flag});}const card=document.createElement('div');card.className='visit-card';card.innerHTML='<div class="visit-head"><div class="visit-date-block"><div class="visit-day">'+dt.day+'</div><div class="visit-month">'+dt.month+'</div><div class="visit-year">'+dt.year+'</div></div><div class="visit-info"><div class="visit-phase-tag">'+(row['phase']||'')+'</div><div class="visit-note">'+(row['visit_note']||'')+'</div></div></div>';if(photos.length){const grid=document.createElement('div');grid.className='photo-grid';photos.forEach((p,i)=>{const cell=document.createElement('div');cell.className='photo-cell';cell.innerHTML='<img src="'+p.url+'" alt="'+(p.caption||'Site photo')+'" loading="lazy"><div class="photo-overlay">'+flagHTML(p.flag)+'<div class="photo-caption">'+(p.caption||'')+'</div></div>';cell.addEventListener('click',()=>openLB(photos,i));grid.appendChild(cell);});card.appendChild(grid);}else{const empty=document.createElement('div');empty.style.cssText='padding:2rem;text-align:center;color:rgba(247,245,241,0.25);font-size:0.78rem;letter-spacing:0.08em';empty.textContent='No photos logged for this visit yet.';card.appendChild(empty);}return card;}
+async function loadData(){try{const[cfgRes,photoRes]=await Promise.all([fetch(CONFIG_CSV+'&t='+Date.now()),fetch(PHOTOS_CSV+'&t='+Date.now())]);const cfg=parseCSV(await cfgRes.text()),photos=parseCSV(await photoRes.text());let currentPhase='Site Preparation';cfg.forEach(row=>{if((row['key']||'').toLowerCase().trim()==='current_phase')currentPhase=row['value']||currentPhase;});buildPhaseTracker(currentPhase);photos.sort((a,b)=>new Date(b['visit_date'])-new Date(a['visit_date']));const container=document.getElementById('visitsContainer'),count=document.getElementById('visitCount');container.innerHTML='';if(!photos.length){container.innerHTML='<div class="empty-state"><div class="empty-icon">&#128247;</div><div class="empty-text">No site visits logged yet</div></div>';count.textContent='';}else{count.textContent=photos.length+' visit'+(photos.length!==1?'s':'')+' documented';photos.forEach(row=>container.appendChild(buildVisitCard(row)));}}catch(err){console.error(err);document.getElementById('visitsContainer').innerHTML='<div class="empty-state"><div class="empty-icon">&#9888;</div><div class="empty-text">Unable to load photo log. Please refresh.</div></div>';}}
 </script>
 </body>
 </html>
