@@ -1,200 +1,1372 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=none">
-    <title>Ava's Meds</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22 fill=%22%23d4af37%22 font-family=%22serif%22 font-weight=%22bold%22>A</text></svg>">
-    
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
-    
-    <style>
-        /* Multi-Realm Variables */
-        .theme-fontaine { --realm-glow: rgba(0, 150, 255, 0.5); --realm-bg: #111b27; }
-        .theme-liyue { --realm-glow: rgba(255, 200, 0, 0.4); --realm-bg: #221a0f; }
-        .theme-inazuma { --realm-glow: rgba(180, 0, 255, 0.4); --realm-bg: #1a1025; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fine Line Studio | Architecture | Idaho, Washington, Oregon, Hawaii &amp; Kentucky</title>
+  <meta name="description" content="Fine Line Studio: licensed architect serving commercial, institutional, and residential clients across Idaho, Washington, Oregon, Hawaii, and Kentucky. 300+ projects. $250M+ construction value." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-        body {
-            background: var(--realm-bg);
-            transition: background 1.2s ease;
-            font-family: 'Quicksand', sans-serif;
-            margin: 0; overflow: hidden; height: 100vh;
-        }
+  <style>
 
-        .gear { 
-            position: absolute; z-index: -1; opacity: 0.15; 
-            animation: rotate 120s linear infinite; pointer-events: none;
-        }
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    /* =============================================
+       BASE LAYOUT
+    ============================================= */
 
-        .artifact-card {
-            background: linear-gradient(180deg, rgba(30, 45, 65, 0.98) 0%, rgba(10, 15, 20, 1) 100%);
-            border: 2px solid #d4af37;
-            box-shadow: 0 0 100px var(--realm-glow), inset 0 0 40px rgba(212, 175, 55, 0.2);
-            position: relative;
-        }
+    /* =============================================
+       RESET & BASE
+    ============================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Two Corner Geometry */
-        .corner { position: absolute; width: 45px; height: 45px; border: 5px solid #d4af37; z-index: 10; }
-        .tc_l { top: -14px; left: -14px; border-right: 0; border-bottom: 0; }
-        .bc_r { bottom: -14px; right: -14px; border-left: 0; border-top: 0; }
+    :root {
+      --yellow: #fec422;
+      --brown: #7d6b57;
+      --dark: #111110;
+      --ink: #1a1a18;
+      --mid: #5c5c58;
+      --light: #a09e98;
+      --cream: #f7f5f1;
+      --rule: #d8d5cf;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --sans: 'IBM Plex Sans', system-ui, sans-serif;
+    }
 
-        /* Tactile Button Materials */
-        .action-orb {
-            background: linear-gradient(180deg, #5c4033 0%, #2b1d0e 100%); 
-            border: 5px solid #f9f0d1; 
-            box-shadow: 0 8px 30px rgba(0,0,0,0.9);
-            transition: transform 0.1s ease, background 0.1s;
-        }
-        .action-orb:active { transform: scale(0.9); background: #f9f0d1; color: #2b1d0e; box-shadow: 0 0 50px #f9f0d1; }
+    html { scroll-behavior: smooth; }
 
-        .chiseled-text { font-family: 'Cinzel', serif; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
+    body {
+      font-family: var(--sans);
+      background: #fff;
+      color: var(--ink);
+      overflow-x: hidden;
+    }
 
-        .indicator-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(212, 175, 55, 0.2); transition: all 0.4s; }
-        .indicator-dot.active { background: #d4af37; transform: scale(1.4); box-shadow: 0 0 15px #d4af37; }
-    </style>
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* =============================================
+       HERO
+    ============================================= */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 700px;
+      display: flex;
+      align-items: flex-end;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('https://fine-linestudio.com/wp-content/uploads/2025/06/sandy_ct_2023-02_EXT_16.jpg');
+      background-size: cover;
+      background-position: center 40%;
+      will-change: transform;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10,10,9,0.85) 0%,
+        rgba(10,10,9,0.4) 45%,
+        rgba(10,10,9,0.15) 100%
+      );
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      padding: 0 4rem 5rem;
+      max-width: 1400px;
+      width: 100%;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--yellow);
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-headline {
+      font-family: var(--serif);
+      font-size: clamp(56px, 7.5vw, 112px);
+      font-weight: 300;
+      line-height: 1.0;
+      color: #fff;
+      margin-bottom: 2rem;
+      max-width: 900px;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--yellow);
+    }
+
+    .hero-subline {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.65);
+      max-width: 520px;
+      margin-bottom: 2.75rem;
+      border-left: 2px solid var(--yellow);
+      padding-left: 1.25rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--yellow);
+      color: var(--dark);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.9rem 1.75rem;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #fff;
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255,255,255,0.7);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-ghost:hover { color: #fff; border-color: #fff; }
+
+    /* Credential badges - hero bottom right */
+    .hero-badges {
+      position: absolute;
+      bottom: 4.5rem;
+      right: 4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      z-index: 2;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: rgba(17,17,16,0.75);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(8px);
+      padding: 0.6rem 1rem;
+      animation: floatBadge 5s ease-in-out infinite;
+    }
+
+    .badge:nth-child(2) { animation-delay: 1.2s; }
+    .badge:nth-child(3) { animation-delay: 2.4s; }
+    .badge:nth-child(4) { animation-delay: 3.6s; }
+
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .badge-num {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--yellow);
+      line-height: 1;
+    }
+
+    .badge-label {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.3;
+    }
+
+    /* Scroll indicator */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .scroll-hint span {
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 40px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.4; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(1.2); }
+    }
+
+    /* =============================================
+       STATS BAR
+    ============================================= */
+    .stats-bar {
+      background: var(--dark);
+      padding: 3rem 4rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 1rem 2rem;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat-item:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 300;
+      color: var(--yellow);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-label {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* =============================================
+       INTRO SECTION
+    ============================================= */
+    .intro {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      max-width: 100%;
+      background: var(--cream);
+    }
+
+    .intro-text {
+      padding: 7rem 5rem 7rem 5rem;
+      max-width: 640px;
+      margin-left: auto;
+    }
+
+    .section-label-sm {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--brown);
+      margin-bottom: 1.75rem;
+    }
+
+    .intro h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3.5vw, 3.25rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--ink);
+      margin-bottom: 2rem;
+    }
+
+    .intro-body {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--mid);
+      margin-bottom: 2rem;
+    }
+
+    .intro-body strong {
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    .intro-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--brown);
+      border-bottom: 1px solid var(--brown);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .intro-link:hover { color: var(--ink); border-color: var(--ink); }
+
+    .intro-image {
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+    }
+
+    .intro-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+
+    .intro-image:hover img { transform: scale(1.04); }
+
+    .intro-image-label {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      background: rgba(10,10,9,0.75);
+      backdrop-filter: blur(6px);
+      padding: 0.5rem 1rem;
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.7);
+    }
+
+    /* =============================================
+       WORK SECTION
+    ============================================= */
+    .work-section {
+      padding: 7rem 4rem;
+      background: #fff;
+    }
+
+    .work-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 3.5rem;
+      max-width: 1400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .work-header-left h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3vw, 3rem);
+      font-weight: 300;
+      line-height: 1.1;
+      color: var(--ink);
+    }
+
+    .work-filters {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .filter-btn {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--mid);
+      background: none;
+      border: 1px solid var(--rule);
+      padding: 0.45rem 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--ink);
+      color: #fff;
+      border-color: var(--ink);
+    }
+
+    /* PROJECT GRID — explicit named grid, no aspect-ratio conflicts */
+    .project-grid {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: 360px 360px 360px 360px;
+      gap: 12px;
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      background: #1a1a18;
+      display: block;
+      text-decoration: none;
+    }
+
+    /* Card size classes */
+    .card-tall { grid-row: span 2; }
+    .card-wide { grid-column: span 1; }
+    .card-square { grid-column: span 1; }
+    .card-cinema { grid-column: span 2; }
+
+    .project-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      position: absolute;
+      inset: 0;
+      transition: transform 0.6s ease;
+    }
+
+    .project-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .project-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(10,10,9,0.88) 0%,
+        rgba(10,10,9,0.2) 55%,
+        transparent 100%
+      );
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+    }
+
+    .project-card:hover .project-card-overlay {
+      opacity: 1;
+    }
+
+    .card-category {
+      font-family: var(--sans);
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--yellow);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-title {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-meta {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.55);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card-arrow {
+      position: absolute;
+      top: 1.25rem;
+      right: 1.25rem;
+      width: 36px;
+      height: 36px;
+      background: var(--yellow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+
+    .project-card:hover .card-arrow {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-arrow svg {
+      width: 16px;
+      height: 16px;
+      stroke: var(--dark);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .work-footer {
+      max-width: 1400px;
+      margin: 3rem auto 0;
+      text-align: center;
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 1px solid var(--ink);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.9rem 2rem;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover {
+      background: var(--ink);
+      color: #fff;
+    }
+
+    /* =============================================
+       SERVICES STRIP
+    ============================================= */
+    .services-strip {
+      background: var(--dark);
+      padding: 6rem 4rem;
+    }
+
+    .services-strip-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .services-strip h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.75rem, 2.5vw, 2.5rem);
+      font-weight: 300;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+
+    .services-strip .section-label-sm { color: var(--yellow); margin-bottom: 1rem; }
+
+    .services-strip p {
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: rgba(255,255,255,0.5);
+      max-width: 480px;
+      margin-bottom: 3.5rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+
+    .service-tile {
+      background: var(--dark);
+      padding: 2rem 2.25rem;
+      transition: background 0.25s;
+      cursor: pointer;
+      border-left: 2px solid transparent;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .service-tile:hover {
+      background: rgba(255,255,255,0.04);
+      border-left-color: var(--yellow);
+    }
+
+    .service-icon {
+      width: 36px;
+      height: 36px;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+
+    .service-tile:hover .service-icon { opacity: 1; }
+
+    .service-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: var(--yellow);
+      fill: none;
+      stroke-width: 1.25;
+    }
+
+    .service-tile h3 {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      font-weight: 400;
+      color: #fff;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-tile p {
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.45);
+      margin: 0;
+      max-width: none;
+    }
+
+    /* =============================================
+       PRINCIPAL SECTION
+    ============================================= */
+    .principal-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 600px;
+    }
+
+    .principal-image-wrap {
+      position: relative;
+      overflow: hidden;
+      min-height: 500px;
+      background: #2a2a28;
+    }
+
+    .principal-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.7s ease;
+    }
+
+    .principal-image-wrap:hover img { transform: scale(1.03); }
+
+    .principal-text {
+      background: var(--cream);
+      padding: 5rem 5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .principal-text h2 {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 3vw, 3.25rem);
+      font-weight: 300;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    .principal-text p {
+      font-family: var(--serif);
+      font-size: 1.3rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--mid);
+      margin-bottom: 1.25rem;
+    }
+
+    .credentials-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.75rem 0;
+    }
+
+    .pill {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--brown);
+      border: 1px solid var(--brown);
+      padding: 0.3rem 0.75rem;
+    }
+
+    /* =============================================
+       CTA SECTION
+    ============================================= */
+    .cta-section {
+      position: relative;
+      padding: 9rem 4rem;
+      background: var(--dark);
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .cta-bg-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--serif);
+      font-size: clamp(80px, 14vw, 200px);
+      font-weight: 300;
+      color: rgba(255,255,255,0.02);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-inner .section-label-sm { color: var(--yellow); margin-bottom: 1.5rem; }
+
+    .cta-inner h2 {
+      font-family: var(--serif);
+      font-size: clamp(2.25rem, 4vw, 4rem);
+      font-weight: 300;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .cta-inner p {
+      font-family: var(--sans);
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 3rem;
+    }
+
+    .cta-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .contact-detail {
+      font-family: var(--sans);
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .contact-detail a {
+      color: rgba(255,255,255,0.65);
+      transition: color 0.2s;
+    }
+
+    .contact-detail a:hover { color: var(--yellow); }
+
+    /* =============================================
+       FOOTER
+    ============================================= */
+    .footer {
+      background: #0a0a09;
+      padding: 4rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .footer-logo img {
+      height: 28px;
+      width: auto;
+      margin-bottom: 1rem;
+    }
+
+    .footer-tagline {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-style: italic;
+      color: rgba(255,255,255,0.35);
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-license {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.25);
+      line-height: 1.8;
+    }
+
+    .footer-nav h4 {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-nav ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .footer-nav a {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+      transition: color 0.2s;
+    }
+
+    .footer-nav a:hover { color: var(--yellow); }
+
+    .footer-contact h4 {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-contact p {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .footer-contact a {
+      color: rgba(255,255,255,0.55);
+      transition: color 0.2s;
+    }
+
+    .footer-contact a:hover { color: var(--yellow); }
+
+    .footer-bottom {
+      background: #0a0a09;
+      padding: 1.5rem 4rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-bottom p {
+      font-family: var(--sans);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.2);
+    }
+
+    /* =============================================
+       FADE IN ANIMATION
+    ============================================= */
+    .fade-in {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* =============================================
+       PARALLAX
+    ============================================= */
+    .parallax-container {
+      overflow: hidden;
+    }
+
+    /* =============================================
+       RESPONSIVE
+    ============================================= */
+    @media (max-width: 1024px) {
+      .project-grid { columns: 2; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .intro { grid-template-columns: 1fr; }
+      .intro-text { max-width: 100%; padding: 4rem 3rem; margin: 0; }
+      .intro-image { min-height: 360px; }
+      .principal-section { grid-template-columns: 1fr; }
+      .hero-badges { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .hero-content { padding: 0 1.5rem 4rem; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); padding: 2rem 1.5rem; }
+      .work-section { padding: 4rem 1.5rem; }
+      .work-header { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+      .project-grid { columns: 1; }
+      .services-strip { padding: 4rem 1.5rem; }
+      .services-grid { grid-template-columns: 1fr; }
+      .principal-text { padding: 4rem 1.5rem; }
+      .cta-section { padding: 6rem 1.5rem; }
+      .footer { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+      .footer-bottom { padding: 1.5rem; flex-direction: column; gap: 0.5rem; }
+    }
+
+    /* Hide theme background bleed */
+    body { background: #fff !important; }
+
+  </style>
+  <script src="/nav.js" defer></script>
 </head>
-<body class="text-white">
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        const supabaseUrl = 'https://mrhgitbdobfnelnulnbg.supabase.co';
-        const supabaseKey = 'sb_publishable_IaM9WgZS8_juRrtHTZBFMQ_BUgc3-uh';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+<body>
 
-        const REALMS = [
-            { id: 'Lime', name: 'BELLEAU', theme: 'theme-liyue', accent: '#fbbf24' },
-            { id: 'Ava', name: 'FONTAINE', theme: 'theme-fontaine', accent: '#60a5fa' },
-            { id: 'Ash', name: 'BERYL', theme: 'theme-inazuma', accent: '#a855f7' }
-        ];
+  <div id="fl-nav-root"></div>
 
-        const ArtifactScreen = ({ realm, onSwipe }) => {
-            const [count, setCount] = useState(0);
-            const [history, setHistory] = useState([]);
-            const [touchStart, setTouchStart] = useState(null);
-            const [touchEnd, setTouchEnd] = useState(null);
-            const isLowSupply = count <= 2;
+  <!-- ======================== HERO ======================== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg" id="hero-parallax"></div>
+    <div class="hero-overlay"></div>
 
-            const fetchData = async () => {
-                const { data: c } = await supabaseClient.from('medicine_supply').select('value').eq('label', realm.id).single();
-                const { data: h } = await supabaseClient.from('medicine_log').select('timestamp, change_type').eq('supply_type', realm.id).order('timestamp', { ascending: false }).limit(3);
-                if (c) setCount(c.value);
-                if (h) setHistory(h);
-            };
+    <div class="hero-content">
+      <p class="hero-eyebrow">Licensed &nbsp;&middot;&nbsp; Idaho &nbsp;&middot;&nbsp; Washington &nbsp;&middot;&nbsp; Oregon &nbsp;&middot;&nbsp; Hawaii &nbsp;&middot;&nbsp; Kentucky &nbsp;&middot;&nbsp; NCARB</p>
+      <h1 class="hero-headline">Built to perform.<br><em>Designed to endure.</em></h1>
+      <p class="hero-subline">
+        Commercial, institutional, and developer-led projects across five states. Principal-led from the first conversation through construction completion.
+      </p>
+      <div class="hero-actions">
+        <a href="https://calendly.com/finelinestudio1/30min" class="btn-primary" target="_blank" rel="noopener">
+          Schedule a Conversation
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="/portfolio/" class="btn-ghost">
+          View Selected Work
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
 
-            useEffect(() => {
-                fetchData();
-                const channel = supabaseClient.channel(`realtime-${realm.id}`).on('postgres_changes', 
-                    { event: '*', schema: 'public', table: 'medicine_supply', filter: `label=eq.${realm.id}` }, () => fetchData()
-                ).subscribe();
-                return () => supabaseClient.removeChannel(channel);
-            }, [realm.id]);
+    <!-- Credential badges -->
+    <div class="hero-badges">
+      <div class="badge">
+        <div class="badge-num">300+</div>
+        <div class="badge-label">Projects<br>Completed</div>
+      </div>
+      <div class="badge">
+        <div class="badge-num">$250M+</div>
+        <div class="badge-label">Construction<br>Value</div>
+      </div>
+      <div class="badge">
+        <div class="badge-num">30+</div>
+        <div class="badge-label">Years in<br>Practice</div>
+      </div>
+      <div class="badge">
+        <div class="badge-num">5</div>
+        <div class="badge-label">States<br>Licensed</div>
+      </div>
+    </div>
 
-            const updateCount = async (newVal) => {
-                const v = newVal < 0 ? 0 : newVal;
-                setCount(v); // Instant response logic
-                await supabaseClient.from('medicine_supply').update({ value: v }).eq('label', realm.id);
-                await supabaseClient.from('medicine_log').insert([{ 
-                    supply_type: realm.id, 
-                    change_type: v > count ? 'RESTOCK' : 'CONSUMED', 
-                    timestamp: new Date().toISOString() 
-                }]);
-            };
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
 
-            const handleTouchStart = (e) => setTouchStart(e.targetTouches[0].clientX);
-            const handleTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
-            const handleTouchEnd = () => {
-                if (!touchStart || !touchEnd) return;
-                const distance = touchStart - touchEnd;
-                if (distance > 70) onSwipe(1);
-                if (distance < -70) onSwipe(-1);
-                setTouchStart(null); setTouchEnd(null);
-            };
+  <!-- ======================== STATS BAR ======================== -->
+  <div class="stats-bar" id="stats">
+    <div class="stat-item fade-in">
+      <div class="stat-num">300+</div>
+      <div class="stat-label">Projects Completed</div>
+    </div>
+    <div class="stat-item fade-in" style="transition-delay:0.1s">
+      <div class="stat-num">$250M+</div>
+      <div class="stat-label">Construction Value</div>
+    </div>
+    <div class="stat-item fade-in" style="transition-delay:0.2s">
+      <div class="stat-num">30+</div>
+      <div class="stat-label">Years in Practice</div>
+    </div>
+    <div class="stat-item fade-in" style="transition-delay:0.3s">
+      <div class="stat-num">5</div>
+      <div class="stat-label">States Licensed</div>
+    </div>
+  </div>
 
-            return (
-                <div onTouchStart={handleTouchStart} onTouchMove={handleTouchMove} onTouchEnd={handleTouchEnd} className="w-full flex flex-col items-center justify-center">
-                    <div className={`artifact-card w-[90vw] max-w-sm h-[75vh] p-8 rounded-2xl text-center flex flex-col justify-between transition-all ${isLowSupply ? 'border-red-500 shadow-[0_0_80px_rgba(239,68,68,0.7)]' : ''}`}>
-                        <div className="corner tc_l"></div><div className="corner bc_r"></div>
+  <!-- ======================== INTRO ======================== -->
+  <section class="intro" id="intro">
+    <div class="intro-text">
+      <p class="section-label-sm">The Practice</p>
+      <h2>One architect.<br>Every project.<br>No hand-offs.</h2>
+      <p class="intro-body">
+        Fine Line Studio is a <strong>principal-led architectural practice</strong> serving commercial clients, developers, business owners, and institutions who need more than a building. We are a partner who understands budgets, schedules, permitting, and construction, and who brings genuine design intelligence to every decision.
+      </p>
+      <p class="intro-body">
+        Our work spans commercial buildings, multifamily housing, tenant improvements, workplaces, civic and institutional facilities, and select custom residential. Every project is led directly by principal architect Mark Wagner, AIA, NCARB, from the first feasibility conversation through construction closeout.
+      </p>
+      <a href="/about/" class="intro-link">
+        About the Practice
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="intro-image">
+      <img src="https://fine-linestudio.com/wp-content/uploads/2026/03/Frontier-Credit-Union-6-1.jpg" alt="Frontier Credit Union &mdash; Branch Prototype, Idaho, Washington, Oregon, Hawaii, and Kentucky &amp; Mountain West" loading="lazy" />
+      <div class="intro-image-label">Frontier Credit Union: Branch Prototype</div>
+    </div>
+  </section>
 
-                        <div className="flex flex-col items-center">
-                            <div className="rarity-slot bg-gradient-to-b from-[#d29762] to-[#7d5a3c] border-2 border-[#f9f0d1] w-20 h-20 rounded-br-2xl flex items-center justify-center shadow-lg">
-                                {/* MAXIMIZED ORIGINAL ICON */}
-                                <svg width="67" height="67" viewBox="0 0 100 100">
-                                    <path d="M40,15 L60,15 L60,75 L40,75 Z" fill="rgba(0,0,0,0.8)" stroke="#f3e5ab" strokeWidth="2" />
-                                    <rect x="43" y="35" width="14" height="30" rx="2" fill={isLowSupply ? "#ef4444" : realm.accent} className="animate-pulse" />
-                                    <path d="M38,20 L62,20 L62,28 L38,28 Z" fill="#d4af37" /><circle cx="50" cy="82" r="6" fill="#f3e5ab" />
-                                </svg>
-                            </div>
-                            <div className="flex gap-1 mt-2 text-[#f3e5ab] text-sm">★ ★ ★ ★ ★</div>
-                        </div>
+  <!-- ======================== SELECTED WORK ======================== -->
+  <section class="work-section" id="work">
+    <div class="work-header fade-in">
+      <div class="work-header-left">
+        <p class="section-label-sm">Selected Work</p>
+        <h2>Commercial. Institutional.<br>Residential. Industrial.</h2>
+      </div>
+      <div class="work-filters">
+        <a href="/portfolio/" class="filter-btn active" style="text-decoration:none;">View All Work &rarr;</a>
+      </div>
+    </div>
 
-                        <h1 className="chiseled-text uppercase tracking-[0.6em] text-[#d4af37] font-black text-sm mt-4">LEGENDARY SUPPLY</h1>
-                        <div className="chiseled-text uppercase tracking-widest text-[#d4af37] text-xs opacity-60 font-bold">{realm.name} REALM</div>
+    <div class="project-grid" id="project-grid">
 
-                        <div className={`chiseled-text text-[13vh] font-black leading-none tabular-nums my-4 ${isLowSupply ? 'text-red-500' : 'text-white'}`}>{count}</div>
-                        
-                        <div className="flex justify-center gap-10">
-                            <button onClick={() => updateCount(count - 1)} className="action-orb w-20 h-20 rounded-full text-4xl font-light">−</button>
-                            <button onClick={() => updateCount(count + 1)} className="action-orb w-20 h-20 rounded-full text-5xl font-bold">+</button>
-                        </div>
+      <!-- Card 1 — Sandy Court -->
+      <a href="/portfolio/sandy-court/" class="project-card card-tall fade-in" data-category="residential">
+        <img src="https://fine-linestudio.com/wp-content/uploads/2025/06/sandy_ct_2023-02_EXT_16.jpg" alt="Sandy Court" loading="lazy" />
+        <div class="project-card-overlay">
+          <div class="card-category">Residential</div>
+          <div class="card-title">Sandy Court</div>
+          <div class="card-meta">Morgan Hill, California</div>
+        </div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </a>
 
-                        {isLowSupply && realm.id === 'Ava' && (
-                            <div className="mt-4 text-[18.5px] text-red-500 font-black animate-bounce chiseled-text drop-shadow-[0_0_10px_black]">
-                                Ava Wagner Needs her Meds!!!
-                            </div>
-                        )}
+      <!-- Card 2 — Frontier Credit Union -->
+      <a href="/portfolio/frontier-credit-union/" class="project-card card-wide fade-in" data-category="commercial">
+        <img src="https://fine-linestudio.com/wp-content/uploads/2026/03/Frontier-Credit-Union-6-1.jpg" alt="Frontier Credit Union" loading="lazy" />
+        <div class="project-card-overlay">
+          <div class="card-category">Commercial</div>
+          <div class="card-title">Frontier Credit Union</div>
+          <div class="card-meta">Branch Prototype, Idaho</div>
+        </div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </a>
 
-                        {/* RESTORED CHRONICLES */}
-                        <div className="mt-4 pt-4 border-t border-yellow-600/20 text-left bg-black/40 rounded-b-xl px-4 overflow-hidden">
-                            <h2 className="chiseled-text text-[8px] uppercase tracking-[0.3em] text-yellow-600/40 font-bold mb-2 text-center italic">Recent Chronicles</h2>
-                            {history.map((l, i) => (
-                                <div key={i} className="flex justify-between py-1 border-b border-white/5 chiseled-text text-[10px] text-yellow-600/80 font-bold uppercase">
-                                    <span>{l.change_type}</span>
-                                    <span>{new Date(l.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            );
-        };
+      <!-- Card 3 — McKenna Charter School -->
+      <a href="/portfolio/mckenna-charter-school/" class="project-card card-wide fade-in" data-category="institutional">
+        <img src="https://fine-linestudio.com/wp-content/uploads/2025/06/McKenna-Charter-School-Final.jpg" alt="McKenna Charter School" loading="lazy" />
+        <div class="project-card-overlay">
+          <div class="card-category">Institutional</div>
+          <div class="card-title">McKenna Charter School</div>
+          <div class="card-meta">Mountain Home, Idaho</div>
+        </div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </a>
 
-        function App() {
-            const [currentIdx, setCurrentIdx] = useState(1);
+      <!-- Card 4 — Gowen Hangar -->
+      <a href="/portfolio/gowen-field-c-130-hangar/" class="project-card card-wide fade-in" data-category="institutional">
+        <img src="https://fine-linestudio.com/wp-content/uploads/2025/06/GOWEN-C-130-HANGAR-scaled.jpg" alt="Gowen Field C-130 Hangar" loading="lazy" />
+        <div class="project-card-overlay">
+          <div class="card-category">Institutional / Military</div>
+          <div class="card-title">Gowen Field C-130 Hangar</div>
+          <div class="card-meta">Idaho Air National Guard</div>
+        </div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </a>
 
-            useEffect(() => {
-                document.body.className = REALMS[currentIdx].theme;
-            }, [currentIdx]);
+      <!-- Card 5 — HD Fowler -->
+      <a href="/portfolio/hd-fowler/" class="project-card card-wide fade-in" data-category="industrial">
+        <img src="https://fine-linestudio.com/wp-content/uploads/2025/06/HD-Fowler-Exterior-Final-scaled.jpg" alt="HD Fowler" loading="lazy" />
+        <div class="project-card-overlay">
+          <div class="card-category">Industrial</div>
+          <div class="card-title">HD Fowler Company</div>
+          <div class="card-meta">Regional Prototype Program</div>
+        </div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </a>
 
-            return (
-                <div className="min-h-screen flex flex-col items-center justify-center p-4">
-                    <svg className="gear" style={{ top: '-10%', right: '-10%', width: '750px' }} viewBox="0 0 100 100">
-                        <path fill="#d4af37" d="M95,50c0-2.2-1.4-4-3.4-4.8l-4.5-1.8c-0.6-1.9-1.4-3.7-2.5-5.4l2.5-4.2c1.1-1.9,0.7-4.3-1-5.8L78,21c-1.6-1.4-4-1.2-5.4,0.6l-3.2,4.1c-1.8-0.9-3.7-1.6-5.7-2.1l-0.8-4.8c-0.4-2.1-2.2-3.7-4.3-3.7H51.4c-2.1,0-4,1.6-4.3,3.7l-0.8,4.8c-2,0.5-3.9,1.2-5.7,2.1l-3.2-4.1c-1.4-1.8-3.8-2-5.4-0.6L22,28.1c-1.7,1.5-2.1,3.9-1,5.8l2.5,4.2c-1.1,1.7-1.9,3.5-2.5,5.4l-4.5,1.8c-2,0.8-3.4,2.6-3.4,4.8v10c0,2.2,1.4,4,3.4,4.8l4.5,1.8c0.6,1.9,1.4,3.7,2.5,5.4l-2.5,4.2c-1.1,1.9-0.7,4.3,1,5.8L32,79c1.6,1.4,4,1.2,5.4-0.6l3.2-4.1c1.8,0.9,3.7,1.6,5.7,2.1l0.8,4.8c0.4,2.1,2.2,3.7,4.3,3.7h17.1c2.1,0,4-1.6,4.3-3.7l0.8-4.8c2-0.5,3.9-1.2,5.7-2.1l3.2,4.1c1.4,1.8,3.8,2,5.4,0.6L88,71.9c1.7-1.5,2.1-3.9,1-5.8l-2.5-4.2c1.1-1.7,1.9-3.5,2.5-5.4l4.5-1.8c2-0.8,3.4-2.6,3.4-4.8V50z M50,65c-8.3,0-15-6.7-15-15s6.7-15,15-15s15,6.7,15,15S58.3,65,50,65z"/>
-                    </svg>
-                    <ArtifactScreen realm={REALMS[currentIdx]} onSwipe={(dir) => {
-                        const n = currentIdx + dir;
-                        if (n >= 0 && n < REALMS.length) setCurrentIdx(n);
-                    }} />
-                    <div className="flex gap-6 mt-10">
-                        {REALMS.map((r, idx) => (
-                            <div key={idx} className="flex flex-col items-center gap-1">
-                                <div className={`indicator-dot ${currentIdx === idx ? 'active' : ''}`} />
-                                <span className={`chiseled-text text-[8px] font-black ${currentIdx === idx ? 'text-[#d4af37]' : 'text-yellow-600/20'}`}>{r.id}</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            );
+      <!-- Card 6 — Idaho Street Townhomes -->
+      <a href="/portfolio/idaho-street-townhomes/" class="project-card card-wide fade-in" data-category="residential">
+        <img src="https://fine-linestudio.com/wp-content/uploads/2025/06/Idaho-Street-Town-Homes-Final.jpg" alt="Idaho Street Townhomes" loading="lazy" />
+        <div class="project-card-overlay">
+          <div class="card-category">Multifamily</div>
+          <div class="card-title">Idaho Street Townhomes</div>
+          <div class="card-meta">Boise, Idaho</div>
+        </div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </a>
+
+      <!-- Card 7 — KLA Corporation -->
+      <a href="/portfolio/kla-corporation-office/" class="project-card card-wide fade-in" data-category="commercial">
+        <img src="https://fine-linestudio.com/wp-content/uploads/2025/09/KLA-OFFICE-EXTERIOR_2-scaled.jpg" alt="KLA Corporation" loading="lazy" />
+        <div class="project-card-overlay">
+          <div class="card-category">Commercial</div>
+          <div class="card-title">KLA Corporation</div>
+          <div class="card-meta">Office Renovation, Milpitas, California</div>
+        </div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </a>
+
+      <!-- Card 8 — Mountain Cabin -->
+      <a href="/portfolio/mountain-cabin/" class="project-card card-wide fade-in" data-category="residential">
+        <img src="https://fine-linestudio.com/wp-content/uploads/2025/12/Mountain-Cabin-Cover-Image-2-scaled.jpg" alt="Mountain Cabin" loading="lazy" />
+        <div class="project-card-overlay">
+          <div class="card-category">Residential</div>
+          <div class="card-title">Mountain Cabin</div>
+          <div class="card-meta">McCall, Idaho</div>
+        </div>
+        <div class="card-arrow"><svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+      </a>
+
+    </div><!-- /project-grid -->
+
+    <div class="work-footer fade-in">
+      <a href="/portfolio/" class="btn-outline">
+        View Full Portfolio
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ======================== SERVICES STRIP ======================== -->
+  <section class="services-strip" id="services">
+    <div class="services-strip-inner">
+      <p class="section-label-sm fade-in">What We Do</p>
+      <h2 class="fade-in">Commercial, institutional, and select residential architecture<br>across Idaho, Washington, Oregon, Hawaii, and Kentucky.</h2>
+      <p class="fade-in">From ground-up commercial construction to tenant improvements, developer-led multifamily, and institutional projects. Fine Line Studio covers the full project lifecycle across all project types and delivery methods.</p>
+      <div class="services-grid">
+
+        <div class="service-tile fade-in">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <h3>Commercial Architecture</h3>
+          <p>Offices, financial institutions, mixed-use, and tenant improvements. Delivered on schedule, within budget, with direct principal involvement at every phase.</p>
+        </div>
+
+        <div class="service-tile fade-in" style="transition-delay:0.1s">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 21h18M9 21V7l6-4v18M9 12H3v9"/></svg>
+          </div>
+          <h3>Institutional Projects</h3>
+          <p>Schools, civic buildings, military facilities, and faith-based projects. Experience navigating public agency requirements and design review.</p>
+        </div>
+
+        <div class="service-tile fade-in" style="transition-delay:0.2s">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M2 20h20M4 20V10l8-7 8 7v10M10 20v-6h4v6"/></svg>
+          </div>
+          <h3>Residential Architecture</h3>
+          <p>Select custom residential. The same discipline, the same delivery.</p>
+        </div>
+
+        <div class="service-tile fade-in" style="transition-delay:0.05s">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="1"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+          </div>
+          <h3>Developer &amp; Multifamily</h3>
+          <p>Townhomes, infill residential, and prototype buildings for multi-location rollout. Fast delivery, value-engineered without sacrificing design.</p>
+        </div>
+
+        <div class="service-tile fade-in" style="transition-delay:0.15s">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <h3>Industrial &amp; Warehouse</h3>
+          <p>Distribution, manufacturing, and aviation facilities. Functional design with attention to workflow, code compliance, and future adaptability.</p>
+        </div>
+
+        <div class="service-tile fade-in" style="transition-delay:0.25s">
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <h3>Permitting &amp; Construction Administration</h3>
+          <p>Full construction document packages, agency submittals, RFI responses, and on-site oversight. Projects delivered the way they were designed.</p>
+        </div>
+
+      </div>
+      <div style="margin-top:2.5rem;" class="fade-in">
+        <a href="/services/" class="btn-primary" style="display:inline-flex;align-items:center;gap:0.6rem;">
+          All Services
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================== PRINCIPAL ======================== -->
+  <section class="principal-section" id="about">
+    <div class="principal-image-wrap">
+      <img src="https://fine-linestudio.com/wp-content/uploads/2026/03/Headshot-Mark-Bio.jpg" alt="Mark Wagner, AIA, NCARB &mdash; Principal Architect" loading="eager" />
+    </div>
+    <div class="principal-text">
+      <p class="section-label-sm">The Principal</p>
+      <h2>Mark Charles Wagner,<br>AIA, NCARB</h2>
+      <p>Mark Wagner has been practicing architecture for over thirty years, delivering more than 300 projects across commercial, institutional, civic, and residential sectors, with a combined construction value exceeding $250 million.</p>
+      <p>Fine Line Studio is a principal-led practice. When you hire Fine Line, you work directly with Mark from the first conversation through construction completion. No hand-offs. No junior staff managing your project. Every drawing, every site visit, every decision carries his direct attention.</p>
+      <div class="credentials-pills">
+        <span class="pill">AIA</span>
+        <span class="pill">NCARB</span>
+        <span class="pill">Idaho</span>
+        <span class="pill">Washington</span>
+        <span class="pill">Oregon</span>
+        <span class="pill">Hawaii</span>
+        <span class="pill">Kentucky</span>
+      </div>
+      <a href="/about/" class="intro-link">
+        Full Biography &amp; Practice History
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- ======================== CTA ======================== -->
+  <section class="cta-section" id="contact">
+    <div class="cta-bg-text">Fine Line</div>
+    <div class="cta-inner">
+      <p class="section-label-sm">Start a Conversation</p>
+      <h2 class="fade-in">Ready to build<br>something that lasts?</h2>
+      <p class="fade-in">A 30-minute project review is a direct conversation with Mark. Bring your site, your program, your budget constraints. Leave with a clear picture of what's possible.</p>
+      <div class="cta-actions fade-in">
+        <a href="https://calendly.com/finelinestudio1/30min" class="btn-primary" target="_blank" rel="noopener">
+          Schedule 30-Minute Review
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+      <p class="contact-detail" style="margin-top:1.5rem;">Or reach out directly: <a href="mailto:info@fine-linestudio.com">info@fine-linestudio.com</a></p>
+    </div>
+  </section>
+
+  <!-- ======================== FOOTER ======================== -->
+  <footer class="footer">
+    <div class="footer-logo">
+      <svg width="160" height="36" viewBox="0 0 160 36" xmlns="http://www.w3.org/2000/svg">
+          <text x="0" y="26" font-family="Georgia, serif" font-size="22" font-weight="300" fill="#ffffff" letter-spacing="2">FINE LINE</text>
+          <text x="0" y="36" font-family="Georgia, sans-serif" font-size="8" font-weight="400" fill="#fec422" letter-spacing="4">STUDIO</text>
+        </svg>
+      <p class="footer-tagline">"Built to perform.<br>Designed to endure."</p>
+      <p class="footer-license">
+        Licensed: ID &bull; WA &bull; OR &bull; HI &bull; KY<br>
+        AIA Member &bull; NCARB Certificate
+      </p>
+    </div>
+    <nav class="footer-nav">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="/portfolio/">Selected Work</a></li>
+        <li><a href="/services/">Services</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/contact/">Contact</a></li>
+        <li><a href="/client-portal/">Client Portal</a></li>
+      </ul>
+    </nav>
+    <div class="footer-contact">
+      <h4>Contact</h4>
+      <p>
+        <a href="mailto:info@fine-linestudio.com">info@fine-linestudio.com</a><br><br>
+        Licensed: Idaho &bull; Washington &bull; Oregon<br>
+        Hawaii &bull; Kentucky<br>
+        NCARB Certificate Holder<br><br>
+        <a href="https://calendly.com/finelinestudio1/30min" target="_blank" rel="noopener">Schedule a project review &rarr;</a>
+      </p>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>&copy; 2026 Fine Line Studio. All rights reserved.</p>
+    <p>Architecture &bull; Idaho &bull; Washington &bull; Oregon &bull; Hawaii &bull; Kentucky</p>
+  </div>
+  </div><!-- /footer-bottom -->
+
+  <!-- ======================== JAVASCRIPT ======================== --><script>
+    // --- Parallax ---
+    const heroBg = document.getElementById('hero-parallax');
+    function updateParallax() {
+      const scrollY = window.scrollY;
+      if (scrollY < window.innerHeight) {
+        heroBg.style.transform = `translateY(${scrollY * 0.45}px)`;
+      }
+    }
+    window.addEventListener('scroll', updateParallax, { passive: true });
+
+    // --- Scroll fade-in ---
+    const fadeEls = document.querySelectorAll('.fade-in');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
         }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
-    </script>
+    fadeEls.forEach(el => observer.observe(el));
+
+    // --- Portfolio filter ---
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.project-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          if (filter === 'all' || card.dataset.category === filter) {
+            card.style.display = 'block';
+            card.style.opacity = '0';
+            setTimeout(() => { card.style.opacity = '1'; }, 20);
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+
 </body>
 </html>
