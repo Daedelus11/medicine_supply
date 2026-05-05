@@ -240,7 +240,7 @@ footer{padding:2rem 1.25rem}
 const BASE = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQyzrIuojRuh6HCDFixkYmhAMTKqtEp29W_bVq6UZyFzFI4I4wCMOcKziTgeUKGmoqvZ9q6kFqJW37t/pub';
 const REPORTS_CSV = BASE + '?gid=1564557185&single=true&output=csv';
 const SUBMITS_CSV = BASE + '?gid=1593772108&single=true&output=csv';
-const RFI_CSV     = BASE + '?gid=RFI_GID_PLACEHOLDER&single=true&output=csv';
+const RFI_CSV     = BASE + '?gid=1378860345&single=true&output=csv';
 
 const PASS = 'Cacopardo2026';
 const SESS = 'ca_auth_v2';
@@ -331,12 +331,7 @@ function field(label, value) {
 async function loadAll() {
   loadReports();
   loadSubmittals();
-  const rfiContainer = document.getElementById('rfi-container');
-  if (RFI_CSV.includes('PLACEHOLDER')) {
-    rfiContainer.innerHTML = '<div class="empty-state"><div class="empty-icon">&#128203;</div><div class="empty-text">RFI log will be available once the RFI tab is added to the project sheet.</div></div>';
-  } else {
-    loadRFI();
-  }
+  loadRFI();
 }
 
 async function loadReports() {
