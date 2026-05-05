@@ -12,8 +12,9 @@
 html{font-size:16px;scroll-behavior:smooth}
 body{background:#111110;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;font-weight:300;line-height:1.6;min-height:100vh}
 .fl-nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(26,26,24,0.97);backdrop-filter:blur(8px);border-bottom:1px solid rgba(247,245,241,0.07);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px}
-.fl-logo{font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.88rem;letter-spacing:0.18em;text-transform:uppercase;color:#f7f5f1;text-decoration:none;white-space:nowrap}
-.fl-logo .pipe{color:rgba(247,245,241,0.3);margin:0 0.15em}
+.fl-logo{display:flex;align-items:center;text-decoration:none}
+.fl-logo span{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;letter-spacing:0.06em;color:#f7f5f1;line-height:1}
+.fl-logo span em{font-style:normal;color:#fec422}
 .fl-nav-links{display:flex;gap:2rem;list-style:none}
 .fl-nav-links a{font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:0.78rem;letter-spacing:0.12em;text-transform:uppercase;color:rgba(247,245,241,0.55);text-decoration:none;transition:color 0.2s}
 .fl-nav-links a:hover{color:#f7f5f1}
@@ -59,21 +60,23 @@ body{background:#111110;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 /* CA MODULE CARDS */
 .ca-modules-section{background:#111110;border-bottom:1px solid rgba(247,245,241,0.08);padding:2.5rem}
 .ca-modules-eyebrow{font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;color:rgba(247,245,241,0.3);margin-bottom:1.5rem}
-.ca-modules-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;max-width:900px}
+.ca-modules-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;max-width:1100px}
 .ca-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:1.5rem 1.25rem;text-align:center;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:0.6rem;transition:border-color 0.2s,background 0.2s,transform 0.2s}
 .ca-card:hover{border-color:rgba(254,196,34,0.35);background:rgba(255,255,255,0.06);transform:translateY(-2px)}
+.ca-card.coming-soon{opacity:0.45;cursor:default;pointer-events:none}
 .ca-card-icon{width:36px;height:36px;display:flex;align-items:center;justify-content:center;color:#fec422}
 .ca-card-icon svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .ca-card-title{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:#f7f5f1}
 .ca-card-desc{font-size:0.72rem;font-weight:300;line-height:1.5;color:rgba(247,245,241,0.4)}
 .ca-card-badge{font-size:0.55rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;padding:0.2rem 0.55rem;background:rgba(254,196,34,0.15);color:#fec422}
+.ca-card-badge.soon{background:rgba(247,245,241,0.08);color:rgba(247,245,241,0.3)}
 /* PHOTOS SECTION */
 .content-area{background:#111110;min-height:40vh}
 .visits-wrap{padding:2.5rem;max-width:1100px;margin:0 auto}
 .visits-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2rem;padding-bottom:1rem;border-bottom:1px solid rgba(247,245,241,0.08)}
 .visits-title{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:1.6rem;letter-spacing:0.04em;color:#f7f5f1}
 .visit-count{font-size:0.72rem;color:rgba(247,245,241,0.35);letter-spacing:0.08em}
-.visit-card{border:1px solid rgba(247,245,241,0.08);margin-bottom:2.5rem;overflow:hidden;background:rgba(255,255,255,0.03)}
+.visit-card{border:1px solid rgba(247,245,241,0.08);margin-bottom:2.5rem;overflow:hidden;background:rgba(255,255,255,0.03);max-width:1080px}
 .visit-head{display:grid;grid-template-columns:auto 1fr;gap:0;border-bottom:1px solid rgba(247,245,241,0.08)}
 .visit-date-block{background:#1a1a18;padding:1.25rem 1.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:90px}
 .visit-day{font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:1.8rem;color:#fec422;line-height:1}
@@ -122,6 +125,7 @@ footer{background:#111110;border-top:1px solid rgba(247,245,241,0.06);padding:2.
 .footer-copy a{color:rgba(247,245,241,0.3);text-decoration:none}
 .footer-copy a:hover{color:rgba(247,245,241,0.55)}
 .footer-conf{font-size:0.65rem;letter-spacing:0.08em;text-transform:uppercase;color:rgba(247,245,241,0.18)}
+@media(max-width:900px){.ca-modules-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){
 .fl-nav{padding:0 1.25rem}.fl-nav-links{display:none}
 .page-header{padding:2rem 1.25rem 2rem}.page-meta-row{gap:1.5rem}
@@ -129,19 +133,19 @@ footer{background:#111110;border-top:1px solid rgba(247,245,241,0.06);padding:2.
 .photo-grid{grid-template-columns:repeat(2,1fr)}.portal-footer-nav{padding:1rem 1.25rem}
 footer{padding:2rem 1.25rem}.status-banner{padding:0.9rem 1.25rem}
 .visit-date-block{min-width:72px;padding:1rem}
-.ca-modules-grid{grid-template-columns:1fr}
+.ca-modules-grid{grid-template-columns:1fr 1fr}
 .ca-modules-section{padding:1.5rem 1.25rem}
 }
 </style>
 </head>
 <body>
 <nav class="fl-nav">
-  <a href="/" class="fl-logo">FINE LINE <span class="pipe">|</span> STUDIO</a>
+  <a href="https://fine-linestudio.com/" class="fl-logo"><span>FINE LINE <em>|</em> STUDIO</span></a>
   <ul class="fl-nav-links">
-    <li><a href="/portfolio">Portfolio</a></li>
-    <li><a href="/services">Services</a></li>
-    <li><a href="/about">About</a></li>
-    <li><a href="/contact">Contact</a></li>
+    <li><a href="https://fine-linestudio.com/portfolio/">Portfolio</a></li>
+    <li><a href="https://fine-linestudio.com/services/">Services</a></li>
+    <li><a href="https://fine-linestudio.com/about/">About</a></li>
+    <li><a href="https://fine-linestudio.com/contact/">Contact</a></li>
   </ul>
 </nav>
 <div id="gate">
@@ -174,26 +178,35 @@ footer{padding:2rem 1.25rem}.status-banner{padding:0.9rem 1.25rem}
     <div class="section-eyebrow">Construction Phase</div>
     <div class="phase-rail" id="phaseRail"></div>
   </div>
-  <!-- CA MODULE CARDS -->
   <div class="ca-modules-section">
     <div class="ca-modules-eyebrow">CA Modules</div>
     <div class="ca-modules-grid">
+      <!-- Site Photos -->
       <a href="cacopardo-photos.html" class="ca-card">
         <div class="ca-card-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
         <div class="ca-card-title">Site Photos</div>
         <div class="ca-card-desc">Construction progress photographs organized by visit date</div>
         <div class="ca-card-badge">Live</div>
       </a>
-      <a href="ca-observation-reports.html" class="ca-card">
+      <!-- Observation Reports - coming soon -->
+      <div class="ca-card coming-soon">
         <div class="ca-card-icon"><svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg></div>
         <div class="ca-card-title">Observation Reports</div>
-        <div class="ca-card-desc">Field reports from each site visit with conformance status and open items</div>
+        <div class="ca-card-desc">Field reports from each site visit with open items and conformance status</div>
+        <div class="ca-card-badge soon">Coming Soon</div>
+      </div>
+      <!-- Submittal Log -->
+      <a href="cacopardo-submittals.html" class="ca-card">
+        <div class="ca-card-icon"><svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></div>
+        <div class="ca-card-title">Submittal Log</div>
+        <div class="ca-card-desc">Track submittals, shop drawings, and product approvals</div>
         <div class="ca-card-badge">Live</div>
       </a>
-      <a href="cacopardo-submittals.html" class="ca-card">
-        <div class="ca-card-icon"><svg viewBox="0 0 24 24"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg></div>
-        <div class="ca-card-title">Submittal Log</div>
-        <div class="ca-card-desc">Track submittals, approvals, and upload project documents</div>
+      <!-- RFI Log -->
+      <a href="cacopardo-ca.html" class="ca-card">
+        <div class="ca-card-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+        <div class="ca-card-title">RFI Log</div>
+        <div class="ca-card-desc">Requests for information, architect responses, and status tracking</div>
         <div class="ca-card-badge">Live</div>
       </a>
     </div>
@@ -221,9 +234,9 @@ footer{padding:2rem 1.25rem}.status-banner{padding:0.9rem 1.25rem}
     <div class="footer-inner">
       <div>
         <div class="footer-brand">FINE LINE <span class="pipe">|</span> STUDIO</div>
-        <div class="footer-copy">Mark Wagner, AIA, NCARB &mdash; Principal Architect<br>Questions: <a href="mailto:info@fine-linestudio.com">info@fine-linestudio.com</a></div>
+        <div class="footer-copy">Mark Wagner, AIA, NCARB &ndash; Principal Architect<br>Questions: <a href="mailto:info@fine-linestudio.com">info@fine-linestudio.com</a></div>
       </div>
-      <div class="footer-conf">Confidential &mdash; Authorized Users Only</div>
+      <div class="footer-conf">Confidential &ndash; Authorized Users Only</div>
     </div>
   </footer>
 </div>
@@ -265,8 +278,7 @@ async function loadData(){
     const photos=parseCSV(await photoRes.text());
     if(cfg['contractor'])document.getElementById('metaContractor').textContent=cfg['contractor'];
     if(cfg['last_updated'])document.getElementById('metaUpdated').textContent=cfg['last_updated'];
-    if(cfg['status_note']){document.getElementById('statusText').textContent=cfg['status_note'];document.getElementById('statusUpdated').textContent=cfg['last_updated']?'Updated '+cfg['last_updated']:'';
-    }
+    if(cfg['status_note']){document.getElementById('statusText').textContent=cfg['status_note'];document.getElementById('statusUpdated').textContent=cfg['last_updated']?'Updated '+cfg['last_updated']:'';}
     const currentPhase=cfg['current_phase']||'Site Preparation';
     buildPhases(DEFAULT_PHASE_ORDER,currentPhase);
     photos.sort((a,b)=>new Date(b['visit_date']||0)-new Date(a['visit_date']||0));
