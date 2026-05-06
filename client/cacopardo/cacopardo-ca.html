@@ -91,7 +91,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .log-table .td-section{font-size:0.72rem;color:rgba(247,245,241,0.4);white-space:nowrap}
 .log-table .td-desc{max-width:260px}
 .log-table .td-date{white-space:nowrap;font-size:0.75rem;color:rgba(247,245,241,0.5)}
-/* RFI */
 .rfi-card{border:1px solid rgba(247,245,241,0.1);margin-bottom:1.25rem}
 .rfi-head{display:grid;grid-template-columns:auto 1fr auto;gap:0;border-bottom:1px solid rgba(247,245,241,0.08);align-items:center}
 .rfi-num-block{padding:1rem 1.25rem;border-right:1px solid rgba(247,245,241,0.08)}
@@ -103,7 +102,6 @@ body{background:#1a1a18;color:#f7f5f1;font-family:'IBM Plex Sans',sans-serif;fon
 .rfi-status-block{padding:1rem 1.25rem}
 .rfi-body{padding:1.25rem 1.5rem;display:grid;grid-template-columns:1fr 1fr;gap:1.25rem}
 .rfi-response-full{grid-column:1/-1}
-/* RFI document links bar */
 .rfi-docs{display:flex;gap:0.75rem;flex-wrap:wrap;padding:0.85rem 1.5rem;border-top:1px solid rgba(247,245,241,0.07);background:rgba(254,196,34,0.04)}
 .rfi-doc-link{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.68rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:#fec422;text-decoration:none;padding:0.35rem 0.75rem;border:1px solid rgba(254,196,34,0.25);transition:background 0.2s,color 0.2s}
 .rfi-doc-link:hover{background:rgba(254,196,34,0.12);color:#ffe07a}
@@ -138,7 +136,7 @@ footer{border-top:1px solid rgba(247,245,241,0.08);padding:3rem 2.5rem;margin-to
 </nav>
 <div class="ca-tabnav" id="caTabnav" style="display:none">
   <a href="cacopardo-construction-admin.html" class="ca-tabnav-back"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>Portal</a>
-  <button class="ca-tab active" data-tab="reports" onclick="switchTab('reports')">
+  <button class="ca-tab" data-tab="reports" onclick="switchTab('reports')">
     <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
     Observation Reports
   </button>
@@ -170,7 +168,7 @@ footer{border-top:1px solid rgba(247,245,241,0.08);padding:3rem 2.5rem;margin-to
     <div class="page-title">Construction Administration</div>
     <div class="page-meta">Cacopardo Residence &nbsp;&bull;&nbsp; McCall, Idaho &nbsp;&bull;&nbsp; Project No. 25-0301</div>
   </div>
-  <div class="panel active" id="panel-reports">
+  <div class="panel" id="panel-reports">
     <div class="sec-header"><div class="sec-title">Observation Reports</div><div class="sec-count" id="reports-count"></div></div>
     <div id="reports-container"><div class="loading"><div class="spin"></div> Loading observation reports...</div></div>
   </div>
@@ -204,11 +202,47 @@ const RFI_CSV=BASE+'?gid=1378860345&single=true&output=csv';
 const PASS='Cacopardo2026',SESS='ca_auth_v2';
 const gate=document.getElementById('gate'),main=document.getElementById('main'),tabnav=document.getElementById('caTabnav');
 const gateInput=document.getElementById('gateInput'),gateErr=document.getElementById('gateErr');
-function unlock(){if(gateInput.value.trim()===PASS){sessionStorage.setItem(SESS,'1');gate.style.display='none';main.style.display='block';tabnav.style.display='flex';loadAll();}else{gateErr.style.display='block';gateInput.value='';gateInput.focus();}}
+
+// Hash-based tab routing: reads #rfi, #submittals, #reports from URL
+// Falls back to 'rfi' if no hash (most direct links will be to RFI)
+function getInitialTab(){
+  const h=window.location.hash.replace('#','').toLowerCase();
+  if(h==='submittals'||h==='reports'||h==='rfi')return h;
+  return'rfi';
+}
+
+function showMain(){
+  gate.style.display='none';
+  main.style.display='block';
+  tabnav.style.display='flex';
+  switchTab(getInitialTab());
+  loadAll();
+}
+
+function unlock(){
+  if(gateInput.value.trim()===PASS){
+    sessionStorage.setItem(SESS,'1');
+    showMain();
+  }else{
+    gateErr.style.display='block';
+    gateInput.value='';
+    gateInput.focus();
+  }
+}
 document.getElementById('gateBtn').addEventListener('click',unlock);
 gateInput.addEventListener('keydown',e=>{if(e.key==='Enter')unlock();});
-if(sessionStorage.getItem(SESS)==='1'){gate.style.display='none';main.style.display='block';tabnav.style.display='flex';loadAll();}
-function switchTab(id){document.querySelectorAll('.ca-tab').forEach(t=>t.classList.remove('active'));document.querySelector('[data-tab="'+id+'"]').classList.add('active');document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-'+id).classList.add('active');}
+if(sessionStorage.getItem(SESS)==='1'){showMain();}
+
+function switchTab(id){
+  document.querySelectorAll('.ca-tab').forEach(t=>t.classList.remove('active'));
+  const btn=document.querySelector('[data-tab="'+id+'"]');
+  if(btn)btn.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const panel=document.getElementById('panel-'+id);
+  if(panel)panel.classList.add('active');
+  window.location.hash=id;
+}
+
 function parseCSV(text){const lines=text.trim().split('\n'),headers=splitLine(lines[0]),rows=[];for(let i=1;i<lines.length;i++){if(!lines[i].trim())continue;const vals=splitLine(lines[i]),obj={};headers.forEach((h,idx)=>{obj[h.trim()]=(vals[idx]||'').trim().replace(/\r/,'');});rows.push(obj);}return rows;}
 function splitLine(line){const parts=[];let cur='',inQ=false;for(let i=0;i<line.length;i++){if(line[i]==='"'){inQ=!inQ;}else if(line[i]===','&&!inQ){parts.push(cur);cur='';}else{cur+=line[i];}}parts.push(cur);return parts;}
 function fmtDate(str){if(!str)return'\u2014';const d=new Date(str);if(isNaN(d))return str;return d.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});}
