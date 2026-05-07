@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -195,7 +195,7 @@
   <button class="btn btn-danger" style="padding:8px 18px;font-size:10px" onclick="showView('timer')">Stop</button>
 </div>
 
-<!-- ═══════════════ TIMER ═══════════════ -->
+<!-- TIMER -->
 <div class="view active" id="view-timer">
   <div class="card">
     <div class="card-rule"></div>
@@ -257,7 +257,7 @@
   </div>
 </div>
 
-<!-- ═══════════════ LOG ═══════════════ -->
+<!-- LOG -->
 <div class="view" id="view-log">
   <div class="page-header">
     <div><div class="page-eyebrow">Fine Line Studio</div><div class="page-title">Time Log</div></div>
@@ -273,7 +273,7 @@
   <div class="entry-list" id="entryList"><div class="empty-state">Loading entries&hellip;</div></div>
 </div>
 
-<!-- ═══════════════ REPORT ═══════════════ -->
+<!-- REPORT -->
 <div class="view" id="view-report">
   <div class="page-header">
     <div><div class="page-eyebrow">Fine Line Studio</div><div class="page-title">Billing Report</div></div>
@@ -292,7 +292,7 @@
   <div class="breakdown-list" id="projectBreakdown"></div>
 </div>
 
-<!-- ═══════════════ INVOICE ═══════════════ -->
+<!-- INVOICE -->
 <div class="view" id="view-invoice">
   <div class="page-header">
     <div><div class="page-eyebrow">Fine Line Studio</div><div class="page-title">Invoice</div></div>
@@ -308,6 +308,13 @@
       <div><label class="field-label">To</label><input type="date" id="invoiceTo" onchange="loadInvoiceEntries()"></div>
     </div>
     <div class="field-group"><label class="field-label">Invoice date</label><input type="date" id="invoiceDate" style="width:200px"></div>
+    <div class="field-group" style="margin-top:4px;padding:12px 14px;background:#f7f5f1;border:1px solid #d8d5cf">
+      <label class="field-label" style="color:#7d6b57">Prior Applied Override <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;color:#a09e98">(leave blank — auto-calculated from Invoice Log)</span></label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:6px">
+        <div><input type="number" id="invoiceRetainerOverride" placeholder="Auto from Invoice Log" min="0" step="0.01" style="background:#fff"></div>
+        <div style="padding-top:10px;font-size:10px;color:#a09e98;line-height:1.5">Sums all non-Void invoices automatically. Enter a value only if the log is out of sync.</div>
+      </div>
+    </div>
   </div>
   <div id="invoicePreview" style="display:none">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
@@ -376,17 +383,25 @@
         <li>Make all checks payable to Fine Line Studio, PLLC.</li>
         <li>Billings will be incrementally charged, based on completed deliverables, unless otherwise stated.</li>
       </ul>
-      <div style="font-size:11px;line-height:2.2;margin-bottom:28px">
+      <div style="font-size:11px;line-height:2.2;margin-bottom:20px">
         <div style="display:flex;justify-content:space-between;border-bottom:1px dotted #d8d5cf;max-width:480px"><span style="font-weight:500">Payment Received to Date</span><span id="inv-received" style="font-weight:300">$0.00</span></div>
         <div style="display:flex;justify-content:space-between;border-bottom:1px dotted #d8d5cf;max-width:480px"><span style="font-weight:500">Previous Due</span><span id="inv-prev-due" style="font-weight:300">$0.00</span></div>
         <div style="display:flex;justify-content:space-between;border-bottom:1px dotted #d8d5cf;max-width:480px"><span style="font-weight:500">This Invoice</span><span id="inv-subtotal" style="font-weight:300"></span></div>
         <div style="display:flex;justify-content:space-between;max-width:480px"><span style="font-weight:700">Total Due</span><span id="inv-total" style="font-weight:700"></span></div>
       </div>
+      <div id="inv-retainer-block" style="display:none;background:#f7f5f1;border:1px solid #d8d5cf;padding:14px 18px;max-width:480px;margin-bottom:28px">
+        <div style="font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:#a09e98;margin-bottom:10px;border-bottom:1px solid #d8d5cf;padding-bottom:6px">Retainer Status</div>
+        <div style="font-size:11px;line-height:2.2">
+          <div style="display:flex;justify-content:space-between;border-bottom:1px dotted #d8d5cf"><span style="font-weight:300">Retainer on File</span><span id="inv-retainer-on-file" style="font-weight:300">$0.00</span></div>
+          <div style="display:flex;justify-content:space-between;border-bottom:1px dotted #d8d5cf"><span style="font-weight:300">Applied to Date</span><span id="inv-retainer-applied" style="font-weight:300">$0.00</span></div>
+          <div style="display:flex;justify-content:space-between"><span style="font-weight:700">Retainer Balance After This Invoice</span><span id="inv-retainer-balance" style="font-weight:700"></span></div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════ INVOICE LOG ═══════════════ -->
+<!-- INVOICE LOG -->
 <div class="view" id="view-invoicelog">
   <div class="page-header">
     <div><div class="page-eyebrow">Fine Line Studio</div><div class="page-title">Invoice Log</div></div>
@@ -402,13 +417,11 @@
       </select>
     </div>
   </div>
-  <!-- Aging summary strip -->
   <div id="ilAgingSummary" style="display:grid;grid-template-columns:repeat(4,1fr);background:var(--rule);gap:1px;border:1px solid var(--rule);margin-bottom:28px"></div>
-  <!-- Invoice table -->
   <div id="invoiceLogList"><div class="empty-state">Loading&hellip;</div></div>
 </div>
 
-<!-- ═══════════════ STATEMENT ═══════════════ -->
+<!-- STATEMENT -->
 <div class="view" id="view-statement">
   <div class="page-header">
     <div><div class="page-eyebrow">Fine Line Studio</div><div class="page-title">Statement</div></div>
@@ -486,7 +499,7 @@
   </div>
 </div>
 
-<!-- ═══════════════ EXPENSES ═══════════════ -->
+<!-- EXPENSES -->
 <div class="view" id="view-expenses">
   <div class="page-header">
     <div><div class="page-eyebrow">Fine Line Studio</div><div class="page-title">Expenses</div></div>
@@ -519,7 +532,7 @@
   </div>
 </div>
 
-<!-- ═══════════════ PROJECTS ═══════════════ -->
+<!-- PROJECTS -->
 <div class="view" id="view-projects">
   <div class="page-header">
     <div><div class="page-eyebrow">Fine Line Studio</div><div class="page-title">Projects</div></div>
@@ -550,7 +563,7 @@
   </div>
 </div>
 
-<!-- ═══════════════ CLIENTS ═══════════════ -->
+<!-- CLIENTS -->
 <div class="view" id="view-clients">
   <div class="page-header">
     <div><div class="page-eyebrow">Fine Line Studio</div><div class="page-title">Clients</div></div>
@@ -711,7 +724,7 @@ async function init() {
     projects = await db('tc_projects?order=name.asc&active=eq.true');
     const raw = await db('tc_entries?order=start_time.desc&limit=500');
     entries = raw.map(e=>({...e, duration_minutes:parseFloat(e.duration_minutes)||0, rate_used:parseFloat(e.rate_used)||195, billed:e.billed===true||e.billed==='true'}));
-    projects = projects.map(p=>({...p, hourly_rate:parseFloat(p.hourly_rate)||0, contract_value:p.contract_value?parseFloat(p.contract_value):null}));
+    projects = projects.map(p=>({...p, hourly_rate:parseFloat(p.hourly_rate)||0, contract_value:p.contract_value?parseFloat(p.contract_value):null, retainer_on_file:p.retainer_on_file?parseFloat(p.retainer_on_file):null}));
     invoices = (await db('tc_invoices?order=invoice_date.desc')).map(coerceInv);
     expenses = (await db('tc_expenses?order=expense_date.desc')).map(coerceExp);
     setStatus(true);
@@ -771,7 +784,7 @@ function showView(name) {
 
 function getRoleData(selectId) { const sel=document.getElementById(selectId); const opt=sel.options[sel.selectedIndex]; return{role:opt.getAttribute('data-role'),rate:parseFloat(sel.value)}; }
 
-// ── Timer ──────────────────────────────────────────────────────
+// Timer
 function startTimer() {
   const pid=document.getElementById('timerProject').value;
   if(!pid){toast('Select a project first','error');return;}
@@ -844,7 +857,7 @@ async function saveManualEntry() {
   } catch(e){toast('Save failed: '+e.message,'error');}
 }
 
-// ── Log ─────────────────────────────────────────────────────────
+// Log
 function renderLog() {
   const fp=document.getElementById('logProjectFilter')?.value, fb=document.getElementById('logBillableFilter')?.value;
   const filtered=entries.filter(e=>{if(fp&&e.project_id!==fp)return false;if(fb==='true'&&!e.billable)return false;if(fb==='false'&&e.billable)return false;return true;});
@@ -920,7 +933,7 @@ async function saveEditEntry() {
   } catch(err){toast('Save failed: '+err.message,'error');}
 }
 
-// ── Report ──────────────────────────────────────────────────────
+// Report
 function setPeriod(p,btn){reportPeriod=p;document.querySelectorAll('.period-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderReport();}
 function getDateRange() {
   const now=new Date();
@@ -945,7 +958,6 @@ function renderReport() {
   const maxMin=Math.max(...Object.values(byP).map(v=>v.min),1);
   document.getElementById('projectBreakdown').innerHTML=Object.entries(byP).sort((a,b)=>b[1].min-a[1].min).map(([pid,d])=>{
     const p=projects.find(x=>x.id===pid),pct=(d.min/maxMin*100).toFixed(1);
-    // Budget bar
     let budgetBar='';
     if(p?.contract_value&&p.contract_value>0){
       const totalBilledAmt=entries.filter(e=>e.project_id===pid&&e.billable&&e.billed).reduce((s,e)=>{const r=e.rate_used||p.hourly_rate||0;return s+(r*(e.duration_minutes/60));},0);
@@ -957,7 +969,7 @@ function renderReport() {
   }).join('')||'<div class="empty-state">No data for this period.</div>';
 }
 
-// ── Projects ─────────────────────────────────────────────────────
+// Projects
 function toggleArchiveView(){showingArchive=!showingArchive;document.getElementById('archiveToggleBtn').textContent=showingArchive?'Show Active':'Show Archive';document.getElementById('archiveToggleBtn').style.color=showingArchive?'var(--yellow)':'';if(showingArchive){loadAndRenderArchive();}else{renderProjects();}}
 async function loadAndRenderArchive(){
   try{archivedProjects=await db('tc_projects?order=name.asc&active=eq.false');archivedProjects=archivedProjects.map(p=>({...p,hourly_rate:parseFloat(p.hourly_rate)||0}));}
@@ -985,11 +997,12 @@ function renderProjects(){
   el.innerHTML=projects.map(p=>{
     const c=clients.find(x=>x.id===p.client_id);const cL=c?c.name:(p.client||'');const linked=!!p.client_id;
     const cv=p.contract_value?`$${p.contract_value.toLocaleString()}`:'—';
+    const ret=p.retainer_on_file?`$${p.retainer_on_file.toLocaleString()}`:'—';
     return`<div class="project-item" id="proj-item-${p.id}">
       <div id="proj-view-${p.id}" style="display:flex;justify-content:space-between;align-items:center;width:100%">
         <div>
           <div class="project-item-name">${p.project_number?`<span style="font-family:var(--sans);font-size:11px;font-weight:500;color:var(--light);letter-spacing:0.08em;margin-right:10px">${p.project_number}</span>`:''}<span style="font-family:var(--serif);font-size:18px">${p.name}</span></div>
-          <div class="project-item-meta">${cL} &middot; ${p.default_role||'Principal Architect'} &middot; Contract: ${cv}${!linked?` <span style="color:#e05252;font-size:9px;margin-left:4px">&#9888; not linked</span>`:''}</div>
+          <div class="project-item-meta">${cL} &middot; ${p.default_role||'Principal Architect'} &middot; Contract: ${cv} &middot; Retainer: ${ret}${!linked?` <span style="color:#e05252;font-size:9px;margin-left:4px">&#9888; not linked</span>`:''}</div>
         </div>
         <div class="entry-actions">
           <button class="btn-micro edit" onclick="startEditProject('${p.id}')">Edit</button>
@@ -1000,11 +1013,12 @@ function renderProjects(){
         </div>
       </div>
       <div id="proj-edit-${p.id}" style="display:none;width:100%">
-        <div style="display:grid;grid-template-columns:0.7fr 1.4fr 1fr 1fr;gap:10px;margin-bottom:10px">
+        <div style="display:grid;grid-template-columns:0.6fr 1.2fr 1fr 0.9fr 0.9fr;gap:10px;margin-bottom:10px">
           <div><label class="field-label">Project no.</label><input type="text" id="pe-num-${p.id}" value="${p.project_number||''}"></div>
           <div><label class="field-label">Project name</label><input type="text" id="pe-name-${p.id}" value="${p.name}"></div>
           <div><label class="field-label">Default role</label><select id="pe-role-${p.id}">${ROLES.map(r=>`<option value="${r.rate}" data-role="${r.label}" ${p.default_role===r.label?'selected':''}>${r.label} — $${r.rate}/hr</option>`).join('')}</select></div>
           <div><label class="field-label">Contract value ($)</label><input type="number" id="pe-cv-${p.id}" value="${p.contract_value||''}" min="0" step="100"></div>
+          <div><label class="field-label">Retainer on file ($)</label><input type="number" id="pe-ret-${p.id}" value="${p.retainer_on_file||''}" min="0" step="100" placeholder="0"></div>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-primary" style="padding:8px 18px;font-size:10px" onclick="saveEditProject('${p.id}')">Save</button>
@@ -1023,8 +1037,9 @@ async function saveEditProject(id){
   const role=roleSel.options[roleSel.selectedIndex].getAttribute('data-role');
   const rate=parseFloat(roleSel.value);
   const cv=parseFloat(document.getElementById('pe-cv-'+id).value)||null;
+  const ret=parseFloat(document.getElementById('pe-ret-'+id).value)||null;
   if(!name){toast('Project name required','error');return;}
-  try{await db(`tc_projects?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({project_number:number||null,name,default_role:role,hourly_rate:rate,contract_value:cv})});const p=projects.find(x=>x.id===id);Object.assign(p,{project_number:number||null,name,default_role:role,hourly_rate:rate,contract_value:cv});projects.sort((a,b)=>a.name.localeCompare(b.name));populateSelects();renderProjects();toast('Project updated','success');}
+  try{await db(`tc_projects?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({project_number:number||null,name,default_role:role,hourly_rate:rate,contract_value:cv,retainer_on_file:ret})});const p=projects.find(x=>x.id===id);Object.assign(p,{project_number:number||null,name,default_role:role,hourly_rate:rate,contract_value:cv,retainer_on_file:ret});projects.sort((a,b)=>a.name.localeCompare(b.name));populateSelects();renderProjects();toast('Project updated','success');}
   catch(e){toast('Error: '+e.message,'error');}
 }
 async function addProject(){
@@ -1038,13 +1053,13 @@ async function addProject(){
   const rate=parseFloat(roleSel.value);
   const cv=parseFloat(document.getElementById('newProjectContract').value)||null;
   if(!name||!client_id){toast('Name and client required','error');return;}
-  try{const p=await db('tc_projects',{method:'POST',body:JSON.stringify({project_number:number||null,name,client:clientName,client_id,hourly_rate:rate,default_role:role,contract_value:cv})});projects.push({...p[0],hourly_rate:rate,contract_value:cv});projects.sort((a,b)=>a.name.localeCompare(b.name));populateSelects();renderProjects();document.getElementById('newProjectNumber').value='';document.getElementById('newProjectName').value='';document.getElementById('newProjectClient').value='';document.getElementById('newProjectContract').value='';toast('Project added','success');}
+  try{const p=await db('tc_projects',{method:'POST',body:JSON.stringify({project_number:number||null,name,client:clientName,client_id,hourly_rate:rate,default_role:role,contract_value:cv,retainer_on_file:null})});projects.push({...p[0],hourly_rate:rate,contract_value:cv,retainer_on_file:null});projects.sort((a,b)=>a.name.localeCompare(b.name));populateSelects();renderProjects();document.getElementById('newProjectNumber').value='';document.getElementById('newProjectName').value='';document.getElementById('newProjectClient').value='';document.getElementById('newProjectContract').value='';toast('Project added','success');}
   catch(e){toast('Error: '+e.message,'error');}
 }
 async function archiveProject(id){if(!confirm('Archive this project?'))return;try{await db(`tc_projects?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({active:false})});projects=projects.filter(p=>p.id!==id);populateSelects();renderProjects();toast('Archived');}catch(e){toast('Error: '+e.message,'error');}}
 function linkClient(id){const p=projects.find(x=>x.id===id);if(!clients.length){toast('Add a client first','error');return;}const opts=clients.map((c,i)=>`${i+1}. ${c.name}`).join('\n');const input=prompt(`Link "${p.name}" to client:\n\n${opts}\n\nEnter number:`,'1');if(input===null)return;const num=parseInt(input);if(isNaN(num)||num<1||num>clients.length){toast('Invalid selection','error');return;}const chosen=clients[num-1];db(`tc_projects?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({client_id:chosen.id,client:chosen.name})}).then(()=>{p.client_id=chosen.id;p.client=chosen.name;renderProjects();toast(`Linked to ${chosen.name}`,'success');}).catch(err=>toast('Error: '+err.message,'error'));}
 
-// ── Closeout ─────────────────────────────────────────────────────
+// Closeout
 let closingProjectId=null;
 function openCloseoutModal(id){
   closingProjectId=id;
@@ -1067,7 +1082,7 @@ async function confirmCloseout(){
   catch(e){toast('Error: '+e.message,'error');}
 }
 
-// ── Invoice ──────────────────────────────────────────────────────
+// Invoice
 function initInvoice(){
   const now=new Date();
   const firstDay=new Date(now.getFullYear(),now.getMonth(),1).toISOString().slice(0,10);
@@ -1098,10 +1113,19 @@ async function loadInvoiceEntries(){
   currentInvoiceEntryIds=billable.map(e=>e.id);
   currentInvoiceExpenseIds=billableExp.map(e=>e.id);
 
-  // Compute Previous Due and Received from tc_invoices
+  // Previous due and received from Invoice Log
   const projInvoices=invoices.filter(i=>i.project_id===pid&&i.status!=='Void');
   const prevDue=projInvoices.reduce((s,i)=>s+(i.amount-i.amount_paid),0);
   const received=projInvoices.reduce((s,i)=>s+i.amount_paid,0);
+
+  // Retainer tracking — cumulative applied to date
+  const currentInvNum=document.getElementById('invoiceNumber').value.trim();
+  const priorInvoiceSum=projInvoices
+    .filter(i=>i.invoice_number!==currentInvNum)
+    .reduce((s,i)=>s+i.amount,0);
+  const retainerOnFile=parseFloat(p.retainer_on_file)||0;
+  const overrideVal=parseFloat(document.getElementById('invoiceRetainerOverride')?.value)||null;
+  const priorApplied=(overrideVal!==null&&overrideVal>0)?overrideVal:priorInvoiceSum;
 
   const clientRec=clients.find(x=>x.id===p.client_id)||clients.find(x=>x.name?.toLowerCase()===p.client?.toLowerCase())||null;
   document.getElementById('inv-number').textContent=document.getElementById('invoiceNumber').value;
@@ -1121,7 +1145,6 @@ async function loadInvoiceEntries(){
   document.getElementById('inv-rows').innerHTML=billable.map(e=>{const hrs=e.duration_minutes/60;const rate=e.rate_used||p.hourly_rate||195;const amount=hrs*rate;grandTotal+=amount;totalHrs+=hrs;return`<tr>${td(fmtDate(e.start_time))}${td(e.role||'Principal Architect')}${td(e.notes||e.phase||'Professional services',false,false,true)}${td(hrs.toFixed(2),true)}${td('$'+rate.toFixed(0)+'/hr',true)}${td('$'+amount.toFixed(2),true,true)}</tr>`;}).join('');
   document.getElementById('inv-tfoot').innerHTML=`<tr><td colspan="3" style="padding:8px 0 4px;font-size:9px;font-weight:600;letter-spacing:0.1em;color:#a09e98;border-top:2px solid #1a1a18">TOTAL</td><td style="padding:8px 4px 4px;text-align:right;font-weight:600;border-top:2px solid #1a1a18">${totalHrs.toFixed(2)}</td><td style="padding:8px 4px 4px;border-top:2px solid #1a1a18"></td><td style="padding:8px 0 4px 4px;text-align:right;font-weight:700;border-top:2px solid #1a1a18">$${grandTotal.toFixed(2)}</td></tr>`;
 
-  // Expense section
   let expTotal=0;
   if(billableExp.length){
     document.getElementById('inv-expense-section').style.display='';
@@ -1135,6 +1158,28 @@ async function loadInvoiceEntries(){
   document.getElementById('inv-prev-due').textContent='$'+prevDue.toFixed(2);
   document.getElementById('inv-subtotal').textContent='$'+invoiceTotal.toFixed(2);
   document.getElementById('inv-total').textContent='$'+totalDue.toFixed(2);
+
+  // Retainer Status block
+  if(retainerOnFile>0){
+    const appliedToDate=priorApplied+invoiceTotal;
+    const retainerBalance=retainerOnFile-appliedToDate;
+    const fmt=(n)=>n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    document.getElementById('inv-retainer-block').style.display='';
+    document.getElementById('inv-retainer-on-file').textContent='$'+fmt(retainerOnFile);
+    document.getElementById('inv-retainer-applied').textContent='$'+fmt(appliedToDate);
+    document.getElementById('inv-retainer-balance').textContent='$'+fmt(retainerBalance);
+    document.getElementById('inv-retainer-balance').style.color=retainerBalance<0?'#e05252':'inherit';
+    // If retainer fully covers this invoice, note it on Total Due
+    if(retainerBalance>=0&&priorApplied<retainerOnFile){
+      document.getElementById('inv-total').textContent='$0.00';
+      document.getElementById('inv-total').style.color='#4caf82';
+      const note=document.getElementById('inv-total').parentNode;
+      note.querySelector('span:first-child').textContent='Total Due (Applied from Retainer)';
+    }
+  } else {
+    document.getElementById('inv-retainer-block').style.display='none';
+  }
+
   document.getElementById('invoicePreview').style.display='block';
 }
 
@@ -1150,12 +1195,9 @@ async function confirmBilled(){
   const dueDate=new Date(new Date(invDate).getTime()+30*24*60*60*1000).toISOString().slice(0,10);
 
   try{
-    // Mark time entries billed
     for(const id of currentInvoiceEntryIds){await db(`tc_entries?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({billed:true})});const e=entries.find(x=>x.id===id);if(e)e.billed=true;}
-    // Create single invoice record
     const inv=await db('tc_invoices',{method:'POST',body:JSON.stringify({project_id:pid,invoice_number:invNum,invoice_date:invDate,due_date:dueDate,amount:invSubtotal,amount_paid:0,status:'Sent'})});
     const newInv=coerceInv(inv[0]);invoices.unshift(newInv);
-    // Mark expenses billed and link to invoice
     for(const id of currentInvoiceExpenseIds){
       await db(`tc_expenses?id=eq.${id}`,{method:'PATCH',body:JSON.stringify({billed:true,invoice_id:newInv.id})});
       const ex=expenses.find(x=>x.id===id);if(ex){ex.billed=true;ex.invoice_id=newInv.id;}
@@ -1163,7 +1205,6 @@ async function confirmBilled(){
     currentInvoiceEntryIds=[];currentInvoiceExpenseIds=[];
     renderLog();renderInvoiceLog();
     toast('Invoice recorded and entries marked billed','success');
-    // Push to Rob Nyhof Google Sheet (fire and forget)
     fetch('https://mrhgitbdobfnelnulnbg.supabase.co/functions/v1/nyhof-invoice-sync?secret=FLS-Nyhof-2026',{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({invoice_number:invNum,invoice_date:invDate,amount:invSubtotal,description:'Architectural Services Rendered',notes:''})
@@ -1171,15 +1212,13 @@ async function confirmBilled(){
   } catch(err){toast('Error: '+err.message,'error');}
 }
 
-// ── Invoice Log ──────────────────────────────────────────────────
+// Invoice Log
 function renderInvoiceLog(){
   const fp=document.getElementById('ilProjectFilter')?.value;
   const fs=document.getElementById('ilStatusFilter')?.value;
   const today=new Date();
-  // Auto-flag overdue
   invoices.forEach(i=>{if(i.status==='Sent'&&new Date(i.due_date)<today){i.status='Overdue';}});
   let filtered=invoices.filter(i=>{if(fp&&i.project_id!==fp)return false;if(fs&&i.status!==fs)return false;return true;});
-  // Aging summary
   const open=invoices.filter(i=>i.status!=='Paid'&&i.status!=='Void');
   const current=open.filter(i=>daysDiff(today,new Date(i.due_date))>=0).reduce((s,i)=>s+(i.amount-i.amount_paid),0);
   const d30=open.filter(i=>{const d=daysDiff(today,new Date(i.due_date));return d<0&&d>=-30;}).reduce((s,i)=>s+(i.amount-i.amount_paid),0);
@@ -1284,7 +1323,6 @@ async function savePayment(){
   const newPaid=inv.amount_paid+amount;
   const newStatus=newPaid>=inv.amount?'Paid':newPaid>0?'Partial':'Sent';
   let receiptUrl=null,receiptFilename=null;
-  // Upload receipt if provided
   const fileInput=document.getElementById('pmtReceipt');
   if(fileInput.files.length>0){
     try{
@@ -1327,7 +1365,7 @@ async function voidInvoice(id){
   catch(e){toast('Error: '+e.message,'error');}
 }
 
-// ── Statement ──────────────────────────────────────────────────────
+// Statement
 function initStatement(){
   const now=new Date();
   const today=now.toISOString().slice(0,10);
@@ -1347,7 +1385,6 @@ function loadStatementEntries(){
   const unbilled=entries.filter(e=>{if(e.project_id!==pid||!e.billable||e.billed)return false;return new Date(e.start_time)<=throughD;}).sort((a,b)=>new Date(a.start_time)-new Date(b.start_time));
   if(!unbilled.length){document.getElementById('statementPreview').style.display='none';toast('No unbilled billable entries through that date','error');return;}
 
-  // Compute Previous Due and Received from tc_invoices
   const projInvoices=invoices.filter(i=>i.project_id===pid&&i.status!=='Void');
   const prevDue=projInvoices.reduce((s,i)=>s+(i.amount-i.amount_paid),0);
   const received=projInvoices.reduce((s,i)=>s+i.amount_paid,0);
@@ -1376,7 +1413,7 @@ function loadStatementEntries(){
   document.getElementById('statementPreview').style.display='block';
 }
 
-// ── Expenses ──────────────────────────────────────────────────────
+// Expenses
 function renderExpenses(){
   const fp=document.getElementById('expProjectFilter')?.value;
   const fb=document.getElementById('expBilledFilter')?.value;
@@ -1418,7 +1455,7 @@ async function addExpense(){
   try{
     const ex=await db('tc_expenses',{method:'POST',body:JSON.stringify({project_id:pid,expense_date:date,description:desc,amount,markup_applied:markup,receipt_note:receipt||null})});
     expenses.unshift(coerceExp(ex[0]));
-    ['newExpProject','newExpDate','newExpDesc','newExpAmount','newExpReceipt'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    ['newExpProject','newExpDate','newExpDesc','newExpAmount','newExpReceipt'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';})
     document.getElementById('newExpMarkup').checked=true;
     renderExpenses();toast('Expense added','success');
   } catch(e){toast('Error: '+e.message,'error');}
@@ -1429,7 +1466,7 @@ async function deleteExpense(id){
   catch(e){toast('Error: '+e.message,'error');}
 }
 
-// ── Clients ──────────────────────────────────────────────────────
+// Clients
 function renderClients(){
   const el=document.getElementById('clientList');if(!el)return;
   if(!clients.length){el.innerHTML='<div class="empty-state">No clients yet.</div>';return;}
@@ -1494,7 +1531,7 @@ async function deleteClient(id){
   catch(e){toast('Error: '+e.message,'error');}
 }
 
-// ── Print helpers ─────────────────────────────────────────────────
+// Print helpers
 const PRINT_STYLES=`*{box-sizing:border-box;margin:0;padding:0}body{font-family:'IBM Plex Sans',sans-serif;background:#fff;color:#1a1a18;-webkit-print-color-adjust:exact;print-color-adjust:exact}@media screen{body{padding:28px;max-width:820px;margin:0 auto}}@media print{@page{size:8.5in 11in;margin-top:0.65in;margin-bottom:0.55in;margin-left:0.75in;margin-right:0.75in;@bottom-left{font-family:'IBM Plex Sans',sans-serif;font-size:7pt;font-weight:300;color:#a09e98;content:"Fine Line Studio  \u2013  8255 Limelight Street, Suite 101  \u2013  Boise, ID 83714  \u2013  (208) 409-3845";vertical-align:top;padding-top:4pt;border-top:0.5pt solid #d8d5cf;}@bottom-right{font-family:'IBM Plex Sans',sans-serif;font-size:7pt;font-weight:300;color:#a09e98;content:"Page | " counter(page);vertical-align:top;padding-top:4pt;border-top:0.5pt solid #d8d5cf;}}body{padding:0;font-size:9pt}div[style*="border:1px solid #d8d5cf"]{border:none!important;padding:0!important;max-width:100%!important}div[style*="margin-bottom:28px"]{margin-bottom:10px!important}div[style*="margin-bottom:24px"]{margin-bottom:8px!important}div[style*="line-height:2.2"]{line-height:1.6!important}div[style*="line-height:1.9"]{line-height:1.5!important}div[style*="line-height:1.7"]{line-height:1.4!important}div[style*="padding-bottom:12px;border-bottom:3px"]{padding-bottom:5px!important;margin-bottom:10px!important}img{height:32pt!important}table{font-size:8.5pt}td,th{padding:3px 4px!important}ul{margin-bottom:8px!important}li{margin-bottom:1px!important}}ul{padding-left:20px}li{margin-bottom:4px}`;
 const PRINT_FONTS=`<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">`;
 
@@ -1507,13 +1544,13 @@ function openPrintWindow(title, areaId){
 function printInvoice(){openPrintWindow('Invoice — Fine Line Studio','invoicePrintArea');}
 function printStatement(){openPrintWindow('Statement — Fine Line Studio','stmtPrintArea');}
 
-// ── Utilities ─────────────────────────────────────────────────────
+// Utilities
 function fmtElapsed(ms){const s=Math.floor(ms/1000);return[Math.floor(s/3600),Math.floor((s%3600)/60),s%60].map(n=>String(n).padStart(2,'0')).join(':');}
 function fmtHours(min){const h=Math.floor(min/60),m=Math.round(min%60);return h>0?`${h}h ${m}m`:`${m}m`;}
 function fmtDate(iso){if(!iso)return'';return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
 function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+type;setTimeout(()=>el.classList.remove('show'),3000);}
 
-// ── Boot ──────────────────────────────────────────────────────────
+// Boot
 (function(){
   const now=new Date();
   document.getElementById('manualDate').value=now.toISOString().slice(0,10);
