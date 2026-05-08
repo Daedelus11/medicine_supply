@@ -140,6 +140,133 @@
   .modal-close:hover { color: var(--ink); }
   .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
   .modal-footer { padding: 16px 24px; border-top: 1px solid var(--rule); display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* ============================================================
+     MOBILE / TABLET RESPONSIVE
+     Breakpoints: 768px tablet,  480px phone
+  ============================================================ */
+
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    gap: 5px;
+    flex-shrink: 0;
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: rgba(255,255,255,0.7);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+  .nav-drawer {
+    display: none;
+    position: fixed;
+    top: 72px;
+    left: 0;
+    right: 0;
+    background: rgba(17,17,16,0.99);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    z-index: 99;
+    padding: 8px 0 16px;
+    flex-direction: column;
+  }
+  .nav-drawer.open { display: flex; }
+  .nav-drawer button {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.6);
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    cursor: pointer;
+    text-align: left;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    transition: color 0.15s, background 0.15s;
+  }
+  .nav-drawer button:last-child { border-bottom: none; }
+  .nav-drawer button:hover,
+  .nav-drawer button.active { color: var(--yellow); background: rgba(255,255,255,0.04); }
+
+  @media (max-width: 768px) {
+    .nav { padding: 0 18px; height: 64px; }
+    .nav-tabs { display: none; }
+    .nav-hamburger { display: flex; }
+    .nav-drawer { top: 64px; }
+
+    main { padding: 24px 16px 80px; }
+    .card { padding: 24px 18px; }
+    .add-card { padding: 20px 18px; }
+
+    .grid-2 { grid-template-columns: 1fr; gap: 12px; }
+
+    .timer-display { font-size: 52px; }
+
+    .timer-actions { flex-wrap: wrap; gap: 8px; }
+    .timer-actions .btn { flex: 1; min-width: 120px; text-align: center; }
+
+    .period-tabs { display: grid; grid-template-columns: 1fr 1fr; width: 100%; margin-bottom: 20px; }
+    .period-btn { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .period-btn:nth-child(2) { border-right: none; }
+    .period-btn:nth-child(3) { border-bottom: none; }
+    .period-btn:nth-child(4) { border-right: none; border-bottom: none; }
+
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    .summary-val { font-size: 28px; }
+
+    .page-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .page-title { font-size: 26px; }
+
+    .filter-row { flex-direction: column; align-items: stretch; gap: 8px; }
+    .filter-row select { width: 100%; min-width: unset; }
+
+    .entry-row { grid-template-columns: 1fr; gap: 10px; padding: 14px 16px; }
+    .entry-duration { text-align: left; }
+    .entry-actions { justify-content: flex-start; flex-wrap: wrap; }
+
+    .form-grid-3 { grid-template-columns: 1fr !important; gap: 12px !important; }
+
+    .project-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .project-item .entry-actions { align-self: flex-start; flex-wrap: wrap; }
+
+    .running-banner { flex-direction: column; align-items: flex-start; gap: 10px; padding: 12px 16px; }
+    .banner-left { flex-wrap: wrap; }
+
+    .breakdown-top { flex-direction: column; align-items: flex-start; gap: 4px; }
+
+    .modal { margin: 12px; max-width: calc(100vw - 24px); }
+    .modal-body { padding: 16px; max-height: 72vh; overflow-y: auto; }
+
+    .toast { left: 16px; right: 16px; bottom: 16px; width: auto; }
+  }
+
+  @media (max-width: 480px) {
+    .nav { height: 56px; }
+    .nav-drawer { top: 56px; }
+    .nav-logo { font-size: 17px; }
+    main { padding: 16px 12px 80px; }
+    .timer-display { font-size: 40px; }
+    .summary-val { font-size: 22px; }
+    .summary-card { padding: 14px 12px; }
+    .card { padding: 16px 14px; }
+    .btn { padding: 11px 16px; }
+    .page-title { font-size: 22px; }
+    .btn-micro { padding: 5px 10px; font-size: 9px; }
+  }
 </style>
 </head>
 <body>
@@ -162,7 +289,20 @@
     <span class="status-dot" id="statusDot"></span>
     <span id="statusText">connecting</span>
   </div>
+  <button class="nav-hamburger" id="navHamburger" onclick="toggleNavDrawer()" aria-label="Open navigation">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<div class="nav-drawer" id="navDrawer">
+  <button onclick="drawerNav('timer')">Timer</button>
+  <button onclick="drawerNav('log')">Log</button>
+  <button onclick="drawerNav('report')">Report</button>
+  <button onclick="drawerNav('invoice')">Invoice</button>
+  <button onclick="drawerNav('statement')">Statement</button>
+  <button onclick="drawerNav('projects')">Projects</button>
+  <button onclick="drawerNav('clients')">Clients</button>
+</div>
 
 <main>
 
@@ -333,15 +473,15 @@
       <div class="field-group"><label class="field-label">Invoice date</label><input type="date" id="invoiceDate" style="width:200px"></div>
     </div>
     <div id="invoicePreview" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
         <div class="page-eyebrow">Preview</div>
-        <div style="display:flex;gap:10px;align-items:center">
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
           <span style="font-size:10px;color:var(--light);font-family:var(--sans);letter-spacing:0.06em">Print first, then confirm:</span>
           <button class="btn btn-ghost" style="padding:8px 18px;font-size:10px" onclick="printInvoice()">Print / Export</button>
           <button class="btn btn-primary" style="padding:8px 18px;font-size:10px" onclick="confirmBilled()">&#10003; Confirm Billed</button>
         </div>
       </div>
-      <div id="invoicePrintArea" style="background:#fff;border:1px solid #d8d5cf;padding:44px 52px;max-width:780px;font-family:'IBM Plex Sans',sans-serif;font-size:11px;color:#1a1a18">
+      <div id="invoicePrintArea" style="background:#fff;border:1px solid #d8d5cf;padding:44px 52px;max-width:780px;font-family:'IBM Plex Sans',sans-serif;font-size:11px;color:#1a1a18;overflow-x:auto">
         <div style="padding-bottom:12px;border-bottom:3px solid #fec422;margin-bottom:24px">
           <div style="font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:300;letter-spacing:0.12em;color:#1a1a18;margin-bottom:10px">FINE LINE | STUDIO</div>
           <div style="font-size:10px;font-weight:300;color:#5c5c58;line-height:1.9">Fine Line Studio, PLLC<br>8255 Limelight Street, Suite #101<br>Boise, Idaho 83714<br>(208) 409-3845<br>mark@fine-linestudio.com &nbsp;|&nbsp; www.fine-linestudio.com</div>
@@ -415,13 +555,13 @@
       </div>
     </div>
     <div id="statementPreview" style="display:none">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
         <div class="page-eyebrow">Preview</div>
         <div style="display:flex;gap:10px;align-items:center">
           <button class="btn btn-ghost" style="padding:8px 18px;font-size:10px" onclick="printStatement()">Print / Export</button>
         </div>
       </div>
-      <div id="stmtPrintArea" style="background:#fff;border:1px solid #d8d5cf;padding:44px 52px;max-width:780px;font-family:'IBM Plex Sans',sans-serif;font-size:11px;color:#1a1a18">
+      <div id="stmtPrintArea" style="background:#fff;border:1px solid #d8d5cf;padding:44px 52px;max-width:780px;font-family:'IBM Plex Sans',sans-serif;font-size:11px;color:#1a1a18;overflow-x:auto">
         <div style="padding-bottom:12px;border-bottom:3px solid #fec422;margin-bottom:24px">
           <div style="font-family:'IBM Plex Sans',sans-serif;font-size:22px;font-weight:300;letter-spacing:0.12em;color:#1a1a18;margin-bottom:10px">FINE LINE | STUDIO</div>
           <div style="font-size:10px;font-weight:300;color:#5c5c58;line-height:1.9">Fine Line Studio, PLLC<br>8255 Limelight Street, Suite #101<br>Boise, Idaho 83714<br>(208) 409-3845<br>mark@fine-linestudio.com &nbsp;|&nbsp; www.fine-linestudio.com</div>
@@ -486,15 +626,15 @@
     <div id="clientList"></div>
     <div class="page-eyebrow" style="margin-bottom:10px;margin-top:28px">Add Client</div>
     <div class="add-card">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px" class="add-client-grid">
         <div><label class="field-label">Company / Client name</label><input type="text" id="newClientName" placeholder="Rob Nyhof Design"></div>
         <div><label class="field-label">Contact name</label><input type="text" id="newClientContact" placeholder="Rob Nyhof"></div>
       </div>
-      <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px">
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:14px" class="add-client-grid">
         <div><label class="field-label">Address</label><input type="text" id="newClientAddress" placeholder="22697 Ryan Dr., Wilder, Idaho 83676"></div>
         <div><label class="field-label">Phone</label><input type="text" id="newClientPhone" placeholder="(208) 401-4390"></div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px" class="add-client-grid">
         <div><label class="field-label">Email</label><input type="email" id="newClientEmail" placeholder="rob@robnyhofdesign.com"></div>
         <div><label class="field-label">Website (optional)</label><input type="text" id="newClientWeb" placeholder="robnyhofdesign.com"></div>
       </div>
@@ -552,6 +692,12 @@
 </div>
 
 <div class="toast" id="toast"></div>
+
+<style>
+  @media (max-width: 768px) {
+    .add-client-grid { grid-template-columns: 1fr !important; }
+  }
+</style>
 
 <script>
 const SUPABASE_URL = 'https://mrhgitbdobfnelnulnbg.supabase.co';
@@ -906,7 +1052,7 @@ function renderProjects() {
         </div>
       </div>
       <div id="proj-edit-${p.id}" style="display:none;width:100%">
-        <div style="display:grid;grid-template-columns:0.8fr 1.5fr 1fr;gap:10px;margin-bottom:10px">
+        <div style="display:grid;grid-template-columns:0.8fr 1.5fr 1fr;gap:10px;margin-bottom:10px" class="proj-edit-grid">
           <div><label class="field-label">Project no.</label><input type="text" id="pe-num-${p.id}" value="${p.project_number||''}"></div>
           <div><label class="field-label">Project name</label><input type="text" id="pe-name-${p.id}" value="${p.name}"></div>
           <div><label class="field-label">Default role</label>
@@ -1157,15 +1303,15 @@ function renderClients() {
         ${cProjects.length?`<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--rule)"><div style="font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--light);margin-bottom:8px">Projects</div>${cProjects.map(p=>`<div style="font-size:12px;padding:4px 0;color:var(--ink)">${p.project_number?`<span style="color:var(--light);margin-right:8px">${p.project_number}</span>`:''}${p.name}</div>`).join('')}</div>`:''}
       </div>
       <div id="client-edit-${c.id}" style="display:none">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px" class="client-edit-grid">
           <div><label class="field-label">Company / Client name</label><input type="text" id="edit-name-${c.id}" value="${c.name||''}"></div>
           <div><label class="field-label">Contact name</label><input type="text" id="edit-contact-${c.id}" value="${c.contact_name||''}"></div>
         </div>
-        <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px">
+        <div style="display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-bottom:12px" class="client-edit-grid">
           <div><label class="field-label">Address</label><input type="text" id="edit-address-${c.id}" value="${c.address||''}"></div>
           <div><label class="field-label">Phone</label><input type="text" id="edit-phone-${c.id}" value="${c.phone||''}"></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px" class="client-edit-grid">
           <div><label class="field-label">Email</label><input type="email" id="edit-email-${c.id}" value="${c.email||''}"></div>
           <div><label class="field-label">Website</label><input type="text" id="edit-web-${c.id}" value="${c.website||''}"></div>
         </div>
@@ -1232,6 +1378,37 @@ function fmtHours(min){const h=Math.floor(min/60),m=Math.round(min%60);return h>
 function fmtDate(iso){if(!iso)return'';return new Date(iso).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
 function fmtTime(iso){if(!iso)return'';return new Date(iso).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}
 function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast show '+type;setTimeout(()=>el.classList.remove('show'),3000);}
+
+// ---- Mobile nav drawer ----
+function toggleNavDrawer() {
+  const drawer = document.getElementById('navDrawer');
+  const btn = document.getElementById('navHamburger');
+  const isOpen = drawer.classList.contains('open');
+  drawer.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+}
+
+function drawerNav(name) {
+  showView(name);
+  document.getElementById('navDrawer').classList.remove('open');
+  document.getElementById('navHamburger').classList.remove('open');
+  const NAMES = ['timer','log','report','invoice','statement','projects','clients'];
+  document.querySelectorAll('.nav-drawer button').forEach((b, i) => {
+    b.classList.toggle('active', NAMES[i] === name);
+  });
+  window.scrollTo(0, 0);
+}
+
+document.addEventListener('click', function(e) {
+  const drawer = document.getElementById('navDrawer');
+  const btn = document.getElementById('navHamburger');
+  if (!drawer || !btn) return;
+  if (drawer.classList.contains('open') && !drawer.contains(e.target) && !btn.contains(e.target)) {
+    drawer.classList.remove('open');
+    btn.classList.remove('open');
+  }
+});
+// ---- End mobile nav ----
 
 (function(){ const now=new Date(); document.getElementById('manualDate').value=now.toISOString().slice(0,10); })();
 init();
